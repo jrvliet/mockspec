@@ -15,11 +15,14 @@ from genLOS import *
 props, ions, xh, instruments = readControlFile()
 galID, expn, nlos, incline, ewcut, snr, ncores, rootLoc = props
 
+# Genearte the name of the gasfile
+gasfile = galID+'_GZa'+expn+'.txt'
+
 ##### 
 #  
 #  Set one: Generate the lines of sight
 #
 #####
-
+genLOS(galID, gasfile, summaryLoc, expn, incline, nlos, ncores)
 
 

@@ -8,7 +8,8 @@ import math
 import sys
 from random import random, seed
 from os import popen
-
+from numpy import linspace as ls
+from numba import jit
 
 def inBox(x,y,z,boxsize):
     size = boxsize
@@ -18,9 +19,8 @@ def inBox(x,y,z,boxsize):
         return 0
 
 
-
+@jit
 def findEnds(px, py, pz, dx, dy, dz, boxsize):
-    from numpy import linspace as ls
     size = boxsize/2.0
     xen, yen, zen, ten, xex, yex, zex, tex = 0,0,0,0,0,0,0,0
     t = ls(-5e3, 5e3, 5e5)
@@ -120,8 +120,12 @@ def read_summary(galID, aexpn, summaryLoc):
         print 'ERROR: Could not find the expansion factor {0} in file: \n\t'.format(aexpn) + summaryLoc
         sys.exit()
 
-def genLines(galID, gasfile, summaryLoc, expn, inc, nLOS, ncores):
 
+
+
+
+
+def genLines(galID, gasfile, summaryLoc, expn, inc, nLOS, ncores):
 
     tol = 1e-5
     seed(25525)
@@ -242,7 +246,29 @@ def genLines(galID, gasfile, summaryLoc, expn, inc, nLOS, ncores):
         yexs.append(yex)
         zexs.append(zex)
 
-        
+    # Determine the inclination of the galaxy
+    # Use the dot product of the normal vector and the LOS
+    norm_g = np.matrix([0,0,10])
+    norm_b = a_gtb*norm_g.T
+    los_len = math.sqrt(db[0,0]*db[0,0] + db[1,0]*db[1,0] + db[2,0]*db[2,0])
+    norm_len = math.sqrt(norm_b[0,0]*norm_b[0,0] + norm_b[1,0]*norm_b[1,0] + norm_b[2,0]*norm_b[2,0])
+    dotprod = db[0,0]*norm_b[0,0] + db[1,0]*norm_b[1,0] + db[2,0]*norm_b[2,0]
+    interior = dotprod / (los_len*norm_len)
 
+    # The following conditional statements are needed to account 
+    # for rounding errors that occur
+    if interior<-1.0 and interior>-1.0-tol:
+        interior=-1.0
+    elif interior>1.0 and interior<1.0+tol:
+        interior=1.0
+    angle = math.acos(interior)
+    if angle>math.pi/2.0 and angle<math.pi:
+        angle = angle - math.pi/2.0
+
+    print 'Calculated inclination: {0:.3f} degrees'.format(math.degrees(angle))
+
+        
+    fout.close()
+    finfo.close()
     
 
