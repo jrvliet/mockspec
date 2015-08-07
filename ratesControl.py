@@ -78,7 +78,7 @@ def setupRatesOutputs(galID, expn, ion_list, codeLoc, requiredLoc):
     sp.call(command, shell=True)
    
 
-def rates():
+def runRates():
     
     print 'Generating ion boxes...'
     command = './funcs/rates/rates'

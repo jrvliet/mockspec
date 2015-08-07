@@ -125,7 +125,7 @@ def read_summary(galID, aexpn, summaryLoc):
 
 
 
-def genLines(galID, gasfile, summaryLoc, expn, inc, nLOS, ncores):
+def genLines(galID, gasfile, summaryLoc, expn, inc, nLOS, maximpact, ncores):
 
     tol = 1e-5
     seed(25525)
@@ -174,7 +174,7 @@ def genLines(galID, gasfile, summaryLoc, expn, inc, nLOS, ncores):
     # Generate random impact parameters:
     impacts = []
     for j in range(0,nLOS):
-        b = impactmax * random()
+        b = maximpact * random()
         impacts.append(b)
 
     # Sort impact parameters
@@ -184,9 +184,6 @@ def genLines(galID, gasfile, summaryLoc, expn, inc, nLOS, ncores):
 
     for j in range(0,nLOS):
 
-        if j%tenth==0:
-            print '{0:.0%} complete'.format(count/10.0)
-            count+=1
 
         b = impacts[j]
         phi = random()*2*math.pi
@@ -199,9 +196,6 @@ def genLines(galID, gasfile, summaryLoc, expn, inc, nLOS, ncores):
         # Define the impact point in the sky frame:
         ps = np.matrix([b*math.cos(phi), b*math.sin(phi), 0.0]).T
 
-        if verbose==1:
-            print 'Sky directional vector: ',ds.T
-            print 'Sky impact point:       ',ps.T
 
         # Define the rotation matrix to convert from the sky frame to the galaxy frame
         a_stg = np.matrix([[1,0,0], [0, math.cos(inc), -1*math.sin(inc)], [0, math.sin(inc), math.cos(inc)]])
@@ -210,10 +204,6 @@ def genLines(galID, gasfile, summaryLoc, expn, inc, nLOS, ncores):
         dg = a_stg*ds
         pg = a_stg*ps
 
-        if verbose==1:
-            print ''
-            print 'Gal directional vector: ',dg.T
-            print 'Gal impact point:       ',pg.T
 
         # To rotate from the sky's frame to the box frame, need a_gtb, which is the 
         # inverse of a_btg
@@ -223,19 +213,10 @@ def genLines(galID, gasfile, summaryLoc, expn, inc, nLOS, ncores):
         db = a_gtb*dg
         pb = a_gtb*pg
 
-        if verbose==1:
-            print ''
-            print 'Box directional vector: ',db.T
-            print 'Box impact point:       ',pb.T
-            print ''
 
         # Get the enter and exit points of the LOS
         xen, yen, zen, ten, xex, yex, zex, tex = findEnds(pb[0,0], pb[1,0], pb[2,0], db[0,0], db[1,0], db[2,0], boxsize)
         
-        if verbose==1:
-            print 'Enter: ',xen, yen, zen, ten
-            print 'Exit:  ',xex, yex, zex, tex
-            print '\n\n'
 
         fout.write('{0:>12,.5f}{1:>12,.5f}{2:>12,.5f}{3:>12,.5f}{4:>12,.5f}{5:>12,.5f}\n'.format(xen,yen,zen,xex,yex,zex))
 

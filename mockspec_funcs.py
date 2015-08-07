@@ -21,11 +21,12 @@ def readControlFile():
 
     galID = f.readline().split()[0]
     expn = f.readline().split()[0]
-    nlos = f.readline().split()[0]
-    incline = f.readline().split()[0]
-    ewcut = f.readline().split()[0]
-    snr = f.readline().split()[0]
-    ncores = f.readline().split()[0]
+    nlos = int(f.readline().split()[0])
+    maximpact = float(f.readline().split()[0])
+    incline = float(f.readline().split()[0])
+    ewcut = float(f.readline().split()[0])
+    snr = float(f.readline().split()[0])
+    ncores = int(f.readline().split()[0])
     rootLoc = f.readline().split()[0]
     requiredLoc = f.readline().split()[0] 
     # Now at ion section
@@ -43,7 +44,7 @@ def readControlFile():
 
     f.close()
 
-    props = (galID, expn, nlos, incline, ewcut, snr, ncores, rootLoc, requiredLoc)
+    props = (galID, expn, nlos, maximpact, incline, ewcut, snr, ncores, rootLoc, requiredLoc)
 
     return props, ions, xh, instruments
 

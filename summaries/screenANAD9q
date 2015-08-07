@@ -1,0 +1,5227 @@
+
+ ****************************************
+ * ART N-body/Gas Version 3-1: 12-04-03 *
+ ****************************************
+
+ jobname1:
+10MpcBox_HartGal_csf                                                                                                                                                                                                                                            
+ path    :
+.                                                                                                                                                                                                                                                               
+
+ mcell    100000000          mind             0          NCPUS           24
+ ndim             3          nvar             3          nchem            2
+ start            F
+ ntc              4          cfl       6.00E-01          timinc    1.10E+00
+ rhogrv    0.00E+00          rhohdr    1.00E-06          enghdr    0.00E+00
+ 
+ 
+ alpha_SF    1.00E+00          eps_SF      3.33E+02          dtmin_SF    5.00E+06
+ dm_st_min   1.00E+03          rho_SF      5.00E+00          T_SF        1.00E+03
+ a_IMF       0.00E+00          M_l         1.00E-01          M_u         1.00E+02
+ M_SNII      8.00E+00          E_51        2.00E+00          t_fb        4.00E+07
+ M_SNIa1     3.00E+00          M_SNIa2     8.00E+00          C_SNIa      5.00E-03
+ t_SNIa      1.00E+00          ejM_SNIa    1.30E+00
+ Stellar mass loss parameters :    c_ml        5.00E-02          T0_ml       5.00E+00
+
+ Refinement controls:
+ wsplit/wjoin            :   2.00E-01 /   1.00E-01
+ Ndiff   :          4
+ MinL_Jeans  :          8
+       iref     w_ref floor_ref  lmax_ref
+          1  1.00E+00  1.00E-01     0   256
+          2  1.00E+00  1.00E-01     3   256
+          3  0.00E+00  1.00E-01     2     9
+          4  0.00E+00  1.00E-01     2     9
+          5  0.00E+00  1.00E-01     2     9
+          6  0.00E+00  1.00E-01     2     9
+          7  0.00E+00  1.00E-01     2     9
+          8  0.00E+00  1.00E-01     2   256
+          9  0.00E+00  1.00E-01     2   256
+ xrefmin,max =   1.000000       129.0000    
+ yrefmin,max =   1.000000       129.0000    
+ zrefmin,max =   1.000000       129.0000    
+
+ isave =           1  asave =  0.2000000    
+ isave =           2  asave =  0.2250000    
+ isave =           3  asave =  0.2500000    
+ isave =           4  asave =  0.2750000    
+ isave =           5  asave =  0.3000000    
+ isave =           6  asave =  0.3500000    
+ isave =           7  asave =  0.3750000    
+ isave =           8  asave =  0.4000000    
+ isave =           9  asave =  0.4250000    
+ isave =          10  asave =  0.4500000    
+ isave =          11  asave =  0.4750000    
+ isave =          12  asave =  0.5000000    
+ isave =          13  asave =  0.5250000    
+ isave =          14  asave =  0.5500000    
+ isave =          15  asave =  0.5750000    
+ isave =          16  asave =  0.6010000    
+ isave =          17  asave =  0.6260000    
+ isave =          18  asave =  0.6500000    
+ isave =          19  asave =  0.6750000    
+ isave =          20  asave =  0.7000000    
+ isave =          21  asave =  0.7260000    
+ isave =          22  asave =  0.7500000    
+ isave =          23  asave =  0.7760000    
+ isave =          24  asave =  0.8000000    
+ isave =          25  asave =  0.8250000    
+ isave =          26  asave =  0.8510000    
+ isave =          27  asave =  0.8750000    
+ isave =          28  asave =  0.9010000    
+ isave =          29  asave =  0.9250000    
+ isave =          30  asave =  0.9500000    
+ isave =          31  asave =  0.9760000    
+ isave =          32  asave =  0.9910000    
+ isave =          33  asave =   1.001000    
+
+ Schedule of analysis (flags= 0 Off , 1 On)-------- RECURSIV
+ Read N-Body file
+ Read stellar file
+ Read HYDRO file
+ Set units
+ Find center using particles
+ Compute the angular momentum &  new system of coordinates
+ ASCII of first specie of DM or stars
+ spherical profiles
+ Binary file with DM particles inside 4Rvir-box
+ Binary file with stellar particles inside 4Rvir box
+ Binary file with stellar particles inside 4Rvir (initial mass)
+ Binary file with stellar particles inside 4Rvir (metallicities)
+ Binary file with gas cells inside 4Rvir box
+ Binary file with gas cells inside 4Rvir (metals)
+ Setting units...
+ reading tree data from file ./10MpcBox_HartGal_csf.d
+istep =1281  t = 0.44583017E-03 dt = 0.58927711E-03  a =  1.0016314     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =       23206  nOct =      350206
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       29704
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      111384
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      274056
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      288792
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      467504
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      322408
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      286856
+ reading tree (oct) data for level            8
+ reading cell data: ncells =      210696
+ reading tree (oct) data for level            9
+ reading cell data: ncells =      270112
+ reading tree (oct) data for level           10
+ reading cell data: ncells =      349168
+ reading tree (oct) data for level           11
+ reading cell data: ncells =      190968
+ done reading     4898800  cells...
+ WARNING!
+ you may need some units for SF analysis
+  E_0 , C_fb , C_SFR ,  rho_SF , in SF_Init () 
+ set units to :
+ r0 [h^{-1} Mpc]    =   7.8125E-02
+ t0 [yrs]           =   5.1098E+10
+ rho0 [M_sun/Mpc^3] =   4.0807E+10
+ v0 [km/s]          =   2.1395E+00
+ T0 [K]             =   3.2756E+02
+ P0 [g/cm/s^2]      =   1.2643E-19
+ S0 [keV cm^2]      =   1.4225E-01
+ Setting global variables...
+ --------------------------
+ CURRENT SNAPSHOT:   0.2000000    
+ --------------------------
+Reading  file: ./PMcrda0.200.DAT             
+Reading  file: ./PMcrs0a0.200.DAT            
+ Open file..../PMcrda0.200.DAT
+ ./PMcrda0.200.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   0.200 A0=   0.020 Ampl=   0.275 Step=   0.001
+  I = 397 WEIGHT=   0.002 Ekin=   0.129E+10   0.128E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     2835788
+  hello :     2835788     2835788
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     2835788
+ Read_Particles_Binary: reading np=     2835788  particles
+  Pages=           3  Species=           5
+  N_in_last=      738636
+Reading  file: ./stars_a0.200.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a0.200.
+ reading tree data from file ./10MpcBox_HartGal_csf_a0.200.d
+istep = 397  t = -1.0945801     dt = 0.33540892E-02  a = 0.20010501     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =       12593  nOct =      284988
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       28200
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      139336
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      607640
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      575944
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      587352
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      205640
+ reading tree (oct) data for level            7
+ reading cell data: ncells =       99552
+ reading tree (oct) data for level            8
+ reading cell data: ncells =       32240
+ reading tree (oct) data for level            9
+ reading cell data: ncells =        4000
+ done reading     4377056  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   2644.44976950458     
+   809.991032906788     
+   481.711205102907     
+  8.9552976E-02
+  8.1411794E-02
+  7.4010722E-02
+  6.7282476E-02
+  6.1165884E-02
+  5.5605348E-02
+  5.0550316E-02
+  4.5954831E-02
+  4.1777119E-02
+  3.7979197E-02
+  3.4526542E-02
+  3.1387765E-02
+  2.8534330E-02
+  2.5940299E-02
+  2.3582090E-02
+  2.1438263E-02
+  1.9489329E-02
+  1.7717572E-02
+  1.6106883E-02
+  1.4642620E-02
+  1.3311473E-02
+  1.2101338E-02
+  1.1001216E-02
+  1.0001105E-02
+  9.0919137E-03
+  8.2653761E-03
+  7.5139781E-03
+  6.8308888E-03
+  6.2098987E-03
+  5.6453622E-03
+ Center in proper Kpc:
+   2644.38110495263     
+   810.015719448085     
+   481.703848186627     
+ Velocity of the center in Km/s
+   6.55781438961351     
+  -22.0797786236384     
+  -9.35711758732301     
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is         7894
+ The specific angular momentum of cold gas is
+   15.8505919610204     
+ Angular momentum in Msun Kpc Km/s (proper):
+  -0.330E+09
+   0.334E+09
+  -0.473E+09
+ AM axis
+ -0.4955669    
+  0.5011154    
+ -0.7094342    
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1= -0.8197945      0.0000000E+00  0.5726578    
+  Vector 2=  0.2869677      0.8653805      0.4108117    
+  Vector 3= -0.4955669      0.5011154     -0.7094342    
+  Vector lengths=   1.000000       1.000000       1.000000      must be 1
+  Vector products=  2.9802322E-08 -2.9802322E-08 -1.4901161E-08  must be 0
+  Vector 1=  -0.8197945      0.0000000E+00  0.5726578    
+ Vector 2=   0.2869677      0.8653805      0.4108117    
+ Vector 3=  -0.4955669      0.5011154     -0.7094342    
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :        2073
+ Total mass:   867585.554449816     
+ Total initial mass:   1073513.48163781     
+ younger than .1E+11 yrs
+ SFR=   7.667953440270059E-005
+ done writing spherical profiles. exiting...
+ Rvir=    10.90755      kpc
+ Mvir=  4.9673308E+09  Msun
+ Writing binary files..
+ #DM particles inside    21.81510      Kpc :       78524
+ with total mass equal to   0.74E+10 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    21.81510      Kpc :        2235
+ Total mass:   936340.424536130     
+ Total initial mass:   1160117.04896427     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    21.81510      Kpc :        2235
+ Total mass:   936340.424536130     
+ Total initial mass:   1160117.04896427     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    21.81510      Kpc :        2235
+ Total mass:   936340.424536130     
+ Total initial mass:   1160117.04896427     
+ younger than .1E+11 yrs
+ Number of cells=       308882
+ Number of cells=       308882
+ --------------------------
+ CURRENT SNAPSHOT:   0.2250000    
+ --------------------------
+Reading  file: ./PMcrda0.225.DAT             
+Reading  file: ./PMcrs0a0.225.DAT            
+ Open file..../PMcrda0.225.DAT
+ ./PMcrda0.225.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   0.225 A0=   0.020 Ampl=   0.275 Step=   0.000
+  I = 446 WEIGHT=   0.002 Ekin=   0.150E+10   0.150E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     2837569
+  hello :     2837569     2837569
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     2837569
+ Read_Particles_Binary: reading np=     2837569  particles
+  Pages=           3  Species=           5
+  N_in_last=      740417
+Reading  file: ./stars_a0.225.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a0.225.
+ reading tree data from file ./10MpcBox_HartGal_csf_a0.225.d
+istep = 446  t =-0.96829244     dt = 0.20938595E-02  a = 0.22508471     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =        1870  nOct =      285436
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       28328
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      139400
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      567480
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      550544
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      596000
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      243760
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      121312
+ reading tree (oct) data for level            8
+ reading cell data: ncells =       30408
+ reading tree (oct) data for level            9
+ reading cell data: ncells =        5976
+ reading tree (oct) data for level           10
+ reading cell data: ncells =         280
+ done reading     4380640  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   2980.35392387175     
+   907.817256583780     
+   541.746475726306     
+  7.9614468E-02
+  7.2376788E-02
+  6.5797076E-02
+  5.9815522E-02
+  5.4377746E-02
+  4.9434312E-02
+  4.4940282E-02
+  4.0854800E-02
+  3.7140727E-02
+  3.3764295E-02
+  3.0694813E-02
+  2.7904375E-02
+  2.5367612E-02
+  2.3061465E-02
+  2.0964969E-02
+  1.9059062E-02
+  1.7326420E-02
+  1.5751291E-02
+  1.4319356E-02
+  1.3017596E-02
+  1.1834178E-02
+  1.0758343E-02
+  9.7803120E-03
+  8.8911923E-03
+  8.0829021E-03
+  7.3480927E-03
+  6.6800844E-03
+  6.0728039E-03
+  5.5207307E-03
+  5.0188461E-03
+ Center in proper Kpc:
+   2980.36656686862     
+   907.821289263815     
+   541.712143450331     
+ Velocity of the center in Km/s
+   15.7418256205970     
+   13.6034858567936     
+   15.0025256163484     
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is         6191
+ The specific angular momentum of cold gas is
+   16.0215992365102     
+ Angular momentum in Msun Kpc Km/s (proper):
+  -0.305E+09
+   0.193E+09
+   0.342E+09
+ AM axis
+ -0.6138103    
+  0.3872404    
+  0.6879547    
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1=  0.7461720      0.0000000E+00  0.6657532    
+  Vector 2=  0.2578065      0.9219787     -0.2889479    
+  Vector 3= -0.6138103      0.3872404      0.6879547    
+  Vector lengths=  0.9999999       1.000000      0.9999998      must be 1
+  Vector products=  0.0000000E+00 -2.9802322E-08  0.0000000E+00  must be 0
+  Vector 1=   0.7461720      0.0000000E+00  0.6657532    
+ Vector 2=   0.2578065      0.9219787     -0.2889479    
+ Vector 3=  -0.6138103      0.3872404      0.6879547    
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :        3830
+ Total mass:   1854368.59634281     
+ Total initial mass:   2306769.32532737     
+ younger than .1E+11 yrs
+ SFR=   1.647692375233835E-004
+ done writing spherical profiles. exiting...
+ Rvir=    13.59700      kpc
+ Mvir=  6.7889403E+09  Msun
+ Writing binary files..
+ #DM particles inside    27.19400      Kpc :       96941
+ with total mass equal to   0.91E+10 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    27.19400      Kpc :        4014
+ Total mass:   1942507.92803362     
+ Total initial mass:   2418804.41772489     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    27.19400      Kpc :        4014
+ Total mass:   1942507.92803362     
+ Total initial mass:   2418804.41772489     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    27.19400      Kpc :        4014
+ Total mass:   1942507.92803362     
+ Total initial mass:   2418804.41772489     
+ younger than .1E+11 yrs
+ Number of cells=       373034
+ Number of cells=       373034
+ --------------------------
+ CURRENT SNAPSHOT:   0.2500000    
+ --------------------------
+Reading  file: ./PMcrda0.250.DAT             
+Reading  file: ./PMcrs0a0.250.DAT            
+ Open file..../PMcrda0.250.DAT
+ ./PMcrda0.250.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   0.250 A0=   0.020 Ampl=   0.275 Step=   0.001
+  I = 491 WEIGHT=   0.002 Ekin=   0.170E+10   0.170E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     2840999
+  hello :     2840999     2840999
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     2840999
+ Read_Particles_Binary: reading np=     2840999  particles
+  Pages=           3  Species=           5
+  N_in_last=      743847
+Reading  file: ./stars_a0.250.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a0.250.
+ reading tree data from file ./10MpcBox_HartGal_csf_a0.250.d
+istep = 491  t =-0.86143239     dt = 0.21962929E-02  a = 0.25018239     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =       77296  nOct =      286658
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       28480
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      138832
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      529104
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      525768
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      612936
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      258032
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      119128
+ reading tree (oct) data for level            8
+ reading cell data: ncells =       52488
+ reading tree (oct) data for level            9
+ reading cell data: ncells =       27456
+ reading tree (oct) data for level           10
+ reading cell data: ncells =        1040
+ done reading     4390416  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   3318.01763463050     
+   1008.22385052653     
+   602.152970895648     
+  7.1627744E-02
+  6.5116130E-02
+  5.9196480E-02
+  5.3814981E-02
+  4.8922710E-02
+  4.4475190E-02
+  4.0431991E-02
+  3.6756355E-02
+  3.3414867E-02
+  3.0377151E-02
+  2.7615592E-02
+  2.5105083E-02
+  2.2822803E-02
+  2.0748002E-02
+  1.8861821E-02
+  1.7147109E-02
+  1.5588281E-02
+  1.4171164E-02
+  1.2882875E-02
+  1.1711705E-02
+  1.0647004E-02
+  9.6790940E-03
+  8.7991757E-03
+  7.9992507E-03
+  7.2720461E-03
+  6.6109509E-03
+  6.0099554E-03
+  5.4635955E-03
+  4.9669049E-03
+  4.5153680E-03
+ Center in proper Kpc:
+   3317.95899728296     
+   1008.10973658067     
+   602.113352539086     
+ Velocity of the center in Km/s
+   21.0173451510652     
+  -9.98688079600196     
+   1.94684650763823     
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is        22460
+ The specific angular momentum of cold gas is
+   26.6441021333711     
+ Angular momentum in Msun Kpc Km/s (proper):
+  -0.206E+10
+   0.692E+09
+   0.201E+10
+ AM axis
+ -0.6949778    
+  0.2340706    
+  0.6798653    
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1=  0.6992919      0.0000000E+00  0.7148362    
+  Vector 2=  0.1673222      0.9722196     -0.1636837    
+  Vector 3= -0.6949778      0.2340706      0.6798653    
+  Vector lengths=   1.000000       1.000000       1.000000      must be 1
+  Vector products= -2.9802322E-08 -7.4505806E-09  2.2351742E-08  must be 0
+  Vector 1=   0.6992919      0.0000000E+00  0.7148362    
+ Vector 2=   0.1673222      0.9722196     -0.1636837    
+ Vector 3=  -0.6949778      0.2340706      0.6798653    
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :        7250
+ Total mass:   2779593.05729087     
+ Total initial mass:   3466942.66288638     
+ younger than .1E+11 yrs
+ SFR=   2.476387616347416E-004
+ done writing spherical profiles. exiting...
+ Rvir=    15.71962      kpc
+ Mvir=  7.6788070E+09  Msun
+ Writing binary files..
+ #DM particles inside    31.43923      Kpc :      109241
+ with total mass equal to   0.10E+11 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    31.43923      Kpc :        7448
+ Total mass:   2871779.45138064     
+ Total initial mass:   3586182.85537662     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    31.43923      Kpc :        7448
+ Total mass:   2871779.45138064     
+ Total initial mass:   3586182.85537662     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    31.43923      Kpc :        7448
+ Total mass:   2871779.45138064     
+ Total initial mass:   3586182.85537662     
+ younger than .1E+11 yrs
+ Number of cells=       432945
+ Number of cells=       432945
+ --------------------------
+ CURRENT SNAPSHOT:   0.2750000    
+ --------------------------
+Reading  file: ./PMcrda0.275.DAT             
+Reading  file: ./PMcrs0a0.275.DAT            
+ Open file..../PMcrda0.275.DAT
+ ./PMcrda0.275.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   0.276 A0=   0.020 Ampl=   0.275 Step=   0.001
+  I = 536 WEIGHT=   0.002 Ekin=   0.192E+10   0.192E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     2848640
+  hello :     2848640     2848640
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     2848640
+ Read_Particles_Binary: reading np=     2848640  particles
+  Pages=           3  Species=           5
+  N_in_last=      751488
+Reading  file: ./stars_a0.275.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a0.275.
+ reading tree data from file ./10MpcBox_HartGal_csf_a0.275.d
+istep = 536  t =-0.76874914     dt = 0.25869683E-02  a = 0.27565870     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =        1491  nOct =      286237
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       28448
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      138144
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      494128
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      504208
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      636568
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      266024
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      136984
+ reading tree (oct) data for level            8
+ reading cell data: ncells =       59272
+ reading tree (oct) data for level            9
+ reading cell data: ncells =       25968
+ reading tree (oct) data for level           10
+ reading cell data: ncells =         152
+ done reading     4387048  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   3662.80480219304     
+   1108.72902714745     
+   664.732644638549     
+  6.5007925E-02
+  5.9098113E-02
+  5.3725556E-02
+  4.8841413E-02
+  4.4401284E-02
+  4.0364802E-02
+  3.6695275E-02
+  3.3359341E-02
+  3.0326674E-02
+  2.7569702E-02
+  2.5063366E-02
+  2.2784878E-02
+  2.0713525E-02
+  1.8830476E-02
+  1.7118614E-02
+  1.5562376E-02
+  1.4147614E-02
+  1.2861467E-02
+  1.1692243E-02
+  1.0629311E-02
+  9.6630100E-03
+  8.7845540E-03
+  7.9859579E-03
+  7.2599617E-03
+  6.5999650E-03
+  5.9999679E-03
+  5.4545160E-03
+  4.9586510E-03
+  4.5078644E-03
+  4.0980582E-03
+ Center in proper Kpc:
+   3662.67793625896     
+   1108.82799129534     
+   664.813461726282     
+ Velocity of the center in Km/s
+   17.6241762155662     
+  -11.2810066203511     
+   3.71926361688418     
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is        18781
+ The specific angular momentum of cold gas is
+   22.6816609596263     
+ Angular momentum in Msun Kpc Km/s (proper):
+  -0.658E+09
+  -0.181E+08
+   0.209E+10
+ AM axis
+ -0.3004906    
+ -8.2570957E-03
+  0.9537491    
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1=  0.9537816      0.0000000E+00  0.3005008    
+  Vector 2= -2.4812638E-03  0.9999659      7.8754658E-03
+  Vector 3= -0.3004906     -8.2570957E-03  0.9537491    
+  Vector lengths=   1.000000       1.000000       1.000000      must be 1
+  Vector products=  0.0000000E+00  0.0000000E+00  0.0000000E+00  must be 0
+  Vector 1=   0.9537816      0.0000000E+00  0.3005008    
+ Vector 2=  -2.4812638E-03  0.9999659      7.8754658E-03
+ Vector 3=  -0.3004906     -8.2570957E-03  0.9537491    
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :       14554
+ Total mass:   4547108.20586758     
+ Total initial mass:   5735315.84746245     
+ younger than .1E+11 yrs
+ SFR=   4.096654176758892E-004
+ done writing spherical profiles. exiting...
+ Rvir=    17.51622      kpc
+ Mvir=  7.9923200E+09  Msun
+ Writing binary files..
+ #DM particles inside    35.03243      Kpc :      124794
+ with total mass equal to   0.12E+11 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    35.03243      Kpc :       15088
+ Total mass:   4740040.68079508     
+ Total initial mass:   5982372.08634815     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    35.03243      Kpc :       15088
+ Total mass:   4740040.68079508     
+ Total initial mass:   5982372.08634815     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    35.03243      Kpc :       15088
+ Total mass:   4740040.68079508     
+ Total initial mass:   5982372.08634815     
+ younger than .1E+11 yrs
+ Number of cells=       462643
+ Number of cells=       462643
+ --------------------------
+ CURRENT SNAPSHOT:   0.3000000    
+ --------------------------
+Reading  file: ./PMcrda0.300.DAT             
+Reading  file: ./PMcrs0a0.300.DAT            
+ Open file..../PMcrda0.300.DAT
+ ./PMcrda0.300.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   0.300 A0=   0.020 Ampl=   0.275 Step=   0.000
+  I = 577 WEIGHT=   0.002 Ekin=   0.214E+10   0.214E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     2854260
+  hello :     2854260     2854260
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     2854260
+ Read_Particles_Binary: reading np=     2854260  particles
+  Pages=           3  Species=           5
+  N_in_last=      757108
+Reading  file: ./stars_a0.300.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a0.300.
+ reading tree data from file ./10MpcBox_HartGal_csf_a0.300.d
+istep = 577  t =-0.69100698     dt = 0.13470367E-02  a = 0.30032009     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =        2591  nOct =      286034
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       28640
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      137264
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      464600
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      488832
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      659320
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      281312
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      150472
+ reading tree (oct) data for level            8
+ reading cell data: ncells =       58792
+ reading tree (oct) data for level            9
+ reading cell data: ncells =       18360
+ reading tree (oct) data for level           10
+ reading cell data: ncells =         680
+ done reading     4385424  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   3996.97316028345     
+   1205.69405565422     
+   725.118485946629     
+  5.9669666E-02
+  5.4245152E-02
+  4.9313772E-02
+  4.4830702E-02
+  4.0755183E-02
+  3.7050165E-02
+  3.3681966E-02
+  3.0619970E-02
+  2.7836336E-02
+  2.5305759E-02
+  2.3005236E-02
+  2.0913851E-02
+  1.9012591E-02
+  1.7284174E-02
+  1.5712885E-02
+  1.4284440E-02
+  1.2985854E-02
+  1.1805322E-02
+  1.0732111E-02
+  9.7564636E-03
+  8.8695120E-03
+  8.0631925E-03
+  7.3301750E-03
+  6.6637956E-03
+  6.0579958E-03
+  5.5072689E-03
+  5.0066081E-03
+  4.5514619E-03
+  4.1376925E-03
+  3.7615385E-03
+ Center in proper Kpc:
+   3996.87027244688     
+   1205.73263859294     
+   725.163826349187     
+ Velocity of the center in Km/s
+   16.9445994356608     
+  -2.36021446161307     
+   5.90493633425339     
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is        10510
+ The specific angular momentum of cold gas is
+   26.5323920288466     
+ Angular momentum in Msun Kpc Km/s (proper):
+  -0.135E+09
+   0.339E+08
+   0.152E+10
+ AM axis
+ -8.8083044E-02
+  2.2216195E-02
+  0.9958653    
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1=  0.9961112      0.0000000E+00  8.8104792E-02
+  Vector 2=  1.9573532E-03  0.9997532     -2.2129800E-02
+  Vector 3= -8.8083044E-02  2.2216195E-02  0.9958653    
+  Vector lengths=   1.000000       1.000000      0.9999999      must be 1
+  Vector products=  0.0000000E+00  0.0000000E+00  1.1641532E-10  must be 0
+  Vector 1=   0.9961112      0.0000000E+00  8.8104792E-02
+ Vector 2=   1.9573532E-03  0.9997532     -2.2129800E-02
+ Vector 3=  -8.8083044E-02  2.2216195E-02  0.9958653    
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :       20073
+ Total mass:   5982786.90775323     
+ Total initial mass:   7694252.76465833     
+ younger than .1E+11 yrs
+ SFR=   5.495894831898809E-004
+ done writing spherical profiles. exiting...
+ Rvir=    19.06954      kpc
+ Mvir=  8.0325094E+09  Msun
+ Writing binary files..
+ #DM particles inside    38.13908      Kpc :      135306
+ with total mass equal to   0.13E+11 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    38.13908      Kpc :       20703
+ Total mass:   6200422.45952750     
+ Total initial mass:   7979205.61929196     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    38.13908      Kpc :       20703
+ Total mass:   6200422.45952750     
+ Total initial mass:   7979205.61929196     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    38.13908      Kpc :       20703
+ Total mass:   6200422.45952750     
+ Total initial mass:   7979205.61929196     
+ younger than .1E+11 yrs
+ Number of cells=       467653
+ Number of cells=       467653
+ --------------------------
+ CURRENT SNAPSHOT:   0.3500000    
+ --------------------------
+Reading  file: ./PMcrda0.350.DAT             
+Reading  file: ./PMcrs0a0.350.DAT            
+ Open file..../PMcrda0.350.DAT
+ ./PMcrda0.350.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   0.350 A0=   0.020 Ampl=   0.275 Step=   0.001
+  I = 662 WEIGHT=   0.002 Ekin=   0.269E+10   0.268E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     2859558
+  hello :     2859558     2859558
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     2859558
+ Read_Particles_Binary: reading np=     2859558  particles
+  Pages=           3  Species=           5
+  N_in_last=      762406
+Reading  file: ./stars_a0.350.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a0.350.
+ reading tree data from file ./10MpcBox_HartGal_csf_a0.350.d
+istep = 662  t =-0.56089127     dt = 0.16556704E-02  a = 0.35031542     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =       13080  nOct =      297548
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       28872
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      135688
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      413648
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      459208
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      787464
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      304392
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      168520
+ reading tree (oct) data for level            8
+ reading cell data: ncells =       59880
+ reading tree (oct) data for level            9
+ reading cell data: ncells =       21056
+ reading tree (oct) data for level           10
+ reading cell data: ncells =        1656
+ done reading     4477536  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   4678.93379550208     
+   1403.89014318824     
+   848.275117333874     
+  5.1153902E-02
+  4.6503548E-02
+  4.2275950E-02
+  3.8432680E-02
+  3.4938801E-02
+  3.1762544E-02
+  2.8875040E-02
+  2.6250036E-02
+  2.3863669E-02
+  2.1694245E-02
+  1.9722041E-02
+  1.7929127E-02
+  1.6299207E-02
+  1.4817460E-02
+  1.3470419E-02
+  1.2245835E-02
+  1.1132577E-02
+  1.0120524E-02
+  9.2004761E-03
+  8.3640693E-03
+  7.6036993E-03
+  6.9124536E-03
+  6.2840488E-03
+  5.7127713E-03
+  5.1934281E-03
+  4.7212983E-03
+  4.2920895E-03
+  3.9018996E-03
+  3.5471814E-03
+  3.2247102E-03
+ Center in proper Kpc:
+   4678.92115250521     
+   1403.97472047763     
+   848.327542174331     
+ Velocity of the center in Km/s
+   20.6082781768231     
+ -0.709021325421470     
+   4.01532570285183     
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is         8917
+ The specific angular momentum of cold gas is
+   32.5580096321089     
+ Angular momentum in Msun Kpc Km/s (proper):
+   0.133E+10
+  -0.446E+09
+   0.740E+09
+ AM axis
+  0.8381193    
+ -0.2813216    
+  0.4673479    
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1=  0.4870168      0.0000000E+00 -0.8733926    
+  Vector 2=  0.2457042      0.9596135      0.1370084    
+  Vector 3=  0.8381193     -0.2813216      0.4673479    
+  Vector lengths=  0.9999999      0.9999999      0.9999999      must be 1
+  Vector products=  0.0000000E+00  0.0000000E+00  0.0000000E+00  must be 0
+  Vector 1=   0.4870168      0.0000000E+00 -0.8733926    
+ Vector 2=   0.2457042      0.9596135      0.1370084    
+ Vector 3=   0.8381193     -0.2813216      0.4673479    
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :       25328
+ Total mass:   7627628.60453535     
+ Total initial mass:   10135412.5493394     
+ younger than .1E+11 yrs
+ SFR=   7.239580392385261E-004
+ done writing spherical profiles. exiting...
+ Rvir=    24.27111      kpc
+ Mvir=  1.0624428E+10  Msun
+ Writing binary files..
+ #DM particles inside    48.54222      Kpc :      179602
+ with total mass equal to   0.17E+11 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    48.54222      Kpc :       26011
+ Total mass:   7867811.50724875     
+ Total initial mass:   10458366.8492774     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    48.54222      Kpc :       26011
+ Total mass:   7867811.50724875     
+ Total initial mass:   10458366.8492774     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    48.54222      Kpc :       26011
+ Total mass:   7867811.50724875     
+ Total initial mass:   10458366.8492774     
+ younger than .1E+11 yrs
+ Number of cells=       591047
+ Number of cells=       591047
+ --------------------------
+ CURRENT SNAPSHOT:   0.3750000    
+ --------------------------
+Reading  file: ./PMcrda0.375.DAT             
+Reading  file: ./PMcrs0a0.375.DAT            
+ Open file..../PMcrda0.375.DAT
+ ./PMcrda0.375.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   0.375 A0=   0.020 Ampl=   0.275 Step=   0.001
+  I = 697 WEIGHT=   0.002 Ekin=   0.298E+10   0.297E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     2861914
+  hello :     2861914     2861914
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     2861914
+ Read_Particles_Binary: reading np=     2861914  particles
+  Pages=           3  Species=           5
+  N_in_last=      764762
+Reading  file: ./stars_a0.375.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a0.375.
+ reading tree data from file ./10MpcBox_HartGal_csf_a0.375.d
+istep = 697  t =-0.50690674     dt = 0.14533324E-02  a = 0.37516293     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =       37779  nOct =      298301
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       28928
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      134720
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      393312
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      440792
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      798424
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      319288
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      171024
+ reading tree (oct) data for level            8
+ reading cell data: ncells =       71512
+ reading tree (oct) data for level            9
+ reading cell data: ncells =       22896
+ reading tree (oct) data for level           10
+ reading cell data: ncells =        5512
+ done reading     4483560  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   5021.13045660309     
+   1502.26039720025     
+   907.849463528386     
+  4.7765911E-02
+  4.3423556E-02
+  3.9475959E-02
+  3.5887234E-02
+  3.2624759E-02
+  2.9658871E-02
+  2.6962610E-02
+  2.4511464E-02
+  2.2283148E-02
+  2.0257406E-02
+  1.8415824E-02
+  1.6741658E-02
+  1.5219688E-02
+  1.3836080E-02
+  1.2578255E-02
+  1.1434777E-02
+  1.0395251E-02
+  9.4502280E-03
+  8.5911164E-03
+  7.8101056E-03
+  7.1000960E-03
+  6.4546326E-03
+  5.8678477E-03
+  5.3344071E-03
+  4.8494609E-03
+  4.4086007E-03
+  4.0078186E-03
+  3.6434715E-03
+  3.3122469E-03
+  3.0111335E-03
+ Center in proper Kpc:
+   5021.06418986089     
+   1502.27140532683     
+   907.870008398295     
+ Velocity of the center in Km/s
+   26.9636799076290     
+  -1.76181997017205     
+  -2.49623178961694     
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is        11736
+ The specific angular momentum of cold gas is
+   18.1607189308517     
+ Angular momentum in Msun Kpc Km/s (proper):
+   0.610E+09
+  -0.735E+09
+   0.294E+09
+ AM axis
+  0.6103811    
+ -0.7352324    
+  0.2947340    
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1=  0.4348295      0.0000000E+00 -0.9005128    
+  Vector 2=  0.6620862      0.6778150      0.3197007    
+  Vector 3=  0.6103811     -0.7352324      0.2947340    
+  Vector lengths=  0.9999998      0.9999999      0.9999999      must be 1
+  Vector products=  0.0000000E+00 -1.4901161E-08  0.0000000E+00  must be 0
+  Vector 1=   0.4348295      0.0000000E+00 -0.9005128    
+ Vector 2=   0.6620862      0.6778150      0.3197007    
+ Vector 3=   0.6103811     -0.7352324      0.2947340    
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :       27680
+ Total mass:   8662782.42942182     
+ Total initial mass:   11587681.7926481     
+ younger than .1E+11 yrs
+ SFR=   8.276915566177193E-004
+ done writing spherical profiles. exiting...
+ Rvir=    26.51052      kpc
+ Mvir=  1.1394040E+10  Msun
+ Writing binary files..
+ #DM particles inside    53.02105      Kpc :      204465
+ with total mass equal to   0.19E+11 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    53.02105      Kpc :       28368
+ Total mass:   8901540.53295144     
+ Total initial mass:   11910307.9769416     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    53.02105      Kpc :       28368
+ Total mass:   8901540.53295144     
+ Total initial mass:   11910307.9769416     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    53.02105      Kpc :       28368
+ Total mass:   8901540.53295144     
+ Total initial mass:   11910307.9769416     
+ younger than .1E+11 yrs
+ Number of cells=       655178
+ Number of cells=       655178
+ --------------------------
+ CURRENT SNAPSHOT:   0.4000000    
+ --------------------------
+Reading  file: ./PMcrda0.400.DAT             
+Reading  file: ./PMcrs0a0.400.DAT            
+ Open file..../PMcrda0.400.DAT
+ ./PMcrda0.400.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   0.400 A0=   0.020 Ampl=   0.275 Step=   0.001
+  I = 731 WEIGHT=   0.002 Ekin=   0.308E+10   0.307E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     2863800
+  hello :     2863800     2863800
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     2863800
+ Read_Particles_Binary: reading np=     2863800  particles
+  Pages=           3  Species=           5
+  N_in_last=      766648
+Reading  file: ./stars_a0.400.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a0.400.
+ reading tree data from file ./10MpcBox_HartGal_csf_a0.400.d
+istep = 731  t =-0.45774353     dt = 0.14108542E-02  a = 0.40045556     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =       14805  nOct =      296339
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       28856
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      133224
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      373832
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      420952
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      767120
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      333472
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      180736
+ reading tree (oct) data for level            8
+ reading cell data: ncells =       88576
+ reading tree (oct) data for level            9
+ reading cell data: ncells =       41848
+ reading tree (oct) data for level           10
+ reading cell data: ncells =        2096
+ done reading     4467864  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   5370.46779514156     
+   1602.75369376376     
+   968.880043181011     
+  4.4749033E-02
+  4.0680937E-02
+  3.6982670E-02
+  3.3620607E-02
+  3.0564187E-02
+  2.7785623E-02
+  2.5259657E-02
+  2.2963325E-02
+  2.0875748E-02
+  1.8977953E-02
+  1.7252684E-02
+  1.5684258E-02
+  1.4258416E-02
+  1.2962196E-02
+  1.1783814E-02
+  1.0712558E-02
+  9.7386893E-03
+  8.8533536E-03
+  8.0485027E-03
+  7.3168203E-03
+  6.6516548E-03
+  6.0469587E-03
+  5.4972349E-03
+  4.9974862E-03
+  4.5431694E-03
+  4.1301539E-03
+  3.7546854E-03
+  3.4133503E-03
+  3.1030457E-03
+  2.8209507E-03
+ Center in proper Kpc:
+   5370.41286350000     
+   1602.71663670398     
+   968.892904160583     
+ Velocity of the center in Km/s
+   30.1217587211921     
+  0.274393297641788     
+   2.75592188663674     
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is        12391
+ The specific angular momentum of cold gas is
+   38.9084452157350     
+ Angular momentum in Msun Kpc Km/s (proper):
+   0.216E+10
+  -0.156E+10
+  -0.137E+08
+ AM axis
+  0.8106774    
+ -0.5854705    
+ -5.1518148E-03
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1= -6.3548223E-03  0.0000000E+00 -0.9999799    
+  Vector 2=  0.5854587      0.8106937     -3.7205610E-03
+  Vector 3=  0.8106774     -0.5854705     -5.1518148E-03
+  Vector lengths=   1.000000       1.000000       1.000000      must be 1
+  Vector products=  0.0000000E+00  3.4549885E-08  0.0000000E+00  must be 0
+  Vector 1=  -6.3548223E-03  0.0000000E+00 -0.9999799    
+ Vector 2=   0.5854587      0.8106937     -3.7205610E-03
+ Vector 3=   0.8106774     -0.5854705     -5.1518148E-03
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :       29502
+ Total mass:   9569242.45497091     
+ Total initial mass:   12906423.8379690     
+ younger than .1E+11 yrs
+ SFR=   9.218874169977826E-004
+ done writing spherical profiles. exiting...
+ Rvir=    31.01220      kpc
+ Mvir=  1.5181107E+10  Msun
+ Writing binary files..
+ #DM particles inside    62.02441      Kpc :      240699
+ with total mass equal to   0.23E+11 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    62.02441      Kpc :       30276
+ Total mass:   9846331.55768112     
+ Total initial mass:   13282060.8791237     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    62.02441      Kpc :       30276
+ Total mass:   9846331.55768112     
+ Total initial mass:   13282060.8791237     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    62.02441      Kpc :       30276
+ Total mass:   9846331.55768112     
+ Total initial mass:   13282060.8791237     
+ younger than .1E+11 yrs
+ Number of cells=       767960
+ Number of cells=       767960
+ --------------------------
+ CURRENT SNAPSHOT:   0.4250000    
+ --------------------------
+Reading  file: ./PMcrda0.425.DAT             
+Reading  file: ./PMcrs0a0.425.DAT            
+ Open file..../PMcrda0.425.DAT
+ ./PMcrda0.425.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   0.425 A0=   0.020 Ampl=   0.275 Step=   0.001
+  I = 765 WEIGHT=   0.002 Ekin=   0.321E+10   0.320E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     2867487
+  hello :     2867487     2867487
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     2867487
+ Read_Particles_Binary: reading np=     2867487  particles
+  Pages=           3  Species=           5
+  N_in_last=      770335
+Reading  file: ./stars_a0.425.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a0.425.
+ reading tree data from file ./10MpcBox_HartGal_csf_a0.425.d
+istep = 765  t =-0.41444773     dt = 0.13575862E-02  a = 0.42522356     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =        5996  nOct =      299610
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       29136
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      131984
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      358096
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      403152
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      732544
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      316832
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      197992
+ reading tree (oct) data for level            8
+ reading cell data: ncells =      124368
+ reading tree (oct) data for level            9
+ reading cell data: ncells =       77304
+ reading tree (oct) data for level           10
+ reading cell data: ncells =       25472
+ done reading     4494032  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   5715.37398126081     
+   1703.08829891832     
+   1029.45373108478     
+  4.2142540E-02
+  3.8311400E-02
+  3.4828544E-02
+  3.1662311E-02
+  2.8783919E-02
+  2.6167199E-02
+  2.3788363E-02
+  2.1625783E-02
+  1.9659802E-02
+  1.7872548E-02
+  1.6247770E-02
+  1.4770700E-02
+  1.3427909E-02
+  1.2207190E-02
+  1.1097445E-02
+  1.0088586E-02
+  9.1714421E-03
+  8.3376747E-03
+  7.5797043E-03
+  6.8906401E-03
+  6.2642181E-03
+  5.6947437E-03
+  5.1770397E-03
+  4.7063995E-03
+  4.2785448E-03
+  3.8895861E-03
+  3.5359873E-03
+  3.2145339E-03
+  2.9223035E-03
+  2.6566396E-03
+ Center in proper Kpc:
+   5715.40449883946     
+   1703.00077886242     
+   1029.40566589842     
+ Velocity of the center in Km/s
+   26.8581548416925     
+   5.40566584822744     
+  -4.73516801381100     
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is        33489
+ The specific angular momentum of cold gas is
+   36.2050239537557     
+ Angular momentum in Msun Kpc Km/s (proper):
+   0.492E+10
+  -0.357E+10
+   0.132E+10
+ AM axis
+  0.7907380    
+ -0.5743946    
+  0.2116701    
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1=  0.2585825      0.0000000E+00 -0.9659892    
+  Vector 2=  0.5548590      0.8185785      0.1485284    
+  Vector 3=  0.7907380     -0.5743946      0.2116701    
+  Vector lengths=   1.000000       1.000000      0.9999999      must be 1
+  Vector products=  0.0000000E+00  5.2154064E-08  0.0000000E+00  must be 0
+  Vector 1=   0.2585825      0.0000000E+00 -0.9659892    
+ Vector 2=   0.5548590      0.8185785      0.1485284    
+ Vector 3=   0.7907380     -0.5743946      0.2116701    
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :       33290
+ Total mass:   11405860.2360326     
+ Total initial mass:   15283711.0604010     
+ younger than .1E+11 yrs
+ SFR=   1.091693647171503E-003
+ done writing spherical profiles. exiting...
+ Rvir=    34.66685      kpc
+ Mvir=  1.7945512E+10  Msun
+ Writing binary files..
+ #DM particles inside    69.33370      Kpc :      286315
+ with total mass equal to   0.27E+11 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    69.33370      Kpc :       33994
+ Total mass:   11663708.8133106     
+ Total initial mass:   15634564.9782135     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    69.33370      Kpc :       33994
+ Total mass:   11663708.8133106     
+ Total initial mass:   15634564.9782135     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    69.33370      Kpc :       33994
+ Total mass:   11663708.8133106     
+ Total initial mass:   15634564.9782135     
+ younger than .1E+11 yrs
+ Number of cells=       917470
+ Number of cells=       917470
+ --------------------------
+ CURRENT SNAPSHOT:   0.4500000    
+ --------------------------
+Reading  file: ./PMcrda0.450.DAT             
+Reading  file: ./PMcrs0a0.450.DAT            
+ Open file..../PMcrda0.450.DAT
+ ./PMcrda0.450.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   0.450 A0=   0.020 Ampl=   0.275 Step=   0.001
+  I = 799 WEIGHT=   0.002 Ekin=   0.335E+10   0.335E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     2873556
+  hello :     2873556     2873556
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     2873556
+ Read_Particles_Binary: reading np=     2873556  particles
+  Pages=           3  Species=           5
+  N_in_last=      776404
+Reading  file: ./stars_a0.450.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a0.450.
+ reading tree data from file ./10MpcBox_HartGal_csf_a0.450.d
+istep = 799  t =-0.37510363     dt = 0.11985303E-02  a = 0.45012289     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =       92079  nOct =      299299
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       29120
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      130752
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      344088
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      390176
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      698240
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      357136
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      248968
+ reading tree (oct) data for level            8
+ reading cell data: ncells =      122512
+ reading tree (oct) data for level            9
+ reading cell data: ncells =       53008
+ reading tree (oct) data for level           10
+ reading cell data: ncells =       20040
+ reading tree (oct) data for level           11
+ reading cell data: ncells =         352
+ done reading     4491544  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   6060.78632322016     
+   1802.66694005331     
+   1086.54536326520     
+  3.9811350E-02
+  3.6192138E-02
+  3.2901943E-02
+  2.9910857E-02
+  2.7191687E-02
+  2.4719715E-02
+  2.2472467E-02
+  2.0429514E-02
+  1.8572286E-02
+  1.6883897E-02
+  1.5348997E-02
+  1.3953634E-02
+  1.2685121E-02
+  1.1531928E-02
+  1.0483570E-02
+  9.5305182E-03
+  8.6641070E-03
+  7.8764604E-03
+  7.1604182E-03
+  6.5094708E-03
+  5.9177005E-03
+  5.3797276E-03
+  4.8906612E-03
+  4.4460557E-03
+  4.0418687E-03
+  3.6744261E-03
+  3.3403873E-03
+  3.0367156E-03
+  2.7606504E-03
+  2.5096820E-03
+ Center in proper Kpc:
+   6060.83079169190     
+   1802.63729440548     
+   1086.56247490751     
+ Velocity of the center in Km/s
+   28.2412884796444     
+  -3.92940526149145     
+  -3.13206796756253     
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is        21941
+ The specific angular momentum of cold gas is
+   41.5015489728177     
+ Angular momentum in Msun Kpc Km/s (proper):
+   0.420E+10
+  -0.123E+10
+  -0.835E+09
+ AM axis
+  0.9427459    
+ -0.2760019    
+ -0.1872252    
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1= -0.1947915      0.0000000E+00 -0.9808447    
+  Vector 2=  0.2707150      0.9611571     -5.3762816E-02
+  Vector 3=  0.9427459     -0.2760019     -0.1872252    
+  Vector lengths=   1.000000       1.000000       1.000000      must be 1
+  Vector products=  0.0000000E+00 -8.3819032E-09 -3.7252903E-09  must be 0
+  Vector 1=  -0.1947915      0.0000000E+00 -0.9808447    
+ Vector 2=   0.2707150      0.9611571     -5.3762816E-02
+ Vector 3=   0.9427459     -0.2760019     -0.1872252    
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :       38972
+ Total mass:   14031595.1286558     
+ Total initial mass:   18816248.2864716     
+ younger than .1E+11 yrs
+ SFR=   1.344017734747975E-003
+ done writing spherical profiles. exiting...
+ Rvir=    38.84723      kpc
+ Mvir=  2.1596768E+10  Msun
+ Writing binary files..
+ #DM particles inside    77.69446      Kpc :      311950
+ with total mass equal to   0.29E+11 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    77.69446      Kpc :       40078
+ Total mass:   14436431.3661493     
+ Total initial mass:   19359328.7933721     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    77.69446      Kpc :       40078
+ Total mass:   14436431.3661493     
+ Total initial mass:   19359328.7933721     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    77.69446      Kpc :       40078
+ Total mass:   14436431.3661493     
+ Total initial mass:   19359328.7933721     
+ younger than .1E+11 yrs
+ Number of cells=      1005678
+ Number of cells=      1005678
+ --------------------------
+ CURRENT SNAPSHOT:   0.4750000    
+ --------------------------
+Reading  file: ./PMcrda0.475.DAT             
+Reading  file: ./PMcrs0a0.475.DAT            
+ Open file..../PMcrda0.475.DAT
+ ./PMcrda0.475.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   0.475 A0=   0.020 Ampl=   0.275 Step=   0.001
+  I = 829 WEIGHT=   0.002 Ekin=   0.345E+10   0.345E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     2879850
+  hello :     2879850     2879850
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     2879850
+ Read_Particles_Binary: reading np=     2879850  particles
+  Pages=           3  Species=           5
+  N_in_last=      782698
+Reading  file: ./stars_a0.475.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a0.475.
+ reading tree data from file ./10MpcBox_HartGal_csf_a0.475.d
+istep = 829  t =-0.33880503     dt = 0.84318848E-03  a = 0.47547147     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =       55248  nOct =      298363
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       29168
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      129496
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      330928
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      380456
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      666616
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      392768
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      219880
+ reading tree (oct) data for level            8
+ reading cell data: ncells =      113232
+ reading tree (oct) data for level            9
+ reading cell data: ncells =       85232
+ reading tree (oct) data for level           10
+ reading cell data: ncells =       39104
+ reading tree (oct) data for level           11
+ reading cell data: ncells =          24
+ done reading     4484056  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   6411.58196605243     
+   1900.19338301579     
+   1147.00842494638     
+  3.7688907E-02
+  3.4262642E-02
+  3.1147856E-02
+  2.8316231E-02
+  2.5742028E-02
+  2.3401843E-02
+  2.1274403E-02
+  1.9340366E-02
+  1.7582150E-02
+  1.5983773E-02
+  1.4530702E-02
+  1.3209729E-02
+  1.2008845E-02
+  1.0917132E-02
+  9.9246651E-03
+  9.0224231E-03
+  8.2022026E-03
+  7.4565476E-03
+  6.7786793E-03
+  6.1624357E-03
+  5.6022140E-03
+  5.0929217E-03
+  4.6299286E-03
+  4.2090258E-03
+  3.8263870E-03
+  3.4785336E-03
+  3.1623032E-03
+  2.8748210E-03
+  2.6134735E-03
+  2.3758849E-03
+ Center in proper Kpc:
+   6411.48561769699     
+   1900.08526359431     
+   1146.92591849269     
+ Velocity of the center in Km/s
+   25.6385057065702     
+  -15.2752208714237     
+  -5.69495933850359     
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is        40535
+ The specific angular momentum of cold gas is
+   37.9446645329770     
+ Angular momentum in Msun Kpc Km/s (proper):
+   0.589E+10
+  -0.345E+10
+   0.120E+10
+ AM axis
+  0.8495343    
+ -0.4982569    
+  0.1732964    
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1=  0.1998737      0.0000000E+00 -0.9798217    
+  Vector 2=  0.4882029      0.8670295      9.9588469E-02
+  Vector 3=  0.8495343     -0.4982569      0.1732964    
+  Vector lengths=   1.000000       1.000000       1.000000      must be 1
+  Vector products=  0.0000000E+00  1.1175871E-08 -7.4505806E-09  must be 0
+  Vector 1=   0.1998737      0.0000000E+00 -0.9798217    
+ Vector 2=   0.4882029      0.8670295      9.9588469E-02
+ Vector 3=   0.8495343     -0.4982569      0.1732964    
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :       45359
+ Total mass:   15946967.9511669     
+ Total initial mass:   21537351.1270279     
+ younger than .1E+11 yrs
+ SFR=   1.538382223359135E-003
+ done writing spherical profiles. exiting...
+ Rvir=    41.64848      kpc
+ Mvir=  2.2939787E+10  Msun
+ Writing binary files..
+ #DM particles inside    83.29696      Kpc :      323772
+ with total mass equal to   0.31E+11 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    83.29696      Kpc :       46372
+ Total mass:   16320546.5121118     
+ Total initial mass:   22048694.9388911     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    83.29696      Kpc :       46372
+ Total mass:   16320546.5121118     
+ Total initial mass:   22048694.9388911     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    83.29696      Kpc :       46372
+ Total mass:   16320546.5121118     
+ Total initial mass:   22048694.9388911     
+ younger than .1E+11 yrs
+ Number of cells=      1044888
+ Number of cells=      1044888
+ --------------------------
+ CURRENT SNAPSHOT:   0.5000000    
+ --------------------------
+Reading  file: ./PMcrda0.500.DAT             
+Reading  file: ./PMcrs0a0.500.DAT            
+ Open file..../PMcrda0.500.DAT
+ ./PMcrda0.500.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   0.500 A0=   0.020 Ampl=   0.275 Step=   0.001
+  I = 859 WEIGHT=   0.002 Ekin=   0.359E+10   0.358E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     2903643
+  hello :     2903643     2903643
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     2903643
+ Read_Particles_Binary: reading np=     2903643  particles
+  Pages=           3  Species=           5
+  N_in_last=      806491
+Reading  file: ./stars_a0.500.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a0.500.
+ reading tree data from file ./10MpcBox_HartGal_csf_a0.500.d
+istep = 859  t =-0.30677147     dt = 0.67818392E-03  a = 0.50006312     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =        4965  nOct =      305668
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       29200
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      128424
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      320736
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      375704
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      638464
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      374960
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      227864
+ reading tree (oct) data for level            8
+ reading cell data: ncells =      146360
+ reading tree (oct) data for level            9
+ reading cell data: ncells =      148800
+ reading tree (oct) data for level           10
+ reading cell data: ncells =       54712
+ reading tree (oct) data for level           11
+ reading cell data: ncells =         120
+ done reading     4542496  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   6753.43901009967     
+   1994.76626932223     
+   1207.04086179462     
+  3.5835478E-02
+  3.2577708E-02
+  2.9616097E-02
+  2.6923724E-02
+  2.4476111E-02
+  2.2251010E-02
+  2.0228190E-02
+  1.8389264E-02
+  1.6717512E-02
+  1.5197738E-02
+  1.3816125E-02
+  1.2560113E-02
+  1.1418285E-02
+  1.0380259E-02
+  9.4365990E-03
+  8.5787261E-03
+  7.7988417E-03
+  7.0898561E-03
+  6.4453236E-03
+  5.8593848E-03
+  5.3267134E-03
+  4.8424667E-03
+  4.4022421E-03
+  4.0020384E-03
+  3.6382165E-03
+  3.3074694E-03
+  3.0067903E-03
+  2.7334457E-03
+  2.4849507E-03
+  2.2590461E-03
+ Center in proper Kpc:
+   6753.38756618138     
+   1994.66643324352     
+   1207.02407712637     
+ Velocity of the center in Km/s
+   16.2403446284529     
+  -12.2471655275203     
+   8.05186034732234     
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is        46962
+ The specific angular momentum of cold gas is
+   46.1597216683197     
+ Angular momentum in Msun Kpc Km/s (proper):
+   0.935E+10
+  -0.389E+10
+   0.231E+10
+ AM axis
+  0.9000295    
+ -0.3747490    
+  0.2225085    
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1=  0.2399981      0.0000000E+00 -0.9707733    
+  Vector 2=  0.3637963      0.9271263      8.9939035E-02
+  Vector 3=  0.9000295     -0.3747490      0.2225085    
+  Vector lengths=   1.000000      0.9999999       1.000000      must be 1
+  Vector products=  0.0000000E+00 -2.7939677E-08 -7.4505806E-09  must be 0
+  Vector 1=   0.2399981      0.0000000E+00 -0.9707733    
+ Vector 2=   0.3637963      0.9271263      8.9939035E-02
+ Vector 3=   0.9000295     -0.3747490      0.2225085    
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :       68850
+ Total mass:   21605113.8173083     
+ Total initial mass:   28756620.8652738     
+ younger than .1E+11 yrs
+ SFR=   2.054044347519561E-003
+ done writing spherical profiles. exiting...
+ Rvir=    43.68296      kpc
+ Mvir=  2.3129491E+10  Msun
+ Writing binary files..
+ #DM particles inside    87.36592      Kpc :      331436
+ with total mass equal to   0.31E+11 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    87.36592      Kpc :       70164
+ Total mass:   22024693.8386050     
+ Total initial mass:   29315078.9635549     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    87.36592      Kpc :       70164
+ Total mass:   22024693.8386050     
+ Total initial mass:   29315078.9635549     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    87.36592      Kpc :       70164
+ Total mass:   22024693.8386050     
+ Total initial mass:   29315078.9635549     
+ younger than .1E+11 yrs
+ Number of cells=      1126994
+ Number of cells=      1126994
+ --------------------------
+ CURRENT SNAPSHOT:   0.5250000    
+ --------------------------
+Reading  file: ./PMcrda0.525.DAT             
+Reading  file: ./PMcrs0a0.525.DAT            
+ Open file..../PMcrda0.525.DAT
+ ./PMcrda0.525.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   0.525 A0=   0.020 Ampl=   0.275 Step=   0.001
+  I = 891 WEIGHT=   0.002 Ekin=   0.376E+10   0.375E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     2934065
+  hello :     2934065     2934065
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     2934065
+ Read_Particles_Binary: reading np=     2934065  particles
+  Pages=           3  Species=           5
+  N_in_last=      836913
+Reading  file: ./stars_a0.525.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a0.525.
+ reading tree data from file ./10MpcBox_HartGal_csf_a0.525.d
+istep = 891  t =-0.27663579     dt = 0.13215888E-02  a = 0.52542311     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =        9372  nOct =      306853
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       29280
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      126936
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      312256
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      371952
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      624448
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      357488
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      250568
+ reading tree (oct) data for level            8
+ reading cell data: ncells =      168088
+ reading tree (oct) data for level            9
+ reading cell data: ncells =      128168
+ reading tree (oct) data for level           10
+ reading cell data: ncells =       83608
+ reading tree (oct) data for level           11
+ reading cell data: ncells =        2032
+ done reading     4551976  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   7105.26440322849     
+   2092.20562819422     
+   1269.97214164005     
+  3.4105845E-02
+  3.1005314E-02
+  2.8186647E-02
+  2.5624225E-02
+  2.3294749E-02
+  2.1177044E-02
+  1.9251859E-02
+  1.7501689E-02
+  1.5910627E-02
+  1.4464206E-02
+  1.3149278E-02
+  1.1953889E-02
+  1.0867172E-02
+  9.8792473E-03
+  8.9811338E-03
+  8.1646666E-03
+  7.4224239E-03
+  6.7476579E-03
+  6.1342344E-03
+  5.5765766E-03
+  5.0696149E-03
+  4.6087406E-03
+  4.1897641E-03
+  3.8088765E-03
+  3.4626150E-03
+  3.1478317E-03
+  2.8616651E-03
+  2.6015136E-03
+  2.3650124E-03
+  2.1500112E-03
+ Center in proper Kpc:
+   7105.22865406494     
+   2092.18797159515     
+   1269.97519339792     
+ Velocity of the center in Km/s
+   21.8034507667006     
+  -4.03318508311242     
+   4.97958646552566     
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is        54267
+ The specific angular momentum of cold gas is
+   52.2709013591219     
+ Angular momentum in Msun Kpc Km/s (proper):
+   0.117E+11
+  -0.416E+10
+   0.392E+10
+ AM axis
+  0.8991287    
+ -0.3186569    
+  0.3000424    
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1=  0.3165438      0.0000000E+00 -0.9485779    
+  Vector 2=  0.3022709      0.9478702      0.1008688    
+  Vector 3=  0.8991287     -0.3186569      0.3000424    
+  Vector lengths=   1.000000       1.000000       1.000000      must be 1
+  Vector products=  0.0000000E+00 -1.6763806E-08  0.0000000E+00  must be 0
+  Vector 1=   0.3165438      0.0000000E+00 -0.9485779    
+ Vector 2=   0.3022709      0.9478702      0.1008688    
+ Vector 3=   0.8991287     -0.3186569      0.3000424    
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :       97983
+ Total mass:   27819987.0129103     
+ Total initial mass:   36971417.6916373     
+ younger than .1E+11 yrs
+ SFR=   2.640815549402664E-003
+ done writing spherical profiles. exiting...
+ Rvir=    47.01489      kpc
+ Mvir=  2.5311777E+10  Msun
+ Writing binary files..
+ #DM particles inside    94.02979      Kpc :      339294
+ with total mass equal to   0.32E+11 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    94.02979      Kpc :      100587
+ Total mass:   28514544.1075926     
+ Total initial mass:   37891188.6405166     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    94.02979      Kpc :      100587
+ Total mass:   28514544.1075926     
+ Total initial mass:   37891188.6405166     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    94.02979      Kpc :      100587
+ Total mass:   28514544.1075926     
+ Total initial mass:   37891188.6405166     
+ younger than .1E+11 yrs
+ Number of cells=      1167789
+ Number of cells=      1167789
+ --------------------------
+ CURRENT SNAPSHOT:   0.5500000    
+ --------------------------
+Reading  file: ./PMcrda0.550.DAT             
+Reading  file: ./PMcrs0a0.550.DAT            
+ Open file..../PMcrda0.550.DAT
+ ./PMcrda0.550.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   0.551 A0=   0.020 Ampl=   0.275 Step=   0.001
+  I = 920 WEIGHT=   0.002 Ekin=   0.396E+10   0.395E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     2964414
+  hello :     2964414     2964414
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     2964414
+ Read_Particles_Binary: reading np=     2964414  particles
+  Pages=           3  Species=           5
+  N_in_last=      867262
+Reading  file: ./stars_a0.550.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a0.550.
+ reading tree data from file ./10MpcBox_HartGal_csf_a0.550.d
+istep = 920  t =-0.24921002     dt = 0.10634032E-02  a = 0.55069095     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =      230380  nOct =      316520
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       29304
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      125816
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      305344
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      370992
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      619312
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      368008
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      223952
+ reading tree (oct) data for level            8
+ reading cell data: ncells =      187424
+ reading tree (oct) data for level            9
+ reading cell data: ncells =      176408
+ reading tree (oct) data for level           10
+ reading cell data: ncells =      124328
+ reading tree (oct) data for level           11
+ reading cell data: ncells =        1272
+ done reading     4629312  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   7454.04239814694     
+   2189.69991870778     
+   1332.42625734510     
+  3.2540940E-02
+  2.9582672E-02
+  2.6893338E-02
+  2.4448488E-02
+  2.2225898E-02
+  2.0205362E-02
+  1.8368511E-02
+  1.6698645E-02
+  1.5180587E-02
+  1.3800533E-02
+  1.2545940E-02
+  1.1405399E-02
+  1.0368545E-02
+  9.4259493E-03
+  8.5690450E-03
+  7.7900407E-03
+  7.0818551E-03
+  6.4380500E-03
+  5.8527724E-03
+  5.3207022E-03
+  4.8370021E-03
+  4.3972745E-03
+  3.9975219E-03
+  3.6341108E-03
+  3.3037369E-03
+  3.0033970E-03
+  2.7303610E-03
+  2.4821463E-03
+  2.2564966E-03
+  2.0513604E-03
+ Center in proper Kpc:
+   7453.98223492047     
+   2189.64564101433     
+   1332.37099872948     
+ Velocity of the center in Km/s
+   17.6424685301911     
+  -3.08604230746106     
+   11.9018449662849     
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is        49827
+ The specific angular momentum of cold gas is
+   37.3656526576942     
+ Angular momentum in Msun Kpc Km/s (proper):
+   0.846E+10
+  -0.951E+09
+  -0.233E+09
+ AM axis
+  0.9933615    
+ -0.1117268    
+ -2.7388364E-02
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1= -2.7560925E-02  0.0000000E+00 -0.9996201    
+  Vector 2=  0.1116843      0.9937389     -3.0792928E-03
+  Vector 3=  0.9933615     -0.1117268     -2.7388364E-02
+  Vector lengths=   1.000000       1.000000       1.000000      must be 1
+  Vector products=  0.0000000E+00  3.6743586E-09 -2.3283064E-10  must be 0
+  Vector 1=  -2.7560925E-02  0.0000000E+00 -0.9996201    
+ Vector 2=   0.1116843      0.9937389     -3.0792928E-03
+ Vector 3=   0.9933615     -0.1117268     -2.7388364E-02
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :      126801
+ Total mass:   34291349.4684183     
+ Total initial mass:   45729634.4790222     
+ younger than .1E+11 yrs
+ SFR=   3.266402462787299E-003
+ done writing spherical profiles. exiting...
+ Rvir=    49.40806      kpc
+ Mvir=  2.6006813E+10  Msun
+ Writing binary files..
+ #DM particles inside    98.81613      Kpc :      344672
+ with total mass equal to   0.32E+11 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    98.81613      Kpc :      130931
+ Total mass:   35325645.4561205     
+ Total initial mass:   47099185.6839653     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    98.81613      Kpc :      130931
+ Total mass:   35325645.4561205     
+ Total initial mass:   47099185.6839653     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    98.81613      Kpc :      130931
+ Total mass:   35325645.4561205     
+ Total initial mass:   47099185.6839653     
+ younger than .1E+11 yrs
+ Number of cells=      1248753
+ Number of cells=      1248753
+ --------------------------
+ CURRENT SNAPSHOT:   0.5750000    
+ --------------------------
+Reading  file: ./PMcrda0.575.DAT             
+Reading  file: ./PMcrs0a0.575.DAT            
+ Open file..../PMcrda0.575.DAT
+ ./PMcrda0.575.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   0.575 A0=   0.020 Ampl=   0.275 Step=   0.001
+  I = 949 WEIGHT=   0.002 Ekin=   0.402E+10   0.402E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     2991972
+  hello :     2991972     2991972
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     2991972
+ Read_Particles_Binary: reading np=     2991972  particles
+  Pages=           3  Species=           5
+  N_in_last=      894820
+Reading  file: ./stars_a0.575.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a0.575.
+ reading tree data from file ./10MpcBox_HartGal_csf_a0.575.d
+istep = 949  t =-0.22460364     dt = 0.73740519E-03  a = 0.57542837     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =       18208  nOct =      321150
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       29320
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      124576
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      298936
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      367152
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      610032
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      334104
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      269168
+ reading tree (oct) data for level            8
+ reading cell data: ncells =      218512
+ reading tree (oct) data for level            9
+ reading cell data: ncells =      220472
+ reading tree (oct) data for level           10
+ reading cell data: ncells =       95456
+ reading tree (oct) data for level           11
+ reading cell data: ncells =        1472
+ done reading     4666352  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   7794.33868602921     
+   2284.67585503503     
+   1395.29007154346     
+  3.1142017E-02
+  2.8310923E-02
+  2.5737202E-02
+  2.3397455E-02
+  2.1270413E-02
+  1.9336740E-02
+  1.7578853E-02
+  1.5980775E-02
+  1.4527977E-02
+  1.3207251E-02
+  1.2006592E-02
+  1.0915084E-02
+  9.9228034E-03
+  9.0207299E-03
+  8.2006631E-03
+  7.4551483E-03
+  6.7774076E-03
+  6.1612795E-03
+  5.6011630E-03
+  5.0919661E-03
+  4.6290602E-03
+  4.2082365E-03
+  3.8256694E-03
+  3.4778812E-03
+  3.1617102E-03
+  2.8742820E-03
+  2.6129836E-03
+  2.3754395E-03
+  2.1594905E-03
+  1.9631730E-03
+ Center in proper Kpc:
+   7794.37705098522     
+   2284.57536500821     
+   1395.22086203474     
+ Velocity of the center in Km/s
+   10.3882019027096     
+  -13.1914467863185     
+   5.64534733880852     
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is        28426
+ The specific angular momentum of cold gas is
+   49.4559560510847     
+ Angular momentum in Msun Kpc Km/s (proper):
+   0.648E+10
+  -0.878E+09
+   0.128E+09
+ AM axis
+  0.9907624    
+ -0.1341915    
+  1.9561563E-02
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1=  1.9740103E-02  0.0000000E+00 -0.9998051    
+  Vector 2=  0.1341653      0.9909555      2.6489536E-03
+  Vector 3=  0.9907624     -0.1341915      1.9561563E-02
+  Vector lengths=   1.000000      0.9999999       1.000000      must be 1
+  Vector products=  0.0000000E+00 -8.5674401E-09  0.0000000E+00  must be 0
+  Vector 1=   1.9740103E-02  0.0000000E+00 -0.9998051    
+ Vector 2=   0.1341653      0.9909555      2.6489536E-03
+ Vector 3=   0.9907624     -0.1341915      1.9561563E-02
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :      151502
+ Total mass:   40056624.3964073     
+ Total initial mass:   53996307.1696508     
+ younger than .1E+11 yrs
+ SFR=   3.856879083546484E-003
+ done writing spherical profiles. exiting...
+ Rvir=    51.80590      kpc
+ Mvir=  2.6798414E+10  Msun
+ Writing binary files..
+ #DM particles inside    103.6118      Kpc :      349268
+ with total mass equal to   0.33E+11 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    103.6118      Kpc :      158482
+ Total mass:   41798313.3624823     
+ Total initial mass:   56311423.0074605     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    103.6118      Kpc :      158482
+ Total mass:   41798313.3624823     
+ Total initial mass:   56311423.0074605     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    103.6118      Kpc :      158482
+ Total mass:   41798313.3624823     
+ Total initial mass:   56311423.0074605     
+ younger than .1E+11 yrs
+ Number of cells=      1304200
+ Number of cells=      1304200
+ --------------------------
+ CURRENT SNAPSHOT:   0.6010000    
+ --------------------------
+Reading  file: ./PMcrda0.601.DAT             
+Reading  file: ./PMcrs0a0.601.DAT            
+ Open file..../PMcrda0.601.DAT
+ ./PMcrda0.601.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   0.601 A0=   0.020 Ampl=   0.275 Step=   0.001
+  I = 974 WEIGHT=   0.002 Ekin=   0.397E+10   0.397E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     3018517
+  hello :     3018517     3018517
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     3018517
+ Read_Particles_Binary: reading np=     3018517  particles
+  Pages=           3  Species=           5
+  N_in_last=      921365
+Reading  file: ./stars_a0.601.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a0.601.
+ reading tree data from file ./10MpcBox_HartGal_csf_a0.601.d
+istep = 974  t =-0.20119359     dt = 0.11875986E-02  a = 0.60107303     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =        3068  nOct =      318670
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       29288
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      123192
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      294112
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      363600
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      602552
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      327280
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      266976
+ reading tree (oct) data for level            8
+ reading cell data: ncells =      238656
+ reading tree (oct) data for level            9
+ reading cell data: ncells =      203232
+ reading tree (oct) data for level           10
+ reading cell data: ncells =       98720
+ reading tree (oct) data for level           11
+ reading cell data: ncells =        1752
+ done reading     4646512  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   8148.51611254072     
+   2382.95749907762     
+   1457.34179117580     
+  2.9813349E-02
+  2.7103044E-02
+  2.4639130E-02
+  2.2399208E-02
+  2.0362915E-02
+  1.8511740E-02
+  1.6828855E-02
+  1.5298959E-02
+  1.3908144E-02
+  1.2643768E-02
+  1.1494334E-02
+  1.0449395E-02
+  9.4994493E-03
+  8.6358627E-03
+  7.8507839E-03
+  7.1370760E-03
+  6.4882506E-03
+  5.8984095E-03
+  5.3621903E-03
+  4.8747184E-03
+  4.4315620E-03
+  4.0286928E-03
+  3.6624479E-03
+  3.3294980E-03
+  3.0268163E-03
+  2.7516512E-03
+  2.5015010E-03
+  2.2740918E-03
+  2.0673561E-03
+  1.8794147E-03
+ Center in proper Kpc:
+   8148.55883715083     
+   2383.01025089213     
+   1457.31029267499     
+ Velocity of the center in Km/s
+   12.9393790153584     
+  -7.10153907826428     
+ -0.512605787580218     
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is        30665
+ The specific angular momentum of cold gas is
+   58.0911299385609     
+ Angular momentum in Msun Kpc Km/s (proper):
+   0.825E+10
+  -0.163E+10
+   0.113E+10
+ AM axis
+  0.9723012    
+ -0.1921950    
+  0.1330094    
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1=  0.1355362      0.0000000E+00 -0.9907724    
+  Vector 2=  0.1904215      0.9813567      2.6049387E-02
+  Vector 3=  0.9723012     -0.1921950      0.1330094    
+  Vector lengths=   1.000000       1.000000       1.000000      must be 1
+  Vector products= -1.4901161E-08  2.4912879E-08  0.0000000E+00  must be 0
+  Vector 1=   0.1355362      0.0000000E+00 -0.9907724    
+ Vector 2=   0.1904215      0.9813567      2.6049387E-02
+ Vector 3=   0.9723012     -0.1921950      0.1330094    
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :      174356
+ Total mass:   46117655.4973057     
+ Total initial mass:   62718255.8964246     
+ younger than .1E+11 yrs
+ SFR=   4.479875421173183E-003
+ done writing spherical profiles. exiting...
+ Rvir=    54.15598      kpc
+ Mvir=  2.7439000E+10  Msun
+ Writing binary files..
+ #DM particles inside    108.3119      Kpc :      353587
+ with total mass equal to   0.33E+11 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    108.3119      Kpc :      185016
+ Total mass:   48991640.9524390     
+ Total initial mass:   66426761.5392909     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    108.3119      Kpc :      185016
+ Total mass:   48991640.9524390     
+ Total initial mass:   66426761.5392909     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    108.3119      Kpc :      185016
+ Total mass:   48991640.9524390     
+ Total initial mass:   66426761.5392909     
+ younger than .1E+11 yrs
+ Number of cells=      1300496
+ Number of cells=      1300496
+ --------------------------
+ CURRENT SNAPSHOT:   0.6260000    
+ --------------------------
+Reading  file: ./PMcrda0.626.DAT             
+Reading  file: ./PMcrs0a0.626.DAT            
+ Open file..../PMcrda0.626.DAT
+ ./PMcrda0.626.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   0.626 A0=   0.020 Ampl=   0.275 Step=   0.001
+  I =1000 WEIGHT=   0.002 Ekin=   0.402E+10   0.401E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     3036529
+  hello :     3036529     3036529
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     3036529
+ Read_Particles_Binary: reading np=     3036529  particles
+  Pages=           3  Species=           5
+  N_in_last=      939377
+Reading  file: ./stars_a0.626.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a0.626.
+ reading tree data from file ./10MpcBox_HartGal_csf_a0.626.d
+istep =1000  t =-0.18024453     dt = 0.93574309E-03  a = 0.62604415     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =      187238  nOct =      321075
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       29504
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      121712
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      289584
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      360288
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      611016
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      340264
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      246192
+ reading tree (oct) data for level            8
+ reading cell data: ncells =      203584
+ reading tree (oct) data for level            9
+ reading cell data: ncells =      217840
+ reading tree (oct) data for level           10
+ reading cell data: ncells =      139760
+ reading tree (oct) data for level           11
+ reading cell data: ncells =        8856
+ done reading     4665752  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   8493.11276321944     
+   2476.63338655461     
+   1517.54479949040     
+  2.8624179E-02
+  2.6021980E-02
+  2.3656344E-02
+  2.1505767E-02
+  1.9550698E-02
+  1.7773362E-02
+  1.6157601E-02
+  1.4688727E-02
+  1.3353389E-02
+  1.2139444E-02
+  1.1035858E-02
+  1.0032598E-02
+  9.1205435E-03
+  8.2914028E-03
+  7.5376388E-03
+  6.8523986E-03
+  6.2294533E-03
+  5.6631393E-03
+  5.1483084E-03
+  4.6802801E-03
+  4.2547998E-03
+  3.8679997E-03
+  3.5163632E-03
+  3.1966937E-03
+  2.9060852E-03
+  2.6418956E-03
+  2.4017233E-03
+  2.1833847E-03
+  1.9848952E-03
+  1.8044502E-03
+ Center in proper Kpc:
+   8493.07439826343     
+   2476.65082517097     
+   1517.56212911541     
+ Velocity of the center in Km/s
+   18.8484009852993     
+  -6.07225762505933     
+  4.720825335514284E-002
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is        40121
+ The specific angular momentum of cold gas is
+   55.0912784939738     
+ Angular momentum in Msun Kpc Km/s (proper):
+   0.923E+10
+  -0.301E+10
+   0.215E+10
+ AM axis
+  0.9282931    
+ -0.3027214    
+  0.2159436    
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1=  0.2265747      0.0000000E+00 -0.9739938    
+  Vector 2=  0.2948488      0.9530790      6.8589002E-02
+  Vector 3=  0.9282931     -0.3027214      0.2159436    
+  Vector lengths=  0.9999999       1.000000      0.9999999      must be 1
+  Vector products=  0.0000000E+00  1.5832484E-08  0.0000000E+00  must be 0
+  Vector 1=   0.2265747      0.0000000E+00 -0.9739938    
+ Vector 2=   0.2948488      0.9530790      6.8589002E-02
+ Vector 3=   0.9282931     -0.3027214      0.2159436    
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :      188336
+ Total mass:   49923473.9506413     
+ Total initial mass:   68438306.0334192     
+ younger than .1E+11 yrs
+ SFR=   4.888450430958513E-003
+ done writing spherical profiles. exiting...
+ Rvir=    56.34240      kpc
+ Mvir=  2.7946052E+10  Msun
+ Writing binary files..
+ #DM particles inside    112.6848      Kpc :      358758
+ with total mass equal to   0.34E+11 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    112.6848      Kpc :      203016
+ Total mass:   53763123.2983478     
+ Total initial mass:   73535195.0030144     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    112.6848      Kpc :      203016
+ Total mass:   53763123.2983478     
+ Total initial mass:   73535195.0030144     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    112.6848      Kpc :      203016
+ Total mass:   53763123.2983478     
+ Total initial mass:   73535195.0030144     
+ younger than .1E+11 yrs
+ Number of cells=      1319319
+ Number of cells=      1319319
+ --------------------------
+ CURRENT SNAPSHOT:   0.6500000    
+ --------------------------
+Reading  file: ./PMcrda0.650.DAT             
+Reading  file: ./PMcrs0a0.650.DAT            
+ Open file..../PMcrda0.650.DAT
+ ./PMcrda0.650.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   0.651 A0=   0.020 Ampl=   0.275 Step=   0.001
+  I =1022 WEIGHT=   0.002 Ekin=   0.418E+10   0.417E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     3055408
+  hello :     3055408     3055408
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     3055408
+ Read_Particles_Binary: reading np=     3055408  particles
+  Pages=           3  Species=           5
+  N_in_last=      958256
+Reading  file: ./stars_a0.650.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a0.650.
+ reading tree data from file ./10MpcBox_HartGal_csf_a0.650.d
+istep =1022  t =-0.16110597     dt = 0.72170568E-03  a = 0.65078866     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =       24991  nOct =      325793
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       29584
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      120976
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      285944
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      355696
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      617816
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      323208
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      239064
+ reading tree (oct) data for level            8
+ reading cell data: ncells =      231136
+ reading tree (oct) data for level            9
+ reading cell data: ncells =      244384
+ reading tree (oct) data for level           10
+ reading cell data: ncells =      154064
+ reading tree (oct) data for level           11
+ reading cell data: ncells =        4472
+ done reading     4703496  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   8836.82004446336     
+   2572.32408817026     
+   1576.88775704397     
+  2.7535820E-02
+  2.5032563E-02
+  2.2756875E-02
+  2.0688068E-02
+  1.8807335E-02
+  1.7097577E-02
+  1.5543252E-02
+  1.4130229E-02
+  1.2845662E-02
+  1.1677874E-02
+  1.0616249E-02
+  9.6511357E-03
+  8.7737599E-03
+  7.9761455E-03
+  7.2510410E-03
+  6.5918555E-03
+  5.9925960E-03
+  5.4478142E-03
+  4.9525583E-03
+  4.5023258E-03
+  4.0930235E-03
+  3.7209303E-03
+  3.3826639E-03
+  3.0751489E-03
+  2.7955899E-03
+  2.5414452E-03
+  2.3104048E-03
+  2.1003680E-03
+  1.9094255E-03
+  1.7358413E-03
+ Center in proper Kpc:
+   8836.79563040045     
+   2572.27722188877     
+   1576.94606741745     
+ Velocity of the center in Km/s
+   20.6247699395628     
+  -7.47350247693009     
+   1.92257340884211     
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is        27198
+ The specific angular momentum of cold gas is
+   51.6523761988117     
+ Angular momentum in Msun Kpc Km/s (proper):
+   0.635E+10
+  -0.142E+10
+   0.283E+09
+ AM axis
+  0.9751171    
+ -0.2173811    
+  4.3496069E-02
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1=  4.4561680E-02  0.0000000E+00 -0.9990066    
+  Vector 2=  0.2171652      0.9760868      9.6868686E-03
+  Vector 3=  0.9751171     -0.2173811      4.3496069E-02
+  Vector lengths=  0.9999999      0.9999999      0.9999999      must be 1
+  Vector products=  0.0000000E+00 -4.5401976E-09  0.0000000E+00  must be 0
+  Vector 1=   4.4561680E-02  0.0000000E+00 -0.9990066    
+ Vector 2=   0.2171652      0.9760868      9.6868686E-03
+ Vector 3=   0.9751171     -0.2173811      4.3496069E-02
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :      206681
+ Total mass:   55681500.1408542     
+ Total initial mass:   76672411.4363570     
+ younger than .1E+11 yrs
+ SFR=   5.476600816882640E-003
+ done writing spherical profiles. exiting...
+ Rvir=    58.38224      kpc
+ Mvir=  2.8304245E+10  Msun
+ Writing binary files..
+ #DM particles inside    116.7645      Kpc :      362079
+ with total mass equal to   0.34E+11 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    116.7645      Kpc :      221879
+ Total mass:   59746710.2380465     
+ Total initial mass:   82127142.4971185     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    116.7645      Kpc :      221879
+ Total mass:   59746710.2380465     
+ Total initial mass:   82127142.4971185     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    116.7645      Kpc :      221879
+ Total mass:   59746710.2380465     
+ Total initial mass:   82127142.4971185     
+ younger than .1E+11 yrs
+ Number of cells=      1352453
+ Number of cells=      1352453
+ --------------------------
+ CURRENT SNAPSHOT:   0.6750000    
+ --------------------------
+Reading  file: ./PMcrda0.675.DAT             
+Reading  file: ./PMcrs0a0.675.DAT            
+ Open file..../PMcrda0.675.DAT
+ ./PMcrda0.675.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   0.676 A0=   0.020 Ampl=   0.275 Step=   0.002
+  I =1043 WEIGHT=   0.002 Ekin=   0.434E+10   0.433E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     3071933
+  hello :     3071933     3071933
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     3071933
+ Read_Particles_Binary: reading np=     3071933  particles
+  Pages=           3  Species=           5
+  N_in_last=      974781
+Reading  file: ./stars_a0.675.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a0.675.
+ reading tree data from file ./10MpcBox_HartGal_csf_a0.675.d
+istep =1043  t =-0.14330214     dt = 0.10566494E-02  a = 0.67571616     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =       38337  nOct =      329268
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       29560
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      119288
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      283776
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      351056
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      617664
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      316880
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      246368
+ reading tree (oct) data for level            8
+ reading cell data: ncells =      200472
+ reading tree (oct) data for level            9
+ reading cell data: ncells =      250904
+ reading tree (oct) data for level           10
+ reading cell data: ncells =      202608
+ reading tree (oct) data for level           11
+ reading cell data: ncells =       15568
+ done reading     4731296  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   9183.62442397432     
+   2666.87626611976     
+   1638.61381051564     
+  2.6520010E-02
+  2.4109099E-02
+  2.1917362E-02
+  1.9924873E-02
+  1.8113522E-02
+  1.6466837E-02
+  1.4969852E-02
+  1.3608956E-02
+  1.2371778E-02
+  1.1247071E-02
+  1.0224610E-02
+  9.2950994E-03
+  8.4500900E-03
+  7.6818997E-03
+  6.9835451E-03
+  6.3486774E-03
+  5.7715247E-03
+  5.2468404E-03
+  4.7698547E-03
+  4.3362314E-03
+  3.9420286E-03
+  3.5836622E-03
+  3.2578746E-03
+  2.9617040E-03
+  2.6924582E-03
+  2.4476892E-03
+  2.2251720E-03
+  2.0228836E-03
+  1.8389850E-03
+  1.6718046E-03
+ Center in proper Kpc:
+   9183.66191699951     
+   2666.79648444987     
+   1638.58743460838     
+ Velocity of the center in Km/s
+   17.3624893277415     
+  -11.1970833143131     
+   3.96018808291802     
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is        37788
+ The specific angular momentum of cold gas is
+   61.3587376917479     
+ Angular momentum in Msun Kpc Km/s (proper):
+   0.940E+10
+  -0.306E+10
+   0.422E+10
+ AM axis
+  0.8742893    
+ -0.2848738    
+  0.3930204    
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1=  0.4100091      0.0000000E+00 -0.9120814    
+  Vector 2=  0.2598281      0.9585650      0.1168009    
+  Vector 3=  0.8742893     -0.2848738      0.3930204    
+  Vector lengths=   1.000000       1.000000      0.9999999      must be 1
+  Vector products=  0.0000000E+00  1.1175871E-08  0.0000000E+00  must be 0
+  Vector 1=   0.4100091      0.0000000E+00 -0.9120814    
+ Vector 2=   0.2598281      0.9585650      0.1168009    
+ Vector 3=   0.8742893     -0.2848738      0.3930204    
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :      219204
+ Total mass:   60108761.1489749     
+ Total initial mass:   83121001.9312613     
+ younger than .1E+11 yrs
+ SFR=   5.937214423661525E-003
+ done writing spherical profiles. exiting...
+ Rvir=    60.41946      kpc
+ Mvir=  2.8687292E+10  Msun
+ Writing binary files..
+ #DM particles inside    120.8389      Kpc :      365043
+ with total mass equal to   0.34E+11 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    120.8389      Kpc :      238394
+ Total mass:   65394303.6099004     
+ Total initial mass:   90279483.3298615     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    120.8389      Kpc :      238394
+ Total mass:   65394303.6099004     
+ Total initial mass:   90279483.3298615     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    120.8389      Kpc :      238394
+ Total mass:   65394303.6099004     
+ Total initial mass:   90279483.3298615     
+ younger than .1E+11 yrs
+ Number of cells=      1379035
+ Number of cells=      1379035
+ --------------------------
+ CURRENT SNAPSHOT:   0.7000000    
+ --------------------------
+Reading  file: ./PMcrda0.700.DAT             
+Reading  file: ./PMcrs0a0.700.DAT            
+ Open file..../PMcrda0.700.DAT
+ ./PMcrda0.700.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   0.701 A0=   0.020 Ampl=   0.275 Step=   0.001
+  I =1070 WEIGHT=   0.002 Ekin=   0.442E+10   0.442E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     3087672
+  hello :     3087672     3087672
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     3087672
+ Read_Particles_Binary: reading np=     3087672  particles
+  Pages=           3  Species=           5
+  N_in_last=      990520
+Reading  file: ./stars_a0.700.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a0.700.
+ reading tree data from file ./10MpcBox_HartGal_csf_a0.700.d
+istep =1070  t =-0.12676344     dt = 0.77588969E-03  a = 0.70076847     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =       11238  nOct =      324734
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       29712
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      118368
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      281216
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      345008
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      611480
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      308072
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      279984
+ reading tree (oct) data for level            8
+ reading cell data: ncells =      230416
+ reading tree (oct) data for level            9
+ reading cell data: ncells =      216728
+ reading tree (oct) data for level           10
+ reading cell data: ncells =      164752
+ reading tree (oct) data for level           11
+ reading cell data: ncells =       12136
+ done reading     4695024  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   9534.49636075320     
+   2763.61263076940     
+   1698.37289705230     
+  2.5571926E-02
+  2.3247205E-02
+  2.1133821E-02
+  1.9212564E-02
+  1.7465968E-02
+  1.5878152E-02
+  1.4434683E-02
+  1.3122439E-02
+  1.1929490E-02
+  1.0844991E-02
+  9.8590823E-03
+  8.9628017E-03
+  8.1480015E-03
+  7.4072741E-03
+  6.7338855E-03
+  6.1217141E-03
+  5.5651944E-03
+  5.0592674E-03
+  4.5993337E-03
+  4.1812123E-03
+  3.8011021E-03
+  3.4555472E-03
+  3.1414065E-03
+  2.8558241E-03
+  2.5962037E-03
+  2.3601851E-03
+  2.1456229E-03
+  1.9505662E-03
+  1.7732419E-03
+  1.6120381E-03
+ Center in proper Kpc:
+   9534.49723268402     
+   2763.56641843602     
+   1698.41660258458     
+ Velocity of the center in Km/s
+   23.2161018425135     
+ -0.931310267527285     
+   3.21491663393517     
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is        30431
+ The specific angular momentum of cold gas is
+   70.1055104065896     
+ Angular momentum in Msun Kpc Km/s (proper):
+   0.915E+10
+  -0.177E+10
+   0.410E+10
+ AM axis
+  0.8986049    
+ -0.1733967    
+  0.4030420    
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1=  0.4092411      0.0000000E+00 -0.9124262    
+  Vector 2=  0.1582117      0.9848521      7.0961058E-02
+  Vector 3=  0.8986049     -0.1733967      0.4030420    
+  Vector lengths=   1.000000      0.9999999       1.000000      must be 1
+  Vector products=  0.0000000E+00 -1.8626451E-08  0.0000000E+00  must be 0
+  Vector 1=   0.4092411      0.0000000E+00 -0.9124262    
+ Vector 2=   0.1582117      0.9848521      7.0961058E-02
+ Vector 3=   0.8986049     -0.1733967      0.4030420    
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :      224578
+ Total mass:   62573088.3723510     
+ Total initial mass:   87242709.1882806     
+ younger than .1E+11 yrs
+ SFR=   6.231622084877189E-003
+ done writing spherical profiles. exiting...
+ Rvir=    62.09568      kpc
+ Mvir=  2.8603812E+10  Msun
+ Writing binary files..
+ #DM particles inside    124.1914      Kpc :      367346
+ with total mass equal to   0.35E+11 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    124.1914      Kpc :      254126
+ Total mass:   71032511.7199993     
+ Total initial mass:   98751443.5908667     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    124.1914      Kpc :      254126
+ Total mass:   71032511.7199993     
+ Total initial mass:   98751443.5908667     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    124.1914      Kpc :      254126
+ Total mass:   71032511.7199993     
+ Total initial mass:   98751443.5908667     
+ younger than .1E+11 yrs
+ Number of cells=      1357265
+ Number of cells=      1357265
+ --------------------------
+ CURRENT SNAPSHOT:   0.7260000    
+ --------------------------
+Reading  file: ./PMcrda0.726.DAT             
+Reading  file: ./PMcrs0a0.726.DAT            
+ Open file..../PMcrda0.726.DAT
+ ./PMcrda0.726.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   0.727 A0=   0.020 Ampl=   0.275 Step=   0.002
+  I =1088 WEIGHT=   0.002 Ekin=   0.438E+10   0.439E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     3101196
+  hello :     3101196     3101196
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     3101196
+ Read_Particles_Binary: reading np=     3101196  particles
+  Pages=           3  Species=           5
+  N_in_last=     1004044
+Reading  file: ./stars_a0.726.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a0.726.
+ reading tree data from file ./10MpcBox_HartGal_csf_a0.726.d
+istep =1088  t =-0.11092597     dt = 0.10327092E-02  a = 0.72672778     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =       18092  nOct =      326483
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       29792
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      117376
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      279640
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      339440
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      603768
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      305800
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      262864
+ reading tree (oct) data for level            8
+ reading cell data: ncells =      238632
+ reading tree (oct) data for level            9
+ reading cell data: ncells =      277064
+ reading tree (oct) data for level           10
+ reading cell data: ncells =      144112
+ reading tree (oct) data for level           11
+ reading cell data: ncells =       13376
+ done reading     4709016  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   9897.59363953716     
+   2862.02768022721     
+   1760.81218993344     
+  2.4658477E-02
+  2.2416797E-02
+  2.0378906E-02
+  1.8526278E-02
+  1.6842071E-02
+  1.5310973E-02
+  1.3919066E-02
+  1.2653695E-02
+  1.1503359E-02
+  1.0457600E-02
+  9.5069082E-03
+  8.6426437E-03
+  7.8569483E-03
+  7.1426802E-03
+  6.4933454E-03
+  5.9030410E-03
+  5.3664008E-03
+  4.8785461E-03
+  4.4350419E-03
+  4.0318561E-03
+  3.6653236E-03
+  3.3321122E-03
+  3.0291928E-03
+  2.7538117E-03
+  2.5034652E-03
+  2.2758774E-03
+  2.0689794E-03
+  1.8808903E-03
+  1.7099002E-03
+  1.5544547E-03
+ Center in proper Kpc:
+   9897.61543780762     
+   2862.03400172564     
+   1760.87507794372     
+ Velocity of the center in Km/s
+   20.0110635412669     
+  -7.66989460643456     
+  -3.15495661324509     
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is        37468
+ The specific angular momentum of cold gas is
+   66.2457721203081     
+ Angular momentum in Msun Kpc Km/s (proper):
+   0.102E+11
+  -0.327E+10
+   0.202E+10
+ AM axis
+  0.9357266    
+ -0.2999798    
+  0.1855472    
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1=  0.1945050      0.0000000E+00 -0.9809015    
+  Vector 2=  0.2942507      0.9539455      5.8347572E-02
+  Vector 3=  0.9357266     -0.2999798      0.1855472    
+  Vector lengths=  0.9999999      0.9999999      0.9999999      must be 1
+  Vector products=  1.4901161E-08 -3.3527613E-08  3.7252903E-09  must be 0
+  Vector 1=   0.1945050      0.0000000E+00 -0.9809015    
+ Vector 2=   0.2942507      0.9539455      5.8347572E-02
+ Vector 3=   0.9357266     -0.2999798      0.1855472    
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :      231085
+ Total mass:   65505089.4703815     
+ Total initial mass:   91935761.0619263     
+ younger than .1E+11 yrs
+ SFR=   6.566840075851879E-003
+ done writing spherical profiles. exiting...
+ Rvir=    63.76376      kpc
+ Mvir=  2.8497193E+10  Msun
+ Writing binary files..
+ #DM particles inside    127.5275      Kpc :      369280
+ with total mass equal to   0.35E+11 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    127.5275      Kpc :      267636
+ Total mass:   76485148.6661763     
+ Total initial mass:   106923634.560056     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    127.5275      Kpc :      267636
+ Total mass:   76485148.6661763     
+ Total initial mass:   106923634.560056     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    127.5275      Kpc :      267636
+ Total mass:   76485148.6661763     
+ Total initial mass:   106923634.560056     
+ younger than .1E+11 yrs
+ Number of cells=      1375515
+ Number of cells=      1375515
+ --------------------------
+ CURRENT SNAPSHOT:   0.7500000    
+ --------------------------
+Reading  file: ./PMcrda0.750.DAT             
+Reading  file: ./PMcrs0a0.750.DAT            
+ Open file..../PMcrda0.750.DAT
+ ./PMcrda0.750.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   0.751 A0=   0.020 Ampl=   0.275 Step=   0.001
+  I =1111 WEIGHT=   0.002 Ekin=   0.431E+10   0.432E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     3111816
+  hello :     3111816     3111816
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     3111816
+ Read_Particles_Binary: reading np=     3111816  particles
+  Pages=           3  Species=           5
+  N_in_last=     1014664
+Reading  file: ./stars_a0.750.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a0.750.
+ reading tree data from file ./10MpcBox_HartGal_csf_a0.750.d
+istep =1111  t =-0.97383492E-01 dt = 0.71845974E-03  a = 0.75067633     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =        1879  nOct =      329421
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       29624
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      116576
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      279120
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      335656
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      596512
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      302640
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      252712
+ reading tree (oct) data for level            8
+ reading cell data: ncells =      207648
+ reading tree (oct) data for level            9
+ reading cell data: ncells =      283256
+ reading tree (oct) data for level           10
+ reading cell data: ncells =      207952
+ reading tree (oct) data for level           11
+ reading cell data: ncells =       23672
+ done reading     4732520  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   10231.2850514699     
+   2954.29736127679     
+   1819.57422357924     
+  2.3871806E-02
+  2.1701641E-02
+  1.9728765E-02
+  1.7935241E-02
+  1.6304763E-02
+  1.4822512E-02
+  1.3475010E-02
+  1.2250009E-02
+  1.1136372E-02
+  1.0123974E-02
+  9.2036119E-03
+  8.3669201E-03
+  7.6062907E-03
+  6.9148098E-03
+  6.2861908E-03
+  5.7147187E-03
+  5.1951986E-03
+  4.7229077E-03
+  4.2935521E-03
+  3.9032290E-03
+  3.5483900E-03
+  3.2258090E-03
+  2.9325536E-03
+  2.6659579E-03
+  2.4235980E-03
+  2.2032708E-03
+  2.0029733E-03
+  1.8208848E-03
+  1.6553497E-03
+  1.5048634E-03
+ Center in proper Kpc:
+   10231.2754602309     
+   2954.25158490882     
+   1819.55297026554     
+ Velocity of the center in Km/s
+   19.0371948384702     
+  -4.41267228292399     
+   3.91774508917229     
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is        24180
+ The specific angular momentum of cold gas is
+   38.3290461836361     
+ Angular momentum in Msun Kpc Km/s (proper):
+   0.410E+10
+  -0.573E+09
+   0.324E+09
+ AM axis
+  0.9873433    
+ -0.1380685    
+  7.8041799E-02
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1=  7.8796446E-02  0.0000000E+00 -0.9968907    
+  Vector 2=  0.1376392      0.9904228      1.0879310E-02
+  Vector 3=  0.9873433     -0.1380685      7.8041799E-02
+  Vector lengths=   1.000000      0.9999999       1.000000      must be 1
+  Vector products=  0.0000000E+00 -1.2340024E-08 -9.3132257E-10  must be 0
+  Vector 1=   7.8796446E-02  0.0000000E+00 -0.9968907    
+ Vector 2=   0.1376392      0.9904228      1.0879310E-02
+ Vector 3=   0.9873433     -0.1380685      7.8041799E-02
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :      239480
+ Total mass:   69114054.2981208     
+ Total initial mass:   97408323.7123241     
+ younger than .1E+11 yrs
+ SFR=   6.957737408023153E-003
+ done writing spherical profiles. exiting...
+ Rvir=    65.66579      kpc
+ Mvir=  2.8940751E+10  Msun
+ Writing binary files..
+ #DM particles inside    131.3316      Kpc :      370988
+ with total mass equal to   0.35E+11 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    131.3316      Kpc :      278242
+ Total mass:   81157675.8292997     
+ Total initial mass:   113917380.523526     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    131.3316      Kpc :      278242
+ Total mass:   81157675.8292997     
+ Total initial mass:   113917380.523526     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    131.3316      Kpc :      278242
+ Total mass:   81157675.8292997     
+ Total initial mass:   113917380.523526     
+ younger than .1E+11 yrs
+ Number of cells=      1403533
+ Number of cells=      1403533
+ --------------------------
+ CURRENT SNAPSHOT:   0.7760000    
+ --------------------------
+Reading  file: ./PMcrda0.776.DAT             
+Reading  file: ./PMcrs0a0.776.DAT            
+ Open file..../PMcrda0.776.DAT
+ ./PMcrda0.776.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   0.777 A0=   0.020 Ampl=   0.275 Step=   0.002
+  I =1127 WEIGHT=   0.002 Ekin=   0.425E+10   0.425E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     3122111
+  hello :     3122111     3122111
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     3122111
+ Read_Particles_Binary: reading np=     3122111  particles
+  Pages=           3  Species=           5
+  N_in_last=     1024959
+Reading  file: ./stars_a0.776.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a0.776.
+ reading tree data from file ./10MpcBox_HartGal_csf_a0.776.d
+istep =1127  t =-0.83823282E-01 dt = 0.95626998E-03  a = 0.77650809     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =       33672  nOct =      336862
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       29600
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      115904
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      278528
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      331696
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      581096
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      308208
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      268296
+ reading tree (oct) data for level            8
+ reading cell data: ncells =      221728
+ reading tree (oct) data for level            9
+ reading cell data: ncells =      319368
+ reading tree (oct) data for level           10
+ reading cell data: ncells =      211616
+ reading tree (oct) data for level           11
+ reading cell data: ncells =       28856
+ done reading     4792048  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   10589.5361387651     
+   3052.23502861151     
+   1882.01907501934     
+  2.3077674E-02
+  2.0979702E-02
+  1.9072456E-02
+  1.7338596E-02
+  1.5762361E-02
+  1.4329419E-02
+  1.3026744E-02
+  1.1842495E-02
+  1.0765905E-02
+  9.7871860E-03
+  8.8974414E-03
+  8.0885831E-03
+  7.3532574E-03
+  6.6847792E-03
+  6.0770717E-03
+  5.5246106E-03
+  5.0223731E-03
+  4.5657936E-03
+  4.1507212E-03
+  3.7733829E-03
+  3.4303479E-03
+  3.1184980E-03
+  2.8349981E-03
+  2.5772708E-03
+  2.3429734E-03
+  2.1299757E-03
+  1.9363415E-03
+  1.7603104E-03
+  1.6002822E-03
+  1.4548019E-03
+ Center in proper Kpc:
+   10589.6050212997     
+   3052.26903391343     
+   1882.14070936851     
+ Velocity of the center in Km/s
+   17.7448788948499     
+  -6.18617092984692     
+  -1.74355474217280     
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is        31033
+ The specific angular momentum of cold gas is
+   36.7804307163509     
+ Angular momentum in Msun Kpc Km/s (proper):
+   0.518E+10
+  -0.804E+09
+   0.499E+09
+ AM axis
+  0.9837226    
+ -0.1527394    
+  9.4659999E-02
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1=  9.5783874E-02  0.0000000E+00 -0.9954022    
+  Vector 2=  0.1520371      0.9882665      1.4629971E-02
+  Vector 3=  0.9837226     -0.1527394      9.4659999E-02
+  Vector lengths=   1.000000       1.000000       1.000000      must be 1
+  Vector products=  0.0000000E+00 -1.1059456E-08 -9.3132257E-10  must be 0
+  Vector 1=   9.5783874E-02  0.0000000E+00 -0.9954022    
+ Vector 2=   0.1520371      0.9882665      1.4629971E-02
+ Vector 3=   0.9837226     -0.1527394      9.4659999E-02
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :      250811
+ Total mass:   73731695.1852809     
+ Total initial mass:   104379718.605723     
+ younger than .1E+11 yrs
+ SFR=   7.455694186123041E-003
+ done writing spherical profiles. exiting...
+ Rvir=    67.62092      kpc
+ Mvir=  2.9339242E+10  Msun
+ Writing binary files..
+ #DM particles inside    135.2418      Kpc :      372854
+ with total mass equal to   0.35E+11 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    135.2418      Kpc :      288528
+ Total mass:   85918194.3181166     
+ Total initial mass:   121157625.865453     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    135.2418      Kpc :      288528
+ Total mass:   85918194.3181166     
+ Total initial mass:   121157625.865453     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    135.2418      Kpc :      288528
+ Total mass:   85918194.3181166     
+ Total initial mass:   121157625.865453     
+ younger than .1E+11 yrs
+ Number of cells=      1453829
+ Number of cells=      1453829
+ --------------------------
+ CURRENT SNAPSHOT:   0.8000000    
+ --------------------------
+Reading  file: ./PMcrda0.800.DAT             
+Reading  file: ./PMcrs0a0.800.DAT            
+ Open file..../PMcrda0.800.DAT
+ ./PMcrda0.800.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   0.801 A0=   0.020 Ampl=   0.275 Step=   0.001
+  I =1146 WEIGHT=   0.002 Ekin=   0.420E+10   0.420E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     3130033
+  hello :     3130033     3130033
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     3130033
+ Read_Particles_Binary: reading np=     3130033  particles
+  Pages=           3  Species=           5
+  N_in_last=     1032881
+Reading  file: ./stars_a0.800.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a0.800.
+ reading tree data from file ./10MpcBox_HartGal_csf_a0.800.d
+istep =1146  t =-0.71927875E-01 dt = 0.67190881E-03  a = 0.80090660     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =      311254  nOct =      338227
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       29576
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      115168
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      277472
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      326616
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      569544
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      313104
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      256872
+ reading tree (oct) data for level            8
+ reading cell data: ncells =      192176
+ reading tree (oct) data for level            9
+ reading cell data: ncells =      295488
+ reading tree (oct) data for level           10
+ reading cell data: ncells =      267952
+ reading tree (oct) data for level           11
+ reading cell data: ncells =       61848
+ done reading     4802968  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   10930.1236515407     
+   3145.08323575911     
+   1940.80443281454     
+  2.2374643E-02
+  2.0340584E-02
+  1.8491440E-02
+  1.6810399E-02
+  1.5282180E-02
+  1.3892891E-02
+  1.2629900E-02
+  1.1481727E-02
+  1.0437934E-02
+  9.4890306E-03
+  8.6263912E-03
+  7.8421738E-03
+  7.1292487E-03
+  6.4811353E-03
+  5.8919410E-03
+  5.3563099E-03
+  4.8693726E-03
+  4.4267024E-03
+  4.0242746E-03
+  3.6584313E-03
+  3.3258465E-03
+  3.0234968E-03
+  2.7486335E-03
+  2.4987576E-03
+  2.2715977E-03
+  2.0650888E-03
+  1.8773534E-03
+  1.7066849E-03
+  1.5515317E-03
+  1.4104834E-03
+ Center in proper Kpc:
+   10930.1410901571     
+   3145.13010204060     
+   1940.85391488848     
+ Velocity of the center in Km/s
+   17.5285713534003     
+  -9.89849336195311     
+   6.72375459429982     
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is        48634
+ The specific angular momentum of cold gas is
+   64.9950473456351     
+ Angular momentum in Msun Kpc Km/s (proper):
+   0.122E+11
+  -0.527E+10
+   0.204E+10
+ AM axis
+  0.9077649    
+ -0.3910860    
+  0.1517057    
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1=  0.1648341      0.0000000E+00 -0.9863213    
+  Vector 2=  0.3857365      0.9203541      6.4464316E-02
+  Vector 3=  0.9077649     -0.3910860      0.1517057    
+  Vector lengths=  0.9999999       1.000000      0.9999999      must be 1
+  Vector products=  0.0000000E+00  3.4458935E-08  0.0000000E+00  must be 0
+  Vector 1=   0.1648341      0.0000000E+00 -0.9863213    
+ Vector 2=   0.3857365      0.9203541      6.4464316E-02
+ Vector 3=   0.9077649     -0.3910860      0.1517057    
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :      250098
+ Total mass:   74419555.2005049     
+ Total initial mass:   105905807.296808     
+ younger than .1E+11 yrs
+ SFR=   7.564700521200588E-003
+ done writing spherical profiles. exiting...
+ Rvir=    69.30864      kpc
+ Mvir=  2.9557772E+10  Msun
+ Writing binary files..
+ #DM particles inside    138.6173      Kpc :      374062
+ with total mass equal to   0.35E+11 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    138.6173      Kpc :      296435
+ Total mass:   89763934.6036905     
+ Total initial mass:   127195382.113703     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    138.6173      Kpc :      296435
+ Total mass:   89763934.6036905     
+ Total initial mass:   127195382.113703     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    138.6173      Kpc :      296435
+ Total mass:   89763934.6036905     
+ Total initial mass:   127195382.113703     
+ younger than .1E+11 yrs
+ Number of cells=      1467298
+ Number of cells=      1467298
+ --------------------------
+ CURRENT SNAPSHOT:   0.8250000    
+ --------------------------
+Reading  file: ./PMcrda0.825.DAT             
+Reading  file: ./PMcrs0a0.825.DAT            
+ Open file..../PMcrda0.825.DAT
+ ./PMcrda0.825.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   0.826 A0=   0.020 Ampl=   0.275 Step=   0.001
+  I =1162 WEIGHT=   0.002 Ekin=   0.421E+10   0.421E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     3140957
+  hello :     3140957     3140957
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     3140957
+ Read_Particles_Binary: reading np=     3140957  particles
+  Pages=           3  Species=           5
+  N_in_last=     1043805
+Reading  file: ./stars_a0.825.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a0.825.
+ reading tree data from file ./10MpcBox_HartGal_csf_a0.825.d
+istep =1162  t =-0.60602356E-01 dt = 0.43866828E-03  a = 0.82585531     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =       29136  nOct =      338660
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       29776
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      114528
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      276760
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      322096
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      552552
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      308624
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      252704
+ reading tree (oct) data for level            8
+ reading cell data: ncells =      221280
+ reading tree (oct) data for level            9
+ reading cell data: ncells =      326328
+ reading tree (oct) data for level           10
+ reading cell data: ncells =      253568
+ reading tree (oct) data for level           11
+ reading cell data: ncells =       51064
+ done reading     4806432  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   11277.1739155424     
+   3238.19367610035     
+   2001.53158054235     
+  2.1698717E-02
+  1.9726105E-02
+  1.7932823E-02
+  1.6302565E-02
+  1.4820513E-02
+  1.3473194E-02
+  1.2248358E-02
+  1.1134870E-02
+  1.0122609E-02
+  9.2023723E-03
+  8.3657932E-03
+  7.6052663E-03
+  6.9138785E-03
+  6.2853438E-03
+  5.7139490E-03
+  5.1944992E-03
+  4.7222720E-03
+  4.2929747E-03
+  3.9027042E-03
+  3.5479129E-03
+  3.2253754E-03
+  2.9321595E-03
+  2.6655993E-03
+  2.4232720E-03
+  2.2029744E-03
+  2.0027040E-03
+  1.8206399E-03
+  1.6551272E-03
+  1.5046610E-03
+  1.3678736E-03
+ Center in proper Kpc:
+   11277.1346786556     
+   3238.06964394143     
+   2001.48231645111     
+ Velocity of the center in Km/s
+   26.3968694354135     
+  -3.20328174162347     
+  -6.28887317852442     
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is        38790
+ The specific angular momentum of cold gas is
+   35.7784112942220     
+ Angular momentum in Msun Kpc Km/s (proper):
+   0.539E+10
+  -0.205E+10
+   0.362E+09
+ AM axis
+  0.9327077    
+ -0.3551677    
+  6.2547132E-02
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1=  6.6909462E-02  0.0000000E+00 -0.9977591    
+  Vector 2=  0.3543719      0.9348025      2.3764081E-02
+  Vector 3=  0.9327077     -0.3551677      6.2547132E-02
+  Vector lengths=  0.9999999       1.000000      0.9999999      must be 1
+  Vector products=  0.0000000E+00  7.3690899E-08  3.7252903E-09  must be 0
+  Vector 1=   6.6909462E-02  0.0000000E+00 -0.9977591    
+ Vector 2=   0.3543719      0.9348025      2.3764081E-02
+ Vector 3=   0.9327077     -0.3551677      6.2547132E-02
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :      256481
+ Total mass:   78560503.9593071     
+ Total initial mass:   111833964.474649     
+ younger than .1E+11 yrs
+ SFR=   7.988140319617783E-003
+ done writing spherical profiles. exiting...
+ Rvir=    70.90450      kpc
+ Mvir=  2.9668502E+10  Msun
+ Writing binary files..
+ #DM particles inside    141.8090      Kpc :      374754
+ with total mass equal to   0.35E+11 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    141.8090      Kpc :      307347
+ Total mass:   96221190.8323339     
+ Total initial mass:   136399508.598975     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    141.8090      Kpc :      307347
+ Total mass:   96221190.8323339     
+ Total initial mass:   136399508.598975     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    141.8090      Kpc :      307347
+ Total mass:   96221190.8323339     
+ Total initial mass:   136399508.598975     
+ younger than .1E+11 yrs
+ Number of cells=      1468485
+ Number of cells=      1468485
+ --------------------------
+ CURRENT SNAPSHOT:   0.8510000    
+ --------------------------
+Reading  file: ./PMcrda0.851.DAT             
+Reading  file: ./PMcrs0a0.851.DAT            
+ Open file..../PMcrda0.851.DAT
+ ./PMcrda0.851.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   0.851 A0=   0.020 Ampl=   0.275 Step=   0.001
+  I =1183 WEIGHT=   0.002 Ekin=   0.425E+10   0.425E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     3149249
+  hello :     3149249     3149249
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     3149249
+ Read_Particles_Binary: reading np=     3149249  particles
+  Pages=           4  Species=           5
+  N_in_last=        3521
+Reading  file: ./stars_a0.851.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a0.851.
+ reading tree data from file ./10MpcBox_HartGal_csf_a0.851.d
+istep =1183  t =-0.49852789E-01 dt = 0.64225429E-03  a = 0.85129660     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =        2816  nOct =      340517
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       29712
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      113608
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      276464
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      317464
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      537232
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      300208
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      259064
+ reading tree (oct) data for level            8
+ reading cell data: ncells =      229232
+ reading tree (oct) data for level            9
+ reading cell data: ncells =      332208
+ reading tree (oct) data for level           10
+ reading cell data: ncells =      278016
+ reading tree (oct) data for level           11
+ reading cell data: ncells =       50928
+ done reading     4821288  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   11633.9505678237     
+   3334.70224882368     
+   2061.05677163698     
+  2.1050241E-02
+  1.9136582E-02
+  1.7396891E-02
+  1.5815355E-02
+  1.4377595E-02
+  1.3070541E-02
+  1.1882309E-02
+  1.0802099E-02
+  9.8200897E-03
+  8.9273537E-03
+  8.1157759E-03
+  7.3779779E-03
+  6.7072525E-03
+  6.0975021E-03
+  5.5431835E-03
+  5.0392575E-03
+  4.5811431E-03
+  4.1646757E-03
+  3.7860686E-03
+  3.4418805E-03
+  3.1289821E-03
+  2.8445292E-03
+  2.5859356E-03
+  2.3508505E-03
+  2.1371369E-03
+  1.9428517E-03
+  1.7662288E-03
+  1.6056625E-03
+  1.4596932E-03
+  1.3269938E-03
+ Center in proper Kpc:
+   11634.0028836728     
+   3334.69396548091     
+   2061.06461901434     
+ Velocity of the center in Km/s
+   13.5597536363602     
+  -4.79733255933238     
+   5.98443961993221     
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is        28608
+ The specific angular momentum of cold gas is
+   46.7632388758901     
+ Angular momentum in Msun Kpc Km/s (proper):
+   0.519E+10
+  -0.252E+10
+   0.208E+10
+ AM axis
+  0.8462213    
+ -0.4106870    
+  0.3394785    
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1=  0.3723265      0.0000000E+00 -0.9281018    
+  Vector 2=  0.3811593      0.9117764      0.1529096    
+  Vector 3=  0.8462213     -0.4106870      0.3394785    
+  Vector lengths=   1.000000      0.9999999       1.000000      must be 1
+  Vector products=  0.0000000E+00 -2.9802322E-08  0.0000000E+00  must be 0
+  Vector 1=   0.3723265      0.0000000E+00 -0.9281018    
+ Vector 2=   0.3811593      0.9117764      0.1529096    
+ Vector 3=   0.8462213     -0.4106870      0.3394785    
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :      255294
+ Total mass:   79913829.0113972     
+ Total initial mass:   114168838.259608     
+ younger than .1E+11 yrs
+ SFR=   8.154917018543439E-003
+ done writing spherical profiles. exiting...
+ Rvir=    72.95339      kpc
+ Mvir=  3.0360310E+10  Msun
+ Writing binary files..
+ #DM particles inside    145.9068      Kpc :      376560
+ with total mass equal to   0.35E+11 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    145.9068      Kpc :      315630
+ Total mass:   101325100.741492     
+ Total initial mass:   144102966.140224     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    145.9068      Kpc :      315630
+ Total mass:   101325100.741492     
+ Total initial mass:   144102966.140224     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    145.9068      Kpc :      315630
+ Total mass:   101325100.741492     
+ Total initial mass:   144102966.140224     
+ younger than .1E+11 yrs
+ Number of cells=      1485357
+ Number of cells=      1485357
+ --------------------------
+ CURRENT SNAPSHOT:   0.8750000    
+ --------------------------
+Reading  file: ./PMcrda0.875.DAT             
+Reading  file: ./PMcrs0a0.875.DAT            
+ Open file..../PMcrda0.875.DAT
+ ./PMcrda0.875.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   0.875 A0=   0.020 Ampl=   0.275 Step=   0.001
+  I =1199 WEIGHT=   0.002 Ekin=   0.427E+10   0.427E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     3156740
+  hello :     3156740     3156740
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     3156740
+ Read_Particles_Binary: reading np=     3156740  particles
+  Pages=           4  Species=           5
+  N_in_last=       11012
+Reading  file: ./stars_a0.875.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a0.875.
+ reading tree data from file ./10MpcBox_HartGal_csf_a0.875.d
+istep =1199  t =-0.40498071E-01 dt = 0.40346246E-03  a = 0.87501663     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =        2671  nOct =      348849
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       29720
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      113288
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      276400
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      312904
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      524144
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      297000
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      279648
+ reading tree (oct) data for level            8
+ reading cell data: ncells =      212512
+ reading tree (oct) data for level            9
+ reading cell data: ncells =      315536
+ reading tree (oct) data for level           10
+ reading cell data: ncells =      325632
+ reading tree (oct) data for level           11
+ reading cell data: ncells =      104008
+ done reading     4887944  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   11964.2144197092     
+   3425.61542350250     
+   2119.62916032977     
+  2.0479610E-02
+  1.8617827E-02
+  1.6925298E-02
+  1.5386634E-02
+  1.3987849E-02
+  1.2716225E-02
+  1.1560204E-02
+  1.0509277E-02
+  9.5538879E-03
+  8.6853523E-03
+  7.8957742E-03
+  7.1779764E-03
+  6.5254332E-03
+  5.9322119E-03
+  5.3929198E-03
+  4.9026543E-03
+  4.4569583E-03
+  4.0517803E-03
+  3.6834367E-03
+  3.3485787E-03
+  3.0441624E-03
+  2.7674204E-03
+  2.5158366E-03
+  2.2871241E-03
+  2.0792037E-03
+  1.8901852E-03
+  1.7183501E-03
+  1.5621365E-03
+  1.4201240E-03
+  1.2910217E-03
+ Center in proper Kpc:
+   11964.2737110048     
+   3425.71525958121     
+   2119.62959629518     
+ Velocity of the center in Km/s
+   15.1202574401658     
+  -12.9478167767072     
+  -2.59290784083628     
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is        39286
+ The specific angular momentum of cold gas is
+   33.1246851495833     
+ Angular momentum in Msun Kpc Km/s (proper):
+   0.398E+10
+  -0.370E+10
+   0.742E+09
+ AM axis
+  0.7255250    
+ -0.6747742    
+  0.1352529    
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1=  0.1832635      0.0000000E+00 -0.9830638    
+  Vector 2=  0.6633461      0.7380244      0.1236615    
+  Vector 3=  0.7255250     -0.6747742      0.1352529    
+  Vector lengths=   1.000000      0.9999999       1.000000      must be 1
+  Vector products=  0.0000000E+00 -2.4214387E-08 -7.4505806E-09  must be 0
+  Vector 1=   0.1832635      0.0000000E+00 -0.9830638    
+ Vector 2=   0.6633461      0.7380244      0.1236615    
+ Vector 3=   0.7255250     -0.6747742      0.1352529    
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :      265167
+ Total mass:   84406108.4846794     
+ Total initial mass:   121020371.447531     
+ younger than .1E+11 yrs
+ SFR=   8.644312246252211E-003
+ done writing spherical profiles. exiting...
+ Rvir=    74.56320      kpc
+ Mvir=  3.0672417E+10  Msun
+ Writing binary files..
+ #DM particles inside    149.1264      Kpc :      378564
+ with total mass equal to   0.36E+11 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    149.1264      Kpc :      323105
+ Total mass:   106488045.486145     
+ Total initial mass:   151704648.119962     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    149.1264      Kpc :      323105
+ Total mass:   106488045.486145     
+ Total initial mass:   151704648.119962     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    149.1264      Kpc :      323105
+ Total mass:   106488045.486145     
+ Total initial mass:   151704648.119962     
+ younger than .1E+11 yrs
+ Number of cells=      1533805
+ Number of cells=      1533805
+ --------------------------
+ CURRENT SNAPSHOT:   0.9010000    
+ --------------------------
+Reading  file: ./PMcrda0.901.DAT             
+Reading  file: ./PMcrs0a0.901.DAT            
+ Open file..../PMcrda0.901.DAT
+ ./PMcrda0.901.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   0.901 A0=   0.020 Ampl=   0.275 Step=   0.002
+  I =1220 WEIGHT=   0.002 Ekin=   0.429E+10   0.429E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     3164208
+  hello :     3164208     3164208
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     3164208
+ Read_Particles_Binary: reading np=     3164208  particles
+  Pages=           4  Species=           5
+  N_in_last=       18480
+Reading  file: ./stars_a0.901.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a0.901.
+ reading tree data from file ./10MpcBox_HartGal_csf_a0.901.d
+istep =1220  t =-0.30785116E-01 dt = 0.53700856E-03  a = 0.90140617     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =      337906  nOct =      337905
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       29704
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      112616
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      275056
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      307120
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      511208
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      290408
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      281632
+ reading tree (oct) data for level            8
+ reading cell data: ncells =      229280
+ reading tree (oct) data for level            9
+ reading cell data: ncells =      332368
+ reading tree (oct) data for level           10
+ reading cell data: ncells =      259584
+ reading tree (oct) data for level           11
+ reading cell data: ncells =       74264
+ done reading     4800392  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   12333.6881285682     
+   3526.07929240089     
+   2182.96534304900     
+  1.9880051E-02
+  1.8072773E-02
+  1.6429793E-02
+  1.4936175E-02
+  1.3578340E-02
+  1.2343946E-02
+  1.1221768E-02
+  1.0201607E-02
+  9.2741875E-03
+  8.4310798E-03
+  7.6646176E-03
+  6.9678342E-03
+  6.3343947E-03
+  5.7585407E-03
+  5.2350368E-03
+  4.7591245E-03
+  4.3264767E-03
+  3.9331606E-03
+  3.5756005E-03
+  3.2505458E-03
+  2.9550416E-03
+  2.6864014E-03
+  2.4421830E-03
+  2.2201664E-03
+  2.0183329E-03
+  1.8348481E-03
+  1.6680437E-03
+  1.5164033E-03
+  1.3785484E-03
+  1.2532258E-03
+ Center in proper Kpc:
+   12333.8372287382     
+   3526.20354254252     
+   2182.84065694197     
+ Velocity of the center in Km/s
+   16.0397757444435     
+  -9.33515319783848     
+   2.87422787443139     
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is        44275
+ The specific angular momentum of cold gas is
+   69.0488738007370     
+ Angular momentum in Msun Kpc Km/s (proper):
+   0.979E+10
+  -0.655E+10
+   0.152E+10
+ AM axis
+  0.8242617    
+ -0.5516310    
+  0.1276558    
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1=  0.1530483      0.0000000E+00 -0.9882187    
+  Vector 2=  0.5451321      0.8340883      8.4426187E-02
+  Vector 3=  0.8242617     -0.5516310      0.1276558    
+  Vector lengths=   1.000000      0.9999999       1.000000      must be 1
+  Vector products=  1.4901161E-08 -1.2107193E-08  0.0000000E+00  must be 0
+  Vector 1=   0.1530483      0.0000000E+00 -0.9882187    
+ Vector 2=   0.5451321      0.8340883      8.4426187E-02
+ Vector 3=   0.8242617     -0.5516310      0.1276558    
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :      257866
+ Total mass:   84037090.2430769     
+ Total initial mass:   120752260.760556     
+ younger than .1E+11 yrs
+ SFR=   8.625161482896887E-003
+ done writing spherical profiles. exiting...
+ Rvir=    75.82414      kpc
+ Mvir=  3.0427539E+10  Msun
+ Writing binary files..
+ #DM particles inside    151.6483      Kpc :      379832
+ with total mass equal to   0.36E+11 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    151.6483      Kpc :      330566
+ Total mass:   111745215.599028     
+ Total initial mass:   159805361.756821     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    151.6483      Kpc :      330566
+ Total mass:   111745215.599028     
+ Total initial mass:   159805361.756821     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    151.6483      Kpc :      330566
+ Total mass:   111745215.599028     
+ Total initial mass:   159805361.756821     
+ younger than .1E+11 yrs
+ Number of cells=      1455557
+ Number of cells=      1455557
+ --------------------------
+ CURRENT SNAPSHOT:   0.9250000    
+ --------------------------
+Reading  file: ./PMcrda0.925.DAT             
+Reading  file: ./PMcrs0a0.925.DAT            
+ Open file..../PMcrda0.925.DAT
+ ./PMcrda0.925.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   0.925 A0=   0.020 Ampl=   0.275 Step=   0.002
+  I =1233 WEIGHT=   0.002 Ekin=   0.431E+10   0.431E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     3172027
+  hello :     3172027     3172027
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     3172027
+ Read_Particles_Binary: reading np=     3172027  particles
+  Pages=           4  Species=           5
+  N_in_last=       26299
+Reading  file: ./stars_a0.925.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a0.925.
+ reading tree data from file ./10MpcBox_HartGal_csf_a0.925.d
+istep =1233  t =-0.22616141E-01 dt = 0.71475844E-03  a = 0.92516577     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =        8194  nOct =      352355
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       29568
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      112448
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      275520
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      301840
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      501984
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      292600
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      289376
+ reading tree (oct) data for level            8
+ reading cell data: ncells =      193816
+ reading tree (oct) data for level            9
+ reading cell data: ncells =      328112
+ reading tree (oct) data for level           10
+ reading cell data: ncells =      368416
+ reading tree (oct) data for level           11
+ reading cell data: ncells =      125160
+ done reading     4915992  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   12663.9266944600     
+   3615.39094814898     
+   2240.90819769090     
+  1.9369502E-02
+  1.7608637E-02
+  1.6007852E-02
+  1.4552592E-02
+  1.3229629E-02
+  1.2026935E-02
+  1.0933577E-02
+  9.9396156E-03
+  9.0360139E-03
+  8.2145575E-03
+  7.4677793E-03
+  6.7888903E-03
+  6.1717182E-03
+  5.6106527E-03
+  5.1005934E-03
+  4.6369028E-03
+  4.2153662E-03
+  3.8321509E-03
+  3.4837734E-03
+  3.1670667E-03
+  2.8791516E-03
+  2.6174104E-03
+  2.3794640E-03
+  2.1631490E-03
+  1.9664990E-03
+  1.7877263E-03
+  1.6252057E-03
+  1.4774597E-03
+  1.3431452E-03
+  1.2210410E-03
+ Center in proper Kpc:
+   12663.7915451832     
+   3615.35912267411     
+   2240.88901521289     
+ Velocity of the center in Km/s
+   20.4872838042020     
+  -18.3191389127118     
+ -0.212525438747288     
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is        52534
+ The specific angular momentum of cold gas is
+   50.0029243954649     
+ Angular momentum in Msun Kpc Km/s (proper):
+   0.768E+10
+  -0.581E+10
+   0.393E+10
+ AM axis
+  0.7387049    
+ -0.5583509    
+  0.3775704    
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1=  0.4551207      0.0000000E+00 -0.8904298    
+  Vector 2=  0.4971723      0.8296049      0.2541171    
+  Vector 3=  0.7387049     -0.5583509      0.3775704    
+  Vector lengths=   1.000000       1.000000       1.000000      must be 1
+  Vector products= -2.9802322E-08 -7.4505806E-09 -1.4901161E-08  must be 0
+  Vector 1=   0.4551207      0.0000000E+00 -0.8904298    
+ Vector 2=   0.4971723      0.8296049      0.2541171    
+ Vector 3=   0.7387049     -0.5583509      0.3775704    
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :      272650
+ Total mass:   91648255.1948279     
+ Total initial mass:   131673521.115804     
+ younger than .1E+11 yrs
+ SFR=   9.405251508271695E-003
+ done writing spherical profiles. exiting...
+ Rvir=    77.71114      kpc
+ Mvir=  3.1164068E+10  Msun
+ Writing binary files..
+ #DM particles inside    155.4223      Kpc :      381061
+ with total mass equal to   0.36E+11 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    155.4223      Kpc :      338378
+ Total mass:   118283888.398805     
+ Total initial mass:   169068356.397559     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    155.4223      Kpc :      338378
+ Total mass:   118283888.398805     
+ Total initial mass:   169068356.397559     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    155.4223      Kpc :      338378
+ Total mass:   118283888.398805     
+ Total initial mass:   169068356.397559     
+ younger than .1E+11 yrs
+ Number of cells=      1550327
+ Number of cells=      1550327
+ --------------------------
+ CURRENT SNAPSHOT:   0.9500000    
+ --------------------------
+Reading  file: ./PMcrda0.950.DAT             
+Reading  file: ./PMcrs0a0.950.DAT            
+ Open file..../PMcrda0.950.DAT
+ ./PMcrda0.950.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   0.950 A0=   0.020 Ampl=   0.275 Step=   0.001
+  I =1249 WEIGHT=   0.002 Ekin=   0.436E+10   0.436E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     3180388
+  hello :     3180388     3180388
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     3180388
+ Read_Particles_Binary: reading np=     3180388  particles
+  Pages=           4  Species=           5
+  N_in_last=       34660
+Reading  file: ./stars_a0.950.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a0.950.
+ reading tree data from file ./10MpcBox_HartGal_csf_a0.950.d
+istep =1249  t =-0.14484441E-01 dt = 0.33263152E-03  a = 0.95041740     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =        7578  nOct =      352922
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       29664
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      112080
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      275176
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      297768
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      491640
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      295312
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      284312
+ reading tree (oct) data for level            8
+ reading cell data: ncells =      222296
+ reading tree (oct) data for level            9
+ reading cell data: ncells =      333872
+ reading tree (oct) data for level           10
+ reading cell data: ncells =      360760
+ reading tree (oct) data for level           11
+ reading cell data: ncells =      120496
+ done reading     4920528  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   13018.1756192987     
+   3712.20535060687     
+   2301.55403786990     
+  1.8854873E-02
+  1.7140793E-02
+  1.5582538E-02
+  1.4165943E-02
+  1.2878130E-02
+  1.1707391E-02
+  1.0643082E-02
+  9.6755289E-03
+  8.7959347E-03
+  7.9963040E-03
+  7.2693671E-03
+  6.6085155E-03
+  6.0077412E-03
+  5.4615829E-03
+  4.9650753E-03
+  4.5137047E-03
+  4.1033677E-03
+  3.7303341E-03
+  3.3912128E-03
+  3.0829206E-03
+  2.8026551E-03
+  2.5478683E-03
+  2.3162439E-03
+  2.1056763E-03
+  1.9142511E-03
+  1.7402283E-03
+  1.5820257E-03
+  1.4382051E-03
+  1.3074592E-03
+  1.1885993E-03
+ Center in proper Kpc:
+   13018.0971455250     
+   3712.23761204715     
+   2301.58433746584     
+ Velocity of the center in Km/s
+   23.7629232040505     
+   2.97546422426298     
+   1.24186589132756     
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is        17550
+ The specific angular momentum of cold gas is
+   36.7303274681208     
+ Angular momentum in Msun Kpc Km/s (proper):
+   0.231E+10
+  -0.133E+10
+   0.118E+10
+ AM axis
+  0.7932069    
+ -0.4545709    
+  0.4052013    
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1=  0.4549192      0.0000000E+00 -0.8905327    
+  Vector 2=  0.4048102      0.8907105      0.2067930    
+  Vector 3=  0.7932069     -0.4545709      0.4052013    
+  Vector lengths=  0.9999999       1.000000      0.9999999      must be 1
+  Vector products=  0.0000000E+00 -4.4703484E-08  0.0000000E+00  must be 0
+  Vector 1=   0.4549192      0.0000000E+00 -0.8905327    
+ Vector 2=   0.4048102      0.8907105      0.2067930    
+ Vector 3=   0.7932069     -0.4545709      0.4052013    
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :      278715
+ Total mass:   97422715.4108078     
+ Total initial mass:   139781628.002989     
+ younger than .1E+11 yrs
+ SFR=   9.984402000213489E-003
+ done writing spherical profiles. exiting...
+ Rvir=    79.45446      kpc
+ Mvir=  3.1674184E+10  Msun
+ Writing binary files..
+ #DM particles inside    158.9089      Kpc :      382382
+ with total mass equal to   0.36E+11 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    158.9089      Kpc :      346718
+ Total mass:   125759814.790373     
+ Total initial mass:   179763573.199192     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    158.9089      Kpc :      346718
+ Total mass:   125759814.790373     
+ Total initial mass:   179763573.199192     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    158.9089      Kpc :      346718
+ Total mass:   125759814.790373     
+ Total initial mass:   179763573.199192     
+ younger than .1E+11 yrs
+ Number of cells=      1556613
+ Number of cells=      1556613
+ --------------------------
+ CURRENT SNAPSHOT:   0.9760000    
+ --------------------------
+Reading  file: ./PMcrda0.976.DAT             
+Reading  file: ./PMcrs0a0.976.DAT            
+ Open file..../PMcrda0.976.DAT
+ ./PMcrda0.976.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   0.976 A0=   0.020 Ampl=   0.275 Step=   0.002
+  I =1268 WEIGHT=   0.002 Ekin=   0.443E+10   0.443E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     3187228
+  hello :     3187228     3187228
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     3187228
+ Read_Particles_Binary: reading np=     3187228  particles
+  Pages=           4  Species=           5
+  N_in_last=       41500
+Reading  file: ./stars_a0.976.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a0.976.
+ reading tree data from file ./10MpcBox_HartGal_csf_a0.976.d
+istep =1268  t =-0.66352351E-02 dt = 0.48700585E-03  a = 0.97649395     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =       11406  nOct =      348370
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       29680
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      111768
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      274800
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      293552
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      478872
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      305032
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      283080
+ reading tree (oct) data for level            8
+ reading cell data: ncells =      228912
+ reading tree (oct) data for level            9
+ reading cell data: ncells =      298208
+ reading tree (oct) data for level           10
+ reading cell data: ncells =      346696
+ reading tree (oct) data for level           11
+ reading cell data: ncells =      136360
+ done reading     4884112  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   13382.1666271715     
+   3810.65113562603     
+   2365.23376133159     
+  1.8351367E-02
+  1.6683061E-02
+  1.5166419E-02
+  1.3787653E-02
+  1.2534230E-02
+  1.1394754E-02
+  1.0358867E-02
+  9.4171520E-03
+  8.5610468E-03
+  7.7827699E-03
+  7.0752450E-03
+  6.4320406E-03
+  5.8473097E-03
+  5.3157359E-03
+  4.8324871E-03
+  4.3931701E-03
+  3.9937911E-03
+  3.6307191E-03
+  3.3006538E-03
+  3.0005942E-03
+  2.7278129E-03
+  2.4798298E-03
+  2.2543906E-03
+  2.0494459E-03
+  1.8631326E-03
+  1.6937569E-03
+  1.5397790E-03
+  1.3997990E-03
+  1.2725445E-03
+  1.1568586E-03
+ Center in proper Kpc:
+   13382.1666271715     
+   3810.66029089962     
+   2365.35365181912     
+ Velocity of the center in Km/s
+   16.3472337057179     
+  -16.8251569975870     
+   6.37353973162267     
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is        59561
+ The specific angular momentum of cold gas is
+   66.8893483258849     
+ Angular momentum in Msun Kpc Km/s (proper):
+   0.138E+11
+  -0.474E+10
+   0.629E+10
+ AM axis
+  0.8682792    
+ -0.2985088    
+  0.3962116    
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1=  0.4151391      0.0000000E+00 -0.9097580    
+  Vector 2=  0.2715708      0.9544069      0.1239227    
+  Vector 3=  0.8682792     -0.2985088      0.3962116    
+  Vector lengths=  0.9999999       1.000000      0.9999999      must be 1
+  Vector products=  0.0000000E+00 -2.2351742E-08 -7.4505806E-09  must be 0
+  Vector 1=   0.4151391      0.0000000E+00 -0.9097580    
+ Vector 2=   0.2715708      0.9544069      0.1239227    
+ Vector 3=   0.8682792     -0.2985088      0.3962116    
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :      278152
+ Total mass:   99521477.1279807     
+ Total initial mass:   143198444.555387     
+ younger than .1E+11 yrs
+ SFR=   1.022846032538476E-002
+ done writing spherical profiles. exiting...
+ Rvir=    80.95876      kpc
+ Mvir=  3.1896861E+10  Msun
+ Writing binary files..
+ #DM particles inside    161.9175      Kpc :      383357
+ with total mass equal to   0.36E+11 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    161.9175      Kpc :      353556
+ Total mass:   132175078.754574     
+ Total initial mass:   189283145.332011     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    161.9175      Kpc :      353556
+ Total mass:   132175078.754574     
+ Total initial mass:   189283145.332011     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    161.9175      Kpc :      353556
+ Total mass:   132175078.754574     
+ Total initial mass:   189283145.332011     
+ younger than .1E+11 yrs
+ Number of cells=      1528963
+ Number of cells=      1528963
+ --------------------------
+ CURRENT SNAPSHOT:   0.9910000    
+ --------------------------
+Reading  file: ./PMcrda0.991.DAT             
+Reading  file: ./PMcrs0a0.991.DAT            
+ Open file..../PMcrda0.991.DAT
+ ./PMcrda0.991.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   0.991 A0=   0.020 Ampl=   0.275 Step=   0.002
+  I =1276 WEIGHT=   0.002 Ekin=   0.447E+10   0.447E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     3190914
+  hello :     3190914     3190914
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     3190914
+ Read_Particles_Binary: reading np=     3190914  particles
+  Pages=           4  Species=           5
+  N_in_last=       45186
+Reading  file: ./stars_a0.991.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a0.991.
+ reading tree data from file ./10MpcBox_HartGal_csf_a0.991.d
+istep =1276  t =-0.24469847E-02 dt = 0.53570645E-03  a = 0.99116534     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =      308891  nOct =      347243
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       29704
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      111552
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      273992
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      290744
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      472312
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      314104
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      278568
+ reading tree (oct) data for level            8
+ reading cell data: ncells =      216160
+ reading tree (oct) data for level            9
+ reading cell data: ncells =      297968
+ reading tree (oct) data for level           10
+ reading cell data: ncells =      336096
+ reading tree (oct) data for level           11
+ reading cell data: ncells =      156744
+ done reading     4875096  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   13587.2247012551     
+   3865.96032323089     
+   2400.55415290686     
+  1.8079728E-02
+  1.6436117E-02
+  1.4941924E-02
+  1.3583567E-02
+  1.2348697E-02
+  1.1226088E-02
+  1.0205534E-02
+  9.2777582E-03
+  8.4343255E-03
+  7.6675685E-03
+  6.9705169E-03
+  6.3368334E-03
+  5.7607573E-03
+  5.2370518E-03
+  4.7609559E-03
+  4.3281415E-03
+  3.9346740E-03
+  3.5769762E-03
+  3.2517966E-03
+  2.9561787E-03
+  2.6874351E-03
+  2.4431227E-03
+  2.2210206E-03
+  2.0191097E-03
+  1.8355543E-03
+  1.6686857E-03
+  1.5169870E-03
+  1.3790791E-03
+  1.2537083E-03
+  1.1397348E-03
+ Center in proper Kpc:
+   13587.2866083432     
+   3865.96729867743     
+   2400.41137423535     
+ Velocity of the center in Km/s
+   16.3501571000030     
+  -3.67732980535574     
+ -0.531258794274003     
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is        49613
+ The specific angular momentum of cold gas is
+   52.4263562117046     
+ Angular momentum in Msun Kpc Km/s (proper):
+   0.880E+10
+  -0.502E+10
+   0.296E+10
+ AM axis
+  0.8337286    
+ -0.4756812    
+  0.2803997    
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1=  0.3187746      0.0000000E+00 -0.9478306    
+  Vector 2=  0.4508652      0.8796177      0.1516351    
+  Vector 3=  0.8337286     -0.4756812      0.2803997    
+  Vector lengths=  0.9999999       1.000000      0.9999999      must be 1
+  Vector products=  0.0000000E+00  2.6077032E-08  0.0000000E+00  must be 0
+  Vector 1=   0.3187746      0.0000000E+00 -0.9478306    
+ Vector 2=   0.4508652      0.8796177      0.1516351    
+ Vector 3=   0.8337286     -0.4756812      0.2803997    
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :      277939
+ Total mass:   100970116.804426     
+ Total initial mass:   145330841.860166     
+ younger than .1E+11 yrs
+ SFR=   1.038077441858327E-002
+ done writing spherical profiles. exiting...
+ Rvir=    81.74937      kpc
+ Mvir=  3.1979553E+10  Msun
+ Writing binary files..
+ #DM particles inside    163.4987      Kpc :      383899
+ with total mass equal to   0.36E+11 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    163.4987      Kpc :      357239
+ Total mass:   135796181.738722     
+ Total initial mass:   194734304.199022     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    163.4987      Kpc :      357239
+ Total mass:   135796181.738722     
+ Total initial mass:   194734304.199022     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    163.4987      Kpc :      357239
+ Total mass:   135796181.738722     
+ Total initial mass:   194734304.199022     
+ younger than .1E+11 yrs
+ Number of cells=      1520974
+ Number of cells=      1520974
+ --------------------------
+ CURRENT SNAPSHOT:    1.001000    
+ --------------------------
+Reading  file: ./PMcrda1.001.DAT             
+Reading  file: ./PMcrs0a1.001.DAT            
+ Open file..../PMcrda1.001.DAT
+ ./PMcrda1.001.DAT  is open.
+ Header=>N=128x1024 L=10h-1Mpc sig8=0.8 sig=0.27 z=50 
+  A=   1.002 A0=   0.020 Ampl=   0.275 Step=   0.002
+  I =1281 WEIGHT=   0.002 Ekin=   0.449E+10   0.449E+10   0.000E+00
+  Nrow=1024 Ngrid= 128 Nrecl=******
+  Omega_0=  0.300 OmLam_0= 0.7000 Omegab_0=  0.045 Hubble=  0.700
+ extras: specie   wspecie    lspecie 
+           1  1.6608206E-03      649216
+           2  1.3286564E-02      727232
+           3  0.1062925          740384
+           4  0.8503401         2833405
+           5  0.0000000E+00     3193198
+  hello :     3193198     3193198
+ ispecie =           1      649216
+ ispecie =           2      727232
+ ispecie =           3      740384
+ ispecie =           4     2833405
+ ispecie =           5     3193198
+ Read_Particles_Binary: reading np=     3193198  particles
+  Pages=           4  Species=           5
+  N_in_last=       47470
+Reading  file: ./stars_a1.001.dat            
+Reading  file: ./10MpcBox_HartGal_csf_a1.001.
+ reading tree data from file ./10MpcBox_HartGal_csf_a1.001.d
+istep =1281  t = 0.44583017E-03 dt = 0.58927711E-03  a =  1.0016314     ainit = 0.19607844E-01
+Lbox[/h Mpc] =  10.0000  Om0 = 0.300  Oml0= 0.700  Omb0= 0.04490  h = 0.700
+ iOctFree =       23206  nOct =      350206
+ reading tree (oct) data for level            1
+ reading cell data: ncells =       29704
+ reading tree (oct) data for level            2
+ reading cell data: ncells =      111384
+ reading tree (oct) data for level            3
+ reading cell data: ncells =      274056
+ reading tree (oct) data for level            4
+ reading cell data: ncells =      288792
+ reading tree (oct) data for level            5
+ reading cell data: ncells =      467504
+ reading tree (oct) data for level            6
+ reading cell data: ncells =      322408
+ reading tree (oct) data for level            7
+ reading cell data: ncells =      286856
+ reading tree (oct) data for level            8
+ reading cell data: ncells =      210696
+ reading tree (oct) data for level            9
+ reading cell data: ncells =      270112
+ reading tree (oct) data for level           10
+ reading cell data: ncells =      349168
+ reading tree (oct) data for level           11
+ reading cell data: ncells =      190968
+ done reading     4898800  cells...
+ Center position and velocity of particles:
+ -------------------------------------------------
+ Position of minimum potential in  proper Kpc:
+   13733.4257012338     
+   3906.12712427764     
+   2426.01169902958     
+  1.7890813E-02
+  1.6264375E-02
+  1.4785795E-02
+  1.3441632E-02
+  1.2219665E-02
+  1.1108786E-02
+  1.0098896E-02
+  9.1808140E-03
+  8.3461944E-03
+  7.5874492E-03
+  6.8976809E-03
+  6.2706191E-03
+  5.7005626E-03
+  5.1823296E-03
+  4.7112084E-03
+  4.2829164E-03
+  3.8935603E-03
+  3.5396002E-03
+  3.2178182E-03
+  2.9252893E-03
+  2.6593539E-03
+  2.4175944E-03
+  2.1978130E-03
+  1.9980117E-03
+  1.8163742E-03
+  1.6512492E-03
+  1.5011356E-03
+  1.3646687E-03
+  1.2406079E-03
+  1.1278254E-03
+ Center in proper Kpc:
+   13733.3733853847     
+   3906.13976727451     
+   2426.03785695413     
+ Velocity of the center in Km/s
+   20.6874401925449     
+  -6.83514441621929     
+   1.27314018689314     
+ Computing angular momentum for cold (T<10^4) gas
+ The number of cells inside    3.000000      is        64024
+ The specific angular momentum of cold gas is
+   67.8672651108121     
+ Angular momentum in Msun Kpc Km/s (proper):
+   0.134E+11
+  -0.104E+11
+   0.524E+10
+ AM axis
+  0.7530430    
+ -0.5878256    
+  0.2956136    
+ New system of coordinates: Vector 1, 2 ,3
+  Vector 1=  0.3654117      0.0000000E+00 -0.9308460    
+  Vector 2=  0.5471751      0.8089877      0.2147983    
+  Vector 3=  0.7530430     -0.5878256      0.2956136    
+  Vector lengths=   1.000000      0.9999999       1.000000      must be 1
+  Vector products=  0.0000000E+00 -3.7252903E-08  0.0000000E+00  must be 0
+  Vector 1=   0.3654117      0.0000000E+00 -0.9308460    
+ Vector 2=   0.5471751      0.8089877      0.2147983    
+ Vector 3=   0.7530430     -0.5878256      0.2956136    
+  writing an ASCII file with
+stars younger than .1E+11 yrs
+ in spherical coordinates
+ inside 5 Kpc
+ Nstars inside    5.000000      Kpc :      274735
+ Total mass:   100777146.792545     
+ Total initial mass:   145248608.823374     
+ younger than .1E+11 yrs
+ SFR=   1.037490063024098E-002
+ done writing spherical profiles. exiting...
+ Rvir=    82.08840      kpc
+ Mvir=  3.1786783E+10  Msun
+ Writing binary files..
+ #DM particles inside    164.1768      Kpc :      384159
+ with total mass equal to   0.36E+11 Msun
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    164.1768      Kpc :      359517
+ Total mass:   138053107.911833     
+ Total initial mass:   198188972.175401     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ writing a binary file with the current stellar mass
+ Nstars inside    164.1768      Kpc :      359517
+ Total mass:   138053107.911833     
+ Total initial mass:   198188972.175401     
+ younger than .1E+11 yrs
+stars younger than .1E+11 yrs
+ Nstars inside    164.1768      Kpc :      359517
+ Total mass:   138053107.911833     
+ Total initial mass:   198188972.175401     
+ younger than .1E+11 yrs
+ Number of cells=      1528030
+ Number of cells=      1528030

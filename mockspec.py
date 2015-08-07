@@ -14,10 +14,11 @@ import os
 
 pathname = os.path.dirname(sys.argv[0])
 codeLoc = os.path.abspath(pathname)
+summaryLoc = codeLoc+'/summaries/'
 
 #  Read in the control file
 props, ions, xh, instruments = readControlFile()
-galID, expn, nlos, incline, ewcut, snr, ncores, rootLoc, requiredLoc = props
+galID, expn, nlos, maximpact, incline, ewcut, snr, ncores, rootLoc, requiredLoc = props
 
 # Genearte the name of the gasfile
 gasfile = galID+'_GZa'+expn+'.txt'
@@ -31,9 +32,9 @@ setupGalprops( galID, expn, requiredLoc )
 #  Run rates
 #
 #####
-setupRatesControl( gasfile, expn, ions, requiredLoc)
-setupRatesOutputs(galID, expn, ions, codeLoc, requiredLoc) 
-runRates()
+#setupRatesControl( gasfile, expn, ions, requiredLoc)
+#setupRatesOutputs(galID, expn, ions, codeLoc, requiredLoc) 
+#runRates()
 
 
 ##### 
@@ -41,8 +42,8 @@ runRates()
 #  Generate the lines of sight
 #
 #####
-genLOS(galID, gasfile, summaryLoc, expn, incline, nlos, ncores)
-
+genLines(galID, gasfile, summaryLoc, expn, incline, nlos, maximpact, ncores)
+print 'Lines generated'
 
 ##### 
 #  
@@ -50,6 +51,6 @@ genLOS(galID, gasfile, summaryLoc, expn, incline, nlos, ncores)
 #
 #####
 command = './cellfinder'
-
+print 'Cellfinder Done'
 
 
