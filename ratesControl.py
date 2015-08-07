@@ -54,7 +54,7 @@ def setupRatesControl(gasfile, expn, ion_list, requiredLoc):
     sp.call(command, shell=True)
 
 
-def setupRatesOutputs(galID, expn, ion_list, codeLoc):
+def setupRatesOutputs(galID, expn, ion_list, codeLoc, requiredLoc):
 
     if not os.path.exists('rates.outfiles'):
         command = 'cp '+requiredLoc+'rates.outfiles .'

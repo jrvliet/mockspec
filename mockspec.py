@@ -32,7 +32,7 @@ setupGalprops( galID, expn, requiredLoc )
 #
 #####
 setupRatesControl( gasfile, expn, ions, requiredLoc)
-setupRatesOutputs(galID, expn, ions, codeLoc) 
+setupRatesOutputs(galID, expn, ions, codeLoc, requiredLoc) 
 runRates()
 
 
