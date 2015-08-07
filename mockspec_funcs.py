@@ -1,14 +1,15 @@
 
 import sys
 import numpy as np
-
+import os
 
 def readControlFile():
 
     # Reads in the control file
     # Filename: mockspec.config
+    filename = 'mockspec.config'
     try:
-        f = open('mockspec.config')
+        f = open(filename)
     except IOError:
         print 'Missing control file: {0:s}'.format(filename)
         print 'Quitting...'
@@ -26,7 +27,7 @@ def readControlFile():
     snr = f.readline().split()[0]
     ncores = f.readline().split()[0]
     rootLoc = f.readline().split()[0]
-    requriedLoc = f.readline().split()[0] 
+    requiredLoc = f.readline().split()[0] 
     # Now at ion section
     # Loop over rest of file
     ions = []
@@ -42,17 +43,17 @@ def readControlFile():
 
     f.close()
 
-    props = (galID, expn, nlos, incline, ewcut, snr, ncores, rootLoc)
+    props = (galID, expn, nlos, incline, ewcut, snr, ncores, rootLoc, requiredLoc)
 
     return props, ions, xh, instruments
 
 
-def setupGalprops(galID, expn):
+def setupGalprops(galID, expn, requiredLoc):
 
     from subprocess import call
 
     if not os.path.exists('gal_props.dat'):
-        command = 'cp /home/matrix3/jrvander/requiredfiles/gal_props.dat .'
+        command = 'cp ' +requiredLoc+ '/gal_props.dat .'
         call(command, shell=True)
 
     call('cp gal_props.dat gal_props.dat.tmp', shell=True)

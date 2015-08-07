@@ -1,6 +1,24 @@
 
+import subprocess as sp
 
-def setupRatesControl(gasfile, expn, ion_list, requiredLoc)
+def getTransitionInfo(ion, codeLoc) :
+
+    # Returns the atomic number and existion level 
+    # of this ion
+    # Open the Mockspec.transistions file
+    f = open(codeLoc+'/data/Mockspec.transitions')
+
+    for line in f:
+        fion = line.split()[4]
+        if fion==ion:
+            element = line.split()[1]
+            k = line.split()[2]
+            j = line.split()[3]
+            f.close()
+            return element, k, j
+
+
+def setupRatesControl(gasfile, expn, ion_list, requiredLoc):
 
     if not os.path.exists('rates.inp'):
         command = 'cp '+requiredLoc+'rates.inp .'
@@ -35,7 +53,7 @@ def setupRatesControl(gasfile, expn, ion_list, requiredLoc)
     sp.call(command, shell=True)
 
 
-def setupRatesOutputs():
+def setupRatesOutputs(galID, expn, ion_list, codeLoc):
 
     if not os.path.exists('rates.outfiles'):
         command = 'cp '+requiredLoc+'rates.outfiles .'
@@ -46,7 +64,7 @@ def setupRatesOutputs():
     outfiles = open('rates.outfiles.tmp', 'w')
     for ion in ion_list:
         ionbox = galID+'_GZa'+expn+'.'+ion+'.txt'
-        element, Z, excitation = get_transition_info(ion)
+        element, Z, excitation = get_transition_info(ion, codeLoc)
         line = '{0:<27s} {1:>2s} {2:>2s}\n'.format(ionbox, Z, excitation)
         outfiles.write(line)
     outfiles.close()
@@ -60,5 +78,6 @@ def setupRatesOutputs():
 def rates():
     
     print 'Generating ion boxes...'
-     
+    command = './funcs/rates/rates'
+    sp.call(command, shell=True) 
 
