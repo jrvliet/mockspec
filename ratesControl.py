@@ -1,5 +1,6 @@
 
 import subprocess as sp
+import os
 
 def getTransitionInfo(ion, codeLoc) :
 
