@@ -1,25 +1,9 @@
 
 import subprocess as sp
 import os
+import sys
 from mockspec_funcs import getTransitionInfo
 
-'''
-def getTransitionInfo(ion, codeLoc) :
-
-    # Returns the atomic number and existion level 
-    # of this ion
-    # Open the Mockspec.transistions file
-    f = open(codeLoc+'/data/Mockspec.transitions')
-
-    for line in f:
-        fion = line.split()[4]
-        if fion==ion:
-            element = line.split()[1]
-            k = line.split()[2]
-            j = line.split()[3]
-            f.close()
-            return element, k, j
-'''
 
 def setupRatesControl(gasfile, expn, ion_list, requiredLoc):
 
@@ -78,9 +62,12 @@ def setupRatesOutputs(galID, expn, ion_list, codeLoc, requiredLoc):
     sp.call(command, shell=True)
    
 
-def runRates():
+def runRates(codeLoc):
     
-    print 'Generating ion boxes...'
-    command = './funcs/rates/rates'
-    sp.call(command, shell=True) 
-
+    command = codeLoc+'/funcs/rates/rates'
+    try:
+        sp.check_call(command, shell=True) 
+    except:
+        print 'Could not run rates'
+        print 'Exiting....'
+        sys.exit()
