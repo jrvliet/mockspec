@@ -1,7 +1,9 @@
 
 import subprocess as sp
 import os
+from mockspec_funcs import getTransitionInfo
 
+'''
 def getTransitionInfo(ion, codeLoc) :
 
     # Returns the atomic number and existion level 
@@ -17,7 +19,7 @@ def getTransitionInfo(ion, codeLoc) :
             j = line.split()[3]
             f.close()
             return element, k, j
-
+'''
 
 def setupRatesControl(gasfile, expn, ion_list, requiredLoc):
 
@@ -65,7 +67,7 @@ def setupRatesOutputs(galID, expn, ion_list, codeLoc, requiredLoc):
     outfiles = open('rates.outfiles.tmp', 'w')
     for ion in ion_list:
         ionbox = galID+'_GZa'+expn+'.'+ion+'.txt'
-        element, Z, excitation = get_transition_info(ion, codeLoc)
+        element, Z, excitation = getTransitionInfo(ion, codeLoc)
         line = '{0:<27s} {1:>2s} {2:>2s}\n'.format(ionbox, Z, excitation)
         outfiles.write(line)
     outfiles.close()
