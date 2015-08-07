@@ -1,16 +1,9 @@
 //!/usr/bin/python
 //
-// Filename: FBcellfinder.py
-// Version: 7
-// Created: 11/12/2013
-// Modified: 11/12/2013
+// Filename: cellfinder.py
 //
 // Purpose: 
-//  This is a direct copy of FBcellfinder5.f, written by Liz Klimek, 
-//  converting the Fortran into python for ease of use and reading
-//
-//  Allows for radial velocity cuts to be made on each cell
-//
+//  This is a version of FBcellfinder but does not 
 //  This does not get any information from the name of the galaxy file
 //  All information is pulled from the galaxy props file
 //  This is to allow the use of galaxies with naming conventions other than
@@ -153,26 +146,15 @@ int main(int argc, char *argv[]){
       // Write header to output file
       write_OutfileHdr(outfp, &aexpn, &R0, &phi, &l, &b, &xen, &yen, &zen, &losx, &losy, &losz, &a11, &a12, &a13, &a21, &a22, &a23, &a31, &a32, &a33, &Xcom, &Ycom, &Zcom, &VXcom, &VYcom, &VZcom, &x0, &y0, &z0, &vx_obs, &vy_obs, &vz_obs);
 
-      //      printf("Finished output header\n");
 
       // Write LOS properties to file
       write_LOSprops(propsfp, losnum, &aexpn, &R0, &phi, &l, &b, &xen, &yen, &zen, &losx, &losy, &losz, &a11, &a12, &a13, &a21, &a22, &a23, &a31, &a32, &a33, &Xcom, &Ycom, &Zcom, &VXcom, &VYcom, &VZcom, &x0, &y0, &z0, &vx_obs, &vy_obs, &vz_obs);
       
-      //      printf("Finished los props write\n");
-
-      // Debug stuff
-      //      printf("%lf \t %lf \t %lf \t %lf \t %lf \t %lf \t %lf \t %lf \t %lf \t %lf \t %lf \t %lf \t %lf \t %lf \t %lf \t %lf \t %lf \t %lf \t %lf \t %lf \t %lf \t %lf \t %lf \t %lf \t %lf \t %lf \t %lf \t %lf \t %lf \t %lf \t %lf \t %lf \n", aexpn, R0, phi, l, b, xen, yen, zen, losx, losy, losz, a11, a12, a13, a21, a22, a23, a31, a32, a33, Xcom, Ycom, Zcom, VXcom, VYcom, VZcom, x0, y0, z0, vx_obs, vy_obs, vz_obs);
-      
-      //      printf("After header: %p\n",outfp);
       outfp = outfp0;
       // Find all the cells that lie along the line of sight as 
       // defined by the points of entry and exit into and out of the box
       cellsearch(nlos, gasfile, &x0, &y0, &z0, &losx, &losy, &losz, &xen, &yen, &zen, &xex, &yex, &zex, &lowvel, &upvel, outfp, logfp, &a11, &a12, &a13, &a21, &a22, &a23, &a31, &a32, &a33);
       
-      //      printf("Finished cellsearch\n");
-
-      //      printf("After cellsearch: %p\n",outfp);
-
       fclose(outfp0);
     }
 
