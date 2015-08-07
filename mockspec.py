@@ -37,7 +37,7 @@ print 'Requried Loc: ', requiredLoc
 
 # Generate gal_props.dat file
 print 'Generating gal_props.dat...'
-setupGalprops( galID, expn, requiredLoc )
+setupGalprops( galID, expn, requiredLoc, summaryLoc )
 
 
 ##### 
@@ -51,7 +51,7 @@ setupRatesControl( gasfile, expn, ions, requiredLoc)
 print '\t Setting up rates.outfiles...'
 setupRatesOutputs(galID, expn, ions, codeLoc, requiredLoc) 
 print '\t Running rates...'
-runRates(codeLoc)
+#runRates(codeLoc)
 
 
 ##### 
@@ -68,7 +68,7 @@ genLines(galID, gasfile, summaryLoc, expn, incline, nlos, maximpact, ncores)
 #
 #####
 print '\nRunning LOS through box...'
-command = './cellfinder'
+runCellfinder(codeLoc)
 
 
 

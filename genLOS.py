@@ -10,6 +10,7 @@ from random import random, seed
 from os import popen
 from numpy import linspace as ls
 from numba import jit
+import subprocess as sp
 
 def inBox(x,y,z,boxsize):
     size = boxsize
@@ -251,5 +252,15 @@ def genLines(galID, gasfile, summaryLoc, expn, inc, nLOS, maximpact, ncores):
         
     fout.close()
     finfo.close()
-    
+   
 
+
+ 
+def runCellfinder(codeLoc):
+    command = codeLoc+'/funcs/cellfinder/cellfinder'
+    try: 
+        sp.check_call(command, shell=True)
+    except:
+        print '\n\nCould not run cellfinder with:\n\t{0:s}'.format(command)
+        print 'Exiting...'
+        print sys.exit()

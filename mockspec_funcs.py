@@ -49,7 +49,7 @@ def readControlFile():
     return props, ions, xh, instruments
 
 
-def setupGalprops(galID, expn, requiredLoc):
+def setupGalprops(galID, expn, requiredLoc, summaryLoc):
 
     from subprocess import call
 
@@ -75,9 +75,10 @@ def setupGalprops(galID, expn, requiredLoc):
     line = f.readline()
     gpf.write(line.replace('1.001', expn))
 
-    for line in f:
-        gpf.write(line)
-
+    gpf.write(f.readline())
+    gpf.write(f.readline())
+    
+    gpf.write(summaryLoc)
     f.close()
     gpf.close()
 
