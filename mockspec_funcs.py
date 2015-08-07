@@ -89,7 +89,7 @@ def getTransitionInfo(ion, codeLoc):
     # Returns the atomic number and existion level 
     # of this ion
     # Open the Mockspec.transistions file
-    f = open(codeLoc+'data/Mockspec.transitions')
+    f = open(codeLoc+'/data/Mockspec.transitions')
 
     for line in f:
         fion = line.split()[4]
