@@ -70,5 +70,9 @@ genLines(galID, gasfile, summaryLoc, expn, incline, nlos, maximpact, ncores)
 print '\nRunning LOS through box...'
 runCellfinder(codeLoc)
 
-
+##### 
+#  
+#  ID the cells along LOSs in the ion boxes
+#
+#####
 
