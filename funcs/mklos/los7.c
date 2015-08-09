@@ -22,7 +22,14 @@ int main(int argc, char *argv[]){
     char new_line[200];    
     char *p;
     FILE *losfp;
+
+    // Constants
     double ckms = 3.0e5;
+    double pc2cm = 3.261633*9.460528e17;
+    double kpc2cm = 1000.0 * pc2cm;
+    double amu     = 1.66053878e-24
+    double Mpc2kpc = 1.e-3;
+    double kboltz  = 1.380658e-16;
 
     // los and galaxy data
     double zlos, dlos, impact;
@@ -113,15 +120,55 @@ int main(int argc, char *argv[]){
             // Bobby Edmonds' for the getD subroutine); returns the value of dlos
             // in kpc, convert to centimeters upon return
             getD( l, m, n, x0, y0, z0, x[i], y[i], z[i], Lcell[i], dlos, error, errtype);
-        } 
 
+            // If getD returns clean, convert from Mpc to kpc
+            // If getD returns an error, use the cube root of the
+            // cell volume; communicate to the error log file
+            if (error==1){
+                dlos = kpc2cm*Lcell[i];
+                badDcells = badDcells+1;
+                dloserr(errtype, losdata, cellnum[i], dlos);    
+            }
+            else{
+                dlos = kpc2cm*dlos;
+            }
+    
+            // Compute the cell column density [cm^-2]
+            // observed redshift
+            // Doppler param [km/s]
+            Nline[i] = ndencell[i] * dlos;
+            zline[i] = zlos;
+            bline[i] = 1.0e-5 * sqrt(2.0*kboltz*temp[i]/(amu*mamu));
+
+            // Translate the coordinate system to the galaxy center
+            // Translate the velocities to the galaxy velocity
+            Rgalx = x[i]-xg;
+            Rgaly = y[i]-yg;
+            Rgalz = z[i]-zg;
+            Rgal  = sqrt(Rgalx*Rgalx + Rgaly*Rgaly + Rgalz*Rgalz);
+            Vgalx  = vx[i]-vxg;
+            Vgaly  = vy[i]-vyg;
+            Vgalz  = vz[i]-vzg;
+            Vgalt  = sqrt(Vgalx*Vgalx + Vgaly*Vgaly + Vgalz*Vgalz);
+
+            // Rotate physical coordinates (spatial will be kpc)
+            // Rotate velocity vectors
+            // Compute spherical coordinate velocities
+            rp = 0.0;
+            rotate(ap, Rgalx, Rgaly, Rgalz, xp, yp, zp);
+            rotate(ap, Vgalx, Vgaly, Vgalz, vxp, vyp, vzp);
+            sphvels(xp, yp, zp, rp, theta, phi, vxp, vyp, vzp, vrp, V_theta, V_phi);
+            
+            // Write processed data to the .losdata file
+            wrtlosdata( Slos, Rgal, zline[i], vlos, vabs, dlos, ndencell[i], fion[i], zmfrac[i], Nline[i], temp[i], bline[i], Vgalt, vrp, V_theta, V_phi, vzp, xp, yp, zp, rp, theta, phi, cellnum[i]);
+
+        }  // Ends loop over cells in a single LOS
+
+    // Write the .lines file, one for each transition
+    // These files used by specsynth to generate the spectra
+    wrtlines(zgal, zline, Nline, bline, cellnum, linesfile);
 
     } 
-
-    
-
-
-
 
     return 0;
 }
