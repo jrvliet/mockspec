@@ -168,7 +168,7 @@ void gethdr( int klos, double *a, double *xg, double *yg, double *zg, double *vx
 
 
 
-void readcells( int *cellnum, double *x, double *y, double *z, double *vx, double *vy, double *vz, double *Lcell, double *ndencell, double *fion, double *temp, double *zmfrac, char *infile){
+int readcells( int *cellnum, double *x, double *y, double *z, double *vx, double *vy, double *vz, double *Lcell, double *ndencell, double *fion, double *temp, double *zmfrac, char *infile){
 
     
 //     now read in the cell data and store in arrays all cell quantities
@@ -239,6 +239,7 @@ void readcells( int *cellnum, double *x, double *y, double *z, double *vx, doubl
         i++;
     }
 
+    return i;
     fclose(fp);
 }
 
@@ -247,7 +248,7 @@ void readcells( int *cellnum, double *x, double *y, double *z, double *vx, doubl
 
 double getamu(char *tranilist, char *ionlabel){
 
-    int iflag, k, j, i;
+    int iflag, k, j;
     double dum, imass, mamu;
     char name[50], ilabel[50], tlabel[50];
     char new_line[500];
@@ -292,8 +293,8 @@ double getamu(char *tranilist, char *ionlabel){
 // above, which is better commented
 void mkfname(char *infile, char *galID, char *ion, char *lostag, char *linesfile){
 
-    const char delim[2] = ".";
-    char *input;
+//    const char delim[2] = ".";
+//    char *input;
     // Format of infile:
     // galID.ion.los####.dat
 
@@ -321,9 +322,9 @@ void wrtlines(double zgal, double *zline, double *Nline, double *bline, int *cel
     
     char outfile[] = "linesout.lines";
     FILE *fp = fopen(outfile, "w");
-    fprintf(fp, "%lf\n", zgal):
+    fprintf(fp, "%lf\n", zgal);
     for (i=0; i<ndata; i++){
-        if (log10(Nlines[i]>9.0)){
+        if (log10(Nline[i]>9.0)){
             fprintf(fp, "%lf \t %lf \t %lf \t %d \n", zline[i], log10(Nline[i]), bline[i], cellnum[i]);
         }
     }
@@ -336,13 +337,12 @@ void wrtlines(double zgal, double *zline, double *Nline, double *bline, int *cel
 
 
 // write the data to the *.losdata  files
-void wrtlosdata( double Slos, double Rgal, double zline, double vlos, double vabs, double dlos, double ndencell, double fion, double zmfrac, double Nline, double temp, double bline, double Vgalt, double vrp, double V_theta, double V_phi, double vzp, double xp, double yp, double zp, double rp, double theta, double phi, int cellnum){
+void wrtlosdata( double Slos, double Rgal, double zline, double vlos, double vabs, double dlos, double ndencell, double fion, double zmfrac, double Nline, double temp, double bline, double Vgalt, double vrp, double V_theta, double V_phi, double vzp, double xp, double yp, double zp, double rp, double theta, double phi, int cellnum, char *unitlosfile){
 
     int i;
-
     FILE *fp = fopen(unitlosfile, "w");
     
-    fprintf(fp, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf", Slos, Rgal, zline, vlos, log10(dlos), log10(ndencell), log10(fion), log10(amfrac), log10(Nline), log10(temp), bline, Vgalt, vrp, V_theta, V_phi, vap , xp, yp, zp, rp, theta, phi, crp/Vgalt, V_theta/Vgalt, V_phi/Vgalt, vzp/Vgalt);
+    fprintf(fp, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf", Slos, Rgal, zline, vlos, log10(dlos), log10(ndencell), log10(fion), log10(zmfrac), log10(Nline), log10(temp), bline, Vgalt, vrp, V_theta, V_phi, vzp , xp, yp, zp, rp, theta, phi, vrp/Vgalt, V_theta/Vgalt, V_phi/Vgalt, vzp/Vgalt);
 
     fclose(fp);
     
