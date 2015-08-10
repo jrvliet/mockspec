@@ -61,6 +61,9 @@ int main(int argc, char *argv[]){
     double vxp, vyp, vzp, vrp, V_theta, V_phi;
     
     
+    // Set up runtime files
+    strcpy(tranilist, "Mockspec.transitions");
+    strcpy(paramlist, "Mockspec.runpars");
     strcpy(qsolist, "qso.list");
 
     // Open the log files
