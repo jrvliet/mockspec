@@ -88,21 +88,24 @@ int main(int argc, char *argv[]){
     // Loop over the lines of sight
     while(fgets(new_line,sizeof(new_line),listfp)){
         klos++;
-        printf("LOS Num: %d\n",klos); 
+        printf("\nLOS Num: %d\n",klos); 
         // Remove the return character
         p = strchr(new_line, '\n');
         *p = '\0';
         strcpy(losdata, new_line);
-       
+        printf("Losdata: %s\n", losdata);
+
         // Parse the file name
         cutfname(losdata, galID, ion, lostag, losdatafile);
+        printf("GalID: %s\nIon: %s\nLostag:%s\n", galID, ion, lostag);
         mamu = getamu(tranilist, ion);
+        printf("Mamu: %lf\n", mamu);
         mkfname(losdata, galID, ion, lostag, linesfile);
-
+        printf("Linesfile: %s\n", linesfile);
         // Read in the cell data for this losdata
         gethdr( klos, &a, &xg, &yg, &zg, &vxg, &vyg, &vzg, &b1, &b2, &x0, &y0, &z0, &l, &m, &n, ap, &zbox, &vgal, &zgal, losdata);
         ndata = readcells( cellnum, x, y, z, vx, vy, vz, Lcell, ndencell, fion, temp, zmfrac, losdata);
-
+        printf("Number of cells: %d\n", ndata);
         // Open the .losdata file and write the header
         losfp = fopen(losdatafile, "w");
         fprintf(losfp, "1 \t 2 \t 3 \t 4 \t 5 \t 6 \t 7 \t 8 \t 9 \t 10 \t 11 \t 12 \t 13 \t 14 \t 15 \t 16 \t 17 \t 18 \t 19 \t 20 \t 21 \t 23 \t 24 \t 25 \t 26 \t 27 \t 28 \n"); 
@@ -122,8 +125,8 @@ int main(int argc, char *argv[]){
             // compute the line of sight path length through the cell (credit to
             // Bobby Edmonds' for the getD subroutine); returns the value of dlos
             // in kpc, convert to centimeters upon return
-            getD( l, m, n, x0, y0, z0, x[i], y[i], z[i], Lcell[i], dlos, &error, errtype);
-
+            getD( l, m, n, x0, y0, z0, x[i], y[i], z[i], Lcell[i], &dlos, &error, errtype);
+            printf("CellID: %d \t Dlos: %lf\n", cellnum[i], dlos);
             // If getD returns clean, convert from Mpc to kpc
             // If getD returns an error, use the cube root of the
             // cell volume; communicate to the error log file
