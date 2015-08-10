@@ -27,7 +27,7 @@ int main(int argc, char *argv[]){
     double ckms = 3.0e5;
     double pc2cm = 3.261633*9.460528e17;
     double kpc2cm = 1000.0 * pc2cm;
-    double amu     = 1.66053878e-24
+    double amu     = 1.66053878e-24;
     double Mpc2kpc = 1.e-3;
     double kboltz  = 1.380658e-16;
 
@@ -119,7 +119,7 @@ int main(int argc, char *argv[]){
             // compute the line of sight path length through the cell (credit to
             // Bobby Edmonds' for the getD subroutine); returns the value of dlos
             // in kpc, convert to centimeters upon return
-            getD( l, m, n, x0, y0, z0, x[i], y[i], z[i], Lcell[i], dlos, error, errtype);
+            getD( l, m, n, x0, y0, z0, x[i], y[i], z[i], Lcell[i], dlos, &error, errtype);
 
             // If getD returns clean, convert from Mpc to kpc
             // If getD returns an error, use the cube root of the
@@ -149,18 +149,18 @@ int main(int argc, char *argv[]){
             Vgalx  = vx[i]-vxg;
             Vgaly  = vy[i]-vyg;
             Vgalz  = vz[i]-vzg;
-            Vgalt  = sqrt(Vgalx*Vgalx + Vgaly*Vgaly + Vgalz*Vgalz);
+            Vgal   = sqrt(Vgalx*Vgalx + Vgaly*Vgaly + Vgalz*Vgalz);
 
             // Rotate physical coordinates (spatial will be kpc)
             // Rotate velocity vectors
             // Compute spherical coordinate velocities
             rp = 0.0;
-            rotate(ap, Rgalx, Rgaly, Rgalz, xp, yp, zp);
-            rotate(ap, Vgalx, Vgaly, Vgalz, vxp, vyp, vzp);
-            sphvels(xp, yp, zp, rp, theta, phi, vxp, vyp, vzp, vrp, V_theta, V_phi);
+            rotate(ap, Rgalx, Rgaly, Rgalz, &xp, &yp, &zp);
+            rotate(ap, Vgalx, Vgaly, Vgalz, &vxp, &vyp, &vzp);
+            sphvels(xp, yp, zp, &rp, &theta, &phi, vxp, vyp, vzp, &vrp, &V_theta, &V_phi);
             
             // Write processed data to the .losdata file
-            wrtlosdata( Slos, Rgal, zline[i], vlos, vabs, dlos, ndencell[i], fion[i], zmfrac[i], Nline[i], temp[i], bline[i], Vgalt, vrp, V_theta, V_phi, vzp, xp, yp, zp, rp, theta, phi, cellnum[i]);
+            wrtlosdata( Slos, Rgal, zline[i], vlos, vabs, dlos, ndencell[i], fion[i], zmfrac[i], Nline[i], temp[i], bline[i], Vgal, vrp, V_theta, V_phi, vzp, xp, yp, zp, rp, theta, phi, cellnum[i], losdata);
 
         }  // Ends loop over cells in a single LOS
 
