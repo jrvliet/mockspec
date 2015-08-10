@@ -7,7 +7,7 @@
 #include <math.h>
 #include "files7.h"
 #include "cellpathsub7.h"
-
+#include "galframe7.h"
 
 #define NMAX 5000
 
@@ -127,7 +127,7 @@ int main(int argc, char *argv[]){
             if (error==1){
                 dlos = kpc2cm*Lcell[i];
                 badDcells = badDcells+1;
-                dloserr(errtype, losdata, cellnum[i], dlos);    
+                dloserr(errtype, losdata, cellnum[i], dlos, errfp);    
             }
             else{
                 dlos = kpc2cm*dlos;
@@ -166,7 +166,7 @@ int main(int argc, char *argv[]){
 
     // Write the .lines file, one for each transition
     // These files used by specsynth to generate the spectra
-    wrtlines(zgal, zline, Nline, bline, cellnum, linesfile);
+    wrtlines(zgal, zline, Nline, bline, cellnum, linesfile, ndata);
 
     } 
 

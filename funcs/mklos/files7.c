@@ -9,7 +9,7 @@
 void cutfname(char *infile, char *galID, char *ion, char *lostag, char *outfile){
 
     const char delim[2] = ".";
-    char *input;
+    char input[200];
     // Format of infile:
     // galID.ion.los####.dat
 
@@ -316,18 +316,18 @@ void mkfname(char *infile, char *galID, char *ion, char *lostag, char *linesfile
 
 // write the data to the .lines files, which will be used by
 // specsynth to create the spectra
-void wrtlines(double zgal, double *zline, double *Nline, double *bline, int *cellnum, int ndata){
+void wrtlines(double zgal, double *zline, double *Nline, double *bline, int *cellnum, char *linesfile, int ndata){
 
     int i;
     
-    char outfile[] = "linesout.lines";
-    FILE *fp = fopen(outfile, "w");
+    FILE *fp = fopen(linesfile, "w");
     fprintf(fp, "%lf\n", zgal);
     for (i=0; i<ndata; i++){
         if (log10(Nline[i]>9.0)){
             fprintf(fp, "%lf \t %lf \t %lf \t %d \n", zline[i], log10(Nline[i]), bline[i], cellnum[i]);
         }
     }
+    fclose(fp);
 
 }
 
@@ -339,13 +339,28 @@ void wrtlines(double zgal, double *zline, double *Nline, double *bline, int *cel
 // write the data to the *.losdata  files
 void wrtlosdata( double Slos, double Rgal, double zline, double vlos, double vabs, double dlos, double ndencell, double fion, double zmfrac, double Nline, double temp, double bline, double Vgalt, double vrp, double V_theta, double V_phi, double vzp, double xp, double yp, double zp, double rp, double theta, double phi, int cellnum, char *unitlosfile){
 
-    int i;
     FILE *fp = fopen(unitlosfile, "w");
     
-    fprintf(fp, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf", Slos, Rgal, zline, vlos, log10(dlos), log10(ndencell), log10(fion), log10(zmfrac), log10(Nline), log10(temp), bline, Vgalt, vrp, V_theta, V_phi, vzp , xp, yp, zp, rp, theta, phi, vrp/Vgalt, V_theta/Vgalt, V_phi/Vgalt, vzp/Vgalt);
+    fprintf(fp, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf\n", Slos, Rgal, zline, vlos, log10(dlos), log10(ndencell), log10(fion), log10(zmfrac), log10(Nline), log10(temp), bline, Vgalt, vrp, V_theta, V_phi, vzp , xp, yp, zp, rp, theta, phi, vrp/Vgalt, V_theta/Vgalt, V_phi/Vgalt, vzp/Vgalt);
 
     fclose(fp);
     
+}
+
+
+
+// Write to the error log file that the Dlos value crashed
+void dloserr( int *errtype, char *losdata, int cellnum, double dlos, FILE *errfp){
+
+    if (errtype[0] == 1){
+        fprintf(errfp, "%s %d Dlos error: x,y,z cell entry points are (0,0,0) - using cell length = %lf [kpc]\n", losdata, cellnum, dlos);
+    }
+    if (errtype[1] == 1){
+        fprintf(errfp, "%s %d Dlos error: x,y,z cell exit  points are (0,0,0) - using cell length = %lf [kpc]\n", losdata, cellnum, dlos);
+    }
+    if (errtype[2] == 1){
+        fprintf(errfp, "%s %d Dlos error: sum check for x,y,z cell points failed - using cell length = %lf [kpc]\n", losdata, cellnum, dlos);
+    }
 }
 
 

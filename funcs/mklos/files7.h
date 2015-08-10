@@ -17,9 +17,10 @@ double getamu(char *tranilist, char *ionlabel);
 
 void mkfname(char *infile, char *galID, char *ion, char *lostag, char *linesfile);
 
-void wrtlines(double zgal, double *zline, double *Nline, double *bline, int *cellnum, int ndata);
+void wrtlines(double zgal, double *zline, double *Nline, double *bline, int *cellnum, char *linesfile, int ndata);
 
 void wrtlosdata( double Slos, double Rgal, double zline, double vlos, double vabs, double dlos, double ndencell, double fion, double zmfrac, double Nline, double temp, double bline, double Vgalt, double vrp, double V_theta, double V_phi, double vzp, double xp, double yp, double zp, double rp, double theta, double phi, int cellnum, char *unitlosfile);
 
+void deloserr( int *errtype, char *losdata, int cellnum, double dlos, FILE *errfp);
 #endif
 
