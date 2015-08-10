@@ -126,7 +126,7 @@ int main(int argc, char *argv[]){
             // Bobby Edmonds' for the getD subroutine); returns the value of dlos
             // in kpc, convert to centimeters upon return
             getD( l, m, n, x0, y0, z0, x[i], y[i], z[i], Lcell[i], &dlos, &error, errtype);
-            printf("CellID: %d \t Dlos: %lf\n", cellnum[i], dlos);
+//            printf("CellID: %d \t Dlos: %lf\n", cellnum[i], dlos);
             // If getD returns clean, convert from Mpc to kpc
             // If getD returns an error, use the cube root of the
             // cell volume; communicate to the error log file
