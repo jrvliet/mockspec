@@ -88,7 +88,7 @@ int main(int argc, char *argv[]){
     // Loop over the lines of sight
     while(fgets(new_line,sizeof(new_line),listfp)){
         klos++;
-    
+        printf("LOS Num: %d\n",klos); 
         // Remove the return character
         p = strchr(new_line, '\n');
         *p = '\0';
