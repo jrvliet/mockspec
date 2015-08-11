@@ -109,7 +109,8 @@ int main(int argc, char *argv[]){
 
         // Parse the file name
         cutfname(losdata, &galID, &ion, &lostag, losdatafile);
-        printf("GalID: %s\nIon: %s\nLostag:%s\n", galID, ion, lostag);
+        printf("\tGalID: %s\n\tIon: %s\n\tLostag: %s\n\tLosdatafile: %s\n\n", 
+                galID, ion, lostag, losdatafile);
 
         mamu = getamu(tranilist, ion);
         printf("Mamu: %lf\n", mamu);

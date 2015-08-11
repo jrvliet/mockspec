@@ -9,24 +9,47 @@
 void cutfname(char *infile, char **galID, char **ion, char **lostag, char *outfile){
 
     const char delim[2] = ".";
+    char *gal = calloc(80, sizeof(char));
+    char *ionname = calloc(80, sizeof(char));
+    char *los = calloc(80, sizeof(char)); 
     char input[200];
     // Format of infile:
     // galID.ion.los####.dat
-
+    printf("\nIn cutfname:\n");
     strcpy(input, infile);
-    *galID = strtok(input, delim);
-    *ion = strtok(NULL, delim);
-    *lostag = strtok(NULL, delim);      
-        
+    printf("Input: %s\n", input);
+
+//    *galID = strtok(input, delim);
+    gal = strtok(input, delim);
+    printf("GalID: %s\n", gal);
+
+//    *ion = strtok(NULL, delim);
+    ionname = strtok(NULL, delim);
+    printf("Ion: %s\n", ionname);
+
+//    *lostag = strtok(NULL, delim);      
+    los = strtok(NULL, delim);      
+    printf("Lostag: %s\n", los);
+
+    strcpy(*galID, gal);
+    strcpy(*ion, ionname);
+    strcpy(*lostag, los);
+
     // Format of outfile
     // galID.ion.los####.losdata
     strcpy(outfile, *galID);
+    printf("Outfile: %s\n", outfile);
     strcat(outfile, ".");
+    printf("Outfile: %s\n", outfile);
     strcat(outfile, *ion);
+    printf("Outfile: %s\n", outfile);
     strcat(outfile, ".");
+    printf("Outfile: %s\n", outfile);
     strcat(outfile, *lostag);
+    printf("Outfile: %s\n", outfile);
     strcat(outfile, ".losdata");
-
+    printf("Outfile: %s\n", outfile);
+    printf("\n");
 }
 
 
