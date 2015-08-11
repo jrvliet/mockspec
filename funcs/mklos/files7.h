@@ -7,7 +7,7 @@
 
 
 
-void cutfname(char *infile, char *galID, char *ion, char *lostag, char *outfile);
+void cutfname(char *infile, char **galID, char **ion, char **lostag, char *outfile);
 
 void gethdr( int klos, double *a, double *xg, double *yg, double *zg, double *vxg, double *vyg, double *vzg, double *b1, double *b2, double *x0, double *y0, double *z0, double *l, double *m, double *n, double ap[][3], double *zbox, double *vgal, double *zgal, char *infile);
 

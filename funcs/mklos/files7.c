@@ -6,7 +6,7 @@
 
 // Cuts up the string infile to get the galID, ion, los number, and
 // create the output file name
-void cutfname(char *infile, char *galID, char *ion, char *lostag, char *outfile){
+void cutfname(char *infile, char **galID, char **ion, char **lostag, char *outfile){
 
     const char delim[2] = ".";
     char input[200];
@@ -14,17 +14,17 @@ void cutfname(char *infile, char *galID, char *ion, char *lostag, char *outfile)
     // galID.ion.los####.dat
 
     strcpy(input, infile);
-    galID = strtok(input, delim);
-    ion = strtok(input, delim);
-    lostag = strtok(input, delim);      
+    *galID = strtok(input, delim);
+    *ion = strtok(input, delim);
+    *lostag = strtok(input, delim);      
         
     // Format of outfile
     // galID.ion.los####.losdata
-    strcpy(outfile, galID);
+    strcpy(outfile, *galID);
     strcat(outfile, ".");
-    strcat(outfile, ion);
+    strcat(outfile, *ion);
     strcat(outfile, ".");
-    strcat(outfile, lostag);
+    strcat(outfile, *lostag);
     strcat(outfile, ".losdata");
 
 }
