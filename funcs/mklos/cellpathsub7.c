@@ -10,11 +10,14 @@
 //     but all tests indicate that it works; there is a condition for
 //     failure and errors are returned in such cases
 
-void getD( double l, double m, double n, double x0, double y0, double z0, double X, double Y, double Z, double lengthcell, double *cellpath, int error, int *errtype){
+void getD(double l, double m, double n, double x0, double y0, double z0, 
+          double X, double Y, double Z, double lengthcell, double *cellpath, 
+          int *error, int *errtype){
 
     double lq, mq, nq;
     double xu[4], xd[4], yu[4], yd[4], zu[4], zd[4];
-    double pnt1[4], pnt2[4], pnt3[4], diffpnt[4];
+    double pnt1[4], pnt2[4];//, pnt3[4]
+    double diffpnt[4];
     double a, k;
 
     // Initialize 

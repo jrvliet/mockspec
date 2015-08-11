@@ -15,8 +15,8 @@ void cutfname(char *infile, char **galID, char **ion, char **lostag, char *outfi
 
     strcpy(input, infile);
     *galID = strtok(input, delim);
-    *ion = strtok(input, delim);
-    *lostag = strtok(input, delim);      
+    *ion = strtok(NULL, delim);
+    *lostag = strtok(NULL, delim);      
         
     // Format of outfile
     // galID.ion.los####.losdata
@@ -42,21 +42,31 @@ void cutfname(char *infile, char **galID, char **ion, char **lostag, char *outfi
 //    file
 //
 
-void gethdr( int klos, double *a, double *xg, double *yg, double *zg, double *vxg, double *vyg, double *vzg, double *b1, double *b2, double *x0, double *y0, double *z0, double *l, double *m, double *n, double ap[][3], double *zbox, double *vgal, double *zgal, char *infile){
+void gethdr(int klos, double *a, double *xg, double *yg, double *zg, 
+            double *vxg, double *vyg, double *vzg, double *b1, double *b2, 
+            double *x0, double *y0, double *z0, double *l, double *m, double *n,
+            double ap[][3], double *zbox, double *vgal, double *zgal, 
+            char *infile){
 
-    int i;
+//    int i;
     double ckms = 3.0e5;
     char new_line[500];
-    char *token;
+    char dum[50];
     FILE *fp = fopen(infile, "r");
-    double a0, xg0, yg0, zg0, vxg0, vyg0, vzg0;
-    double b10, b20, Robs, phiobs;
-    double x00, y00, z00, l0, m0, n0;
-    double zbox0, vgal0, zgal0;     
-
-
+//    double a0, xg0, yg0, zg0, vxg0, vyg0, vzg0;
+//    double b10, b20, Robs, phiobs;
+//    double x00, y00, z00, l0, m0, n0;
+//    double zbox0, vgal0, zgal0;    
+    double Robs, phiobs; 
+    double a11, a12, a13;       
+    double a21, a22, a23;
+    double a31, a32, a33;
+    
     // First line
     fgets(new_line, sizeof(new_line), fp);
+    sscanf(new_line, "%s %lf %s %s %s %s %lf %lf %lf %s %s %s %s %s %lf %lf %lf",
+           dum, a, dum, dum, dum, dum, xg, yg, zg, dum, dum, dum, dum, dum, vxg, vyg, vzg);
+   /* 
     token = strtok(new_line, " ");
     a0 = atof( strtok(new_line, " ") );     // Expansion parameter
     for (i=0;i<4;i++){
@@ -71,9 +81,14 @@ void gethdr( int klos, double *a, double *xg, double *yg, double *zg, double *vx
     vxg0 = atof( strtok(new_line, " ") );   // Galaxy vx km/s
     vyg0 = atof( strtok(new_line, " ") );   // Galaxy vy km/s
     vzg0 = atof( strtok(new_line, " ") );   // Galaxy vz km/s
+    */
 
+    
     // Second line
     fgets(new_line, sizeof(new_line), fp);
+    sscanf(new_line, "%s %s %s %s %s %lf %lf %s %s %s %lf %lf", 
+           dum, dum, dum, dum, dum, b1, b2, dum, dum, dum, &Robs, &phiobs);
+    /*
     for (i=0; i<5; i++){
         token = strtok(new_line, " ");
     }
@@ -84,14 +99,19 @@ void gethdr( int klos, double *a, double *xg, double *yg, double *zg, double *vx
     }
     Robs = atof( strtok(new_line, " ") );     // R observer on Gal disk (should be 0)
     phiobs = atof( strtok(new_line, " ") );   // Azimuthal pos of obs on disk (should be 90)
-
+    */
     // Third line 
     // Nothing on this line
     fgets(new_line, sizeof(new_line), fp);
-    
+    sscanf(new_line, "%s %s %s %s %s %s %s %s %s %s %lf %lf %lf",
+           dum, dum, dum, dum, dum, dum, dum, dum, dum, dum, x0, y0, z0);
+
     // Forth line
     // x0, y0, z0, l, m, n
     fgets(new_line, sizeof(new_line), fp);
+    sscanf(new_line, "%s %s %s %s %s %s %lf %lf %lf %s %s %s %s %lf %lf %lf",
+           dum, dum, dum, dum, dum, dum, x0, y0, z0, dum, dum, dum, dum, l, m, n);
+    /*
     for (i=0; i<6; i++){
         token = strtok(new_line, " ");
     }
@@ -104,10 +124,36 @@ void gethdr( int klos, double *a, double *xg, double *yg, double *zg, double *vx
     l0 = atof( strtok(new_line, " ") );     // Directional Cosines
     m0 = atof( strtok(new_line, " ") );
     n0 = atof( strtok(new_line, " ") );
-    
+    */
     // Fifth, sixth, seventh lines
     // Rotation matrix
+
     fgets(new_line, sizeof(new_line), fp);
+    sscanf(new_line, "%s %s %s %s %s %s %s %s %lf %lf %lf", 
+           dum, dum, dum, dum ,dum, dum, dum, dum, &a31, &a32, &a33);
+    
+
+    fgets(new_line, sizeof(new_line), fp);
+    sscanf(new_line, "%s %s %s %s %s %s %lf %lf %lf", 
+           dum, dum, dum, dum ,dum, dum, &a11, &a12, &a13);
+
+    fgets(new_line, sizeof(new_line), fp);
+    sscanf(new_line, "%s %s %s %s %s %s %lf %lf %lf", 
+           dum, dum, dum, dum ,dum, dum, &a21, &a22, &a23);
+    
+    ap[0][0] = a11;
+    ap[0][1] = a12;
+    ap[0][2] = a13;
+    
+    ap[1][0] = a21;
+    ap[1][1] = a22;
+    ap[1][2] = a23;
+
+    ap[2][0] = a31;
+    ap[2][1] = a32;
+    ap[2][2] = a33;
+    
+    /*
     for (i=0; i<8; i++){
         token = strtok(new_line, " ");
     }
@@ -130,15 +176,16 @@ void gethdr( int klos, double *a, double *xg, double *yg, double *zg, double *vx
     ap[2][0] = atof( strtok(new_line, " ") );
     ap[2][1] = atof( strtok(new_line, " ") );
     ap[2][2] = atof( strtok(new_line, " ") );
-
+    */
 
     // Done reading the file header
 
     // Compute the redshift and the galaxy los velocity
-    zbox0 = 1.0/a0 - 1.0;
-    vgal0 = l0*vxg0 + m0*vyg0 + n0*vzg0;
-    zgal0 = zbox0 + (1.0+zbox0)*vgal0/ckms;
+    *zbox = 1.0/(*a) - 1.0;
+    *vgal = (*l)*(*vxg) + (*m)*(*vyg) + (*n)*(*vzg);
+    *zgal = *zbox + (1.0+(*zbox)) * (*vgal)/ckms;
 
+    /*
     // Assign the values to the passed in pointers
     *a = a0;
     *xg = xg0;
@@ -157,10 +204,11 @@ void gethdr( int klos, double *a, double *xg, double *yg, double *zg, double *vx
     *l = l0;
     *m = m0;
     *n = n0;
+    
     *zbox = zbox0;
     *vgal = vgal0;
     *zgal = zgal0;
-
+    */
     fclose(fp);
 }
 
@@ -168,7 +216,9 @@ void gethdr( int klos, double *a, double *xg, double *yg, double *zg, double *vx
 
 
 
-int readcells( int *cellnum, double *x, double *y, double *z, double *vx, double *vy, double *vz, double *Lcell, double *ndencell, double *fion, double *temp, double *zmfrac, char *infile){
+int readcells( int *cellnum, double *x, double *y, double *z, double *vx, 
+               double *vy, double *vz, double *Lcell, double *ndencell, 
+               double *fion, double *temp, double *zmfrac, char *infile){
 
     
 //     now read in the cell data and store in arrays all cell quantities
@@ -206,7 +256,9 @@ int readcells( int *cellnum, double *x, double *y, double *z, double *vx, double
     i=0;
     while(fgets(new_line, sizeof(new_line), fp)){        
         
-        sscanf(new_line, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %d", &size, &xLoc, &yLoc, &zLoc, &velx, &vely, &velz, &n, &t, &snIa, &snII, &natom, &fion0, &nion0, &cellID);
+        sscanf(new_line, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %d", 
+               &size, &xLoc, &yLoc, &zLoc, &velx, &vely, &velz, &n, &t, 
+               &snIa, &snII, &natom, &fion0, &nion0, &cellID);
         /*
         size = atof(strtok(new_line, " "));
         xLoc = atof(strtok(new_line, " "));
@@ -268,7 +320,8 @@ double getamu(char *tranilist, char *ionlabel){
     // Loop through the file looking for the ion being used
     while(fgets(new_line, sizeof(new_line), fp)){
     
-        sscanf(new_line, "%d %s %d %d %s %s %lf %lf %lf %lf", &iflag, name, &k, &j, ilabel, tlabel, &dum, &dum, &dum, &imass);
+        sscanf(new_line, "%d %s %d %d %s %s %lf %lf %lf %lf", 
+               &iflag, name, &k, &j, ilabel, tlabel, &dum, &dum, &dum, &imass);
         if (strcmp(ilabel, ionlabel)!=0 && iflag==1){
             mamu = imass;
         }
@@ -316,7 +369,8 @@ void mkfname(char *infile, char *galID, char *ion, char *lostag, char *linesfile
 
 // write the data to the .lines files, which will be used by
 // specsynth to create the spectra
-void wrtlines(double zgal, double *zline, double *Nline, double *bline, int *cellnum, char *linesfile, int ndata){
+void wrtlines(double zgal, double *zline, double *Nline, double *bline, 
+              int *cellnum, char *linesfile, int ndata){
 
     int i;
     
@@ -324,7 +378,8 @@ void wrtlines(double zgal, double *zline, double *Nline, double *bline, int *cel
     fprintf(fp, "%lf\n", zgal);
     for (i=0; i<ndata; i++){
         if (log10(Nline[i]>9.0)){
-            fprintf(fp, "%lf \t %lf \t %lf \t %d \n", zline[i], log10(Nline[i]), bline[i], cellnum[i]);
+            fprintf(fp, "%lf \t %lf \t %lf \t %d \n", 
+                    zline[i], log10(Nline[i]), bline[i], cellnum[i]);
         }
     }
     fclose(fp);
@@ -337,11 +392,21 @@ void wrtlines(double zgal, double *zline, double *Nline, double *bline, int *cel
 
 
 // write the data to the *.losdata  files
-void wrtlosdata( double Slos, double Rgal, double zline, double vlos, double vabs, double dlos, double ndencell, double fion, double zmfrac, double Nline, double temp, double bline, double Vgalt, double vrp, double V_theta, double V_phi, double vzp, double xp, double yp, double zp, double rp, double theta, double phi, int cellnum, char *unitlosfile){
+void wrtlosdata( double Slos, double Rgal, double zline, double vlos, 
+                 double vabs, double dlos, double ndencell, double fion, 
+                 double zmfrac, double Nline, double temp, double bline, 
+                 double Vgalt, double vrp, double V_theta, double V_phi, 
+                 double vzp, double xp, double yp, double zp, double rp, 
+                 double theta, double phi, int cellnum, char *unitlosfile){
 
     FILE *fp = fopen(unitlosfile, "w");
     
-    fprintf(fp, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf\n", Slos, Rgal, zline, vlos, log10(dlos), log10(ndencell), log10(fion), log10(zmfrac), log10(Nline), log10(temp), bline, Vgalt, vrp, V_theta, V_phi, vzp , xp, yp, zp, rp, theta, phi, vrp/Vgalt, V_theta/Vgalt, V_phi/Vgalt, vzp/Vgalt);
+    fprintf(fp, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf \
+                 %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf\n", 
+                Slos, Rgal, zline, vlos, log10(dlos), log10(ndencell), 
+                log10(fion), log10(zmfrac), log10(Nline), log10(temp), bline, 
+                Vgalt, vrp, V_theta, V_phi, vzp , xp, yp, zp, rp, theta, phi, 
+                vrp/Vgalt, V_theta/Vgalt, V_phi/Vgalt, vzp/Vgalt);
 
     fclose(fp);
     
@@ -353,13 +418,16 @@ void wrtlosdata( double Slos, double Rgal, double zline, double vlos, double vab
 void dloserr( int *errtype, char *losdata, int cellnum, double dlos, FILE *errfp){
 
     if (errtype[0] == 1){
-        fprintf(errfp, "%s %d Dlos error: x,y,z cell entry points are (0,0,0) - using cell length = %lf [kpc]\n", losdata, cellnum, dlos);
+        fprintf(errfp, "%s %d Dlos error: x,y,z cell entry points are (0,0,0)\
+         - using cell length = %lf [kpc]\n", losdata, cellnum, dlos);
     }
     if (errtype[1] == 1){
-        fprintf(errfp, "%s %d Dlos error: x,y,z cell exit  points are (0,0,0) - using cell length = %lf [kpc]\n", losdata, cellnum, dlos);
+        fprintf(errfp, "%s %d Dlos error: x,y,z cell exit  points are (0,0,0)\
+        - using cell length = %lf [kpc]\n", losdata, cellnum, dlos);
     }
     if (errtype[2] == 1){
-        fprintf(errfp, "%s %d Dlos error: sum check for x,y,z cell points failed - using cell length = %lf [kpc]\n", losdata, cellnum, dlos);
+        fprintf(errfp, "%s %d Dlos error: sum check for x,y,z cell points \
+        failed - using cell length = %lf [kpc]\n", losdata, cellnum, dlos);
     }
 }
 

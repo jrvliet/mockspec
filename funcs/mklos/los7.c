@@ -14,11 +14,22 @@
 int main(int argc, char *argv[]){
 
     // general variables
-    int i, j, klos, error, errtype[3];
-    int goodTCcells, badICcells, badDcells;
-    double rdum;        
-    char qsolist[80], paramlist[80], tranilist[80], ion[80];
-    char losdata[80], galID[80], lostag[80], losdatafile[80];
+    int i, klos, error, errtype[3];
+//    int goodTCcells, badICcells, badDcells;
+    int badDcells;
+//    double rdum;        
+//    char qsolist[80], paramlist[80], tranilist[80], ion[80];
+
+    char *qsolist = calloc(80, sizeof(char));
+    char *paramlist = calloc(80, sizeof(char));
+    char *tranilist = calloc(80, sizeof(char));
+    char *ion = calloc(80, sizeof(char));
+    char *losdata = calloc(80, sizeof(char));
+    char *galID = calloc(80, sizeof(char));
+    char *lostag = calloc(80, sizeof(char));
+    char *losdatafile = calloc(80, sizeof(char));
+
+//    char losdata[80], galID[80], lostag[80], losdatafile[80];
     char new_line[200];    
     char *p;
     FILE *losfp;
@@ -28,18 +39,19 @@ int main(int argc, char *argv[]){
     double pc2cm = 3.261633*9.460528e17;
     double kpc2cm = 1000.0 * pc2cm;
     double amu     = 1.66053878e-24;
-    double Mpc2kpc = 1.e-3;
+//    double Mpc2kpc = 1.e-3;
     double kboltz  = 1.380658e-16;
 
     // los and galaxy data
-    double zlos, dlos, impact;
+    double zlos, dlos; //, impact;
     double Slos, vlos, vabs;
     double Rgalx, Rgaly, Rgalz, Rgal;
     double Vgalx, Vgaly, Vgalz, Vgal;
     
     // atomic data
     double mamu;
-    char ionlabel[80], linesfile[80];
+//    char ionlabel[80];
+    char linesfile[80];
     
     // cell data
     int cellnum[NMAX], ndata;
@@ -67,7 +79,7 @@ int main(int argc, char *argv[]){
     strcpy(qsolist, "qso.list");
 
     // Open the log files
-    FILE *runfp = fopen("Mockspec.runlog.los7", "w");
+   // FILE *runfp = fopen("Mockspec.runlog.los7", "w");
     FILE *errfp = fopen("Mockspec.errlog.los7", "w");
 
     
@@ -98,18 +110,31 @@ int main(int argc, char *argv[]){
         // Parse the file name
         cutfname(losdata, &galID, &ion, &lostag, losdatafile);
         printf("GalID: %s\nIon: %s\nLostag:%s\n", galID, ion, lostag);
+
         mamu = getamu(tranilist, ion);
         printf("Mamu: %lf\n", mamu);
+
         mkfname(losdata, galID, ion, lostag, linesfile);
         printf("Linesfile: %s\n", linesfile);
+
         // Read in the cell data for this losdata
-        gethdr( klos, &a, &xg, &yg, &zg, &vxg, &vyg, &vzg, &b1, &b2, &x0, &y0, &z0, &l, &m, &n, ap, &zbox, &vgal, &zgal, losdata);
-        ndata = readcells( cellnum, x, y, z, vx, vy, vz, Lcell, ndencell, fion, temp, zmfrac, losdata);
+        gethdr( klos, &a, &xg, &yg, &zg, &vxg, &vyg, &vzg, &b1, &b2, &x0, &y0, 
+                &z0, &l, &m, &n, ap, &zbox, &vgal, &zgal, losdata);
+
+        ndata = readcells( cellnum, x, y, z, vx, vy, vz, Lcell, ndencell, fion, 
+                           temp, zmfrac, losdata);
         printf("Number of cells: %d\n", ndata);
+
         // Open the .losdata file and write the header
         losfp = fopen(losdatafile, "w");
-        fprintf(losfp, "1 \t 2 \t 3 \t 4 \t 5 \t 6 \t 7 \t 8 \t 9 \t 10 \t 11 \t 12 \t 13 \t 14 \t 15 \t 16 \t 17 \t 18 \t 19 \t 20 \t 21 \t 23 \t 24 \t 25 \t 26 \t 27 \t 28 \n"); 
-        fprintf(losfp, "Slos \t Rgal \t zabs \t vlos \t vabs \t dlos \t nion \t fion \t zmfrac \t Nion \t T \t bpar \t Vgtot \t vrp \t V_theta \t V_phi \t vzp \t xp \t yp \t zp \t rp \t theta \t phi \t vrp/Vgt \t Vth/Vgt \t Vph/Vgt \t vzp/Vg \t cellID\n");
+        fprintf(losfp, "1 \t 2 \t 3 \t 4 \t 5 \t 6 \t 7 \t 8 \t 9 \t 10 \t 11 \
+                        \t 12 \t 13 \t 14 \t 15 \t 16 \t 17 \t 18 \t 19 \t 20 \
+                        \t 21 \t 23 \t 24 \t 25 \t 26 \t 27 \t 28 \n"); 
+        fprintf(losfp, "Slos \t Rgal \t zabs \t vlos \t vabs \t dlos \t nion \t\
+                        fion \t zmfrac \t Nion \t T \t bpar \t Vgtot \t vrp \t\
+                        V_theta \t V_phi \t vzp \t xp \t yp \t zp \t rp \t\
+                        theta \t phi \t vrp/Vgt \t Vth/Vgt \t Vph/Vgt \t \
+                        vzp/Vg \t cellID\n");
 
         // Innder loop: 
         // Loop over cell data for the los, compute the los quantities
@@ -125,7 +150,9 @@ int main(int argc, char *argv[]){
             // compute the line of sight path length through the cell (credit to
             // Bobby Edmonds' for the getD subroutine); returns the value of dlos
             // in kpc, convert to centimeters upon return
-            getD( l, m, n, x0, y0, z0, x[i], y[i], z[i], Lcell[i], &dlos, &error, errtype);
+            getD( l, m, n, x0, y0, z0, x[i], y[i], z[i], Lcell[i], &dlos, 
+                  &error, errtype);
+
 //            printf("CellID: %d \t Dlos: %lf\n", cellnum[i], dlos);
             // If getD returns clean, convert from Mpc to kpc
             // If getD returns an error, use the cube root of the
@@ -163,10 +190,14 @@ int main(int argc, char *argv[]){
             rp = 0.0;
             rotate(ap, Rgalx, Rgaly, Rgalz, &xp, &yp, &zp);
             rotate(ap, Vgalx, Vgaly, Vgalz, &vxp, &vyp, &vzp);
-            sphvels(xp, yp, zp, &rp, &theta, &phi, vxp, vyp, vzp, &vrp, &V_theta, &V_phi);
+            sphvels(xp, yp, zp, &rp, &theta, &phi, 
+                    vxp, vyp, vzp, &vrp, &V_theta, &V_phi);
             
             // Write processed data to the .losdata file
-            wrtlosdata( Slos, Rgal, zline[i], vlos, vabs, dlos, ndencell[i], fion[i], zmfrac[i], Nline[i], temp[i], bline[i], Vgal, vrp, V_theta, V_phi, vzp, xp, yp, zp, rp, theta, phi, cellnum[i], losdata);
+            wrtlosdata( Slos, Rgal, zline[i], vlos, vabs, dlos, ndencell[i], 
+                        fion[i], zmfrac[i], Nline[i], temp[i], bline[i], Vgal, 
+                        vrp, V_theta, V_phi, vzp, xp, yp, zp, rp, theta, phi, 
+                        cellnum[i], losdata);
 
         }  // Ends loop over cells in a single LOS
 
