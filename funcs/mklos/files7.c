@@ -71,8 +71,10 @@ void gethdr(int klos, double *a, double *xg, double *yg, double *zg,
     
     // First line
     fgets(new_line, sizeof(new_line), fp);
-    sscanf(new_line, "%s %lf %s %s %s %s %lf %lf %lf %s %s %s %s %s %lf %lf %lf",
-           dum, a, dum, dum, dum, dum, xg, yg, zg, dum, dum, dum, dum, dum, vxg, vyg, vzg);
+    sscanf(new_line, "%s %lf %s %s %s %s %lf %lf %lf "
+                     "%s %s %s %s %s %lf %lf %lf",
+                      dum, a, dum, dum, dum, dum, xg, yg, zg, 
+                      dum, dum, dum, dum, dum, vxg, vyg, vzg);
    /* 
     token = strtok(new_line, " ");
     a0 = atof( strtok(new_line, " ") );     // Expansion parameter
@@ -104,7 +106,7 @@ void gethdr(int klos, double *a, double *xg, double *yg, double *zg,
     for (i=0; i<3; i++){
         token = strtok(new_line, " "); 
     }
-    Robs = atof( strtok(new_line, " ") );     // R observer on Gal disk (should be 0)
+    Robs = atof( strtok(new_line, " ") ); // R observer on Gal disk (should be 0)
     phiobs = atof( strtok(new_line, " ") );   // Azimuthal pos of obs on disk (should be 90)
     */
     // Third line 
@@ -116,8 +118,10 @@ void gethdr(int klos, double *a, double *xg, double *yg, double *zg,
     // Forth line
     // x0, y0, z0, l, m, n
     fgets(new_line, sizeof(new_line), fp);
-    sscanf(new_line, "%s %s %s %s %s %s %lf %lf %lf %s %s %s %s %lf %lf %lf",
-           dum, dum, dum, dum, dum, dum, x0, y0, z0, dum, dum, dum, dum, l, m, n);
+    sscanf(new_line, "%s %s %s %s %s %s %lf %lf %lf "
+                     "%s %s %s %s %lf %lf %lf",
+                     dum, dum, dum, dum, dum, dum, x0, y0, z0, 
+                     dum, dum, dum, dum, l, m, n);
     /*
     for (i=0; i<6; i++){
         token = strtok(new_line, " ");
@@ -263,7 +267,8 @@ int readcells( int *cellnum, double *x, double *y, double *z, double *vx,
     i=0;
     while(fgets(new_line, sizeof(new_line), fp)){        
         
-        sscanf(new_line, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %d", 
+        sscanf(new_line, "%lf %lf %lf %lf %lf %lf %lf %lf "
+                         "%lf %lf %lf %lf %lf %lf %d", 
                &size, &xLoc, &yLoc, &zLoc, &velx, &vely, &velz, &n, &t, 
                &snIa, &snII, &natom, &fion0, &nion0, &cellID);
         /*
@@ -380,11 +385,11 @@ void wrtlines(double zgal, double *zline, double *Nline, double *bline,
               int *cellnum, char *linesfile, int ndata){
 
     int i;
-    
+    printf("\nlinesfile: %s\n", linesfile);
     FILE *fp = fopen(linesfile, "w");
     fprintf(fp, "%lf\n", zgal);
     for (i=0; i<ndata; i++){
-        if (log10(Nline[i]>9.0)){
+        if (log10(Nline[i])>9.0){
             fprintf(fp, "%lf \t %lf \t %lf \t %d \n", 
                     zline[i], log10(Nline[i]), bline[i], cellnum[i]);
         }
@@ -409,7 +414,9 @@ void wrtlosdata( double Slos, double Rgal, double zline, double vlos,
     printf("unitlosfile: %s\n", unitlosfile);
     FILE *fp = fopen(unitlosfile, "a");
     
-    fprintf(fp, "%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf\n", 
+    fprintf(fp, "%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf "
+                "\t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf "
+                "\t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf\n", 
                 Slos, Rgal, zline, vlos, log10(dlos), log10(ndencell), 
                 log10(fion), log10(zmfrac), log10(Nline), log10(temp), bline, 
                 Vgalt, vrp, V_theta, V_phi, vzp , xp, yp, zp, rp, theta, phi, 

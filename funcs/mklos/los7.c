@@ -129,10 +129,18 @@ int main(int argc, char *argv[]){
 
         // Open the .losdata file and write the header
         losfp = fopen(losdatafile, "w");
-        fprintf(losfp, "1 \t\t 2 \t\t 3 \t\t 4 \t\t 5 \t\t 6 \t\t 7 \t\t 8 \t\t 9 \t\t 10 \t\t 11 \t\t 12 \t\t 13 \t\t 14 \t\t 15 \t\t 16 \t\t 17 \t\t 18 \t\t 19 \t\t 20 \t\t 21 \t\t 23 \t\t 24 \t\t 25 \t\t 26 \t\t 27 \t\t 28 \n"); 
-        fprintf(losfp, "Slos \t\t Rgal \t\t zabs \t\t vlos \t\t vabs \t\t dlos \t\t nion \t\t fion \t\t zmfrac \t Nion \t\t T \t\t bpar \t\t Vgtot \t\t vrp \t\tV_theta \t V_phi \t\t vzp \t\t xp \t\t yp \t\t zp \t\t rp \t\ttheta \t\t phi \t\t vrp/Vgt \t Vth/Vgt \t Vph/Vgt \t vzp/Vg \t cellID\n");
+        fprintf(losfp, "1 \t\t 2 \t\t 3 \t\t 4 \t\t 5 \t\t 6 \t\t 7 \t\t 8 \t\t"
+                       " 9 \t\t 10 \t\t 11 \t\t 12 \t\t 13 \t\t 14 \t\t 15 "
+                       "\t\t 16 \t\t 17 \t\t 18 \t\t 19 \t\t 20 \t\t 21 \t\t 23"
+                       " \t\t 24 \t\t 25 \t\t 26 \t\t 27 \t\t 28 \n"); 
+        fprintf(losfp, "Slos \t\t Rgal \t\t zabs \t\t vlos \t\t vabs \t\t dlos "
+                        "\t\t nion \t\t fion \t\t zmfrac \t Nion \t\t T \t\t "
+                        "bpar \t\t Vgtot \t\t vrp \t\tV_theta \t V_phi \t\t vzp "
+                        "\t\t xp \t\t yp \t\t zp \t\t rp \t\ttheta \t\t phi "
+                        "\t\t vrp/Vgt \t Vth/Vgt \t Vph/Vgt \t vzp/Vg \t "
+                        "cellID\n");
 
-        // Innder loop: 
+        // Inner loop: 
         // Loop over cell data for the los, compute the los quantities
         for(i=0; i<ndata; i++){
 
@@ -148,12 +156,13 @@ int main(int argc, char *argv[]){
             // in kpc, convert to centimeters upon return
             getD( l, m, n, x0, y0, z0, x[i], y[i], z[i], Lcell[i], &dlos, 
                   &error, errtype);
-//            printf("CellID: %d \n\tx: %lf \n\ty: %lf\n\tz: %lf\n\tl: %lf\n\t\
+//            printf("CellID: %d \n\tx: %lf \n\ty: %lf\n\tz: %lf\n\tl: %lf\n\t
 //            m: %lf\n\tn: %lf\n\tLcell: %lf\n\tDlos: %lf\n\t, Error: %d\n", 
 //            cellnum[i], x[i], y[i], z[i], l, m, n, Lcell[i], dlos, error);
 
-            printf("CellID: %d \t Dlos: %lf \t Slos: %lf \t vlos: %lf \t \
-            zlos: %lf \t vabs: %lf  %d\n", cellnum[i], dlos, Slos, vlos, zlos, vabs, error);
+            printf("CellID: %d \t Dlos: %lf \t Slos: %lf \t vlos: %lf \t"
+                    "zlos: %lf \t vabs: %lf  %d\n", 
+                    cellnum[i], dlos, Slos, vlos, zlos, vabs, error);
             // If getD returns clean, convert from Mpc to kpc
             // If getD returns an error, use the cube root of the
             // cell volume; communicate to the error log file
@@ -194,7 +203,8 @@ int main(int argc, char *argv[]){
                     vxp, vyp, vzp, &vrp, &V_theta, &V_phi);
             printf("xp: %lf\typ: %lf\tzp: %lf\trp: %lf\ttheta: %lf\tphi: %lf\n",
                     xp, yp, zp, rp , theta, phi);
-            printf("vxp: %lf\tvyp: %lf\tvzp: %lf\tvrp: %lf\tvtheta: %lf\tvphi: %lf\n\n",
+            printf("vxp: %lf\tvyp: %lf\tvzp: %lf\tvrp: %lf\tvtheta: %lf\t"
+                    "vphi: %lf\n\n",
                     vxp, vyp, vzp, vrp , V_theta, V_phi);
             
             // Write processed data to the .losdata file
