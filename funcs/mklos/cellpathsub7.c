@@ -10,6 +10,15 @@
 //     but all tests indicate that it works; there is a condition for
 //     failure and errors are returned in such cases
 
+void printArr( double *x, int size){
+    int i;
+    for (i=0; i<size; i++){
+        printf("\t%lf", x[i]);
+    }
+    printf("\n");
+}
+
+
 void getD(double l, double m, double n, double x0, double y0, double z0, 
           double X, double Y, double Z, double lengthcell, double *cellpath, 
           int *error, int *errtype){
@@ -21,7 +30,7 @@ void getD(double l, double m, double n, double x0, double y0, double z0,
     double a, k;
 
     // Initialize 
-    error = 0;
+    *error = 0;
     errtype[0] = 0;
     errtype[1] = 0;
     errtype[0] = 0;
@@ -58,7 +67,10 @@ void getD(double l, double m, double n, double x0, double y0, double z0,
     diffpnt[3] = 0.0;   
 
     *cellpath = 0.0;
-
+    
+//    printf("\nIn getD:\n");
+    
+//    printf("\tl: %lf \n\tm: %lf \n\t n: %lf \n", l, m, n);
     
     // Sets flags to check if LOS is perpidicular to a cell wall
     // if not perpidicular then set flag high
@@ -83,6 +95,7 @@ void getD(double l, double m, double n, double x0, double y0, double z0,
         nq = 1.0;
     }
 
+//    printf("\tlq: %lf \n\tmq: %lf \n\t nq: %lf \n", lq, mq, nq);
 
     // Following code initializes points of intersection on cell
     // Initializing the matrix of points on each face of the cell
@@ -90,32 +103,32 @@ void getD(double l, double m, double n, double x0, double y0, double z0,
     xu[0] = 0.0;    // x center x pos in front of cell center
     xu[1] = 0.0;    // x center y pos in front of cell center
     xu[2] = 0.0;    // x center z pos in front of cell center
-    xu[3] = 0.0;    // flag x center in front of cell center
+    xu[3] = 1.0;    // flag x center in front of cell center
 
     xd[0] = 0.0;    // x center x pos behind cell center
     xd[1] = 0.0;    // x center y pos behind cell center
     xd[2] = 0.0;    // x center z pos behind cell center
-    xd[3] = 0.0;    // flag x center behind cell center
+    xd[3] = 1.0;    // flag x center behind cell center
 
     yu[0] = 0.0;    // y center x pos in front of cell center
     yu[1] = 0.0;    // y center y pos in front of cell center
     yu[2] = 0.0;    // y center z pos in front of cell center
-    yu[3] = 0.0;    // flag y center in front of cell center
+    yu[3] = 1.0;    // flag y center in front of cell center
 
     yd[0] = 0.0;    // y center x pos behind cell center
     yd[1] = 0.0;    // y center y pos behind cell center
     yd[2] = 0.0;    // y center z pos behind cell center
-    yd[3] = 0.0;    // flag y center behind cell center
+    yd[3] = 1.0;    // flag y center behind cell center
 
     zu[0] = 0.0;    // z center x pos in front of cell center
     zu[1] = 0.0;    // z center y pos in front of cell center
     zu[2] = 0.0;    // z center z pos in front of cell center
-    zu[3] = 0.0;    // flag z center in front of cell center
+    zu[3] = 1.0;    // flag z center in front of cell center
 
     zd[0] = 0.0;    // z center x pos behind cell center
     zd[1] = 0.0;    // z center y pos behind cell center
     zd[2] = 0.0;    // z center z pos behind cell center
-    zd[3] = 0.0;    // flag z center behind cell center
+    zd[3] = 1.0;    // flag z center behind cell center
 
     
     // following code finds possible points of intersection
@@ -167,11 +180,11 @@ void getD(double l, double m, double n, double x0, double y0, double z0,
     }
    
     
-    // Following code test whether points are on clel surface
+    // Following code test whether points are on cell surface
     // If outside the cell, then set flag low
     // Check both fornt and back cell walls
     
-
+//    printf("\nX: %lf\tY: %lf\tZ: %lf\n\n", X, Y, Z);
     // X posiitions
     if( (xu[1] > (Y+(lengthcell/2.0))) || (xu[1] < (Y-(lengthcell/2.0))) ) {
         xu[3] = 0.0;
@@ -218,8 +231,20 @@ void getD(double l, double m, double n, double x0, double y0, double z0,
       
 
     // Following code extracts the entry points that are on cell surface
+ /*   printf("\nxu\n");
+    printArr(xu, 4);
+    printf("yu\n");
+    printArr(yu, 4);
+    printf("zu\n");
+    printArr(zu, 4);
 
-
+    printf("xd\n");
+    printArr(xu, 4);
+    printf("yd\n");
+    printArr(yd, 4);
+    printf("zd\n");
+    printArr(zd, 4);
+    printf("\n");   */
     if (xu[3]>0.5){             // If on cell wall
         if (k<0.5){             // Appears to have no use
             pnt1[0] = xu[0];    // Store the x pos
@@ -325,7 +350,14 @@ void getD(double l, double m, double n, double x0, double y0, double z0,
     diffpnt[1] = pnt1[1] - pnt2[1];
     diffpnt[2] = pnt1[2] - pnt2[2];
     diffpnt[3] = pnt1[3] - pnt2[3];     // Why? Unknown
-
+/*        
+    printf("Point 1: \n");
+    printArr(pnt1, 3);
+    printf("Point 2: \n");
+    printArr(pnt2, 3);
+    printf("Diff Point:\n");
+    printArr(diffpnt, 3); 
+*/
     *cellpath = pow(diffpnt[0], 2.0) + pow(diffpnt[1], 2.0) + pow(diffpnt[2], 2.0) ;
     *cellpath = sqrt(*cellpath);
 
@@ -343,9 +375,17 @@ void getD(double l, double m, double n, double x0, double y0, double z0,
     }
 
     // Check 3
-    if (xu[3] + xd[3] + yu[3] + yd[3] + zu[3] + zd[3]){
+    if (xu[3] + xd[3] + yu[3] + yd[3] + zu[3] + zd[3] > 1.5){
         *cellpath = 0.0;
         errtype[2] = 1;
     }
+
+//    printf("Cellpath: %lf\n", *cellpath);
+//    printf("Error: %d\n", *error);
+
+    if (*cellpath==0.0){
+        *error = 1;
+    }
+
 
 }

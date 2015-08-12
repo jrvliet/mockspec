@@ -109,8 +109,6 @@ int main(int argc, char *argv[]){
 
         // Parse the file name
         cutfname(losdata, &galID, &ion, &lostag, losdatafile);
-        printf("\tGalID: %s\n\tIon: %s\n\tLostag: %s\n\tLosdatafile: %s\n\n", 
-                galID, ion, lostag, losdatafile);
 
         mamu = getamu(tranilist, ion);
         printf("Mamu: %lf\n", mamu);
@@ -121,6 +119,9 @@ int main(int argc, char *argv[]){
         // Read in the cell data for this losdata
         gethdr( klos, &a, &xg, &yg, &zg, &vxg, &vyg, &vzg, &b1, &b2, &x0, &y0, 
                 &z0, &l, &m, &n, ap, &zbox, &vgal, &zgal, losdata);
+        printf("Results from gethr:\n");
+        printf("a: %lf\nxg: %lf\nyg: %lf\nzg: %lf\nl: %lf\nm: %lf\nn: %lf\n", 
+                a, xg, yg, zg, l, m, n);
 
         ndata = readcells( cellnum, x, y, z, vx, vy, vz, Lcell, ndencell, fion, 
                            temp, zmfrac, losdata);
@@ -153,8 +154,12 @@ int main(int argc, char *argv[]){
             // in kpc, convert to centimeters upon return
             getD( l, m, n, x0, y0, z0, x[i], y[i], z[i], Lcell[i], &dlos, 
                   &error, errtype);
+//            printf("CellID: %d \n\tx: %lf \n\ty: %lf\n\tz: %lf\n\tl: %lf\n\t\
+//            m: %lf\n\tn: %lf\n\tLcell: %lf\n\tDlos: %lf\n\t, Error: %d\n", 
+//            cellnum[i], x[i], y[i], z[i], l, m, n, Lcell[i], dlos, error);
 
-//            printf("CellID: %d \t Dlos: %lf\n", cellnum[i], dlos);
+            printf("CellID: %d \t Dlos: %lf \t Slos: %lf \t vlos: %lf \t \
+            zlos: %lf \t vabs: %lf  %d\n", cellnum[i], dlos, Slos, vlos, zlos, vabs, error);
             // If getD returns clean, convert from Mpc to kpc
             // If getD returns an error, use the cube root of the
             // cell volume; communicate to the error log file
@@ -198,7 +203,7 @@ int main(int argc, char *argv[]){
             wrtlosdata( Slos, Rgal, zline[i], vlos, vabs, dlos, ndencell[i], 
                         fion[i], zmfrac[i], Nline[i], temp[i], bline[i], Vgal, 
                         vrp, V_theta, V_phi, vzp, xp, yp, zp, rp, theta, phi, 
-                        cellnum[i], losdata);
+                        cellnum[i], losdatafile);
 
         }  // Ends loop over cells in a single LOS
 
