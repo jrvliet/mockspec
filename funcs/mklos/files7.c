@@ -406,10 +406,10 @@ void wrtlosdata( double Slos, double Rgal, double zline, double vlos,
                  double vzp, double xp, double yp, double zp, double rp, 
                  double theta, double phi, int cellnum, char *unitlosfile){
 
-    FILE *fp = fopen(unitlosfile, "w");
+    printf("unitlosfile: %s\n", unitlosfile);
+    FILE *fp = fopen(unitlosfile, "a");
     
-    fprintf(fp, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf \
-                 %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf\n", 
+    fprintf(fp, "%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf\n", 
                 Slos, Rgal, zline, vlos, log10(dlos), log10(ndencell), 
                 log10(fion), log10(zmfrac), log10(Nline), log10(temp), bline, 
                 Vgalt, vrp, V_theta, V_phi, vzp , xp, yp, zp, rp, theta, phi, 
