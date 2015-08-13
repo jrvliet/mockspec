@@ -387,10 +387,10 @@ void wrtlines(double zgal, double *zline, double *Nline, double *bline,
     int i;
     printf("\nlinesfile: %s\n", linesfile);
     FILE *fp = fopen(linesfile, "w");
-    fprintf(fp, "%lf\n", zgal);
+    fprintf(fp, "%4.2lf\n", zgal);
     for (i=0; i<ndata; i++){
         if (log10(Nline[i])>9.0){
-            fprintf(fp, "%lf \t %lf \t %lf \t %d \n", 
+            fprintf(fp, "%4.2lf \t %4.2lf \t %4.2lf \t %d \n", 
                     zline[i], log10(Nline[i]), bline[i], cellnum[i]);
         }
     }
@@ -411,16 +411,17 @@ void wrtlosdata( double Slos, double Rgal, double zline, double vlos,
                  double vzp, double xp, double yp, double zp, double rp, 
                  double theta, double phi, int cellnum, char *unitlosfile){
 
-    printf("unitlosfile: %s\n", unitlosfile);
     FILE *fp = fopen(unitlosfile, "a");
     
-    fprintf(fp, "%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf "
-                "\t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf "
-                "\t%lf \t%lf \t%lf \t%lf \t%lf \t%lf \t%lf\n", 
+    fprintf(fp, "%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf "
+                "\t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf"
+                " \t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf "
+                "\t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf \t"
+                "%4.2lf \t%d\n", 
                 Slos, Rgal, zline, vlos, log10(dlos), log10(ndencell), 
                 log10(fion), log10(zmfrac), log10(Nline), log10(temp), bline, 
                 Vgalt, vrp, V_theta, V_phi, vzp , xp, yp, zp, rp, theta, phi, 
-                vrp/Vgalt, V_theta/Vgalt, V_phi/Vgalt, vzp/Vgalt);
+                vrp/Vgalt, V_theta/Vgalt, V_phi/Vgalt, vzp/Vgalt, cellnum);
 
     fclose(fp);
     

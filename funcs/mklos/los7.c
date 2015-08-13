@@ -129,17 +129,17 @@ int main(int argc, char *argv[]){
 
         // Open the .losdata file and write the header
         losfp = fopen(losdatafile, "w");
-        fprintf(losfp, "1 \t\t 2 \t\t 3 \t\t 4 \t\t 5 \t\t 6 \t\t 7 \t\t 8 \t\t"
-                       " 9 \t\t 10 \t\t 11 \t\t 12 \t\t 13 \t\t 14 \t\t 15 "
-                       "\t\t 16 \t\t 17 \t\t 18 \t\t 19 \t\t 20 \t\t 21 \t\t 23"
-                       " \t\t 24 \t\t 25 \t\t 26 \t\t 27 \t\t 28 \n"); 
-        fprintf(losfp, "Slos \t\t Rgal \t\t zabs \t\t vlos \t\t vabs \t\t dlos "
-                        "\t\t nion \t\t fion \t\t zmfrac \t Nion \t\t T \t\t "
-                        "bpar \t\t Vgtot \t\t vrp \t\tV_theta \t V_phi \t\t vzp "
-                        "\t\t xp \t\t yp \t\t zp \t\t rp \t\ttheta \t\t phi "
-                        "\t\t vrp/Vgt \t Vth/Vgt \t Vph/Vgt \t vzp/Vg \t "
+        fprintf(losfp, "1 \t2 \t3 \t4 \t5 \t6 \t7 \t8 \t"
+                       "9 \t10 \t11 \t12 \t13 \t14 \t15 \t"
+                       "16 \t17 \t18 \t19 \t20 \t21 \t22 \t23 \t"
+                       "24 \t25 \t26 \t27 \t28 \n"); 
+        fprintf(losfp, "Slos \tRgal \tzabs \tvlos \tvabst\tdlos "
+                        "\tnion \tfion \tzmfrac \tNion \tT \t"
+                        "bpar \t Vgtot \tvrp \tVtheta \tVphi \tvzp "
+                        "\txp \typ \tzp \trp \ttheta \tphi "
+                        "\tvrp/Vgt Vth/Vgt Vph/Vgt vzp/Vg \t "
                         "cellID\n");
-
+        fclose(losfp);
         // Inner loop: 
         // Loop over cell data for the los, compute the los quantities
         for(i=0; i<ndata; i++){
