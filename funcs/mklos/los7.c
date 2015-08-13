@@ -105,23 +105,17 @@ int main(int argc, char *argv[]){
         p = strchr(new_line, '\n');
         *p = '\0';
         strcpy(losdata, new_line);
-        printf("Losdata: %s\n", losdata);
 
         // Parse the file name
         cutfname(losdata, &galID, &ion, &lostag, losdatafile);
 
         mamu = getamu(tranilist, ion);
-        printf("Mamu: %lf\n", mamu);
 
         mkfname(losdata, galID, ion, lostag, linesfile);
-        printf("Linesfile: %s\n", linesfile);
 
         // Read in the cell data for this losdata
         gethdr( klos, &a, &xg, &yg, &zg, &vxg, &vyg, &vzg, &b1, &b2, &x0, &y0, 
                 &z0, &l, &m, &n, ap, &zbox, &vgal, &zgal, losdata);
-        printf("Results from gethr:\n");
-        printf("a: %lf\nxg: %lf\nyg: %lf\nzg: %lf\nl: %lf\nm: %lf\nn: %lf\n", 
-                a, xg, yg, zg, l, m, n);
 
         ndata = readcells( cellnum, x, y, z, vx, vy, vz, Lcell, ndencell, fion, 
                            temp, zmfrac, losdata);
@@ -160,9 +154,11 @@ int main(int argc, char *argv[]){
 //            m: %lf\n\tn: %lf\n\tLcell: %lf\n\tDlos: %lf\n\t, Error: %d\n", 
 //            cellnum[i], x[i], y[i], z[i], l, m, n, Lcell[i], dlos, error);
 
-            printf("CellID: %d \t Dlos: %lf \t Slos: %lf \t vlos: %lf \t"
-                    "zlos: %lf \t vabs: %lf  %d\n", 
-                    cellnum[i], dlos, Slos, vlos, zlos, vabs, error);
+//            printf("CellID: %d \t Dlos: %lf \t Slos: %lf \t vlos: %lf \t"
+//                    "zlos: %lf \t vabs: %lf  %d\n", 
+//                    cellnum[i], dlos, Slos, vlos, zlos, vabs, error);
+//            printf("Temperature: %lf\n", log10(temp[0]));
+//            exit(0);
             // If getD returns clean, convert from Mpc to kpc
             // If getD returns an error, use the cube root of the
             // cell volume; communicate to the error log file
@@ -201,11 +197,11 @@ int main(int argc, char *argv[]){
             rotate(ap, Vgalx, Vgaly, Vgalz, &vxp, &vyp, &vzp);
             sphvels(xp, yp, zp, &rp, &theta, &phi, 
                     vxp, vyp, vzp, &vrp, &V_theta, &V_phi);
-            printf("xp: %lf\typ: %lf\tzp: %lf\trp: %lf\ttheta: %lf\tphi: %lf\n",
-                    xp, yp, zp, rp , theta, phi);
-            printf("vxp: %lf\tvyp: %lf\tvzp: %lf\tvrp: %lf\tvtheta: %lf\t"
-                    "vphi: %lf\n\n",
-                    vxp, vyp, vzp, vrp , V_theta, V_phi);
+//            printf("xp: %lf\typ: %lf\tzp: %lf\trp: %lf\ttheta: %lf\tphi: %lf\n",
+//                    xp, yp, zp, rp , theta, phi);
+//            printf("vxp: %lf\tvyp: %lf\tvzp: %lf\tvrp: %lf\tvtheta: %lf\t"
+//                    "vphi: %lf\n\n",
+//                    vxp, vyp, vzp, vrp , V_theta, V_phi);
             
             // Write processed data to the .losdata file
             wrtlosdata( Slos, Rgal, zline[i], vlos, vabs, dlos, ndencell[i], 
@@ -218,6 +214,7 @@ int main(int argc, char *argv[]){
     // Write the .lines file, one for each transition
     // These files used by specsynth to generate the spectra
     wrtlines(zgal, zline, Nline, bline, cellnum, linesfile, ndata);
+    printf("Number of cells: %d\n", ndata);
 
     } 
 

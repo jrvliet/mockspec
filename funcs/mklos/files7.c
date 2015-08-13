@@ -55,16 +55,11 @@ void gethdr(int klos, double *a, double *xg, double *yg, double *zg,
             double ap[][3], double *zbox, double *vgal, double *zgal, 
             char *infile){
 
-//    int i;
     double ckms = 3.0e5;
     char new_line[500];
     char dum[50];
     FILE *fp = fopen(infile, "r");
-//    double a0, xg0, yg0, zg0, vxg0, vyg0, vzg0;
-//    double b10, b20, Robs, phiobs;
-//    double x00, y00, z00, l0, m0, n0;
-//    double zbox0, vgal0, zgal0;    
-    double Robs, phiobs; 
+    double Robs, phiobs;
     double a11, a12, a13;       
     double a21, a22, a23;
     double a31, a32, a33;
@@ -75,40 +70,13 @@ void gethdr(int klos, double *a, double *xg, double *yg, double *zg,
                      "%s %s %s %s %s %lf %lf %lf",
                       dum, a, dum, dum, dum, dum, xg, yg, zg, 
                       dum, dum, dum, dum, dum, vxg, vyg, vzg);
-   /* 
-    token = strtok(new_line, " ");
-    a0 = atof( strtok(new_line, " ") );     // Expansion parameter
-    for (i=0;i<4;i++){
-        token = strtok(new_line, " ");
-    }
-    xg0 = atof( strtok(new_line, " ") );    // Galaxy x center in Mpc
-    yg0 = atof( strtok(new_line, " ") );    // Galaxy y center in Mpc
-    zg0 = atof( strtok(new_line, " ") );    // Galaxy z center in Mpc
-    for (i=0; i<5; i++){
-        token = strtok(new_line, " ");
-    }
-    vxg0 = atof( strtok(new_line, " ") );   // Galaxy vx km/s
-    vyg0 = atof( strtok(new_line, " ") );   // Galaxy vy km/s
-    vzg0 = atof( strtok(new_line, " ") );   // Galaxy vz km/s
-    */
 
     
     // Second line
     fgets(new_line, sizeof(new_line), fp);
     sscanf(new_line, "%s %s %s %s %s %lf %lf %s %s %s %lf %lf", 
            dum, dum, dum, dum, dum, b1, b2, dum, dum, dum, &Robs, &phiobs);
-    /*
-    for (i=0; i<5; i++){
-        token = strtok(new_line, " ");
-    }
-    b10 = atoi( strtok(new_line, " ") );    // Galactic longitude
-    b20 = atoi( strtok(new_line, " ") );    // Galactic latitude
-    for (i=0; i<3; i++){
-        token = strtok(new_line, " "); 
-    }
-    Robs = atof( strtok(new_line, " ") ); // R observer on Gal disk (should be 0)
-    phiobs = atof( strtok(new_line, " ") );   // Azimuthal pos of obs on disk (should be 90)
-    */
+
     // Third line 
     // Nothing on this line
     fgets(new_line, sizeof(new_line), fp);
@@ -122,20 +90,7 @@ void gethdr(int klos, double *a, double *xg, double *yg, double *zg,
                      "%s %s %s %s %lf %lf %lf",
                      dum, dum, dum, dum, dum, dum, x0, y0, z0, 
                      dum, dum, dum, dum, l, m, n);
-    /*
-    for (i=0; i<6; i++){
-        token = strtok(new_line, " ");
-    }
-    x00 = atof( strtok(new_line, " ") );    // Box entry point
-    y00 = atof( strtok(new_line, " ") );
-    z00 = atof( strtok(new_line, " ") );
-    for (i=0; i<4; i++){
-        token = strtok(new_line, " ");
-    }
-    l0 = atof( strtok(new_line, " ") );     // Directional Cosines
-    m0 = atof( strtok(new_line, " ") );
-    n0 = atof( strtok(new_line, " ") );
-    */
+    
     // Fifth, sixth, seventh lines
     // Rotation matrix
 
@@ -164,30 +119,6 @@ void gethdr(int klos, double *a, double *xg, double *yg, double *zg,
     ap[2][1] = a32;
     ap[2][2] = a33;
     
-    /*
-    for (i=0; i<8; i++){
-        token = strtok(new_line, " ");
-    }
-    ap[0][0] = atof( strtok(new_line, " ") );
-    ap[0][1] = atof( strtok(new_line, " ") );
-    ap[0][2] = atof( strtok(new_line, " ") );
-    
-    fgets(new_line, sizeof(new_line), fp);
-    for (i=0; i<8; i++){
-        token = strtok(new_line, " ");
-    }
-    ap[1][0] = atof( strtok(new_line, " ") );
-    ap[1][1] = atof( strtok(new_line, " ") );
-    ap[1][2] = atof( strtok(new_line, " ") );
-
-    fgets(new_line, sizeof(new_line), fp);
-    for (i=0; i<8; i++){
-        token = strtok(new_line, " ");
-    }
-    ap[2][0] = atof( strtok(new_line, " ") );
-    ap[2][1] = atof( strtok(new_line, " ") );
-    ap[2][2] = atof( strtok(new_line, " ") );
-    */
 
     // Done reading the file header
 
@@ -196,30 +127,6 @@ void gethdr(int klos, double *a, double *xg, double *yg, double *zg,
     *vgal = (*l)*(*vxg) + (*m)*(*vyg) + (*n)*(*vzg);
     *zgal = *zbox + (1.0+(*zbox)) * (*vgal)/ckms;
 
-    /*
-    // Assign the values to the passed in pointers
-    *a = a0;
-    *xg = xg0;
-    *yg = yg0;
-    *zg = zg0;
-    *vxg = vxg0;
-    *vyg = vyg0;
-    *vzg = vzg0;
-    *b1 = b10;
-    *b2 = b20;
-//    *Robs = Robs0;
-//    *phiobs = phiobs0;
-    *x0 = x00;
-    *y0 = y00;
-    *z0 = z00;
-    *l = l0;
-    *m = m0;
-    *n = n0;
-    
-    *zbox = zbox0;
-    *vgal = vgal0;
-    *zgal = zgal0;
-    */
     fclose(fp);
 }
 
@@ -301,6 +208,21 @@ int readcells( int *cellnum, double *x, double *y, double *z, double *vx,
         zmfrac[i] = snIa + snII;
         Lcell[i] = size;
         i++;
+        
+        /*
+        printf("For cell: %d\n", cellID);
+        printf("x[i]: %lf\n", xLoc);
+        printf("y[i]: %lf\n", yLoc);
+        printf("z[i]: %lf\n", zLoc);
+        printf("vx[i]: %lf\n", velx);
+        printf("vy[i]: %lf\n", vely);
+        printf("vz[i]: %lf\n", velz);
+        printf("ndencell[i]: %lf\n", nion0);
+        printf("temp[i]: %e\n", t);
+        printf("fion[i]: %e\n", fion0);
+        printf("zmfrac[i]: %lf\n", snIa+snII);
+        printf("Lcell[i]: %lf\n", size);
+        */
     }
 
     return i;
@@ -407,21 +329,24 @@ void wrtlines(double zgal, double *zline, double *Nline, double *bline,
 void wrtlosdata( double Slos, double Rgal, double zline, double vlos, 
                  double vabs, double dlos, double ndencell, double fion, 
                  double zmfrac, double Nline, double temp, double bline, 
-                 double Vgalt, double vrp, double V_theta, double V_phi, 
+                 double Vgal, double vrp, double V_theta, double V_phi, 
                  double vzp, double xp, double yp, double zp, double rp, 
                  double theta, double phi, int cellnum, char *unitlosfile){
 
     FILE *fp = fopen(unitlosfile, "a");
-    
+//    printf("Temperature during write:  %e, %lf\n", temp, log10(temp));
+//    printf("Ion Density during write:  %e, %lf\n", ndencell, log10(ndencell));
+//    printf("Vabs during write:         %e, %lf\n", vabs, log10(vabs));
+//    printf("Column dense during write: %e, %lf\n", Nline, log10(Nline));
     fprintf(fp, "%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf "
                 "\t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf"
                 " \t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf "
                 "\t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf \t"
-                "%4.2lf \t%d\n", 
-                Slos, Rgal, zline, vlos, log10(dlos), log10(ndencell), 
+                "%4.2lf \t%4.2lf \t%d\n", 
+                Slos, Rgal, zline, vlos, vabs, log10(dlos), log10(ndencell), 
                 log10(fion), log10(zmfrac), log10(Nline), log10(temp), bline, 
-                Vgalt, vrp, V_theta, V_phi, vzp , xp, yp, zp, rp, theta, phi, 
-                vrp/Vgalt, V_theta/Vgalt, V_phi/Vgalt, vzp/Vgalt, cellnum);
+                Vgal, vrp, V_theta, V_phi, vzp , xp, yp, zp, rp, theta, phi, 
+                vrp/Vgal, V_theta/Vgal, V_phi/Vgal, vzp/Vgal, cellnum);
 
     fclose(fp);
     
