@@ -256,8 +256,18 @@ double getamu(char *tranilist, char *ionlabel){
     
         sscanf(new_line, "%d %s %d %d %s %s %lf %lf %lf %lf", 
                &iflag, name, &k, &j, ilabel, tlabel, &dum, &dum, &dum, &imass);
-        if (strcmp(ilabel, ionlabel)!=0 && iflag==1){
+        if (strcmp(ilabel, ionlabel)==0 && iflag==1){
             mamu = imass;
+            /*
+            printf("Flag  : %d\n", iflag);
+            printf("Name  : %s\n", name);
+            printf("k     : %d\n", k);
+            printf("j     : %d\n", j);
+            printf("ilabel: %s\n", ilabel);
+            printf("tlabel: %s\n" ,tlabel);
+            printf("imass:  %lf\n", imass);
+            exit(0);
+            */
         }
     }
     
@@ -334,10 +344,6 @@ void wrtlosdata( double Slos, double Rgal, double zline, double vlos,
                  double theta, double phi, int cellnum, char *unitlosfile){
 
     FILE *fp = fopen(unitlosfile, "a");
-//    printf("Temperature during write:  %e, %lf\n", temp, log10(temp));
-//    printf("Ion Density during write:  %e, %lf\n", ndencell, log10(ndencell));
-//    printf("Vabs during write:         %e, %lf\n", vabs, log10(vabs));
-//    printf("Column dense during write: %e, %lf\n", Nline, log10(Nline));
     fprintf(fp, "%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf "
                 "\t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf"
                 " \t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf \t%4.2lf "

@@ -35,7 +35,7 @@ int main(int argc, char *argv[]){
     FILE *losfp;
 
     // Constants
-    double ckms = 3.0e5;
+    double ckms = 2.99792458e5;
     double pc2cm = 3.261633*9.460528e17;
     double kpc2cm = 1000.0 * pc2cm;
     double amu     = 1.66053878e-24;
@@ -177,6 +177,7 @@ int main(int argc, char *argv[]){
             Nline[i] = ndencell[i] * dlos;
             zline[i] = zlos;
             bline[i] = 1.0e-5 * sqrt(2.0*kboltz*temp[i]/(amu*mamu));
+//            printf("Kboltz: %e \t Temp[i]: %e \t amu: %e \t mamu: %e \t bline[i]: %e\n", kboltz, temp[i], amu, mamu, bline[i]);
 
             // Translate the coordinate system to the galaxy center
             // Translate the velocities to the galaxy velocity
