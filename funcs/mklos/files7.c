@@ -178,23 +178,6 @@ int readcells( int *cellnum, double *x, double *y, double *z, double *vx,
                          "%lf %lf %lf %lf %lf %lf %d", 
                &size, &xLoc, &yLoc, &zLoc, &velx, &vely, &velz, &n, &t, 
                &snIa, &snII, &natom, &fion0, &nion0, &cellID);
-        /*
-        size = atof(strtok(new_line, " "));
-        xLoc = atof(strtok(new_line, " "));
-        yLoc = atof(strtok(new_line, " "));
-        zLoc = atof(strtok(new_line, " "));
-        velx = atof(strtok(new_line, " "));
-        vely = atof(strtok(new_line, " "));
-        velz = atof(strtok(new_line, " "));
-        n = atof(strtok(new_line, " "));
-        t = atof(strtok(new_line, " "));
-        snIa = atof(strtok(new_line, " "));
-        snII = atof(strtok(new_line, " "));
-        natom = atof(strtok(new_line, " "));
-        fion0 = atof(strtok(new_line, " "));
-        nion0 = atof(strtok(new_line, " "));
-        cellID = atoi(strtok(new_line, " "));
-        */
         x[i] = xLoc;
         y[i] = yLoc;
         z[i] = zLoc;
@@ -209,20 +192,6 @@ int readcells( int *cellnum, double *x, double *y, double *z, double *vx,
         Lcell[i] = size;
         i++;
         
-        /*
-        printf("For cell: %d\n", cellID);
-        printf("x[i]: %lf\n", xLoc);
-        printf("y[i]: %lf\n", yLoc);
-        printf("z[i]: %lf\n", zLoc);
-        printf("vx[i]: %lf\n", velx);
-        printf("vy[i]: %lf\n", vely);
-        printf("vz[i]: %lf\n", velz);
-        printf("ndencell[i]: %lf\n", nion0);
-        printf("temp[i]: %e\n", t);
-        printf("fion[i]: %e\n", fion0);
-        printf("zmfrac[i]: %lf\n", snIa+snII);
-        printf("Lcell[i]: %lf\n", size);
-        */
     }
 
     return i;
@@ -258,16 +227,6 @@ double getamu(char *tranilist, char *ionlabel){
                &iflag, name, &k, &j, ilabel, tlabel, &dum, &dum, &dum, &imass);
         if (strcmp(ilabel, ionlabel)==0 && iflag==1){
             mamu = imass;
-            /*
-            printf("Flag  : %d\n", iflag);
-            printf("Name  : %s\n", name);
-            printf("k     : %d\n", k);
-            printf("j     : %d\n", j);
-            printf("ilabel: %s\n", ilabel);
-            printf("tlabel: %s\n" ,tlabel);
-            printf("imass:  %lf\n", imass);
-            exit(0);
-            */
         }
     }
     
@@ -290,12 +249,8 @@ double getamu(char *tranilist, char *ionlabel){
 // above, which is better commented
 void mkfname(char *infile, char *galID, char *ion, char *lostag, char *linesfile){
 
-//    const char delim[2] = ".";
-//    char *input;
     // Format of infile:
     // galID.ion.los####.dat
-
-        
     // Format of linesfile
     // galID.ion.los####.lines
     strcpy(linesfile, galID);

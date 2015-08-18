@@ -67,10 +67,6 @@ void getD(double l, double m, double n, double x0, double y0, double z0,
     diffpnt[3] = 0.0;   
 
     *cellpath = 0.0;
-//    FILE *cellogfp = fopen("celllog.los7", "a");
-//    printf("\nIn getD:\n");
-    
-//    printf("\tl: %lf \n\tm: %lf \n\t n: %lf \n", l, m, n);
     
     // Sets flags to check if LOS is perpidicular to a cell wall
     // if not perpidicular then set flag high
@@ -94,8 +90,6 @@ void getD(double l, double m, double n, double x0, double y0, double z0,
     if (n<0.0){
         nq = 1.0;
     }
-
-//    printf("\tlq: %lf \n\tmq: %lf \n\t nq: %lf \n", lq, mq, nq);
 
     // Following code initializes points of intersection on cell
     // Initializing the matrix of points on each face of the cell
@@ -226,69 +220,7 @@ void getD(double l, double m, double n, double x0, double y0, double z0,
     if (zd[0] > (X+halfcell)) {  zd[3]=0.0; }
     if (zd[0] < (X-halfcell)) {  zd[3]=0.0; }
 
-    /*
-    // X posiitions
-    if( (xu[1] > (Y+(lengthcell/2.0))) || (xu[1] < (Y-(lengthcell/2.0))) ) {
-        xu[3] = 0.0;
-    }
-    if( (xu[2] > (Z+(lengthcell/2.0))) || (xu[2] < (Z-(lengthcell/2.0))) ) {
-        xu[3] = 0.0;
-    }
-    if( (xd[1] > (Y+(lengthcell/2.0))) || (xd[1] < (Y-(lengthcell/2.0))) ) {
-        xd[3] = 0.0;
-    }
-    if( (xd[2] > (Z+(lengthcell/2.0))) || (xd[2] < (Z-(lengthcell/2.0))) ) {
-        xd[3] = 0.0;
-    }
-      
-
-    // Y posiitions
-    if( (xu[0] > (X+(lengthcell/2.0))) || (yu[0] < (X-(lengthcell/2.0))) ) {
-        yu[3] = 0.0;
-    }
-    if( (yu[2] > (Z+(lengthcell/2.0))) || (yu[2] < (Z-(lengthcell/2.0))) ) {
-        yu[3] = 0.0;
-    }
-    if( (yd[0] > (X+(lengthcell/2.0))) || (yd[0] < (X-(lengthcell/2.0))) ) {
-        yd[3] = 0.0;
-    }
-    if( (yd[2] > (Z+(lengthcell/2.0))) || (yd[2] < (Z-(lengthcell/2.0))) ) {
-        yd[3] = 0.0;
-    }
-    if( yd[3] != 0.0){
-        fprintf(cellogfp, "yd fail: xu[0]"
-
-    // Z posiitions
-    if( (zu[1] > (Y+(lengthcell/2.0))) || (zu[1] < (Y-(lengthcell/2.0))) ) {
-        zu[3] = 0.0;
-        printf("error e\n");
-    }
-    if( (zu[0] > (X+(lengthcell/2.0))) || (zu[0] < (X-(lengthcell/2.0))) ) {
-        zu[3] = 0.0;
-    }
-    if( (zd[1] > (Y+(lengthcell/2.0))) || (zd[1] < (Y-(lengthcell/2.0))) ) {
-        zd[3] = 0.0;
-    }
-    if( (zd[0] > (X+(lengthcell/2.0))) || (zd[0] < (X-(lengthcell/2.0))) ) {
-        zd[3] = 0.0;
-    }
-    */  
-
     // Following code extracts the entry points that are on cell surface
- /*   printf("\nxu\n");
-    printArr(xu, 4);
-    printf("yu\n");
-    printArr(yu, 4);
-    printf("zu\n");
-    printArr(zu, 4);
-
-    printf("xd\n");
-    printArr(xu, 4);
-    printf("yd\n");
-    printArr(yd, 4);
-    printf("zd\n");
-    printArr(zd, 4);
-    printf("\n");   */
     if (xu[3]>0.5){             // If on cell wall
         if (k<0.5){             // Appears to have no use
             pnt1[0] = xu[0];    // Store the x pos
@@ -394,14 +326,7 @@ void getD(double l, double m, double n, double x0, double y0, double z0,
     diffpnt[1] = pnt1[1] - pnt2[1];
     diffpnt[2] = pnt1[2] - pnt2[2];
     diffpnt[3] = pnt1[3] - pnt2[3];     // Why? Unknown
-/*        
-    printf("Point 1: \n");
-    printArr(pnt1, 3);
-    printf("Point 2: \n");
-    printArr(pnt2, 3);
-    printf("Diff Point:\n");
-    printArr(diffpnt, 3); 
-*/
+    
     *cellpath = pow(diffpnt[0], 2.0) + pow(diffpnt[1], 2.0) + pow(diffpnt[2], 2.0) ;
     *cellpath = sqrt(*cellpath);
 
@@ -426,9 +351,6 @@ void getD(double l, double m, double n, double x0, double y0, double z0,
                 "\t xd[3]: %lf \t yd[3]: %lf \t zu[3]: %lf\n",
                 xu[3], yu[3], zu[3],  xd[3], yd[3], zd[3]); 
     }
-
-//    printf("Cellpath: %lf\n", *cellpath);
-//    printf("Error: %d\n", *error);
 
     if (*cellpath==0.0){
         *error = 1;

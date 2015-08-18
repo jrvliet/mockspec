@@ -150,15 +150,7 @@ int main(int argc, char *argv[]){
             // in kpc, convert to centimeters upon return
             getD( l, m, n, x0, y0, z0, x[i], y[i], z[i], Lcell[i], &dlos, 
                   &error, errtype);
-//            printf("CellID: %d \n\tx: %lf \n\ty: %lf\n\tz: %lf\n\tl: %lf\n\t
-//            m: %lf\n\tn: %lf\n\tLcell: %lf\n\tDlos: %lf\n\t, Error: %d\n", 
-//            cellnum[i], x[i], y[i], z[i], l, m, n, Lcell[i], dlos, error);
-
-//            printf("CellID: %d \t Dlos: %lf \t Slos: %lf \t vlos: %lf \t"
-//                    "zlos: %lf \t vabs: %lf  %d\n", 
-//                    cellnum[i], dlos, Slos, vlos, zlos, vabs, error);
-//            printf("Temperature: %lf\n", log10(temp[0]));
-//            exit(0);
+            
             // If getD returns clean, convert from Mpc to kpc
             // If getD returns an error, use the cube root of the
             // cell volume; communicate to the error log file
@@ -177,7 +169,6 @@ int main(int argc, char *argv[]){
             Nline[i] = ndencell[i] * dlos;
             zline[i] = zlos;
             bline[i] = 1.0e-5 * sqrt(2.0*kboltz*temp[i]/(amu*mamu));
-//            printf("Kboltz: %e \t Temp[i]: %e \t amu: %e \t mamu: %e \t bline[i]: %e\n", kboltz, temp[i], amu, mamu, bline[i]);
 
             // Translate the coordinate system to the galaxy center
             // Translate the velocities to the galaxy velocity
@@ -198,12 +189,7 @@ int main(int argc, char *argv[]){
             rotate(ap, Vgalx, Vgaly, Vgalz, &vxp, &vyp, &vzp);
             sphvels(xp, yp, zp, &rp, &theta, &phi, 
                     vxp, vyp, vzp, &vrp, &V_theta, &V_phi);
-//            printf("xp: %lf\typ: %lf\tzp: %lf\trp: %lf\ttheta: %lf\tphi: %lf\n",
-//                    xp, yp, zp, rp , theta, phi);
-//            printf("vxp: %lf\tvyp: %lf\tvzp: %lf\tvrp: %lf\tvtheta: %lf\t"
-//                    "vphi: %lf\n\n",
-//                    vxp, vyp, vzp, vrp , V_theta, V_phi);
-            
+
             // Write processed data to the .losdata file
             wrtlosdata( Slos, Rgal, zline[i], vlos, vabs, dlos, ndencell[i], 
                         fion[i], zmfrac[i], Nline[i], temp[i], bline[i], Vgal, 
