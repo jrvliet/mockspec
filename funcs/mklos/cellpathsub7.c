@@ -67,7 +67,7 @@ void getD(double l, double m, double n, double x0, double y0, double z0,
     diffpnt[3] = 0.0;   
 
     *cellpath = 0.0;
-    
+//    FILE *cellogfp = fopen("celllog.los7", "a");
 //    printf("\nIn getD:\n");
     
 //    printf("\tl: %lf \n\tm: %lf \n\t n: %lf \n", l, m, n);
@@ -182,9 +182,51 @@ void getD(double l, double m, double n, double x0, double y0, double z0,
     
     // Following code test whether points are on cell surface
     // If outside the cell, then set flag low
-    // Check both fornt and back cell walls
+    // Check both front and back cell walls
     
 //    printf("\nX: %lf\tY: %lf\tZ: %lf\n\n", X, Y, Z);
+    double halfcell = lengthcell/2.0;
+    
+    // X positions
+    if (xu[1] > (Y+halfcell)) {  xu[3]=0.0; }
+    if (xu[1] < (Y-halfcell)) {  xu[3]=0.0; }
+
+    if (xu[2] > (Z+halfcell)) {  xu[3]=0.0; }
+    if (xu[2] < (Z-halfcell)) {  xu[3]=0.0; }
+        
+    if (xd[1] > (Y+halfcell)) {  xd[3]=0.0; }
+    if (xd[1] < (Y-halfcell)) {  xd[3]=0.0; }
+
+    if (xd[2] > (Z+halfcell)) {  xd[3]=0.0; }
+    if (xd[2] < (Z-halfcell)) {  xd[3]=0.0; }
+
+    // Y positions
+    if (yu[0] > (X+halfcell)) {  yu[3]=0.0; }
+    if (yu[0] < (X-halfcell)) {  yu[3]=0.0; }
+
+    if (yu[2] > (Z+halfcell)) {  yu[3]=0.0; }
+    if (yu[2] < (Z-halfcell)) {  yu[3]=0.0; }
+        
+    if (yd[0] > (X+halfcell)) {  yd[3]=0.0; }
+    if (yd[0] < (X-halfcell)) {  yd[3]=0.0; }
+
+    if (yd[2] > (Z+halfcell)) {  yd[3]=0.0; }
+    if (yd[2] < (Z-halfcell)) {  yd[3]=0.0; }
+
+    // Z positions
+    if (zu[1] > (Y+halfcell)) {  zu[3]=0.0; }
+    if (zu[1] < (Y-halfcell)) {  zu[3]=0.0; }
+
+    if (zu[0] > (X+halfcell)) {  zu[3]=0.0; }
+    if (zu[0] < (X-halfcell)) {  zu[3]=0.0; }
+        
+    if (zd[1] > (Y+halfcell)) {  zd[3]=0.0; }
+    if (zd[1] < (Y-halfcell)) {  zd[3]=0.0; }
+
+    if (zd[0] > (X+halfcell)) {  zd[3]=0.0; }
+    if (zd[0] < (X-halfcell)) {  zd[3]=0.0; }
+
+    /*
     // X posiitions
     if( (xu[1] > (Y+(lengthcell/2.0))) || (xu[1] < (Y-(lengthcell/2.0))) ) {
         xu[3] = 0.0;
@@ -213,11 +255,13 @@ void getD(double l, double m, double n, double x0, double y0, double z0,
     if( (yd[2] > (Z+(lengthcell/2.0))) || (yd[2] < (Z-(lengthcell/2.0))) ) {
         yd[3] = 0.0;
     }
-      
+    if( yd[3] != 0.0){
+        fprintf(cellogfp, "yd fail: xu[0]"
 
     // Z posiitions
     if( (zu[1] > (Y+(lengthcell/2.0))) || (zu[1] < (Y-(lengthcell/2.0))) ) {
         zu[3] = 0.0;
+        printf("error e\n");
     }
     if( (zu[0] > (X+(lengthcell/2.0))) || (zu[0] < (X-(lengthcell/2.0))) ) {
         zu[3] = 0.0;
@@ -228,7 +272,7 @@ void getD(double l, double m, double n, double x0, double y0, double z0,
     if( (zd[0] > (X+(lengthcell/2.0))) || (zd[0] < (X-(lengthcell/2.0))) ) {
         zd[3] = 0.0;
     }
-      
+    */  
 
     // Following code extracts the entry points that are on cell surface
  /*   printf("\nxu\n");
@@ -378,6 +422,9 @@ void getD(double l, double m, double n, double x0, double y0, double z0,
     if (xu[3] + xd[3] + yu[3] + yd[3] + zu[3] + zd[3] > 1.5){
         *cellpath = 0.0;
         errtype[2] = 1;
+        printf("Check sum failed:\n\t xu[3]: %lf \t yu[3]: %lf \t zu[3]: %lf\n"
+                "\t xd[3]: %lf \t yd[3]: %lf \t zu[3]: %lf\n",
+                xu[3], yu[3], zu[3],  xd[3], yd[3], zd[3]); 
     }
 
 //    printf("Cellpath: %lf\n", *cellpath);

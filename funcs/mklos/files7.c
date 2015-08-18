@@ -319,6 +319,11 @@ void wrtlines(double zgal, double *zline, double *Nline, double *bline,
     int i;
     printf("\nlinesfile: %s\n", linesfile);
     FILE *fp = fopen(linesfile, "w");
+    if (fp==NULL){
+        printf("Error opening linesfile: %s\n", linesfile);
+        printf("Exitting...\n");
+        exit(1);
+    }
     fprintf(fp, "%4.2lf\n", zgal);
     for (i=0; i<ndata; i++){
         if (log10(Nline[i])>9.0){
@@ -364,16 +369,16 @@ void wrtlosdata( double Slos, double Rgal, double zline, double vlos,
 void dloserr( int *errtype, char *losdata, int cellnum, double dlos, FILE *errfp){
 
     if (errtype[0] == 1){
-        fprintf(errfp, "%s %d Dlos error: x,y,z cell entry points are (0,0,0)\
-         - using cell length = %lf [kpc]\n", losdata, cellnum, dlos);
+        fprintf(errfp, "%s %d Dlos error: x,y,z cell entry points are (0,0,0)"
+         "- using cell length = %lf [kpc]\n", losdata, cellnum, dlos);
     }
     if (errtype[1] == 1){
-        fprintf(errfp, "%s %d Dlos error: x,y,z cell exit  points are (0,0,0)\
-        - using cell length = %lf [kpc]\n", losdata, cellnum, dlos);
+        fprintf(errfp, "%s %d Dlos error: x,y,z cell exit  points are (0,0,0)"
+        "- using cell length = %lf [kpc]\n", losdata, cellnum, dlos);
     }
     if (errtype[2] == 1){
-        fprintf(errfp, "%s %d Dlos error: sum check for x,y,z cell points \
-        failed - using cell length = %lf [kpc]\n", losdata, cellnum, dlos);
+        fprintf(errfp, "%s %d Dlos error: sum check for x,y,z cell points "
+        "failed - using cell length = %lf [kpc]\n", losdata, cellnum, dlos);
     }
 }
 
