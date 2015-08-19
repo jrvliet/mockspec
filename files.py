@@ -205,6 +205,7 @@ def setup_ion_dir(ion, galID, expn):
     """ 
     Creates a directory for this ion if one does not exit
     Copies the all required files into this directory
+    Returns the path to the ion directory
     """
     cwd = os.getcwd()
     ionloc = cwd + '/' + ion

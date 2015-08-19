@@ -12,10 +12,10 @@ import pandas
 import subprocess as sp
 
 # Code specific libraries
-from files import *
-from genLOS import *
-from ratesControl import *
-
+import files as fi
+import genLOS as gl
+import ratesControl as rc
+import funcs.locatecells.locatecells as lc
 
 
 pathname = os.path.dirname(sys.argv[0])
@@ -25,7 +25,7 @@ summaryLoc = codeLoc+'/summaries/'
 
 #  Read in the control file
 print 'Reading in control file...'
-props, ions, xh, instruments = readControlFile()
+props, ions, xh, instruments = fr.readControlFile()
 galID, expn, nlos, maximpact, incline, ewcut, snr, ncores, rootLoc, requiredLoc = props
 
 # Genearte the name of the gasfile
@@ -44,7 +44,7 @@ print 'Requried Loc: ', requiredLoc
 
 # Generate gal_props.dat file
 print 'Generating gal_profgrep ps.dat...'
-setupGalprops( galID, expn, requiredLoc, summaryLoc )
+fi.setupGalprops( galID, expn, requiredLoc, summaryLoc )
 
 
 ##### 
@@ -54,11 +54,11 @@ setupGalprops( galID, expn, requiredLoc, summaryLoc )
 #####
 print '\nRates:'
 print '\t Setting up rates.inp...'
-setupRatesControl( gasfile, expn, ions, requiredLoc)
+rc.setupRatesControl( gasfile, expn, ions, requiredLoc)
 print '\t Setting up rates.outfiles...'
-setupRatesOutputs(galID, expn, ions, codeLoc, requiredLoc) 
+rc.setupRatesOutputs(galID, expn, ions, codeLoc, requiredLoc) 
 print '\t Running rates...'
-#runRates(codeLoc)
+#rc.runRates(codeLoc)
 
 
 ##### 
@@ -67,7 +67,7 @@ print '\t Running rates...'
 #
 #####
 print '\nGenerating lines of sight...'
-genLines(galID, gasfile, summaryLoc, expn, incline, nlos, maximpact, ncores)
+gl.genLines(galID, gasfile, summaryLoc, expn, incline, nlos, maximpact, ncores)
 
 ##### 
 #  
@@ -75,7 +75,7 @@ genLines(galID, gasfile, summaryLoc, expn, incline, nlos, maximpact, ncores)
 #
 #####
 print '\nRunning LOS through box...'
-runCellfinder(codeLoc)
+gl.runCellfinder(codeLoc)
 
 
 
@@ -84,7 +84,7 @@ for ion in ions:
 
 
     # Setup the ion directory
-    ionloc = setup_ion_dir(ion, galID, expn) 
+    ionloc = fi.setup_ion_dir(ion, galID, expn) 
 
     # Move into the ion directory
     os.chdir(ionloc)
@@ -97,7 +97,7 @@ for ion in ions:
     #
     #####
     print '\nDetermining cell path length and applying rough cut'
-    los7(codeLoc)
+    rc.los7(codeLoc)
 
 
     ##### 
@@ -107,7 +107,7 @@ for ion in ions:
     #
     #####
     print '\nGenerating spectra'
-    specsynth(codeLoc)
+    rc.specsynth(codeLoc)
 
 
     ##### 
@@ -117,7 +117,7 @@ for ion in ions:
     #
     #####
     print '\nAnalyzing spectra...'
-    sysanal(codeLoc)
+    rc.sysanal(codeLoc)
 
 
 
@@ -128,7 +128,7 @@ for ion in ions:
     #
     #####
     print '\nCreating sysabs'
-    sysabs(codeLoc)
+    rc.sysabs(codeLoc)
 
     
 
@@ -139,7 +139,7 @@ for ion in ions:
     #
     #####
     print '\nIdentifying significant cells'
-    runLocateCells(codeLoc)
+    rc.runLocateCells(codeLoc)
 
     os.chdir('..')
 
