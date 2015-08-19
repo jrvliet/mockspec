@@ -16,6 +16,7 @@ import files as fi
 import genLOS as gl
 import ratesControl as rc
 import funcs.locatecells.locatecells as lc
+import funcs.cellfinder.idcells as ic
 
 
 pathname = os.path.dirname(sys.argv[0])
@@ -69,6 +70,7 @@ print '\t Running rates...'
 print '\nGenerating lines of sight...'
 gl.genLines(galID, gasfile, summaryLoc, expn, incline, nlos, maximpact, ncores)
 
+
 ##### 
 #  
 #  Run lines of sight through box with cellfinder
@@ -76,6 +78,17 @@ gl.genLines(galID, gasfile, summaryLoc, expn, incline, nlos, maximpact, ncores)
 #####
 print '\nRunning LOS through box...'
 gl.runCellfinder(codeLoc)
+
+
+
+##### 
+#  
+#  Identify cells in the ion boxes
+#
+#####
+print '\nRunning LOS through box...'
+ic.idcells(codeLoc)
+
 
 
 
