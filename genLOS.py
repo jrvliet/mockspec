@@ -263,4 +263,4 @@ def runCellfinder(codeLoc):
     except:
         print '\n\nCould not run cellfinder with:\n\t{0:s}'.format(command)
         print 'Exiting...'
-        print sys.exit()
+        sys.exit()
