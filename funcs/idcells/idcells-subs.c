@@ -132,10 +132,41 @@ struct los losProps(int losnum){
 
 
 
+FILE open_cell_list(int num){
+
+    char filename[200], losnum[10];
+    
+    // Filename structure
+    //    los<losnum>.cellID.dat
+    sprintf(losnum, "%04d", num);
+
+    strcpy(filename, "los");
+    strcat(filename, losnum);   
+    strcat(filename, ".cellID.dat");
+    
+    FILE *fp = fopen(filename, "r");
+    
+    return fp;
+}
 
 
 
 
+void open_losdat(char *losdata, char *linesfile, FILE *losfp, FILE *linesfp){
 
+    losfp = fopen(losdata, "w");
+    linesfp = fopen(linesfile, "w");
 
+    fprintf(losfp, "1 \t2 \t3 \t4 \t5 \t6 \t7 \t8 \t"
+                   "9 \t10 \t11 \t12 \t13 \t14 \t15 \t"
+                   "16 \t17 \t18 \t19 \t20 \t21 \t22 \t23 \t"
+                   "24 \t25 \t26 \t27 \t28 \n"); 
+    fprintf(losfp, "Slos \tRgal \tzabs \tvlos \tvabst\tdlos "
+                    "\tnion \tfion \tzmfrac \tNion \tT \t"
+                    "bpar \t Vgtot \tvrp \tVtheta \tVphi \tvzp "
+                    "\txp \typ \tzp \trp \ttheta \tphi "
+                    "\tvrp/Vgt Vth/Vgt Vph/Vgt vzp/Vg \t "
+                    "cellID\n");
+
+}
 

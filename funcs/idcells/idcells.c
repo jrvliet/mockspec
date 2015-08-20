@@ -6,7 +6,8 @@
 */
 
 #include "idcells-subs.h"
-#include <stdio.h>
+#include "los7.h"
+#include <stdio.h>1
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
@@ -15,8 +16,17 @@
 int idcells(char *ion, char *galID, char *expn, int numcores, int losnum){
 
     int i, numCells;
-    double losB, losPhi;
+    double losB, losPhi, mamau;
     char boxfile[100], new_line[1000];
+    struct los props;
+    FILE *cellsfp;
+
+    char tranilist[80] = "Mockspec.transisions";
+
+    // Get the mass of the ion
+    mamu = getamu(tranilist, ion);
+    
+
     // Read in the LOS properties, stored in lines.info file
     
     // Read in the gas box
@@ -87,13 +97,31 @@ int idcells(char *ion, char *galID, char *expn, int numcores, int losnum){
     // Loop over all lines of sight
     for (i=1; i<=losnum; i++){
 
+        // Generate the .losdata file and open it
+        mkfname(losdata, galID< ion, losname, linesfile);
+        open_losdat(losdata, linesfile, losfp, linesfp);
+
+
+
         // Get the LOS props
         props = losProps(i);
     
-
-
-
+        // Open the list of cells
+        cellsfp = open_cell_list(i);
+        
+        // Read past the header
+        fgets(new_line, sizeof(new_line), fp);
     
+        // Loop over the cells
+        while(fgets(new_line, sizeof(new_line), fp){
+                
+            sscanf(new_line, "%d", &cellnum);
+                
+            // Cell numnber corresponds to the line of the gas file
+            index = cellnum-1;
+
+            // Pass into los7 to determine if it should be included
+
 
     return 0;
 }
