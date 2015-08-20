@@ -7,22 +7,26 @@
 
 #include "idcells-subs.h"
 #include "los7.h"
-#include <stdio.h>1
+#include "datatypes.h"
+#include "files7.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 
 // Run per ion
-int idcells(char *ion, char *galID, char *expn, int numcores, int losnum){
+int idcells(char *ion, struct galaxy gal, int numcores, int losnum, 
+            struct orient oprops){
 
-    int i, numCells;
-    double losB, losPhi, mamau;
+    int i, numCells, cellnum, index;
+    double losB, losPhi, mamu, zgal;
     char boxfile[100], new_line[1000];
-    struct los props;
-    FILE *cellsfp;
-
+    struct los losprops;
+    FILE *cellsfp, *losfp, *linesfp;
+    
+    char losname[10], linesfile[80], losdata[80];
     char tranilist[80] = "Mockspec.transisions";
-
+    
     // Get the mass of the ion
     mamu = getamu(tranilist, ion);
     
@@ -30,12 +34,13 @@ int idcells(char *ion, char *galID, char *expn, int numcores, int losnum){
     // Read in the LOS properties, stored in lines.info file
     
     // Read in the gas box
-    buildBoxName(galID, expn, ion, boxfile);
+    build_box_name(gal, ion, boxfile);
     
     // Get the number of cells in the box
-    numCells = boxSize(boxfile);
+    numCells = box_size(boxfile);
 
     // Allocate memory for the box file
+    /*
     double *size = (double *)calloc(numCells, sizeof(double));
     double *x = (double *)calloc(numCells, sizeof(double));
     double *y = (double *)calloc(numCells, sizeof(double));
@@ -58,53 +63,70 @@ int idcells(char *ion, char *galID, char *expn, int numcores, int losnum){
     double *trec = (double *)calloc(numCells, sizeof(double));
     double *tcoll = (double *)calloc(numCells, sizeof(double));
     double *tcool = (double *)calloc(numCells, sizeof(double));
-    
-    FILE *fp = fopen(boxfile, "r");
+    */
+    double size, x, y, z, vx, vy, vz, dense, temp;
+    double snII, snIa, natom, fion, nion, alpha, zmet;
+    unsigned long cellid;
+    double tph, trec, tcoll, tcool;
 
+//    struct cell allcells[numCells];
+    struct cell *allcells0 = (struct cell *)calloc(numCells, 
+                                            sizeof(struct cell));
+    struct cell *allcells = allcells0;
+
+    FILE *fp = fopen(boxfile, "r");
+    i = 0;
     while( fgets( new_line, sizeof(new_line), fp) ){
         
         sscanf(new_line, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf" 
                          "%lf %lf %lf %lu %lf %lf %lf %lf", 
-                          size, x, y, z, vx, vy, vz, dense, temp, snII, snIa,
-                          natom, fion, nion, alpha, zmet, cellid, 
-                          tph, trec, tcoll, tcool);
-        size++;
-        x++;
-        y++;
-        z++;
-        vx++;
-        vy++;
-        vz++;
-        dense++;
-        temp++;
-        snII++;
-        snIa++;
-        natom++;
-        fion++;
-        nion++;
-        alpha++;
-        zmet++;
-        cellid++;
-        tph++;
-        trec++;
-        tcoll++;
-        tcool++;
+                          &size, &x, &y, &z, &vx, &vy, &vz, &dense, &temp, 
+                          &snII, &snIa, &natom, &fion, &nion, &alpha, &zmet, 
+                          &cellid, &tph, &trec, &tcoll, &tcool);
+
+        allcells->size = size;
+        allcells->x = x;
+        allcells->y = y;
+        allcells->z = z;
+        allcells->vx = vx;
+        allcells->vy = vy;
+        allcells->vz = vz;
+        allcells->dense = dense;
+        allcells->temp = temp;
+        allcells->snII = snII;
+        allcells->snIa = snIa;
+        allcells->natom = natom;
+        allcells->fion = fion;
+        allcells->nion = nion;
+        allcells->alpha = alpha;
+        allcells->zmet = zmet;
+        allcells->cellid = cellid;
+        i++;
+/*        size++;        x++;        y++;        z++;        
+vx++;        vy++;        vz++;        dense++;        temp++;        snII++;
+snIa++;        natom++;        fion++;        nion++;        alpha++;        
+zmet++;        cellid++;        tph++;        trec++;        tcoll++;tcool++;*/
     }
 
-    fp.close()
-
+    fclose(fp);
+    allcells = allcells0;
 
     // Loop over all lines of sight
     for (i=1; i<=losnum; i++){
 
         // Generate the .losdata file and open it
-        mkfname(losdata, galID< ion, losname, linesfile);
+        mkfname(gal, ion, losname, linesfile);
         open_losdat(losdata, linesfile, losfp, linesfp);
+        sprintf(losname, "%04d", losnum);
+
+        // Write the first line to the .linesfile
+        fprintf(linesfp, "%4.2lf\n", zgal);
+        
 
 
 
         // Get the LOS props
-        props = losProps(i);
+        losprops = los_props(i);
     
         // Open the list of cells
         cellsfp = open_cell_list(i);
@@ -113,7 +135,7 @@ int idcells(char *ion, char *galID, char *expn, int numcores, int losnum){
         fgets(new_line, sizeof(new_line), fp);
     
         // Loop over the cells
-        while(fgets(new_line, sizeof(new_line), fp){
+        while(fgets(new_line, sizeof(new_line), fp)){
                 
             sscanf(new_line, "%d", &cellnum);
                 
@@ -121,8 +143,30 @@ int idcells(char *ion, char *galID, char *expn, int numcores, int losnum){
             index = cellnum-1;
 
             // Pass into los7 to determine if it should be included
+            los7(ion, losname, mamu, losprops, allcells[index], oprops, gal, linesfp);
+        }
+    
+        // Close all files
+        fclose(cellsfp);
+        fclose(linesfp);
+        fclose(losfp);
+    
+    }        
 
+    free(allcells0);
 
     return 0;
 }
 
+
+
+int main(int argc, char *argv[]){
+
+
+    char ion = "CIV";
+    int losnum = 1;
+    struct galaxy gal; 
+    struct orient oprops;
+    idcells(ion, gal, numcores, losnum, oprops);
+    return 0;
+}

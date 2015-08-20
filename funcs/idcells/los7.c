@@ -10,13 +10,15 @@
 #include "files7.h"
 #include "cellpathsub7.h"
 #include "galframe7.h"
+#include "datatypes.h"
 
 #define NMAX 5000
 
 
 
-int los7(char *galID, char *ion, char *losname, double mamu, struct los losprops, 
-            struct cell cprops, struct orient oprops, stuct gal gprops){
+int los7(char *ion, char *losname, double mamu, struct los losprops,
+         struct cell cprops, struct orient oprops, struct galaxy gprops,
+         FILE *linesfp){
 
     // general variables
     int i, klos, error, errtype[3];
@@ -25,10 +27,8 @@ int los7(char *galID, char *ion, char *losname, double mamu, struct los losprops
     char *qsolist = calloc(80, sizeof(char));
     char *paramlist = calloc(80, sizeof(char));
     char *tranilist = calloc(80, sizeof(char));
-    char *ion = calloc(80, sizeof(char));
     char *losdata = calloc(80, sizeof(char));
     char *galID = calloc(80, sizeof(char));
-    char *lostag = calloc(80, sizeof(char));
     char *losdatafile = calloc(80, sizeof(char));
 
     char new_line[200];    
@@ -48,17 +48,15 @@ int los7(char *galID, char *ion, char *losname, double mamu, struct los losprops
     double Rgalx, Rgaly, Rgalz, Rgal;
     double Vgalx, Vgaly, Vgalz, Vgal;
     
-    // atomic data
-    double mamu;
-    char linesfile[80];
-    
     // cell data
-    int cellnum[NMAX], ndata;
-    double x[NMAX], y[NMAX], z[NMAX];
-    double vx[NMAX], vy[NMAX], vz[NMAX];
-    double ndencell[NMAX], fion[NMAX], zmfrac[NMAX];
-    double temp[NMAX], Lcell[NMAX];
-    double Nline[NMAX], zline[NMAX], bline[NMAX];
+    
+    int cellnum, ndata;
+    double x, y, z;
+    double vx, vy, vz;
+    double ndencell, fion, zmfrac;
+    double temp, Lcell;
+    
+    double Nline, zline, bline;
     
     // box reference frame quantities
     double a, zbox, x0, y0, z0;
@@ -81,7 +79,7 @@ int los7(char *galID, char *ion, char *losname, double mamu, struct los losprops
     // FILE *runfp = fopen("Mockspec.runlog.los7", "w");
     FILE *errfp = fopen("Mockspec.errlog.los7", "a");
 
-    
+    /*
     // Open the list file of LOS files output by ana.2 (Daniel's code)
     // loop over this list file; for each LOS, raw cell quantities are
     // stored in arrays, whereas we will compute LOS data for each cell
@@ -93,7 +91,7 @@ int los7(char *galID, char *ion, char *losname, double mamu, struct los losprops
         printf("Exiting...\n");
         exit(1);
     }
-
+    */
     klos = 0; 
 
     x = cprops.x;
@@ -103,24 +101,24 @@ int los7(char *galID, char *ion, char *losname, double mamu, struct los losprops
     vy = cprops.vy;
     vz = cprops.vz;
     Lcell = cprops.size;
-    cellnum = cprops.num;
+    cellnum = cprops.cellid;
 
-    x0 = lprops.x0;
-    y0 = lprops.y0;
-    z0 = lprops.z0;
+    x0 = losprops.x0;
+    y0 = losprops.y0;
+    z0 = losprops.z0;
     
-    vxg = gprops.vpec_x;
-    vyg = gprops.vpec_y;
-    vzg = gprops.vpec_z;
+    vxg = gprops.vxg;
+    vyg = gprops.vyg;
+    vzg = gprops.vzg;
 
     l = oprops.losx;
-    m = oprops.loxy;
+    m = oprops.losy;
     n = oprops.losz;
     xg = 0.0;
     yg = 0.0;
     zg = 0.0;
    
-    ndencell = cprops.nden;
+    ndencell = cprops.dense;
     temp = cprops.temp; 
     
     // compute cell los quantities; Slos [kpc], Rgal [kpc], velocities
@@ -133,16 +131,15 @@ int los7(char *galID, char *ion, char *losname, double mamu, struct los losprops
     // compute the line of sight path length through the cell (credit to
     // Bobby Edmonds' for the getD subroutine); returns the value of dlos
     // in kpc, convert to centimeters upon return
-    getD( l, m, n, x0, y0, z0, x[i], y[i], z[i], Lcell[i], &dlos, 
-          &error, errtype);
+    getD( l, m, n, x0, y0, z0, x, y, z, Lcell, &dlos, &error, errtype);
     
     // If getD returns clean, convert from Mpc to kpc
     // If getD returns an error, use the cube root of the
     // cell volume; communicate to the error log file
     if (error==1){
-        dlos = kpc2cm*Lcell[i];
+        dlos = kpc2cm*Lcell;
         badDcells = badDcells+1;
-        dloserr(errtype, losdata, cellnum[i], dlos, errfp);    
+        dloserr(errtype, losdata, cellnum, dlos, errfp);    
     }
     else{
         dlos = kpc2cm*dlos;
@@ -183,7 +180,7 @@ int los7(char *galID, char *ion, char *losname, double mamu, struct los losprops
 
     // Write the .lines file, one for each transition
     // These files used by specsynth to generate the spectra
-    wrtlines(zgal, zline, Nline, bline, cellnum, linesfile, ndata);
+    wrtlines(zgal, zline, Nline, bline, cellnum, linesfp);
 
 
     return 0;

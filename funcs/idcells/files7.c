@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+#include "datatypes.h"
+
 
 // Cuts up the string infile to get the galID, ion, los number, and
 // create the output file name
@@ -247,13 +249,13 @@ double getamu(char *tranilist, char *ionlabel){
 
 // make the file names for the lines files; similar to "cutfname"
 // above, which is better commented
-void mkfname(char *infile, char *galID, char *ion, char *lostag, char *linesfile){
+void mkfname(struct galaxy gal, char *ion, char *lostag, char *linesfile){
 
     // Format of infile:
     // galID.ion.los####.dat
     // Format of linesfile
     // galID.ion.los####.lines
-    strcpy(linesfile, galID);
+    strcpy(linesfile, gal.galID);
     strcat(linesfile, ".");
     strcat(linesfile, ion);
     strcat(linesfile, ".");
@@ -268,23 +270,21 @@ void mkfname(char *infile, char *galID, char *ion, char *lostag, char *linesfile
 
 // write the data to the .lines files, which will be used by
 // specsynth to create the spectra
-void wrtlines(double zgal, double *zline, double *Nline, double *bline, 
-              int *cellnum, char *linesfile, int ndata){
+void wrtlines(double zgal, double zline, double Nline, double bline, 
+              int cellnum, FILE *fp){
 
+    /*
     int i;
     printf("\nlinesfile: %s\n", linesfile);
-    FILE *fp = fopen(linesfile, "w");
+    FILE *fp = fopen(linesfile, "a");
     if (fp==NULL){
         printf("Error opening linesfile: %s\n", linesfile);
         printf("Exitting...\n");
         exit(1);
-    }
-    fprintf(fp, "%4.2lf\n", zgal);
-    for (i=0; i<ndata; i++){
-        if (log10(Nline[i])>9.0){
-            fprintf(fp, "%4.2lf \t %4.2lf \t %4.2lf \t %d \n", 
-                    zline[i], log10(Nline[i]), bline[i], cellnum[i]);
-        }
+    }*/
+    if (log10(Nline)>9.0){
+        fprintf(fp, "%4.2lf \t %4.2lf \t %4.2lf \t %d \n", 
+                zline, log10(Nline), bline, cellnum);
     }
     fclose(fp);
 
