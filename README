@@ -2,4 +2,9 @@
 This is a repository for the entire mockspec pipeline that uses functional forms
 of the python code. 
 
+To run this code, the following python packgages need to be installed:
+    numpy
+    pytables
+    pandas
+
 
