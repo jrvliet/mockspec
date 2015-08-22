@@ -16,7 +16,7 @@ import files as fi
 import genLOS as gl
 import ratesControl as rc
 import funcs.locatecells.locatecells as lc
-import funcs.cellfinder.idcells as ic
+import funcs.idcells.idcells as ic
 
 
 pathname = os.path.dirname(sys.argv[0])
