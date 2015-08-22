@@ -5,7 +5,7 @@ import sys
 from mockspec_funcs import getTransitionInfo
 
 
-def setupRatesControl(gasfile, expn, ion_list, requiredLoc):
+def setup_rates_control(gasfile, expn, ion_list, requiredLoc):
 
     if not os.path.exists('rates.inp'):
         command = 'cp '+requiredLoc+'rates.inp .'
@@ -18,15 +18,19 @@ def setupRatesControl(gasfile, expn, ion_list, requiredLoc):
     for i in range(0,3):
         line = defaultratesinp.readline()
         ratesinp.write(line)
+
     # Replace the gas file name
     line = defaultratesinp.readline().replace('MW9_GZ932.a1.001.txt', gasfile)
     ratesinp.write(line)
+
     # Replace the expansion parameter
     line = defaultratesinp.readline().replace('1.001', expn)
     ratesinp.write(line)
+
     # Replace the number of output cubes
     line = defaultratesinp.readline().replace('4', str(numions))
     ratesinp.write(line)
+
     # Copy the rest of the file
     for line in defaultratesinp:
         ratesinp.write(line)
@@ -40,7 +44,7 @@ def setupRatesControl(gasfile, expn, ion_list, requiredLoc):
     sp.call(command, shell=True)
 
 
-def setupRatesOutputs(galID, expn, ion_list, codeLoc, requiredLoc):
+def setup_rates_outputs(galID, expn, ion_list, codeLoc, requiredLoc):
 
     if not os.path.exists('rates.outfiles'):
         command = 'cp '+requiredLoc+'rates.outfiles .'
@@ -62,7 +66,7 @@ def setupRatesOutputs(galID, expn, ion_list, codeLoc, requiredLoc):
     sp.call(command, shell=True)
    
 
-def runRates(codeLoc):
+def run_rates(codeLoc):
     
     command = codeLoc+'/funcs/rates/rates'
     try:

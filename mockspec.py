@@ -10,13 +10,14 @@ import tables as tb
 import os
 import pandas
 import subprocess as sp
+import sys
 
 # Code specific libraries
 import files as fi
 import genLOS as gl
 import ratesControl as rc
 import funcs.locatecells.locatecells as lc
-import funcs.idcells.idcells as ic
+#import funcs.idcells.idcells as ic
 
 
 pathname = os.path.dirname(sys.argv[0])
@@ -25,27 +26,42 @@ summaryLoc = codeLoc+'/summaries/'
 
 
 #  Read in the control file
-print 'Reading in control file...'
-props, ions, xh, instruments = fr.readControlFile()
+print '\n\nReading in control file...'
+props, flags, ions, xh, instruments = fi.read_control_file()
 galID, expn, nlos, maximpact, incline, ewcut, snr, ncores, rootLoc, requiredLoc = props
+runRates, runGenLOS, runCellfinder, runIdcells, runLos7, runSpecsynth, runSysanal, runCullabs, runLocateCells = flags
 
 # Genearte the name of the gasfile
 gasfile = galID+'_GZa'+expn+'.txt'
- 
-print 'Gasfile:      ', gasfile
-print 'Ions:         ', ions
-print 'NLOS:         ', nlos
-print 'Max impact:   ', maximpact
-print 'Incline:      ', incline
-print 'EWCut:        ', ewcut
-print 'SNR:          ', snr
-print 'NCores:       ', ncores
-print 'Root Loc:     ', rootLoc
-print 'Requried Loc: ', requiredLoc
+print '\nRun Parameters:'
+print '\tGasfile:      ', gasfile
+print '\tIons:         ', ions
+print '\tNLOS:         ', nlos
+print '\tMax impact:   ', maximpact
+print '\tIncline:      ', incline
+print '\tEWCut:        ', ewcut
+print '\tSNR:          ', snr
+print '\tNCores:       ', ncores
+print '\tRoot Loc:     ', rootLoc
+print '\tRequried Loc: ', requiredLoc
+
+print '\nRun Flags:'
+print '\tRates:       {0:d}'.format(runRates)
+print '\tGenLOS:      {0:d}'.format(runGenLOS)
+print '\tCellfinder:  {0:d}'.format(runCellfinder)
+print '\tIDCells:     {0:d}'.format(runIdcells)
+print '\tLos7:        {0:d}'.format(runLos7)
+print '\tSpecsynth:   {0:d}'.format(runSpecsynth)
+print '\tSysanal:     {0:d}'.format(runSysnal)
+print '\tCullabs:     {0:d}'.format(runCullabs)
+print '\tLocateCells: {0:d}'.format(runLocateCells)
+
+
+
 
 # Generate gal_props.dat file
-print 'Generating gal_profgrep ps.dat...'
-fi.setupGalprops( galID, expn, requiredLoc, summaryLoc )
+print '\n\nGenerating gal_profgrep ps.dat...'
+fi.setup_galprops( galID, expn, requiredLoc, summaryLoc )
 
 
 ##### 
@@ -53,32 +69,38 @@ fi.setupGalprops( galID, expn, requiredLoc, summaryLoc )
 #  Run rates
 #
 #####
-print '\nRates:'
-print '\t Setting up rates.inp...'
-rc.setupRatesControl( gasfile, expn, ions, requiredLoc)
-print '\t Setting up rates.outfiles...'
-rc.setupRatesOutputs(galID, expn, ions, codeLoc, requiredLoc) 
-print '\t Running rates...'
-#rc.runRates(codeLoc)
-
+if runRates==1:
+    print '\nRates:'
+    print '\t Setting up rates.inp...'
+    rc.setup_rates_control( gasfile, expn, ions, requiredLoc)
+    print '\t Setting up rates.outfiles...'
+    rc.setup_rates_outputs(galID, expn, ions, codeLoc, requiredLoc) 
+    print '\t Running rates...'
+    rc.run_rates(codeLoc)
+else:
+    print 'Skipping rates'
 
 ##### 
 #  
 #  Generate the lines of sight
 #
 #####
-print '\nGenerating lines of sight...'
-gl.genLines(galID, gasfile, summaryLoc, expn, incline, nlos, maximpact, ncores)
-
+if runLOS==1:
+    print '\nGenerating lines of sight...'
+    gl.genLines(galID, gasfile, summaryLoc, expn, incline, nlos, maximpact, ncores)
+else: 
+    print 'Skipping genLOS...'
 
 ##### 
 #  
 #  Run lines of sight through box with cellfinder
 #
 #####
-print '\nRunning LOS through box...'
-gl.runCellfinder(codeLoc)
-
+if runCellfinder==1:
+    print '\nRunning LOS through box...'
+    gl.runCellfinder(codeLoc)
+else: 
+    print 'Skipping cellfinder...'
 
 
 ##### 
@@ -86,15 +108,18 @@ gl.runCellfinder(codeLoc)
 #  Identify cells in the ion boxes
 #
 #####
-print '\nRunning LOS through box...'
-ic.idcells(codeLoc)
+if runIdcells==1:
+    print '\nRunning LOS through box...'
+    ic.idcells(codeLoc)
+else:
+    print 'Skipping IDcells...'
 
 
 
-
-# Start looping over ions
+#Start looping over ions
 for ion in ions:
 
+    print 'Ion: ', ion
 
     # Setup the ion directory
     ionloc = fi.setup_ion_dir(ion, galID, expn) 
@@ -109,8 +134,11 @@ for ion in ions:
     #  .losdata and .lines files
     #
     #####
-    print '\nDetermining cell path length and applying rough cut'
-    rc.los7(codeLoc)
+    if runLos7==1:
+        print '\n\tDetermining cell path length and applying rough cut'
+        rc.los7(codeLoc)
+    else:
+        print '\tSkipping los7...'
 
 
     ##### 
@@ -119,9 +147,11 @@ for ion in ions:
     #  Generate the synthetic spectra
     #
     #####
-    print '\nGenerating spectra'
-    rc.specsynth(codeLoc)
-
+    if runSpecsynth==1:
+        print '\n\tGenerating spectra'
+        rc.specsynth(codeLoc)
+    else:
+        print '\tSkipping specsynth...'
 
     ##### 
     #  
@@ -129,9 +159,11 @@ for ion in ions:
     #  Analyze the spectra
     #
     #####
-    print '\nAnalyzing spectra...'
-    rc.sysanal(codeLoc)
-
+    if runSysanal==1:
+        print '\n\tAnalyzing spectra...'
+        rc.sysanal(codeLoc)
+    else:
+        print '\tSkipping sysanal...'
 
 
     ##### 
@@ -140,8 +172,11 @@ for ion in ions:
     #  Create sysabs file
     #
     #####
-    print '\nCreating sysabs'
-    rc.sysabs(codeLoc)
+    if runSysabs==1:
+        print '\n\tCreating sysabs'
+        rc.sysabs(codeLoc)
+    else:
+        print '\tSkipping sysabs...'
 
     
 
@@ -151,12 +186,14 @@ for ion in ions:
     #  Identify the cells that are significant contributers to the absorption
     #
     #####
-    print '\nIdentifying significant cells'
-    rc.runLocateCells(codeLoc)
-
+    if runLocateCells==1:
+        print '\n\tIdentifying significant cells'
+        rc.runLocateCells(codeLoc)
+    else:
+        print '\tSkipping locatecells...'
     os.chdir('..')
 
-
+    
 
 
 
