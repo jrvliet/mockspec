@@ -26,7 +26,7 @@ summaryLoc = codeLoc+'/summaries/'
 
 #  Read in the control file
 print 'Reading in control file...'
-props, ions, xh, instruments = fr.readControlFile()
+props, ions, xh, instruments = fi.readControlFile()
 galID, expn, nlos, maximpact, incline, ewcut, snr, ncores, rootLoc, requiredLoc = props
 
 # Genearte the name of the gasfile
