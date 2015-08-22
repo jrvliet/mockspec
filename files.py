@@ -41,6 +41,16 @@ def read_control_file():
     ncores = int(f.readline().split()[0])
     rootLoc = f.readline().split()[0]
     requiredLoc = f.readline().split()[0] 
+    # Now at flags for running the various subfunctions
+    runRates = int(f.readline().split()[0])
+    runGenLOS = int(f.readline().split()[0])
+    runCellfinder = int(f.readline().split()[0])
+    runIdcells = int(f.readline().split()[0])
+    runLos7 = int(f.readline().split()[0])
+    runSpecsynth = int(f.readline().split()[0])
+    runSysanal = int(f.readline().split()[0])
+    runCullabs = int(f.readline().split()[0])
+    runLocatecells = int(f.readline().split()[0])
     # Now at ion section
     # Loop over rest of file
     ions = []
@@ -57,8 +67,9 @@ def read_control_file():
     f.close()
 
     props = (galID, expn, nlos, maximpact, incline, ewcut, snr, ncores, rootLoc, requiredLoc)
-
-    return props, ions, xh, instruments
+    flags = (runRates, runGenLOS, runCellfinder, runIdcells, runLos7, 
+             runSpecsynth, runSysanal, runCullabs, runLocateCells)
+    return props, flags, ions, xh, instruments
 
 
 def setup_galprops(galID, expn, requiredLoc, summaryLoc):
