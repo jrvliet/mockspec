@@ -33,7 +33,7 @@ void cutfname(char *infile, char **galID, char **ion, char **lostag, char *outfi
     strcat(outfile, ".");
     strcat(outfile, *lostag);
     strcat(outfile, ".losdata");
-    printf("\n");
+    //printf("\n");
 }
 
 

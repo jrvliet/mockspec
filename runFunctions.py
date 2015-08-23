@@ -34,7 +34,7 @@ def specsynth(codeLoc):
     returns nothing.
     """
     
-    funcLoc = '/funcs/mkspec/specsynth'
+    funcLoc = '/funcs/mkspec/specsynth qso.list'
     command = codeLoc + funcLoc
 
     
@@ -55,7 +55,7 @@ def sysanal(codeLoc):
     Takes in the local location of the code, returns nothing.
     """
     
-    funcLoc = '/funcs/anal/sysanal'
+    funcLoc = '/funcs/anal/sysanal qso.list'
     command = codeLoc + funcLoc
 
     
@@ -78,7 +78,7 @@ def cullabs(codeLoc):
     returns nothing.
     """
     
-    funcLoc = '/funcs/mkALL/cullabs'
+    funcLoc = '/funcs/mkALLabs/cullabs qso.list'
     command = codeLoc + funcLoc
 
     
