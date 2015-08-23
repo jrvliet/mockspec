@@ -40,7 +40,7 @@ def read_control_file():
     snr = float(f.readline().split()[0])
     ncores = int(f.readline().split()[0])
     rootLoc = f.readline().split()[0]
-    requiredLoc = f.readline().split()[0] 
+    sigcellsCut = float(f.readline().split()[0])
     # Now at flags for running the various subfunctions
     f.readline()
     runRates = int(f.readline().split()[0])
@@ -67,7 +67,7 @@ def read_control_file():
 
     f.close()
 
-    props = (galID, expn, nlos, maximpact, incline, ewcut, snr, ncores, rootLoc, requiredLoc)
+    props = (galID, expn, nlos, maximpact, incline, ewcut, snr, ncores, rootLoc, sigcellsCut)
     flags = (runRates, runGenLOS, runCellfinder, runIdcells, runLos7, 
              runSpecsynth, runSysanal, runCullabs, runLocateCells)
     return props, flags, ions, xh, instruments

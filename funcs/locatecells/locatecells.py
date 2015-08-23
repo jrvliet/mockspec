@@ -14,7 +14,7 @@ import locate_funcs as lf
 import os
 
 
-def sigCells(galID, expn, ion, ewcut, codeLoc):
+def locateSigCells(galID, expn, ion, ewcut, codeLoc):
 
     """
     Locates the significant cells in a line of sight.
@@ -72,10 +72,10 @@ def sigCells(galID, expn, ion, ewcut, codeLoc):
         sp.call(command, shell=True)
 
         # Perform the velocity cut
-        velcut(linesfile)
+        lf.velcut(linesfile)
 
         # Find the significant cells
-        sigcells(linesfile, ewcut)
+        lf.sigcells(linesfile, ewcut)
 
         # Get the properties of the cells
         # Open the lines.final file

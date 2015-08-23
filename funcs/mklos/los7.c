@@ -100,7 +100,7 @@ int main(int argc, char *argv[]){
     // Loop over the lines of sight
     while(fgets(new_line,sizeof(new_line),listfp)){
         klos++;
-        printf("LOS Num: %d\t",klos); 
+//        printf("LOS Num: %d\t",klos); 
         // Remove the return character
         p = strchr(new_line, '\n');
         *p = '\0';
@@ -119,7 +119,7 @@ int main(int argc, char *argv[]){
 
         ndata = readcells( cellnum, x, y, z, vx, vy, vz, Lcell, ndencell, fion, 
                            temp, zmfrac, losdata);
-        printf("Number of cells: %d\n", ndata);
+//        printf("Number of cells: %d\n", ndata);
 
         // Open the .losdata file and write the header
         losfp = fopen(losdatafile, "w");
