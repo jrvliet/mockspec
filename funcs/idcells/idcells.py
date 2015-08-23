@@ -157,78 +157,83 @@ def read_los_props(losnum):
 ##################################################################################################
 ##################################################################################################
 
-width = 15
 
-# Read in properties from gal_props file
-galID, aexpn, ion_list, ion_num = read_control_file(sys.argv[1])
+def idcells(galID, aexpn, ion_list, codeLoc):
 
-# Read in LOS properties
-los_num, los_b, los_phi = read_lines('lines.info')
+    ion_num = len(ion_list)
 
-# Loop over ions
-for ion in ion_list:
+    width = 15
 
-    print 'Ion: ',ion
-    # Read in ion box
-    ionboxfile = galID+'_GZa'+aexpn+'.'+ion+'.txt'
-#    ionboxfile = galID+'_a'+aexpn+'.'+ion+'.txt'
-    ionbox = np.loadtxt(ionboxfile, skiprows=2)
+    # Read in properties from gal_props file
+#    galID, aexpn, ion_list, ion_num = read_control_file(sys.argv[1])
 
-    # Loop over lines of sight
-    for i in range(0,len(los_num)):
-        
-        print '\tLOS: ',i+1
+    # Read in LOS properties
+    los_num, los_b, los_phi = read_lines('lines.info')
 
-        # Read in LOS properties (entry points)
-        xen, yen, zen, losx, losy, losz, a11, a12, a13, a21, a22, a23, a31, a32, a33, Xcom, Ycom, Zcom, VXcom, VYcom, VZcom, x0, y0, z0, vx_obs, vy_obs, vz_obs = read_los_props(i+1)
-        
+    # Loop over ions
+    for ion in ion_list:
 
-        # Construct filename that contains list of cells
-        cell_file = 'los{0:04d}.cellID.dat'.format(i+1)
-        cf = open(cell_file)
-        cf.readline()     # Read past header
+#        print 'Ion: ',ion
+        # Read in ion box
+        ionboxfile = galID+'_GZa'+aexpn+'.'+ion+'.txt'
+    #    ionboxfile = galID+'_a'+aexpn+'.'+ion+'.txt'
+        ionbox = np.loadtxt(ionboxfile, skiprows=2)
 
-        # Construct output filename
-        outfile = galID+'.'+ion+'.los{0:04d}.dat'.format(i+1)
-
-        # Write output header
-        l = 0
-        b = 90
-        of = write_OutfileHdr(outfile, aexpn, los_b[i], los_phi[i], l, b, xen, yen, zen, losx, losy, losz, a11, a12, a13, a21, a22, a23, a31, a32, a33, Xcom, Ycom, Zcom, VXcom, VYcom, VZcom, x0, y0, z0, vx_obs, vy_obs, vz_obs)
-
-        
-        # Loop through cells in cellID file
-        for line in cf:
-
-            cellnum = int(line)
+        # Loop over lines of sight
+        for i in range(0,len(los_num)):
             
-            # Cell number corresponds to line of gas file
-#            print ionbox[cellnum-1]
-            cellsize = ionbox[cellnum-1,0]
-            x = ionbox[cellnum-1,1]
-            y = ionbox[cellnum-1,2]
-            z = ionbox[cellnum-1,3]
-            vx = ionbox[cellnum-1,4]
-            vy = ionbox[cellnum-1,5]
-            vz = ionbox[cellnum-1,6]
-            nH = ionbox[cellnum-1,7]
-            t = ionbox[cellnum-1,8]
-            SNII_frac = ionbox[cellnum-1,9]
-            SNIa_frac = ionbox[cellnum-1,10]
-            natom = ionbox[cellnum-1,11]
-            fion = ionbox[cellnum-1,12]
-            nion= ionbox[cellnum-1,13]
-            cell_id = int(ionbox[cellnum-1,16])
+#            print '\tLOS: ',i+1
 
-            if cell_id != cellnum:
-                print 'Error'
-                sys.exit()
+            # Read in LOS properties (entry points)
+            xen, yen, zen, losx, losy, losz, a11, a12, a13, a21, a22, a23, a31, a32, a33, Xcom, Ycom, Zcom, VXcom, VYcom, VZcom, x0, y0, z0, vx_obs, vy_obs, vz_obs = read_los_props(i+1)
+            
 
-            # Write to file
-            str = ('{0:1.4e}'.format(cellsize)).center(width) + '{0:.4e}'.format(x).center(width) + '{0:.4e}'.format(y).center(width) + '{0:.4e}'.format(z).center(width) + '{0:.4e}'.format(vx).center(width) + '{0:.4e}'.format(vy).center(width ) + '{0:.4e}'.format(vz).center(width) + '{0:.4e}'.format(nH).center(width) + '{0:.4e}'.format(t).center(width) + '{0:.4e}'.format(SNII_frac).center(width) + '{0:.4e}'.format(SNIa_frac).center(width) + '{0:.4e}'.format(natom).center(width) + '{0:.4e}'.format(fion).center(width) + '{0:.4e}'.format(nion).center(width) + '{0:d}\n'.format(cell_id).rjust(width-3)
-            of.write(str)
+            # Construct filename that contains list of cells
+            cell_file = 'los{0:04d}.cellID.dat'.format(i+1)
+            cf = open(cell_file)
+            cf.readline()     # Read past header
+
+            # Construct output filename
+            outfile = galID+'.'+ion+'.los{0:04d}.dat'.format(i+1)
+
+            # Write output header
+            l = 0
+            b = 90
+            of = write_OutfileHdr(outfile, aexpn, los_b[i], los_phi[i], l, b, xen, yen, zen, losx, losy, losz, a11, a12, a13, a21, a22, a23, a31, a32, a33, Xcom, Ycom, Zcom, VXcom, VYcom, VZcom, x0, y0, z0, vx_obs, vy_obs, vz_obs)
+
+            
+            # Loop through cells in cellID file
+            for line in cf:
+
+                cellnum = int(line)
+                
+                # Cell number corresponds to line of gas file
+    #            print ionbox[cellnum-1]
+                cellsize = ionbox[cellnum-1,0]
+                x = ionbox[cellnum-1,1]
+                y = ionbox[cellnum-1,2]
+                z = ionbox[cellnum-1,3]
+                vx = ionbox[cellnum-1,4]
+                vy = ionbox[cellnum-1,5]
+                vz = ionbox[cellnum-1,6]
+                nH = ionbox[cellnum-1,7]
+                t = ionbox[cellnum-1,8]
+                SNII_frac = ionbox[cellnum-1,9]
+                SNIa_frac = ionbox[cellnum-1,10]
+                natom = ionbox[cellnum-1,11]
+                fion = ionbox[cellnum-1,12]
+                nion= ionbox[cellnum-1,13]
+                cell_id = int(ionbox[cellnum-1,16])
+
+                if cell_id != cellnum:
+                    print 'Error'
+                    sys.exit()
+
+                # Write to file
+                str = ('{0:1.4e}'.format(cellsize)).center(width) + '{0:.4e}'.format(x).center(width) + '{0:.4e}'.format(y).center(width) + '{0:.4e}'.format(z).center(width) + '{0:.4e}'.format(vx).center(width) + '{0:.4e}'.format(vy).center(width ) + '{0:.4e}'.format(vz).center(width) + '{0:.4e}'.format(nH).center(width) + '{0:.4e}'.format(t).center(width) + '{0:.4e}'.format(SNII_frac).center(width) + '{0:.4e}'.format(SNIa_frac).center(width) + '{0:.4e}'.format(natom).center(width) + '{0:.4e}'.format(fion).center(width) + '{0:.4e}'.format(nion).center(width) + '{0:d}\n'.format(cell_id).rjust(width-3)
+                of.write(str)
 
 
-        cf.close()
-        of.close()
+            cf.close()
+            of.close()
 

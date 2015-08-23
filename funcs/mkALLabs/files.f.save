@@ -1,0 +1,584 @@
+c     PACKAGE: Mockspec
+c     PROGRAM: cullabs
+c     MODULE:  files.f
+c
+c     this file contains:
+c     SUBROUTINE ckfiles
+c     SUBROUTINE mkfiles
+c     SUBROUTINE idxtable
+c     SUBROUTINE openALLfiles
+c     SUBROUTINE wrtdata
+c     SUBROUTINE cullabsdata
+c     SUBROUTINE cullregdata
+c
+c
+c.............................................................................
+c
+
+      SUBROUTINE ckfiles(qsolist,tranilist)
+
+c     check that the files entered on the command line can be accessed
+c     in the present working directory; this routine does not confirm
+c     the formating of the contenst of the file; only that they can be
+c     accessed; for formatting contraints, see the file
+c     "Mockspec/Mockspec.help"
+
+c
+c::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+c
+      implicit          none
+      logical           error
+      integer           istat,access
+      character*80      qsolist,paramlist,tranilist
+
+
+      error = .false.
+
+c     checking command line entry $1
+
+      istat = access(qsolist,'r')
+      IF (istat.ne.0) then
+       WRITE(6,*) 'ERROR(ckfiles): no access to file ',
+     &             qsolist(1:40)
+       error = .true.
+      END IF
+
+c     checking command line entry $2
+
+      istat = access(tranilist,'r')
+      IF (istat.ne.0) then
+       WRITE(6,*) 'ERROR(ckfiles): no access to file ',
+     &             tranilist(1:40)
+       error = .true.
+      END IF
+
+c     terminate if an error occured
+
+c       error trap- terminate program
+
+      IF (error) then
+       WRITE(6,*) '***********************************************'
+       WRITE(6,*) '* 1 or more of the command line files were not *'
+       WRITE(6,*) '* present in the present working directory.    * '
+       WRITE(6,*) '* For help, read the "Mockspec/Mockspec.help"  *'
+       WRITE(6,*) '************************************************'
+       STOP
+      END IF
+
+c     happy! return and GO!
+
+      RETURN
+
+      END
+
+
+
+c
+c..............................................................................
+c
+      SUBROUTINE mkfiles(klos,tranilist)
+
+c     populate the sysabsfile and regabsfile arrays from the transition
+c     list from the exisiting .sysabs files; see comments below for
+c     details
+
+c     this routine is admittedly a little messy for it tries to take
+c     care of several book keeping steps in the fly during a file read;
+c     so I would recommend not messing with it (or if you do, save a
+c     copy first!)
+
+c
+c::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+c
+
+      include           'cullabs.h'
+
+      integer            j,iflag,anum,stage,iknt
+      integer            access
+      double precision   w,f
+      character*80       tranilist,losnum,testfile,sname,ionname,
+     &                   traniname,old_iname,header
+
+      include            'cullabs.com'
+
+
+c     basically, we cull through the transition list on the fly and
+c     check for desired transition using the "iflag=1" condition; we
+c     then construct the "QS0.*.sysabs" file names corresponding to the
+c     transition (i.e., "HI" for transition "Lya", "HI1025", etc). these
+c     files contain the absorption line data to be culled; we then check
+c     if the file has been created (on disk); if they have then we want
+c     to cull out the data for this species so we increment the ion
+c     counter (iknt); later in the program, we will want to include only
+c     cell in detected subregions so we also need to check if we have a
+c     "QS0.*.regabs" file; if so store that info too; if not, then there
+c     is only one regions and so we set the regabsfile=sysabsfile for
+c     simpicity downstream
+
+      nions(klos) = 0
+      losnum      = losfile(klos)
+
+      iknt  = 0
+
+      old_iname = ' '
+
+      OPEN(unit=44,file=tranilist,status='old')
+      READ(44,*,ERR=99) header
+
+      DO 11 j=1,mxions*mxtrans
+       READ(44,*,END=12,ERR=99) iflag,sname,anum,stage,ionname,
+     &                          traniname
+       IF (iflag.eq.1) then
+        CALL fappend2(losnum,ionname,'.sysabs',testfile)
+        IF (access(testfile,'r').eq.0) then
+         IF (old_iname.ne.ionname) then
+          iknt             = iknt + 1
+          old_iname        = ionname
+          ionid(klos,iknt) = ionname
+          sysabsfile(klos,iknt) = testfile
+          CALL fappend2(losnum,ionname,'.regabs',testfile)
+          IF (access(testfile,'r').eq.0) then
+           regabsfile(klos,iknt) = testfile
+          ELSE
+           regabsfile(klos,iknt) = sysabsfile(klos,iknt)
+          END IF
+         END IF
+        END IF
+       END IF
+ 11   CONTINUE
+ 12   CLOSE(unit=44)
+
+c     sanity check for global variable dimensions' iknt cannot be larger
+c     than parameter mxions or the data segments overwrite one another
+c     (stupid fortran!)
+
+      IF (iknt.gt.mxions) then
+       WRITE(6,*) 'ERROR(mkfiles): a dangerous book keeping clash'
+       WRITE(6,*) 'is in the making! In short, if you wish to '
+       WRITE(6,*) 'continue... edit the "cullabs.h" file, increase'
+       WRITE(6,*) 'parameter MXIONS to a value that exceeds ',iknt
+       WRITE(6,*) 'then re-make cullabs and re-run.'
+      END IF
+
+c     well, ok, we are good to GO
+
+      nions(klos) = iknt
+
+c     determine the first LOS that has ions for purpose of reading the
+c     headers of the .sysabs files
+
+      IF ((klos1.eq.0).AND.(iknt.gt.0)) klos1 = klos
+
+c     communicate the number of ions for this LOS to the screen and to
+c     the runlog file
+
+      WRITE(6,600) losnum,nions(klos),
+     &             (ionid(klos,j),j=1,iknt)
+      WRITE(45,600) losnum,nions(klos),
+     &             (ionid(klos,j),j=1,iknt)
+
+c     debug printout
+
+c      WRITE(6,*) klos,losfile(klos)
+c      DO 13 j=1,nions(klos)
+c       WRITE(6,*) sysabsfile(klos,j),regabsfile(klos,j)
+c 13   CONTINUE
+
+
+      RETURN
+
+c     formatting error?
+
+ 99   WRITE(6,*) 'ERROR(mkfiles): atomic/transition data file ',
+     &            tranilist(1:40)
+      WRITE(6,*) 'is apparently not formatted correctly. Please'
+      WRITE(6,*) 'read the Mockspec/Mockspec.help file for details.'
+      CLOSE(unit=44)
+      STOP
+
+c     formats
+
+ 600  FORMAT(1x,a12,1x,i3,2x,30(1x,a7))
+
+      END
+
+c......................................................................
+c
+
+      SUBROUTINE idxtable
+
+
+c
+c::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+c
+
+      implicit none
+
+      include           'cullabs.h'
+
+      integer           i,j,k,m,idx(Mmax)
+      character*80      tmplist(Mmax),chkstr,lastchkstr
+
+      include           'cullabs.com'
+
+
+c     determine the number of unique ions we have; store them in a
+c     linear array and a temporary linear array; sort the index numbers
+c     of the list; then find the number of unique lines and store them
+c     in the linear array with logical length nunique
+
+      i = 0
+
+      DO 03 k=1,nlos
+       DO 04 j=1,nions(k)
+        i = i + 1
+        ionlist(i) = ionid(k,j)
+        tmplist(i) = ionid(k,j)
+ 04    CONTINUE
+ 03   CONTINUE
+
+      k = i
+      CALL index(k,tmplist,idx)
+
+      j = 0
+      lastchkstr = ' '
+      DO 13 i=1,k
+       chkstr = tmplist(idx(i))
+       IF (chkstr.ne.lastchkstr) then
+        j           = j + 1
+        ionlist(j)  = chkstr
+        lastchkstr  = chkstr
+       END IF
+ 13   CONTINUE
+
+      nunique = j
+
+c     now make the translation table so that we know which los and which
+c     nion(klos) index corresponds to each unique ion; we identify the
+c     file to draw the dat from for a given ion using the indices
+c     klosindx and jionidx; the number for each ion is stored as ntab(i)
+
+      DO 21 i=1,nunique
+       m  = 0
+       DO 23 k=1,nlos
+        DO 25 j=1,nions(k)
+         IF (ionid(k,j).eq.ionlist(i)) then
+          m = m + 1
+          klosidx(i,m) = k 
+          jionidx(i,m) = j
+         END IF
+ 25     CONTINUE
+ 23    CONTINUE
+       ntab(i) = m
+ 21   CONTINUE
+
+
+c     communicate to screen and the runlog file
+
+      WRITE(6,600) nunique,(ionlist(j),ntab(j),j=1,nunique)
+      WRITE(45,600) nunique,(ionlist(j),ntab(j),j=1,nunique)
+
+c     return
+
+      RETURN
+
+ 600  FORMAT(/,1x,'Found',i2,' detected ions',/,
+     &       30(1x,a8,' in',i5,' LOS',/))
+
+      END
+
+
+c
+c......................................................................
+c
+
+      SUBROUTINE openALLfiles
+
+c     this routine opens the output files (ALL files)
+
+c
+c::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+c
+
+      implicit none
+
+      include           'cullabs.h'
+
+      integer           i,icol,funit
+      character*80      midstr,delim,outfile1,outfile2
+
+      include           'cullabs.com'
+
+
+c     determine how many columns there are before we reach a blank entry
+
+      DO 05 i=1,maxcols
+       IF (sysheader(i).eq.' ') GOTO 06
+ 05   CONTINUE
+ 06   nsyscols = i - 3   ! subtrack off last two columns
+
+
+c     create the file names, open them, and stampt the header
+
+      DO 21 i=1,nunique
+
+       midstr = ionlist(i)
+
+       delim  = '.sysabs'
+       CALL mkallfile(midstr,delim,outfile1)
+       funit = 7 + i
+       OPEN(unit=funit,file=outfile1,status='unknown')
+       WRITE(funit,1200) 'LOS','D_kpc',(sysheader(icol),
+     &                   icol=1,nsyscols)
+
+       delim  = '.regabs'
+       CALL mkallfile(midstr,delim,outfile2)
+       funit = 7 + nunique + i
+       OPEN(unit=funit,file=outfile2,status='unknown')
+       WRITE(funit,1201) 'LOS','D_kpc','reg',(sysheader(icol),
+     &                   icol=1,nregcols-1)
+
+c     communucate to screen and the runlog file
+
+       WRITE(6,600) ionlist(i),outfile1,outfile2
+       WRITE(45,600) ionlist(i),outfile1,outfile2
+
+ 21   CONTINUE
+
+      RETURN
+
+ 600  FORMAT(1x,'OUTPUT FILES:',1x,a9,' -->',2(1x,a19))
+ 1200 FORMAT(1x,a3,3x,a5,3x,a4,9x,25a10)
+ 1201 FORMAT(1x,a3,3x,a5,1x,a3,2x,a4,9x,25a10)
+
+      END
+
+
+c......................................................................
+c
+
+      SUBROUTINE wrtdata
+
+c     this routine writes the sysabs data to the ALL sysabs files
+
+c
+c::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+c
+
+      implicit none
+
+      include           'cullabs.h'
+
+      integer           icell,ireg,icol,i,j,k,m,funit
+
+      include           'cullabs.com'
+
+
+
+c     loop over the unique ions; grad the relevant indices from the
+c     translation table and write the sysabs data to the ALL file; when
+c     done, close the file
+
+c     the .sysabs files
+
+      DO 21 i=1,nunique
+       funit = 7 + i
+       DO 23 m=1,ntab(i)
+        k = klosidx(i,m)
+        j = jionidx(i,m)
+        WRITE(funit,1200) losID(k),impact(k),
+     &        (sysdata(k,j,icol),icol=1,nsyscols)
+ 23    CONTINUE
+       CLOSE(unit=funit)
+ 21   CONTINUE
+
+
+c     the .regabs files
+
+      DO 31 i=1,nunique
+       funit = 7 + nunique + i
+       DO 33 m=1,ntab(i)
+        k = klosidx(i,m)
+        j = jionidx(i,m)
+        DO 35 ireg=1,nreg(k,j)
+         WRITE(funit,1201) losID(k),impact(k),
+     &         (regdata(k,j,ireg,icol),icol=1,nregcols)
+ 35     CONTINUE
+ 33    CONTINUE
+       CLOSE(unit=funit)
+ 31   CONTINUE
+
+
+c     return
+
+      RETURN
+
+ 1200 FORMAT(1x,a4,1x,f6.1,1x,f10.7,24f10.3)
+ 1201 FORMAT(1x,a4,1x,f6.1,f4.0,f10.7,24f10.3)
+     
+      END
+
+
+
+c
+c......................................................................
+c
+
+      SUBROUTINE cullabsdata(klos)
+
+c     this routine is called one los at a time, so we only work on one
+c     los and then return to main; losnum is incremented in main
+
+c
+c::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+c
+
+      implicit none
+
+      include           'cullabs.h'
+
+      integer           icol,j,klos,ncols
+      double precision  sdata(maxcols)
+      character*80      shdr(maxcols)
+      character*250     stringline
+
+      include           'cullabs.com'
+
+
+c     if there are no ions for this LOs, then we have nothing to do
+
+      IF (nions(klos).eq.0) RETURN
+
+c     set the maximum allowed number of columns to a local variable
+
+      ncols = maxcols
+
+c     loop over the ions
+
+      DO 11 j=1,nions(klos)
+
+c     for this ion, open the ".sysabs" file, which is first line header
+c     and second line data
+
+       OPEN(unit=4,file=sysabsfile(klos,j),status='old')
+
+c     if this is the first file read for the first LOS to have detected
+c     absorption (i.e., klos=klos1) and the first ion for this LOS, then
+c     read and store the header and then read the data; else discard the
+c     header and read the data
+
+       IF ((klos.eq.klos1).AND.(j.eq.1)) then
+
+        READ(4,'(a250)') stringline            ! read header
+        CALL parzehdr(ncols,shdr,stringline)   ! parze header
+        DO 07 icol=1,ncols                     ! store header
+         sysheader(icol) = shdr(icol)
+ 07     CONTINUE
+        READ(4,'(a250)') stringline            ! read data
+        CALL parzeline(ncols,sdata,stringline) ! parze data
+
+       ELSE
+
+        READ(4,'(a250)') stringline            ! read, discard header
+        READ(4,'(a250)') stringline            ! read data
+        CALL parzeline(ncols,sdata,stringline) ! parze data
+
+       END IF
+
+c     store the sysdata for this los 
+
+       DO 19 icol=1,ncols
+        sysdata(klos,j,icol) = sdata(icol)
+ 19    CONTINUE
+
+c     close the file
+
+       CLOSE(unit=4)
+
+ 11   CONTINUE
+
+c     return
+
+      RETURN
+
+      END
+
+
+c
+c......................................................................
+c
+
+      SUBROUTINE cullregdata(klos)
+
+c     this routine is called one los at a time, so we only work on one
+c     los and then return to main; losnum is incremented in main
+
+c
+c::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+c
+
+      implicit none
+
+      include           'cullabs.h'
+
+      integer           ireg,icol,j,klos,ncols
+      double precision  sdata(maxcols)
+      character*250     stringline
+
+      include           'cullabs.com'
+
+
+c     if there are no ions for this LOs, then we have nothing to do
+
+      IF (nions(klos).eq.0) RETURN
+
+c     set the maximum allowed number of columns to a local variable
+
+      ncols = maxcols
+
+c     loop over the ions
+
+      DO 11 j=1,nions(klos)
+
+c     if there is only one region, then the regabsfile and the
+c     sysabsfile are the same file, check this and bookkeep accordingly;
+c     we need only the 1st 14 entrie of the sysdata file
+
+       IF (regabsfile(klos,j).eq.sysabsfile(klos,j)) then
+
+        nreg(klos,j) = 1
+        regdata(klos,j,1,1) = 1.0
+        DO 09 icol=2,nregcols
+         regdata(klos,j,1,icol) = sysdata(klos,j,icol-1)
+ 09     CONTINUE
+
+       ELSE
+
+c     if there are multiple regions then we need to read them in; we do
+c     not need to save the header (see the wrtregdat dubroutine)
+
+        OPEN(unit=4,file=regabsfile(klos,j),status='old')
+
+        READ(4,'(a250)') stringline             ! read, discard header
+
+        DO 21 ireg=1,mxreg
+         READ(4,'(a250)',END=22) stringline     ! read data
+         CALL parzeline(ncols,sdata,stringline) ! parze data
+         DO 07 icol=1,ncols                     ! store data
+          regdata(klos,j,ireg,icol) = sdata(icol)
+ 07      CONTINUE
+ 21     CONTINUE
+ 22     CLOSE(unit=4)
+        nreg(klos,j) = ireg-1
+
+       END IF
+
+ 11   CONTINUE
+
+c     return
+
+      RETURN
+
+      END
+
+

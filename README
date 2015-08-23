@@ -8,3 +8,30 @@ To run this code, the following python packgages need to be installed:
     pandas
 
 
+Overview:
+
+    This code generates synthetic quasar absorption lines by running lines of sight (LOS) 
+    through a simulated galaxy made with ART.  This repository has all the code required
+    to generate and analyze the spectra. 
+
+
+Before you run the code:
+    
+    There are a few steps that need to be taken before the code can be run. 
+
+    1) Get the simulation in the correct format. ART output the entire simulation box, 
+       typicaly 10Mpc along a side. Mockspec does not run on these boxes. It instead
+       runs on a small box selected from the large box. This selection is done using 
+       ANA, a code written by Daniel Ceverino and greatly imporved by Kenza Arraki. 
+       It is found in funcs/ana/. Running ANA can be challenging. It reuires the 
+       following simulation files:
+            10MpcBox_HartGal_csf_a0.300.di
+            10MpcBox_HartGal_csf.d
+            PMcrda0.300.DAT
+            PMcrs0a0.300.DAT    
+            sf.dat
+
+
+
+  
+    
