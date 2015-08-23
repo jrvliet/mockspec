@@ -1,6 +1,7 @@
 
 # Functions to run external codes as part of the pipeline
 
+import sys
 from subprocess import check_call
 
 def los7(codeLoc):
@@ -12,7 +13,7 @@ def los7(codeLoc):
     to the final profile.
     """
 
-    funcLoc = './funcs/mklos/los7'
+    funcLoc = '/funcs/mklos/los7'
     command = codeLoc + funcLoc
 
     try:
@@ -33,8 +34,8 @@ def specsynth(codeLoc):
     returns nothing.
     """
     
-    funcLoc = './funcs/mkspec/specsynth'
-    command = codeLoc + funLoc
+    funcLoc = '/funcs/mkspec/specsynth'
+    command = codeLoc + funcLoc
 
     
     try:
@@ -54,8 +55,8 @@ def sysanal(codeLoc):
     Takes in the local location of the code, returns nothing.
     """
     
-    funcLoc = './funcs/anal/sysanal'
-    command = codeLoc + funLoc
+    funcLoc = '/funcs/anal/sysanal'
+    command = codeLoc + funcLoc
 
     
     try:
@@ -77,8 +78,8 @@ def cullabs(codeLoc):
     returns nothing.
     """
     
-    funcLoc = './funcs/mkALL/cullabs'
-    command = codeLoc + funLoc
+    funcLoc = '/funcs/mkALL/cullabs'
+    command = codeLoc + funcLoc
 
     
     try:

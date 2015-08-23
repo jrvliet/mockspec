@@ -17,8 +17,8 @@ import files as fi
 import genLOS as gl
 import ratesControl as rc
 import funcs.locatecells.locatecells as lc
-#import funcs.idcells.idcells as ic
-
+import funcs.idcells.idcells as ic
+import runFunctions as rf 
 
 pathname = os.path.dirname(sys.argv[0])
 codeLoc = os.path.abspath(pathname)
@@ -52,7 +52,7 @@ print '\tCellfinder:  {0:d}'.format(runCellfinder)
 print '\tIDCells:     {0:d}'.format(runIdcells)
 print '\tLos7:        {0:d}'.format(runLos7)
 print '\tSpecsynth:   {0:d}'.format(runSpecsynth)
-print '\tSysanal:     {0:d}'.format(runSysnal)
+print '\tSysanal:     {0:d}'.format(runSysanal)
 print '\tCullabs:     {0:d}'.format(runCullabs)
 print '\tLocateCells: {0:d}'.format(runLocateCells)
 
@@ -60,7 +60,7 @@ print '\tLocateCells: {0:d}'.format(runLocateCells)
 
 
 # Generate gal_props.dat file
-print '\n\nGenerating gal_profgrep ps.dat...'
+print '\n\nGenerating gal_props.dat...'
 fi.setup_galprops( galID, expn, requiredLoc, summaryLoc )
 
 
@@ -85,7 +85,7 @@ else:
 #  Generate the lines of sight
 #
 #####
-if runLOS==1:
+if runGenLOS==1:
     print '\nGenerating lines of sight...'
     gl.genLines(galID, gasfile, summaryLoc, expn, incline, nlos, maximpact, ncores)
 else: 
@@ -109,20 +109,21 @@ else:
 #
 #####
 if runIdcells==1:
-    print '\nRunning LOS through box...'
-    ic.idcells(codeLoc)
+    print '\nIdentifying probed cell properites...'
+    ic.idcells(galID, expn, ions, codeLoc)
 else:
     print 'Skipping IDcells...'
 
 
 
 #Start looping over ions
+print '\nBegin looping over ions...'
 for ion in ions:
 
-    print 'Ion: ', ion
+    print '\rIon: ', ion
 
     # Setup the ion directory
-    ionloc = fi.setup_ion_dir(ion, galID, expn) 
+    ionloc = fi.setup_ion_dir(ion, galID, expn, codeLoc) 
 
     # Move into the ion directory
     os.chdir(ionloc)
@@ -136,7 +137,7 @@ for ion in ions:
     #####
     if runLos7==1:
         print '\n\tDetermining cell path length and applying rough cut'
-        rc.los7(codeLoc)
+        rf.los7(codeLoc)
     else:
         print '\tSkipping los7...'
 
@@ -149,7 +150,7 @@ for ion in ions:
     #####
     if runSpecsynth==1:
         print '\n\tGenerating spectra'
-        rc.specsynth(codeLoc)
+        rf.specsynth(codeLoc)
     else:
         print '\tSkipping specsynth...'
 
@@ -161,7 +162,7 @@ for ion in ions:
     #####
     if runSysanal==1:
         print '\n\tAnalyzing spectra...'
-        rc.sysanal(codeLoc)
+        rf.sysanal(codeLoc)
     else:
         print '\tSkipping sysanal...'
 
@@ -174,7 +175,7 @@ for ion in ions:
     #####
     if runSysabs==1:
         print '\n\tCreating sysabs'
-        rc.sysabs(codeLoc)
+        rf.sysabs(codeLoc)
     else:
         print '\tSkipping sysabs...'
 
@@ -188,7 +189,7 @@ for ion in ions:
     #####
     if runLocateCells==1:
         print '\n\tIdentifying significant cells'
-        rc.runLocateCells(codeLoc)
+        rf.runLocateCells(codeLoc)
     else:
         print '\tSkipping locatecells...'
     os.chdir('..')

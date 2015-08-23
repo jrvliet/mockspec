@@ -42,6 +42,7 @@ def read_control_file():
     rootLoc = f.readline().split()[0]
     requiredLoc = f.readline().split()[0] 
     # Now at flags for running the various subfunctions
+    f.readline()
     runRates = int(f.readline().split()[0])
     runGenLOS = int(f.readline().split()[0])
     runCellfinder = int(f.readline().split()[0])
@@ -50,7 +51,7 @@ def read_control_file():
     runSpecsynth = int(f.readline().split()[0])
     runSysanal = int(f.readline().split()[0])
     runCullabs = int(f.readline().split()[0])
-    runLocatecells = int(f.readline().split()[0])
+    runLocateCells = int(f.readline().split()[0])
     # Now at ion section
     # Loop over rest of file
     ions = []
@@ -211,7 +212,7 @@ element, stage, xh, inst, ewcut, snr, vmax, slev)
 
 
 
-def setup_ion_dir(ion, galID, expn):
+def setup_ion_dir(ion, galID, expn, codeLoc):
     
     """ 
     Creates a directory for this ion if one does not exit
@@ -220,26 +221,43 @@ def setup_ion_dir(ion, galID, expn):
     """
     cwd = os.getcwd()
     ionloc = cwd + '/' + ion
-    if not os.path.exists(loc):
+    if not os.path.exists(ionloc):
         command = 'mkdir '+ion
         sp.call(command, shell=True)
 
     # Copy the cell files, ion boxes and the lines files into the ion directory
     ionbox =  galID+'_GZa'+expn+'.'+ion+'.txt'
     command = 'cp '+ionbox+' ./'+ion+'/'
-    sp.call(command, shell=True)
+    try:
+        sp.call(command, shell=True)
+    except: 
+        print 'Could not complete {0:s}'.format(command)
+
     command = 'mv *'+ion+'.los*.dat ./'+ion+'/'
-    sp.call(command, shell=True)
+    try:
+        sp.check_call(command, shell=True)
+    except:
+        print 'Could not complete {0:s}'.format(command)
+        
     command = 'cp lines* ./'+ion+'/'
-    sp.call(command, shell=True)
+    try:
+        sp.check_call(command, shell=True)
+    except:
+        print 'Could not complete {0:s}'.format(command)
    
      # Create the los.list file
-    command = 'ls *los*dat > los.list'
-    sp.call(command, shell=True)
+    command = 'ls *'+ion+'*los*dat > qso.list && mv qso.list ./'+ion+'/'
+    try:
+        sp.check_call(command, shell=True)
+    except:
+        print 'Could not complete {0:s}'.format(command)
 
     # Copy the Mockspec files from the parent directory to here
-    command = 'cp ../Mockspec* .'
-    sp.call(command, shell=True)
+    command = 'cp '+codeLoc+'/controls/Mockspec* ./'+ion+'/'
+    try:
+        sp.check_call(command, shell=True)
+    except:
+        print 'Could not complete {0:s}'.format(command)
 
     return ionloc
 

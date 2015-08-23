@@ -158,7 +158,7 @@ def read_los_props(losnum):
 ##################################################################################################
 
 
-def idcells(galID, aexpn, ion_list):
+def idcells(galID, aexpn, ion_list, codeLoc):
 
     ion_num = len(ion_list)
 
@@ -173,7 +173,7 @@ def idcells(galID, aexpn, ion_list):
     # Loop over ions
     for ion in ion_list:
 
-        print 'Ion: ',ion
+#        print 'Ion: ',ion
         # Read in ion box
         ionboxfile = galID+'_GZa'+aexpn+'.'+ion+'.txt'
     #    ionboxfile = galID+'_a'+aexpn+'.'+ion+'.txt'
@@ -182,7 +182,7 @@ def idcells(galID, aexpn, ion_list):
         # Loop over lines of sight
         for i in range(0,len(los_num)):
             
-            print '\tLOS: ',i+1
+#            print '\tLOS: ',i+1
 
             # Read in LOS properties (entry points)
             xen, yen, zen, losx, losy, losz, a11, a12, a13, a21, a22, a23, a31, a32, a33, Xcom, Ycom, Zcom, VXcom, VYcom, VZcom, x0, y0, z0, vx_obs, vy_obs, vz_obs = read_los_props(i+1)

@@ -272,7 +272,7 @@ void wrtlines(double zgal, double *zline, double *Nline, double *bline,
               int *cellnum, char *linesfile, int ndata){
 
     int i;
-    printf("\nlinesfile: %s\n", linesfile);
+    //printf("\nlinesfile: %s\n", linesfile);
     FILE *fp = fopen(linesfile, "w");
     if (fp==NULL){
         printf("Error opening linesfile: %s\n", linesfile);
