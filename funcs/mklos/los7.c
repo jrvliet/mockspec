@@ -79,7 +79,7 @@ int main(int argc, char *argv[]){
     strcpy(qsolist, "qso.list");
 
     // Open the log files
-   // FILE *runfp = fopen("Mockspec.runlog.los7", "w");
+    FILE *runfp = fopen("Mockspec.runlog.los7", "w");
     FILE *errfp = fopen("Mockspec.errlog.los7", "w");
 
     
@@ -204,7 +204,8 @@ int main(int argc, char *argv[]){
 //    printf("Number of cells: %d\n", ndata);
 
     } 
-
+    fclose(runfp);
+    fclose(errfp);
     return 0;
 }
 

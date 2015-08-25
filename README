@@ -32,6 +32,22 @@ Before you run the code:
             sf.dat
 
 
+    2) Configure the run. The parameters of the run are set in the mockspec.config 
+       file. There are three sections in this file. The first describes the 
+       galaxy and basic code parameters.  These are mostly self-explanatory. The
+       number of cores only affects the codes that can be run with parallization,
+       namely cellfinder. The root location is not used by anything, so don't change it
+    
+       The second section determines which codes will be run. A 1 turns the code on, 
+       a 0 turns it off. 
+
+       The third section describes the ions to be probed and what instrument will be
+       used for that ion. 
+
+
+    3)  
+
+
 
   
     

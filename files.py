@@ -225,6 +225,13 @@ def setup_ion_dir(ion, galID, expn, codeLoc):
         command = 'mkdir '+ion
         sp.call(command, shell=True)
 
+    # Create the los.list file
+    command = 'ls *'+ion+'*los*dat > qso.list && mv qso.list ./'+ion+'/'
+    try:
+        sp.check_call(command, shell=True)
+    except:
+        print 'Could not complete {0:s}'.format(command)
+    
     # Copy the cell files, ion boxes and the lines files into the ion directory
     ionbox =  galID+'_GZa'+expn+'.'+ion+'.txt'
     command = 'cp '+ionbox+' ./'+ion+'/'
@@ -245,12 +252,6 @@ def setup_ion_dir(ion, galID, expn, codeLoc):
     except:
         print 'Could not complete {0:s}'.format(command)
    
-     # Create the los.list file
-    command = 'ls *'+ion+'*los*dat > qso.list && mv qso.list ./'+ion+'/'
-    try:
-        sp.check_call(command, shell=True)
-    except:
-        print 'Could not complete {0:s}'.format(command)
 
     # Copy the Mockspec files from the parent directory to here
     command = 'cp '+codeLoc+'/controls/Mockspec* ./'+ion+'/'
