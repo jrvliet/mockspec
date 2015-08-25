@@ -133,6 +133,7 @@ def genLines(galID, gasfile, summaryLoc, expn, inc, nLOS, maximpact, ncores):
    
     # Read in galaxy properties
     mvir, rvir, a11, a12, a13, a21, a22, a23, a31, a32, a33, vpec_x, vpec_y, vpec_z = read_summary(galID, expn, summaryLoc)
+    maximpact_kpc = maximpact * rvir
     
     # Initialize variables
     Xcom, Ycom, Zcom = 0., 0., 0.
@@ -175,7 +176,7 @@ def genLines(galID, gasfile, summaryLoc, expn, inc, nLOS, maximpact, ncores):
     # Generate random impact parameters:
     impacts = []
     for j in range(0,nLOS):
-        b = maximpact * random()
+        b = maximpact_kpc * random()
         impacts.append(b)
 
     # Sort impact parameters
