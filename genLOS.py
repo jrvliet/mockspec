@@ -184,7 +184,7 @@ def genLines(galID, gasfile, summaryLoc, expn, inc, nLOS, maximpact, ncores):
 
 
 
-    for j in range(0,nLOS):
+    for j in range(0,nLOS-1):
 
 
         b = impacts[j]
