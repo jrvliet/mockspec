@@ -23,7 +23,7 @@ import runFunctions as rf
 pathname = os.path.dirname(sys.argv[0])
 codeLoc = os.path.abspath(pathname)
 summaryLoc = codeLoc+'/summaries/'
-requiredLoc = codeLoc+'/comtrols/'
+requiredLoc = codeLoc+'/controls/'
 
 #  Read in the control file
 print '\n\nReading in control file...'

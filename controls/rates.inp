@@ -1,0 +1,55 @@
+INPUT LIST FOR RATES (*** DO NOT MODIFY FORMAT ***)
+-------------------------------------------------------------------
+BOX INFO
+'D9o2_GZa1.002.txt'	data file
+1.002                	scale factor 
+4       		number of output ion cubes
+-------------------------------------------------------------------
+RUN MODE
+yes     	include UVB ionizing spectrum?.............[yes,no]
+no            	include stellar ionizing spectrum?.........[yes,no]
+-------------------------------------------------------------------
+LSF MODE
+no       	obtain LSF solution.......... .............[yes,no]	
+0               LSF tolerance (0=use machine precision)    [1.0d-7]
+-------------------------------------------------------------------
+PHYSICS MODE
+yes     	include photoionization?...................[yes,no] 
+yes     	include low T dielectronic recombination?..[yes,no] 
+yes     	include high T dielectronic recombination?.[yes,no] 
+yes      	include direct collisional ionization?.....[yes,no] 
+yes      	include excitation-autoionization?.........[yes,no] 
+yes      	include Auger ionization?..................[yes,no] 
+yes            	include charge exchange reactions?.........[yes,no] 
+-------------------------------------------------------------------
+METALS TO INCLUDE
+no      	include lithium (Li)?			   [yes,no]*
+no      	include beryllium (Be)?			   [yes,no]*
+no      	include boron (B)?			   [yes,no]*
+yes     	include carbon (C)?			   [yes,no]yes
+yes      	include nitrogen (N)?			   [yes,no]yes
+yes      	include oxygen (O)?			   [yes,no]yes
+no      	include florine (Fl)?			   [yes,no]*
+yes      	include neon (Ne)?			   [yes,no]yes
+no      	include sodium (Na)?			   [yes,no]
+yes      	include magnesium (Mg)?			   [yes,no]yes
+yes      	include aluminum (Al)?			   [yes,no]yes
+yes      	include silicon (Si)?			   [yes,no]yes
+no      	include phosphorous (P)?		   [yes,no]
+yes      	include sulfur (S)?			   [yes,no]yes
+no      	include chlorine (Cl)?			   [yes,no]*
+no      	include argon (Ar)?			   [yes,no]
+no      	include potasium (K)?			   [yes,no]
+yes      	include calcium (Ca)?			   [yes,no]yes
+no      	include scandium (Sc)?			   [yes,no]*
+no      	include titanium (Ti)?			   [yes,no]
+no      	include vanadium (V)?			   [yes,no]*
+no      	include chromium (Cr)?			   [yes,no]
+no      	include mangenese (Mn)?			   [yes,no]
+yes      	include iron (Fe)?			   [yes,no]yes
+no      	include cobolt (Co)?			   [yes,no]*
+no      	include nickel (Ni)?			   [yes,no]
+no      	include copper (Cu)?			   [yes,no]*
+no      	include zinc (Zn)?			   [yes,no]*
+-------------------------------------------------------------------
+* not recommended

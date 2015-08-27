@@ -70,8 +70,10 @@ void gethdr(int klos, double *a, double *xg, double *yg, double *zg,
                      "%s %s %s %s %s %lf %lf %lf",
                       dum, a, dum, dum, dum, dum, xg, yg, zg, 
                       dum, dum, dum, dum, dum, vxg, vyg, vzg);
-
-    
+    if (*a>1.0){
+        *a = 1.0;
+    }
+     
     // Second line
     fgets(new_line, sizeof(new_line), fp);
     sscanf(new_line, "%s %s %s %s %s %lf %lf %s %s %s %lf %lf", 
@@ -279,10 +281,10 @@ void wrtlines(double zgal, double *zline, double *Nline, double *bline,
         printf("Exitting...\n");
         exit(1);
     }
-    fprintf(fp, "%4.2lf\n", zgal);
+    fprintf(fp, "%4.16lf\n", zgal);
     for (i=0; i<ndata; i++){
         if (log10(Nline[i])>9.0){
-            fprintf(fp, "%4.2lf \t %4.2lf \t %4.2lf \t %d \n", 
+            fprintf(fp, "%4.7lf \t %4.3lf \t %4.3lf \t %d \n", 
                     zline[i], log10(Nline[i]), bline[i], cellnum[i]);
         }
     }

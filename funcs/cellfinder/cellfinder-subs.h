@@ -15,4 +15,12 @@ void write_OutfileHdr(FILE *outfp, double *aexpn, double *R0, double *phi, doubl
 
 void write_LOSprops(FILE *propsfp, int losnum, double *aexpn, double *R0, double *phi, double *l, double *b, double *xen, double *yen, double *zen, double *losx, double *losy, double *losz, double *a11, double *a12, double *a13, double *a21, double *a22, double *a23, double *a31, double *a32, double *a33, double *Xcom, double *Ycom, double *Zcom, double *VXcom, double *VYcom, double *VZcom, double *x0, double *y0, double *z0, double *vx_obs, double *vy_obs,double *vz_obs);
 
+
+void write_LOSprops2(FILE *propsfp, double *arr);
+
+
+
+
+
 #endif
+
