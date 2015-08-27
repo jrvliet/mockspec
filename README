@@ -45,9 +45,13 @@ Before you run the code:
        used for that ion. 
 
 
-    3)  
+    3) Ensure the directory has all required files, namely the galaxy file 
 
+    4) Make all compiled codes. This includes: cellfinder, los7, specsynth, sysabs, and cullabs
 
+    5)
 
   
-    
+Running the code:
+    The main driver is mockspec.py. Run this in the directory with the snapshot.   
+    The final output is the ALL sysabs  

@@ -128,4 +128,12 @@ void write_LOSprops(FILE *propsfp, int losnum, double *aexpn, double *R0, double
   fprintf(propsfp, "%d \t %1.2lf \t %1.2lf \t %1.6lf \t %1.6lf \t %1.6lf \t %1.6lf \t %1.6lf \t %1.6lf \t %1.7lf \t %1.7lf \t %1.7lf \t %1.7lf \t %1.7lf \t %1.7lf \t %1.7lf \t %1.7lf \t %1.7lf \t %1.6lf \t %1.6lf \t %1.6lf \t %1.6lf \t %1.6lf \t %1.6lf \t %1.6lf \t %1.6lf \t %1.6lf \t %1.6lf \t %1.6lf \t %1.6lf \n", losnum, *R0, *phi, *xen, *yen, *zen, *losx, *losy, *losz, *a11, *a12, *a13, *a21, *a22, *a23, *a31, *a32, *a33, *Xcom, *Ycom, *Zcom, *VXcom, *VYcom, *VZcom, *x0, *y0, *z0, *vx_obs, *vy_obs, *vz_obs);
 
 
+// Write LOS props to file
+void write_LOSprops2(FILE *propsfp, double *arr){
+    fprintf(propsfp, "%1.0lf \t %1.2lf \t %1.2lf \t %1.6lf \t %1.6lf \t %1.6lf \t %1.6lf \t %1.6lf \t %1.6lf \t %1.7lf \t %1.7lf \t %1.7lf \t %1.7lf \t %1.7lf \t %1.7lf \t %1.7lf \t %1.7lf \t %1.7lf \t %1.6lf \t %1.6lf \t %1.6lf \t %1.6lf \t %1.6lf \t %1.6lf \t %1.6lf \t %1.6lf \t %1.6lf \t %1.6lf \t %1.6lf \t %1.6lf \n", arr[0],  arr[1],  arr[2],  arr[3],  arr[4],  arr[5],  arr[6],  arr[7],  arr[8],  arr[9],  arr[10],  arr[11],  arr[12],  arr[13],  arr[14],  arr[15],  arr[16],  arr[17],  arr[18],  arr[19],  arr[20],  arr[21],  arr[22],  arr[23],  arr[24],  arr[25],  arr[26],  arr[27],  arr[28],  arr[29]);
+
+}
+
+
+
 }

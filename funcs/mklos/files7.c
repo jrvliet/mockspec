@@ -70,8 +70,10 @@ void gethdr(int klos, double *a, double *xg, double *yg, double *zg,
                      "%s %s %s %s %s %lf %lf %lf",
                       dum, a, dum, dum, dum, dum, xg, yg, zg, 
                       dum, dum, dum, dum, dum, vxg, vyg, vzg);
-
-    
+    if (*a>1.0){
+        *a = 1.0;
+    }
+     
     // Second line
     fgets(new_line, sizeof(new_line), fp);
     sscanf(new_line, "%s %s %s %s %s %lf %lf %s %s %s %lf %lf", 
