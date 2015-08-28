@@ -166,20 +166,20 @@ def setup_idcells(gasfile, ion_list):
 
 
 
-def setup_mockspec(ion_list, instr_list, ewcut, snr, sh_list):
+def setup_mockspec(ion_list, instr_list, ewcut, snr, xh_list, requiredLoc):
 
     from subprocess import call
 
     # Need Mockspec.runpars, Mockspec.instruments, Mockspec.transitions
-
+    basecommand = 'cp '+requiredLoc
     if not os.path.exists('Mockspec.runpars'):
-        command = 'cp /home/matrix3/jrvander/requiredfiles/Mockspec.runpars .'
+        command = basecommand + 'Mockspec.runpars .'
         call(command, shell=True)
     if not os.path.exists('Mockspec.instruments'):
-        command = 'cp /home/matrix3/jrvander/requiredfiles/Mockspec.instruments .'
+        command = basecommand + 'Mockspec.instruments .'
         call(command, shell=True)
     if not os.path.exists('Mockspec.transtions'):
-        command = 'cp /home/matrix3/jrvander/requiredfiles/Mockspec.transitions .'
+        command = basecommand + 'Mockspec.transitions .'
         call(command, shell=True)
         
     # Alter Mockspec.runpars

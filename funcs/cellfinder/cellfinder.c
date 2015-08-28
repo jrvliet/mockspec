@@ -16,7 +16,7 @@
 //    python FBcellfinder_v7.py gal_props.dat 0 inf
 //
 
-#include "cellfinder-subs.h"
+#include "cellfinder_subs.h"
 #include "lmn_cellfinder.h"
 #include "cellsearch_sub.h"
 #include <stdio.h>
@@ -28,7 +28,8 @@
 
 int main(int argc, char *argv[]){
 
-  int numcores = int(argv[1]);
+  int numcores;
+  sscanf(argv[1], "%d", &numcores);
 
 
   FILE *propfp0 = fopen("gal_props.dat", "r");
@@ -39,7 +40,7 @@ int main(int argc, char *argv[]){
   lowvel = -1.9e30;
   
 
-  int nlos, losnum;
+  int i, nlos, losnum;
   char new_line[100], new_line2[100];
   char gasfile[100], galID[100], rootname[100], summaryLoc[100];
   char outfile[100];
@@ -55,7 +56,11 @@ int main(int argc, char *argv[]){
   double losx, losy, losz, x0, y0, z0;  // Describe unit vector
   double xlen, ylen, zlen, loslength;
 
-  // Read input parameter file which contains all of the galaxy information
+  //Read input parameter file which contains all of the galaxy informationrr[1000], yenArr[1000], zenArr[1000];
+  double xenArr[1000], yenArr[1000], zenArr[1000];
+  double xexArr[1000], yexArr[1000], zexArr[1000];
+  double R0Arr[1000], phiArr[1000], incArr[1000];
+  int losArr[1000];
   read_control_file(propfp, gasfile, galID, rootname, &aexpn, summaryLoc);
 
   // Read summary file
@@ -113,7 +118,7 @@ int main(int argc, char *argv[]){
   double R0, phi, incline;
   
   // Read in the entry and exit points from the file
-
+  int currentInd = 0;
   while(fgets(new_line, sizeof(new_line), losfp)){
     fgets(new_line2, sizeof(new_line2), infofp);
     if(new_line[0] != '#'){
@@ -142,8 +147,8 @@ int main(int argc, char *argv[]){
 
   
 
-  double xen, yen, zen, xex, yex, zex;
-  double R0, phi, incline;
+  //double xen, yen, zen, xex, yex, zex;
+//  double R0, phi, incline;
 
   losnum = 0;
 
@@ -230,7 +235,7 @@ int main(int argc, char *argv[]){
     fclose(outfp0);
   }
 
-  FILE *propsfp = fopen("lines.props", "w");
+  //FILE *propsfp = fopen("lines.props", "w");
   // Write header to lines.props file
   fprintf(propsfp, "LOS \t b \t %-6s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \n", "phi", "xen", "yen", "zen", "losx", "losy", "losz", "a11", "a12", "a13", "a21", "a22", "a23", "a31", "a32", "a33", "Xcom", "Ycom", "Zcom", "VXcom", "VYcom", "VZcom", "x0", "y0", "z0", "vx_obs", "vy_obs", "vz_obs");
      
