@@ -31,8 +31,48 @@ Before you run the code:
             PMcrs0a0.300.DAT    
             sf.dat
 
+        To control the run of ANA, there are two control file: 
+            control.dat 
+            schedule_R.dat
+    
+        Schedule_R.dat has most of the controls in it. The top section has flags as
+        to what the code should read in and what files it should produce. The sections 
+        that definately need to have a 1 are:
+            Read N-body file
+            Read stellar file
+            Read HYDRO file
+            Set units and global variables
+            Find halo center using particle distribution
+            Compute angular momentum
+            density, temperature, entropy profiles and Rvir calculation
+            Binary file with gas cells inside 4Rvir-box
+            Binary file with gas cells inside 4Rvir-box (metalliciites)
+        Most of the rest of the file should not be touched. 
+        ANA has an interesting behaviour where it finds the center of the galaxy, but
+        is super bad at it. You need to find the center with Rockstar and put it in 
+        manually. The coordinates are put in on the lines "xuser", "yuser", "zuser". 
+        The flag in front of "ioptCenter=1/2/3-->potential/HF/IFRIT" should be 
+        set to 1, indicating the center is from a halo finder.
 
-    2) Configure the run. The parameters of the run are set in the mockspec.config 
+        To setup control.dat, only change after the three repeated lines of "1. 129". 
+        The single number on the next line is the number of snapshots to run ANA on.
+        Leave this as one. The rest of the file is the list of expansion parameters
+        of the snapshots. Even if there are several numbers listed here, ANA will only 
+        run on the first one, since the number of snapshots to run is set to 1. 
+
+        Once both control.dat and schedule_R.dat are set, run ana.R.exe
+        The file needed is the GZ file. 
+
+    2) The pipeline does not run on the binary files. It runs on an ASCII version 
+        of the file. To convert, use readbinary.exe. Run it with the format of 
+        
+            readbinary.exe <binary file> <name of output ASCII file> GZ
+
+        The name of the output ASCII file should be the name of the binary file,
+        but with .dat replaced with .txt
+
+
+    3) Configure the run. The parameters of the run are set in the mockspec.config 
        file. There are three sections in this file. The first describes the 
        galaxy and basic code parameters.  These are mostly self-explanatory. The
        number of cores only affects the codes that can be run with parallization,
@@ -45,11 +85,11 @@ Before you run the code:
        used for that ion. 
 
 
-    3) Ensure the directory has all required files, namely the galaxy file 
+    4) Ensure the directory has all required files, namely the galaxy file 
 
-    4) Make all compiled codes. This includes: cellfinder, los7, specsynth, sysabs, and cullabs
+    5) Make all compiled codes. This includes: cellfinder, los7, specsynth, sysabs, and cullabs
 
-    5)
+    6)
 
   
 Running the code:
