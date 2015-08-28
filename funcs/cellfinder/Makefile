@@ -1,7 +1,7 @@
 TARGET = cellfinder
-LIBS = -lm
+LIBS = -lm -fopenmp
 CC = gcc
-CFLAGS = -g -Wall
+CFLAGS = -g -Wall -fopenmp
 
 .PHONY: default all clean
 

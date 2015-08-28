@@ -116,6 +116,9 @@ else:
 
 
 
+# Setup Mockspec 
+fi.setup_mockspec(ions, instruments, ewcut, snr, xh, requiredLoc)
+
 #Start looping over ions
 print '\nBegin looping over ions...'
 for ion in ions:
