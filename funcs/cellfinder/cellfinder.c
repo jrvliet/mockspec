@@ -30,7 +30,7 @@ int main(int argc, char *argv[]){
 
   int numcores;
   sscanf(argv[1], "%d", &numcores);
-
+  printf("Number of cores to use: %d\n", numcores);
 
   FILE *propfp0 = fopen("gal_props.dat", "r");
   FILE *propfp = propfp0;
@@ -110,7 +110,7 @@ int main(int argc, char *argv[]){
   fprintf(screenfp, "Number of lines of sight: %d\n",nlos);
 
   // Write header to lines.props file
-  fprintf(propsfp, "LOS \t b \t %-6s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \n", "phi", "xen", "yen", "zen", "losx", "losy", "losz", "a11", "a12", "a13", "a21", "a22", "a23", "a31", "a32", "a33", "Xcom", "Ycom", "Zcom", "VXcom", "VYcom", "VZcom", "x0", "y0", "z0", "vx_obs", "vy_obs", "vz_obs");
+  //fprintf(propsfp, "LOS \t b \t %-6s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \n", "phi", "xen", "yen", "zen", "losx", "losy", "losz", "a11", "a12", "a13", "a21", "a22", "a23", "a31", "a32", "a33", "Xcom", "Ycom", "Zcom", "VXcom", "VYcom", "VZcom", "x0", "y0", "z0", "vx_obs", "vy_obs", "vz_obs");
 
 
   double propsArr[nlos][30];

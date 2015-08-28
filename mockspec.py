@@ -98,7 +98,7 @@ else:
 #####
 if runCellfinder==1:
     print '\nRunning LOS through box...'
-    gl.runCellfinder(codeLoc)
+    gl.runCellfinder(codeLoc, ncores)
 else: 
     print 'Skipping cellfinder...'
 

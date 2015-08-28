@@ -2,9 +2,9 @@
 # Galaxy Properties
 #
 -------------------------------------------------------------
-D9o2_GZa1.002.txt               # Galaxy Name
-D9o2                          # Output Base name (.los###.dat will be added as extension)
-1.002                                    # Expansion Parameter
+MW9_GZ932.a1.001.HI.txt               # Galaxy Name
+MW9                          # Output Base name (.los###.dat will be added as extension)
+1.001                                    # Expansion Parameter
 -------------------------------------------------------------------
 # Summary Table
 /home/matrix3/jrvander/galaxy_files/summaries/

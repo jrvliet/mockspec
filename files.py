@@ -195,14 +195,13 @@ def setup_mockspec(ion_list, instr_list, ewcut, snr, xh_list, requiredLoc):
     
     for ion, inst, xh in zip(ion_list, instr_list, xh_list):
 
-        element, Z, stage = getTransitionInfo(ion)
+        element, Z, stage = get_transition_info(ion, requiredLoc)
         if element =='hydrogen':
             vmax = '5000.'
         else:
             vmax = '1000.'
         element = '\''+element+'\''
-        line = '{0:<11s} {1:<5s} {2:<6s} {3:<7s} {4:<6s} {5:<5s} {6:<6s} {7:<s}\n'.format(
-element, stage, xh, inst, ewcut, snr, vmax, slev)
+        line = '{0:<11s} {1:<5s} {2:<6s} {3:<7s} {4:<6f} {5:<5f} {6:<6s} {7:<s}\n'.format(element, stage, xh, inst, ewcut, snr, vmax, slev)
         datf.write(line)
         
     call('rm Mockspec.tmp', shell=True)
@@ -210,6 +209,23 @@ element, stage, xh, inst, ewcut, snr, vmax, slev)
     datf.close()
 
 
+def get_transition_info(ion, requiredLoc):
+
+    """
+    Returns the atomic number and exiciation level
+    of this ion as defined in Mockspec.transitions
+    """
+    filename = requiredLoc+'/Mockspec.transitions'
+    f = open(filename)
+    for line in f:
+        fion = line.split()[4]
+        if fion==ion:
+            element = line.split()[1]
+            k = line.split()[2]
+            j = line.split()[3]
+            f.close()
+            return element, k, j
+    
 
 
 def setup_ion_dir(ion, galID, expn, codeLoc):

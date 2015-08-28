@@ -257,8 +257,9 @@ def genLines(galID, gasfile, summaryLoc, expn, inc, nLOS, maximpact, ncores):
 
 
  
-def runCellfinder(codeLoc):
-    command = codeLoc+'/funcs/cellfinder/cellfinder'
+
+def runCellfinder(codeLoc, numcores):
+    command = codeLoc+'/funcs/cellfinder/cellfinder {0:d}'.format(numcores)
     try: 
         sp.check_call(command, shell=True)
     except:
