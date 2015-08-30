@@ -89,7 +89,9 @@ Before you run the code:
 
     5) Make all compiled codes. This includes: cellfinder, los7, specsynth, sysabs, and cullabs
 
-    6)
+    6) Download the cooling tables for rates. They can be downloaded from:
+        http://astronomy.nmsu.edu/jrvander/coolingtables.tar.gz
+       Unzip this file in the rates folder in funcs. 
 
   
 Running the code:
