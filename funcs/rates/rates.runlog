@@ -1,0 +1,47 @@
+  
+ ........................................
+ .                                      .
+ .         GRID ION CODE V2.0           .
+ .           November 2013              .
+ .                                      .
+ ........................................
+  
+  GATHERING INPUT CONFIGURATION
+   obtaining box info...
+   obtaining runtime mode...
+   obtaining solution mode...
+   obtaining ionization physics modes...
+   obtaining the chemical mixture...
+  
+  DATA CUBE INFO
+    Gas Box  =  MW9_GZ932.a1.001.txt                    
+    redshift =  0.000000000
+   No. of outfiles =  4
+    outfile =  MW9_GZ932.a1.001.HI.txt                           
+    for ion =  HI                                                
+    outfile =  MW9_GZ932.a1.001.OVI.txt                          
+    for ion =  OVI                                               
+    outfile =  MW9_GZ932.a1.001.CIV.txt                          
+    for ion =  CIV                                               
+    outfile =  MW9_GZ932.a1.001.MgII.txt                         
+    for ion =  MgII                                              
+  
+  LSF DATA
+   tolerance =  1.490E-08
+   Nspecies  =  12
+  
+  IONIZATION PHYSICS
+   photoionization is UVB only
+   Auger ionization included
+   loading UVB SED library
+   constructing UVB SED
+   populating photo cross section data
+   collisional processes include:
+   -low T dielectronic recombination
+   -high T dielectronic recombination
+   -charge exchange recombination
+   -direct collisional ionization
+   -excitation autoionization
+   -charge exchange ionization
+  
+  READING DATA CUBE...

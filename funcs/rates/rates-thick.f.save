@@ -1,0 +1,412 @@
+c
+c.........................................................................
+c
+
+      SUBROUTINE popedges
+
+c     this subroutine populates the cross sections and threshold
+c     energies for the ionization edges of neutral hydrogen (11),
+c     neutral helium (21), and single ionized helium (22); they are
+c     stored globally for checking the mean free paths of JE at the
+c     edges
+
+c     cross sections stored as cm^2; since there is only a single shell
+c     for these ions, there is no summing over shells
+
+c     function thresholdE returns the threshiold energy E for ionization
+c     function phfit2 returns the cross section at photon energy E
+
+c
+c:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+c
+
+      implicit none
+      include           'rates.h'
+      double precision  thresholdE,phfit2
+      include           'com-photo.com'
+
+c     get the cross section at neutral hydrogen edge
+
+      E11   = thresholdE(1,1,1) 
+      sig11 = 1.0d-18 * phfit2(1,1,1,E11)
+
+c     get the cross section at neutral helium edge
+
+      E21   = thresholdE(2,2,1)
+      sig21 = 1.0d-18 * phfit2(2,2,1,E21)
+
+c     get the cross section at ionized helium edge
+
+      E22   = thresholdE(2,1,1)
+      sig22 = 1.0d-18 * phfit2(2,1,1,E22)
+
+      RETURN
+      END
+
+c
+c.........................................................................
+c
+
+      LOGICAL FUNCTION opticallythick(i)
+
+c     for cell ID=i this routine computes the mean free path of the
+c     photons at the ionization edges for an optical depth unity for
+c     neutral hydrogen, neutral helium, and singly ionized helium; it
+c     then determines if ionization structure must be treated in the
+c     cell
+
+c     this routine is called only once per cell; it determines whether
+c     self-shielding is required for this cell
+
+c     global boolean OPTICALLYTHICK is returned high if the mean free
+c     path of any of ionizing photons are less than half the cell
+c     thickness, and is returned low otherwise; if high, self-shielding
+c     will be treated in routine SOLVETHICK
+
+c
+c:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+c
+
+
+      implicit none
+      include           'rates.h'
+      include           'getcube.h'
+      integer           i
+      double precision  mfp11,mfp21,mfp22
+      double precision  Lcell,mfp
+      include           'rates.com'
+      include           'com-photo.com'
+      include           'getcube.com'
+
+
+      opticallythick = .false.
+      taumin         = 1.0d0
+
+c     compute the mean free path at neutral hydrogen edge (11), the
+c     neutral helium edge (21), and the singly ionized helium edge (22);
+c     these values are in centimeters
+
+      mfp11 = taumin/(nkj(1,1)*sig11)
+      mfp21 = taumin/(nkj(2,1)*sig21)
+      mfp22 = taumin/(nkj(2,2)*sig22)
+
+c     determine which mean free path yields the the smallest penetration
+c     into the cell; if less than the cell physical half-depth, this
+c     sets the subcell physical size
+
+      mfp = min(mfp11,mfp21)
+      mfp = min(mfp22,mfp)
+
+c     check whether this cell is optically thick; note that we assume
+c     that the cell ionization structure is symmetric, or basially that
+c     the cell is illuminated on both sides; we will solve the radiative
+c     tranfer through half the cell and reflect it about the midplane,
+c     thus the criterion for ionization structure is that the mean free
+c     path is less than the half-depth of the cell
+
+      Lcell  = 3.08567758d+18*cellsize(i)  ! convert pc to cm
+
+      IF (mfp.lt.0.50d0*Lcell) opticallythick = .true.
+
+      RETURN
+      END
+
+c
+c.........................................................................
+c
+
+      SUBROUTINE solvethick(i,toler)
+
+c     treats self-shielding for cell ID=i 
+
+c     this routine computes the ionization structure of the cell and
+c     compute the mean ionization fractions and number densities
+
+c
+c:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+c
+
+
+      implicit none
+      include           'rates.h'
+      include           'getcube.h'
+      integer           i,ie,j,k,kk,isub,Nmaxsub
+      integer           iprint,funit
+      parameter         (Nmaxsub = 100)
+      double precision  fikj(Imax,Imax+1),Lisub,depth
+      double precision  Lcell,toler
+      double precision  meanfreepath,fdepth,fdS
+      double precision  mfpmin,fmpf,x
+      double precision  tau11E,tau21E,tau22E
+      double precision  N0(4),Nshield(4)
+      include           'rates.com'
+      include           'com-photo.com'
+      include           'getcube.com'
+
+
+      iprint = i
+      funit  = 300+i
+
+c     we use the half-cell depth because we assume symmetry, meaning
+c     that the incident ionizing spectrum is incident on two opposing
+c     faces of the "plane parallel" cell
+
+      Lcell  = 0.50d0*cellsize(i) ! pc 
+
+c     STORE DATA FOR FIRST SUBCELL: the first subcell is solved
+
+c     set the subcell index counter (isub); compute the fist subcell
+c     physical depth (Lisub) and the fraction into the half-cell it
+c     extends (fdepth); when we have modelled the entire cell, the value
+c     of fdepth is 1
+
+      isub    = 1
+      Lisub   = meanfreepath(isub) ! pc
+      fdepth  = Lisub/Lcell
+      depth   = 2.0*Lisub
+
+c     store the first term in the summation, fikj(k,j), that will be
+c     used to obtain the mean ionization fractions for each species k,j;
+c     we weight each term in the sum by the fractional depth of these
+c     ionization fractions, so that the weighted average ionization
+c     fraction preserves the column density of a line of sight
+
+      DO kk=1,Nspecies
+       k = kidx(kk)
+       DO j=1,k+1
+        fikj(k,j) = fion(k,j)*fdepth
+       END DO
+      END DO
+
+c     reporting to screen and file fort.199 (comment out if not desired)
+      
+      WRITE(6,*) 'cell = ',i
+      WRITE(6,198) i,isub,nH,Tcell(i),cellsize(i),Lisub,depth,
+     &             fdepth,fdepth,taumin,tau11E,tau21E,tau22E
+      WRITE(400,198) i,isub,nH,Tcell(i),cellsize(i),Lisub,depth,
+     &             fdepth,fdepth,taumin,tau11E,tau21E,tau22E
+      IF (i.eq.iprint) then 
+      WRITE(funit,199) Lisub,fdepth,
+     &         R_ph(1,1),R_ph(1,2),R_ph(12,2),R_ph(6,4),R_ph(8,6),
+     &         nkj(1,1),nkj(1,2),nkj(12,2),nkj(6,4),nkj(8,6),
+     &         fion(1,1),fion(1,2),fion(12,2),fion(6,4),fion(8,6)
+       END IF
+
+      N0(1) = nkj(1,1)*cellsize(i)  * 3.08567758d+18
+      N0(2) = nkj(12,2)*cellsize(i) * 3.08567758d+18
+      N0(3) = nkj(6,4)*cellsize(i)  * 3.08567758d+18
+      N0(4) = nkj(8,6)*cellsize(i)  * 3.08567758d+18
+
+
+c     BEGIN ITERATIVE LOOP FOR SELF-SHIELDING FOR SUBSEQUENT SUBCELLS
+
+c     penetrate into the cell once subcell at a time until we reach the
+c     physical half-depth of the cell, which keep track of in terms of
+c     the fractional depth (fdpeth) of the inner edge of the subcell
+
+      DO 15 WHILE (fdepth.lt.1.00) 
+
+c     attenuate the ionizing SED for having penetrated into the
+c     *previous* subcell a distance Lisub (which is determined by the
+c     current value of taumin (optical depth)
+
+       CALL attenuateSED(Lisub,tau11E,tau21E,tau22E)
+
+c     increment the index counter for the next subcell
+
+       isub = isub + 1
+
+c     compute photionization and Auger rates for this subcell
+
+       CALL alphas_nonT
+
+c     solve ionization balance for this subcell; returns the ionization
+c     fractions and ion number densities for this subcell
+
+       CALL ionbalance(toler)
+
+c     determine this subcell's physical depth from the optical depth
+c     increment (taumin) for this subcell, and deterine the fraction of
+c     the half cell size where the subcell ends; enforce that we do not
+c     exceed the half cell depth; note that for the first 5 subcells we
+c     enforce unity optical depth increments, and then increase the
+c     optical depth by 30% for each successive subcell
+   
+       IF (isub.gt.5.AND.taumin.lt.50.0) taumin = 1.3d0*taumin
+       Lisub  = meanfreepath(isub)
+       IF (fdepth+(Lisub/Lcell).gt.1.0) Lisub = Lcell*(1.0d0-fdepth)
+       fdS    = Lisub/Lcell
+       fdepth = fdepth + fdS
+       depth  = depth + 2.0*Lisub
+
+c     reporting to screen and file fort.199 (comment out if not desired)
+
+      WRITE(6,198) i,isub,nH,Tcell(i),cellsize(i),Lisub,depth,
+     &             fdepth,fdS,taumin,tau11E,tau21E,tau22E
+      WRITE(400,198) i,isub,nH,Tcell(i),cellsize(i),Lisub,depth,
+     &             fdepth,fdS,taumin,tau11E,tau21E,tau22E
+       IF (i.eq.iprint) then 
+       WRITE(funit,199) Lisub,fdepth,
+     &          R_ph(1,1),R_ph(1,2),R_ph(12,2),R_ph(6,4),R_ph(8,6),
+     &          nkj(1,1),nkj(1,2),nkj(12,2),nkj(6,4),nkj(8,6),
+     &          fion(1,1),fion(1,2),fion(12,2),fion(6,4),fion(8,6)
+       END IF
+
+c     increment the next term in the weighted sum used to obtain the
+c     mean ionization fractions for the full cell
+
+       DO kk=1,Nspecies
+        k = kidx(kk)
+        DO j=1,k+1
+         fikj(k,j) = fikj(k,j) + fion(k,j)*fdS
+        END DO
+       END DO
+
+       IF (isub.eq.Nmaxsub) then
+        WRITE(6,*) 'ERROR(solvethick): too many subcells in cell ',i
+        WRITE(6,*) 'The maximum allowed is ',Nmaxsub
+        WRITE(6,*) '- this can be adjusted in the source code by'
+        WRITE(6,*) '  editing parameter Nmaxsub in routine solvethick'
+        STOP 
+       END IF
+
+ 15   CONTINUE  ! next sub cell
+
+c     SELF-SHIELDING TREATMENT COMPLETE
+
+c     store the mean ionization fractions and number densities 
+
+      DO kk=1,Nspecies
+       k = kidx(kk)
+       DO j=1,k+1
+        fion(k,j) = fikj(k,j) 
+       END DO
+      END DO
+
+      Nshield(1) = fion(1,1)*nk(1)*cellsize(i)   * 3.08567758d+18
+      Nshield(2) = fion(12,2)*nk(12)*cellsize(i) * 3.08567758d+18
+      Nshield(3) = fion(6,4)*nk(6)*cellsize(i)   * 3.08567758d+18
+      Nshield(4) = fion(8,6)*nk(8)*cellsize(i)   * 3.08567758d+18
+
+      WRITE(401,198) i,isub,nH,Tcell(i),
+     &         (log10(N0(j)),log10(Nshield(j)),j=1,4)
+
+
+      RETURN
+
+ 198  FORMAT(1x,2i4,20f12.3) 
+ 199  FORMAT(1x,20(1pe12.2))
+
+      END
+
+c
+c.........................................................................
+c
+
+      DOUBLE PRECISION FUNCTION meanfreepath(isub)
+
+c     for cell ID=i for each subcell this routine computes the current
+c     mean free path (mfp) of the photons at the ionization edges for an
+c     optical depth unity for neutral hydrogen, neutral helium, and
+c     singly ionized helium
+
+c     "isub" is not required, but the function call requires an argument
+
+c
+c:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+c
+
+
+      implicit none
+      include           'rates.h'
+      include           'getcube.h'
+      integer           isub
+      double precision  mfp11,mfp21,mfp22
+      double precision  mfp
+      include           'rates.com'
+      include           'com-photo.com'
+      include           'getcube.com'
+
+
+c     compute the mean free path at neutral hydrogen edge (11), the
+c     neutral helium edge (21), and the singly ionized helium edge (22);
+c     these values are in centimeters
+
+      mfp11 = taumin/(nkj(1,1)*sig11)  
+      mfp21 = taumin/(nkj(2,1)*sig21)
+      mfp22 = taumin/(nkj(2,2)*sig22)
+
+c     determine which the minimum mean free path, which dictates the
+c     subcell depth
+
+      mfp = min(mfp11,mfp21)
+      mfp = min(mfp22,mfp)
+
+      meanfreepath = mfp/3.08567758d+18 ! conver cm to pc
+
+
+      RETURN
+      END
+
+c
+c.........................................................................
+c
+
+      SUBROUTINE attenuateSED(Lisub,tau11E,tau21E,tau22E)
+
+c     this routine takes the current SED and attenuates it for the
+c     incremental pathlength dS into the cell
+
+c
+c:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+c
+
+
+      implicit none
+      include           'rates.h'
+      integer           i,ie,n
+      double precision  thresholdE,phfit2
+      double precision  E,JE0,y,Lisub,dS
+      double precision  sig11E,sig21E,sig22E
+      double precision  tau11E,tau21E,tau22E
+      double precision  tau11,tau21,tau22
+      include           'rates.com'
+      include           'com-photo.com'
+
+
+c     get the path length along the line of sight
+
+      dS = 3.08567758d+18*Lisub  ! convert pc to cm
+
+c     attenuate the spectrum for hydrogen and helium ionization
+ 
+      DO 31 ie=1,NEsed
+       IF (logEsed(ie).ge.log10(E11)) then 
+        E      = 10.0d0**logEsed(ie)
+        JE0    = 10.0d0**logJEsed(ie)
+        sig11E = 1.0d-18*phfit2(1,1,1,E)
+        sig21E = 1.0d-18*phfit2(2,2,1,E)
+        sig22E = 1.0d-18*phfit2(2,1,1,E)
+        tau11E = nkj(1,1)*sig11E*dS
+        tau21E = nkj(2,1)*sig21E*dS
+        tau22E = nkj(2,2)*sig22E*dS
+        y      = JE0*exp(-tau11E-tau21E-tau22E)
+        logJEsed(ie) = log10(y)
+       END IF
+31    CONTINUE
+
+c     debug?
+
+      tau11E = nkj(1,1)*sig11*dS
+      tau21E = nkj(2,1)*sig21*dS
+      tau22E = nkj(2,2)*sig22*dS
+
+c     obtain the global 2nd derivatives in the energy direction of
+c     logJEuvb for the integration required to obtain the
+c     photoionization and Auger rates
+
+      CALL SEDderivs
+
+      RETURN
+      END
+

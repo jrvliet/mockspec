@@ -1,0 +1,233 @@
+c
+c.........................................................................
+c
+
+      PROGRAM rates
+
+c
+c:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+c
+
+      implicit none
+      include           'rates.h'
+      include           'getcube.h'
+      logical           opticallythick
+      integer           i,j,k,iz,NT,kk,noutfiles
+      integer           irow,icol,update,report
+      integer           kdo(Imax),jdo(Imax)
+      double precision  toler
+      double precision  z,T,Zmet
+      double precision  spop_age,spop_Zmet,spop_Msol,rstar
+      double precision  logTlo,logThi,dlogT,Tlo,pow
+      character*80      GZinfile,GZcoolfile,GZoutfile(Imax) 
+      include           'rates.com'
+      include           'com-file.com'
+      include           'com-modes.com'
+      include           'getcube.com'
+
+
+      OPEN(unit=4,file='rates.runlog',status='unknown')
+
+      WRITE(6,*) ' '
+      WRITE(6,*) '........................................'
+      WRITE(6,*) '.                                      .'
+      WRITE(6,*) '.         GRID ION CODE V3.0           .'
+      WRITE(6,*) '.           November 2014              .'
+      WRITE(6,*) '.                                      .'
+      WRITE(6,*) '........................................'
+      WRITE(6,*) ' '
+
+      WRITE(4,*) ' '
+      WRITE(4,*) '........................................'
+      WRITE(4,*) '.                                      .'
+      WRITE(4,*) '.         GRID ION CODE V2.0           .'
+      WRITE(4,*) '.           November 2013              .'
+      WRITE(4,*) '.                                      .'
+      WRITE(4,*) '........................................'
+      WRITE(4,*) ' '
+
+c     ............................................
+c     PHASE 1: SET UP THE RUN, COMMUNICATE TO USER
+c     ............................................
+
+      i       = 0
+      Nprint  = 0
+
+c     table, UVB, and Sb99 data paths (global)
+c     TABPATH is where the atomic data tables live
+c     UVBPATH is where the Haardt & Madau UVB SEDs live
+c     SB99PATH is where the Starburst99 SEDs live
+
+      tabpath  = '/home/matrix2/cwc/Projects/Mockspec/GridCode/'
+      UVBpath  = '/home/matrix2/cwc/Projects/Mockspec/UVBspectrum/'
+      Sb99path = '/home/matrix2/cwc/Projects/Mockspec/Sb99spectrum/'
+      homedir  = tabpath
+
+c     configure arrays, globals, zero out all arrays, etc
+
+      CALL configall(toler,GZinfile,z,noutfiles)
+
+c     read in the "rates.outfiles" file and configure the arrays that
+c     track which ions are to be output for processing
+
+      CALL outfiles(noutfiles,kdo,jdo,GZoutfile,GZcoolfile)
+
+c     communicate the current run to the user
+
+      CALL commconfig(GZinfile,z,toler,noutfiles,kdo,jdo,GZoutfile)
+
+c     construct the unattenuated ionizing SED
+
+      CALL configIonPhysics(z)
+      CALL mkSED
+
+c     construct Rkjs grid
+
+C      CALL Rkjsgrid(toler)
+
+c     read in the data cube
+
+      CALL readGZ(GZinfile)
+
+      update = ncells/10
+      report = update
+
+c     open the output files
+
+      CALL ofiles(noutfiles,GZoutfile,GZcoolfile)
+
+c     ......................................................
+c     PHASE 2: COMPUTE IONIZATION BALANCE AND OUTPUT RESULTS
+c     ......................................................
+
+      CALL notify(' ',0)
+      CALL notify(' COMPUTING IONIZATION BALANCE for all cells',0)
+      CALL notify('  *** this may take several minutes ***',0)
+      CALL notify('  10% interval notifications...',0)
+
+      DO 01 i=1,ncells
+
+       IF (i.gt.report) then
+        CALL notify('  Ncells completed = ',report)
+        report = report + update
+       END IF
+
+c     for cell i: store nH, T, and Zmet
+
+        nH   = den(i)
+        T    = Tcell(i)
+        Zmet = SNII(i) + SNIa(i)
+
+c     compute abundance pattern
+
+        CALL initabund(Zmet)
+
+c     make the SED, populate photo-ionization rates and collisional rate
+c     coefficients
+
+       CALL mkSED
+       IF (doPH) CALL alphas_nonT
+       CALL alphas_T(T)
+
+c     solve ionization balance
+
+       CALL ionbalance(toler)
+
+c     NEW CALL HERE check for optically thick
+
+C       IF (doPH.AND.opticallythick(i)) then
+C        CALL solvethick(i,toler)
+C       END IF
+
+c     compute the ionization and recombination timescales
+
+       CALL timescales(T,Zmet,noutfiles,kdo,jdo)
+
+c     write the cell data to the new ion cubes
+
+      DO 92 j=1,noutfiles
+       CALL writeGZcell(i,j,kdo,jdo)
+ 92   CONTINUE
+      CALL writecooldat(i,z,T,Zmet) 
+
+c     go to the next cell i
+
+ 01   CONTINUE
+
+c     close all output files
+
+      CALL cfiles(noutfiles,GZoutfile,GZcoolfile)
+      
+c     communicate completion
+
+      CALL notify(' ',0)
+      CALL notify(' SUCCESSFUL COMPLETION',0)
+    
+c     ....
+c     DONE
+c     ....
+
+c     close the runlog file
+
+      CLOSE(unit=4)
+
+      STOP
+      END
+
+
+c     ...........................................
+c     INCLUDE MODULES (subroutines and functions)
+c     ...........................................
+
+c     data cube I/O routines
+
+      include 'getcube.f'
+
+c     communication routines and general file I/O
+
+      include 'rates-comm.f'
+      include 'rates-files.f'
+
+c     computation of SED, rate coefficients, photo cross sections
+
+      include 'rates-sed.f'
+      include 'rates-alphas.f'
+      include 'rates-phxsecs.f'
+      include 'rates-Rkjs.f'
+      include 'rates-Rkjs-data.blk'
+
+c     photoionization calculations and population of tabulated data
+
+      include 'funcs-photo.f'   
+      include 'files-photo.f'
+      include 'phfit-mod.f'
+      include 'phfit-data.blk'
+
+c     recombination calculations and population of tabulated data
+
+      include 'funcs-recomb.f'
+      include 'files-recomb.f'
+
+c     collisional calculations and population of tabulated data
+
+      include 'funcs-coll.f'
+      include 'files-coll.f'
+
+c     charge transfer calculations and population of tabulated data
+
+      include 'kingdon-mod.f'
+      include 'kingdon-data.blk'
+
+c     auger calculations and population of tabulated data
+
+      include 'files-auger.f'
+      include 'funcs-auger.f'
+
+c     general subs, rate matrix solver, gas timescales
+
+      include 'rates-subs.f'
+      include 'rates-solve4.f'
+      include 'rates-thick.f'
+      include 'rates-times.f'
+
+c     eof
