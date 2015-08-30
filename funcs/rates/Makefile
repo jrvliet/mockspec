@@ -1,4 +1,4 @@
-FFLAGS=-O -C -w 
+FFLAGS=-O -C -w -mcmodel=medium -Bdynamic
 #FFLAGS=-O -Bstatic
 #SLATEC=/home/matrix/cwc/Programs/slatec/libslatec.a -llapack
 SLATEC=/home/matrix/cwc/Swinburne/Swin-Programs/Programs/slatec/libslatec.a #-llapack# -dlamch
@@ -11,4 +11,4 @@ default:: rates
 
 rates: files-auger.f files-coll.f files-photo.f files-recomb.f funcs-auger.f funcs-coll.f funcs-photo.f funcs-recomb.f getcube.f kingdon-mod.f phfit-mod.f rates-alphas.f rates-phxsecs.f rates-comm.f rates.f rates-files.f rates-sed.f rates-solve4.f rates-thick.f rates-subs.f rates-times.f com-auger.com com-coll.com com-modes.com com-photo.com com-recomb.com getcube.com rates.com getcube.h rates.h
 
-	f95 $(FFLAGS) rates.f -o rates2 $(SLATEC) $(LAPACK)
+	f95 $(FFLAGS) rates.f -o rates $(SLATEC) $(LAPACK)

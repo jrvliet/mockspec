@@ -87,11 +87,11 @@ Before you run the code:
 
     4) Ensure the directory has all required files, namely the galaxy file 
 
-    5) Make all compiled codes. This includes: cellfinder, los7, specsynth, sysabs, and cullabs
-
-    6) Download the cooling tables for rates. They can be downloaded from:
-        http://astronomy.nmsu.edu/jrvander/coolingtables.tar.gz
-       Unzip this file in the rates folder in funcs. 
+    5) Make all compiled codes. This includes: rates, cellfinder, los7, specsynth, 
+       sysabs, and cullabs. To make rates, you need to download and untar the follwing files:
+            http://astronomy.nmsu.edu/jrvander/ratesFiles/coolingtables.tar.gz
+            http://astronomy.nmsu.edu/jrvander/ratesFiles/lapack.tar.gz
+            http://astronomy.nmsu.edu/jrvander/ratesFiles/slatec.tar.gz
 
   
 Running the code:
