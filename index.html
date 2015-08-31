@@ -38,103 +38,30 @@
           <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
         </div>
 
-        <p>This is a repository for the entire mockspec pipeline that uses functional forms
-of the python code. </p>
+        <h2>
+<a id="welcome-to-mockspec" class="anchor" href="#welcome-to-mockspec" aria-hidden="true"><span class="octicon octicon-link"></span></a>Welcome to Mockspec</h2>
 
-<p>To run this code, the following python packgages need to be installed:
-    numpy
-    pytables
-    pandas</p>
-
-<p>Overview:</p>
-
-<pre><code>This code generates synthetic quasar absorption lines by running lines of sight (LOS) 
-through a simulated galaxy made with ART.  This repository has all the code required
-to generate and analyze the spectra. 
-</code></pre>
-
-<p>Before you run the code:</p>
-
-<pre><code>There are a few steps that need to be taken before the code can be run. 
-
-1) Get the simulation in the correct format. ART output the entire simulation box, 
-   typicaly 10Mpc along a side. Mockspec does not run on these boxes. It instead
-   runs on a small box selected from the large box. This selection is done using 
-   ANA, a code written by Daniel Ceverino and greatly imporved by Kenza Arraki. 
-   It is found in funcs/ana/. Running ANA can be challenging. It reuires the 
-   following simulation files:
-        10MpcBox_HartGal_csf_a0.300.di
-        10MpcBox_HartGal_csf.d
-        PMcrda0.300.DAT
-        PMcrs0a0.300.DAT    
-        sf.dat
-
-    To control the run of ANA, there are two control file: 
-        control.dat 
-        schedule_R.dat
-
-    Schedule_R.dat has most of the controls in it. The top section has flags as
-    to what the code should read in and what files it should produce. The sections 
-    that definately need to have a 1 are:
-        Read N-body file
-        Read stellar file
-        Read HYDRO file
-        Set units and global variables
-        Find halo center using particle distribution
-        Compute angular momentum
-        density, temperature, entropy profiles and Rvir calculation
-        Binary file with gas cells inside 4Rvir-box
-        Binary file with gas cells inside 4Rvir-box (metalliciites)
-    Most of the rest of the file should not be touched. 
-    ANA has an interesting behaviour where it finds the center of the galaxy, but
-    is super bad at it. You need to find the center with Rockstar and put it in 
-    manually. The coordinates are put in on the lines "xuser", "yuser", "zuser". 
-    The flag in front of "ioptCenter=1/2/3--&gt;potential/HF/IFRIT" should be 
-    set to 1, indicating the center is from a halo finder.
-
-    To setup control.dat, only change after the three repeated lines of "1. 129". 
-    The single number on the next line is the number of snapshots to run ANA on.
-    Leave this as one. The rest of the file is the list of expansion parameters
-    of the snapshots. Even if there are several numbers listed here, ANA will only 
-    run on the first one, since the number of snapshots to run is set to 1. 
-
-    Once both control.dat and schedule_R.dat are set, run ana.R.exe
-    The file needed is the GZ file. 
-
-2) The pipeline does not run on the binary files. It runs on an ASCII version 
-    of the file. To convert, use readbinary.exe. Run it with the format of 
-
-        readbinary.exe &lt;binary file&gt; &lt;name of output ASCII file&gt; GZ
-
-    The name of the output ASCII file should be the name of the binary file,
-    but with .dat replaced with .txt
+<p>This is the main page for the mockspec code. This code generates and analyzes synthetic quasar absorption line profiles in the circumgalactic medium around galaxies simulated with ART. It has been developed by <a href="http://astronomy.nmsu.edu/jrvander">Jacob Vander Vliet</a> and <a href="http://astronomy.nmsu.edu/cwc&gt;Dr.%20Chris%20Churchill&lt;/a&gt;%20at%20&lt;a%20href=">New Mexico State University</a>. The full details of how the code works can be found: <a href="http://adsabs.harvard.edu/abs/2014arXiv1409.0916C">here</a> and <a href="http://adsabs.harvard.edu/abs/2015ApJ...802...10C&gt;here&lt;/a&gt;.%20&lt;/p&gt;%0A%0A&lt;h3&gt;Overview:&lt;/h3&gt;%0A%0A&lt;p&gt;This%20code%20generates%20synthetic%20quasar%20absorption%20lines%20by%20running%20lines%20of%20sight%20(LOS)%20through%20a%20simulated%20galaxy%20made%20with%20ART.%20%20This%20repository%20has%20all%20the%20code%20required%20to%20generate%20and%20analyze%20the%20spectra.%20&lt;/p&gt;%0A%0A&lt;h3&gt;Before%20you%20run%20the%20code:&lt;/h3&gt;%0A%0A&lt;p&gt;There%20are%20a%20few%20steps%20that%20need%20to%20be%20taken%20before%20the%20code%20can%20be%20run.%20&lt;/p&gt;%0A%0A&lt;ol&gt;%0A&lt;li&gt;To%20run%20this%20code,%20the%20following%20python%20packages%20need%20to%20be%20installed:&lt;/li&gt;%0A&lt;li&gt;numpy&lt;/li&gt;%0A&lt;li&gt;pytables&lt;/li&gt;%0A&lt;li&gt;&lt;p&gt;pandas&lt;/p&gt;&lt;/li&gt;%0A&lt;li&gt;&lt;p&gt;Get%20the%20simulation%20in%20the%20correct%20format.%20ART%20output%20the%20entire%20simulation%20box,%20typically%2010Mpc%20along%20a%20side.%20Mockspec%20does%20not%20run%20on%20these%20boxes.%20It%20instead%20runs%20on%20a%20small%20box%20selected%20from%20the%20large%20box.%20This%20selection%20is%20done%20using%20ANA,%20a%20code%20written%20by%20Daniel%20Ceverino%20and%20greatly%20improved%20by%20Kenza%20Arraki.%20It%20is%20found%20in%20funcs/ana/.%20Running%20ANA%20can%20be%20challenging.%20It%20requires%20the%20following%20simulation%20files:&lt;/p&gt;&lt;/li&gt;%0A&lt;li&gt;10MpcBox_HartGal_csf_a0.300.di&lt;/li&gt;%0A&lt;li&gt;10MpcBox_HartGal_csf.d&lt;/li&gt;%0A&lt;li&gt;PMcrda0.300.DAT&lt;/li&gt;%0A&lt;li&gt;PMcrs0a0.300.DAT&lt;br&gt;&lt;/li&gt;%0A&lt;li&gt;sf.dat&lt;/li&gt;%0A&lt;/ol&gt;%0A%0A&lt;p&gt;To%20control%20the%20run%20of%20ANA,%20there%20are%20two%20control%20file:%20&lt;/p&gt;%0A%0A&lt;ul&gt;%0A&lt;li&gt;control.dat%20&lt;/li&gt;%0A&lt;li&gt;schedule_R.dat&lt;/li&gt;%0A&lt;/ul&gt;%0A%0A&lt;p&gt;Schedule_R.dat%20has%20most%20of%20the%20controls%20in%20it.%20The%20top%20section%20has%20flags%20as%0Ato%20what%20the%20code%20should%20read%20in%20and%20what%20files%20it%20should%20produce.%20The%20sections%20%0Athat%20definately%20need%20to%20have%20a%201%20are:&lt;/p&gt;%0A%0A&lt;ul&gt;%0A&lt;li&gt;Read%20N-body%20file&lt;/li&gt;%0A&lt;li&gt;Read%20stellar%20file&lt;/li&gt;%0A&lt;li&gt;Read%20HYDRO%20file&lt;/li&gt;%0A&lt;li&gt;Set%20units%20and%20global%20variables&lt;/li&gt;%0A&lt;li&gt;Find%20halo%20center%20using%20particle%20distribution&lt;/li&gt;%0A&lt;li&gt;Compute%20angular%20momentum&lt;/li&gt;%0A&lt;li&gt;density,%20temperature,%20entropy%20profiles%20and%20Rvir%20calculation&lt;/li&gt;%0A&lt;li&gt;Binary%20file%20with%20gas%20cells%20inside%204Rvir-box&lt;/li&gt;%0A&lt;li&gt;Binary%20file%20with%20gas%20cells%20inside%204Rvir-box%20(metalliciites)&lt;/li&gt;%0A&lt;/ul&gt;%0A%0A&lt;p&gt;Most%20of%20the%20rest%20of%20the%20file%20should%20not%20be%20touched.%20ANA%20has%20an%20interesting%20behaviour%20where%20it%20finds%20the%20center%20of%20the%20galaxy,%20but%20is%20super%20bad%20at%20it.%20You%20need%20to%20find%20the%20center%20with%20Rockstar%20and%20put%20it%20in%20manually.%20The%20coordinates%20are%20put%20in%20on%20the%20lines%20%22xuser%22,%20%22yuser%22,%20%22zuser%22.%20The%20flag%20in%20front%20of%20%22ioptCenter=1/2/3--&gt;potential/HF/IFRIT%22%20should%20be%20set%20to%201,%20indicating%20the%20center%20is%20from%20a%20halo%20finder.&lt;/p&gt;%0A%0A&lt;p&gt;To%20setup%20control.dat,%20only%20change%20after%20the%20three%20repeated%20lines%20of%20%221.%20129%22.%20The%20single%20number%20on%20the%20next%20line%20is%20the%20number%20of%20snapshots%20to%20run%20ANA%20on.%20Leave%20this%20as%20one.%20The%20rest%20of%20the%20file%20is%20the%20list%20of%20expansion%20parameters%20of%20the%20snapshots.%20Even%20if%20there%20are%20several%20numbers%20listed%20here,%20ANA%20will%20only%20run%20on%20the%20first%20one,%20since%20the%20number%20of%20snapshots%20to%20run%20is%20set%20to%201.%20&lt;/p&gt;%0A%0A&lt;p&gt;Once%20both%20control.dat%20and%20schedule_R.dat%20are%20set,%20run%20ana.R.exe.%20%20The%20file%20needed%20is%20the%20GZ%20file.%20&lt;/p&gt;%0A%0A&lt;p&gt;2)%20The%20pipeline%20does%20not%20run%20on%20the%20binary%20files.%20It%20runs%20on%20an%20ASCII%20version%20of%20the%20file.%20To%20convert,%20use%20readbinary.exe.%20Run%20it%20with%20the%20format%20of%20&lt;/p&gt;%0A%0A&lt;pre&gt;&lt;code&gt;%20%20%20%20%20%20%20%20readbinary.exe%20&lt;binary%20file&gt;%20&lt;name%20of%20output%20ASCII%20file&gt;%20GZ%0A&lt;/code&gt;&lt;/pre&gt;%0A%0A&lt;p&gt;The%20name%20of%20the%20output%20ASCII%20file%20should%20be%20the%20name%20of%20the%20binary%20file,%20but%20with%20.dat%20replaced%20with%20.txt&lt;/p&gt;%0A%0A&lt;p&gt;3)%20Configure%20the%20run.%20The%20parameters%20of%20the%20run%20are%20set%20in%20the%20mockspec.config%20file.%20There%20are%20three%20sections%20in%20this%20file.%20The%20first%20describes%20the%20galaxy%20and%20basic%20code%20parameters.%20%20These%20are%20mostly%20self-explanatory.%20The%20%20%20%20%20%20number%20of%20cores%20only%20affects%20the%20codes%20that%20can%20be%20run%20with%20parallization,%20namely%20cellfinder.%20The%20root%20location%20is%20not%20used%20by%20anything,%20so%20don't%20change%20it&lt;/p&gt;%0A%0A&lt;p&gt;The%20second%20section%20determines%20which%20codes%20will%20be%20run.%20A%201%20turns%20the%20code%20on,%20a%200%20turns%20it%20off.%20&lt;/p&gt;%0A%0A&lt;p&gt;The%20third%20section%20describes%20the%20ions%20to%20be%20probed%20and%20what%20instrument%20will%20be%20used%20for%20that%20ion.%20&lt;/p&gt;%0A%0A&lt;p&gt;4)%20Ensure%20the%20directory%20has%20all%20required%20files,%20namely%20the%20galaxy%20file%20&lt;/p&gt;%0A%0A&lt;p&gt;5)%20Make%20all%20compiled%20codes.%20This%20includes:%20rates,%20cellfinder,%20los7,%20specsynth,%20sysabs,%20and%20cullabs.%20To%20make%20rates,%20you%20need%20to%20download%20and%20untar%20the%20following%20files:&lt;/p&gt;%0A%0A&lt;ul&gt;%0A&lt;li&gt;&lt;a%20href="></a><a href="http://astronomy.nmsu.edu/jrvander/ratesFiles/coolingtables.tar.gz">http://astronomy.nmsu.edu/jrvander/ratesFiles/coolingtables.tar.gz</a>
+</p><a href="http://astronomy.nmsu.edu/jrvander/ratesFiles/lapack.tar.gz"></a><a href="http://astronomy.nmsu.edu/jrvander/ratesFiles/lapack.tar.gz">http://astronomy.nmsu.edu/jrvander/ratesFiles/lapack.tar.gz</a>
+<a href="http://astronomy.nmsu.edu/jrvander/ratesFiles/slatec.tar.gz"></a><a href="http://astronomy.nmsu.edu/jrvander/ratesFiles/slatec.tar.gz">http://astronomy.nmsu.edu/jrvander/ratesFiles/slatec.tar.gz</a>
 
 
-3) Configure the run. The parameters of the run are set in the mockspec.config 
-   file. There are three sections in this file. The first describes the 
-   galaxy and basic code parameters.  These are mostly self-explanatory. The
-   number of cores only affects the codes that can be run with parallization,
-   namely cellfinder. The root location is not used by anything, so don't change it
+<h3>
+<a id="running-the-code" class="anchor" href="#running-the-code" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running the code</h3>
 
-   The second section determines which codes will be run. A 1 turns the code on, 
-   a 0 turns it off. 
+<p>The main driver is mockspec.py. Run this in the directory with the snapshot. Everything is controlled by the mockspec.config file. </p>
 
-   The third section describes the ions to be probed and what instrument will be
-   used for that ion. 
+<h3>
+<a id="outputs" class="anchor" href="#outputs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Outputs</h3>
 
-
-4) Ensure the directory has all required files, namely the galaxy file 
-
-5) Make all compiled codes. This includes: rates, cellfinder, los7, specsynth, 
-   sysabs, and cullabs. To make rates, you need to download and untar the follwing files:
-        http://astronomy.nmsu.edu/jrvander/ratesFiles/coolingtables.tar.gz
-        http://astronomy.nmsu.edu/jrvander/ratesFiles/lapack.tar.gz
-        http://astronomy.nmsu.edu/jrvander/ratesFiles/slatec.tar.gz
-</code></pre>
-
-<p>Running the code:
-    The main driver is mockspec.py. Run this in the directory with the snapshot.<br>
-    The final output is the ALL sysabs  </p>
+<p>The code generates several files along the way:
+1. .cellID.dat: Generated by cellfinder, this is a list of the cellIDs of cells along the LOS
+2. .dat: Generated by idcells, this contains all properties of the cells along the LOS as taken from the simulation output. 
+3. .lines: Generated by los7, this contains the column density and doppler parameter for each cell only the LOS. 
+4. .spec: Generated by specsynth, this contains the spectrum of the absorption. If the ion is a doublet, two of these files are created, one for each transition.
+5. .sysabs: Generated by sysanal, this contains the equivalent width and AOD column density of each transition. This file is only generated if absorption is detected. 
+5. .regabs: Generated by sysanal, this file is only generated if there are multiple absorption regions detected. 
+6. ALL.sysabs: Generated by cullabs, this is all sysabs files culminated into one file.  </p>
       </section>
 
     </div>
