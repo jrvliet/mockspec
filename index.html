@@ -41,7 +41,7 @@
         <h2>
 <a id="welcome-to-mockspec" class="anchor" href="#welcome-to-mockspec" aria-hidden="true"><span class="octicon octicon-link"></span></a>Welcome to Mockspec</h2>
 
-<p>This is the main page for the mockspec code. This code generates and analyzes synthetic quasar absorption line profiles in the circumgalactic medium around galaxies simulated with ART. It has been developed by <a href="http://astronomy.nmsu.edu/jrvander">Jacob Vander Vliet</a> and <a href="http://astronomy.nmsu.edu/cwc&gt;Dr.%20Chris%20Churchill&lt;/a&gt;%20at%20&lt;a%20href=">New Mexico State University</a>. The full details of how the code works can be found: <a href="http://adsabs.harvard.edu/abs/2014arXiv1409.0916C">here</a> and <a href="http://adsabs.harvard.edu/abs/2015ApJ...802...10C">here</a>. </p>
+<p>This is the main page for the mockspec code. This code generates and analyzes synthetic quasar absorption line profiles in the circumgalactic medium around galaxies simulated with ART. It has been developed by <a href="http://astronomy.nmsu.edu/jrvander">Jacob Vander Vliet</a> and <a href="http://astronomy.nmsu.edu/cwc">Dr. Chris Churchill</a> at <a href="astronomy.nmsu.edu">New Mexico State University</a>. The full details of how the code works can be found: <a href="http://adsabs.harvard.edu/abs/2014arXiv1409.0916C">here</a> and <a href="http://adsabs.harvard.edu/abs/2015ApJ...802...10C">here</a>. </p>
 
 <h3>
 <a id="overview" class="anchor" href="#overview" aria-hidden="true"><span class="octicon octicon-link"></span></a>Overview:</h3>
@@ -108,7 +108,9 @@ Schedule_R.dat has most of the controls in it. The top section has flags as to w
 </ul>
 Most of the rest of the file should not be touched. ANA has an interesting behaviour where it finds the center of the galaxy, but is super bad at it. You need to find the center with Rockstar and put it in manually. The coordinates are put in on the lines "xuser", "yuser", "zuser". The flag in front of "ioptCenter=1/2/3--&gt;potential/HF/IFRIT" should be set to 1, indicating the center is from a halo finder.
 
+
 To setup control.dat, only change after the three repeated lines of "1. 129". The single number on the next line is the number of snapshots to run ANA on. Leave this as one. The rest of the file is the list of expansion parameters of the snapshots. Even if there are several numbers listed here, ANA will only run on the first one, since the number of snapshots to run is set to 1. 
+
 
 Once both control.dat and schedule_R.dat are set, run ana.R.exe.  The file needed is the GZ file. 
 
@@ -119,21 +121,31 @@ Once both control.dat and schedule_R.dat are set, run ana.R.exe.  The file neede
 
 The name of the output ASCII file should be the name of the binary file, but with .dat replaced with .txt
 
+
 </li>
 <li> Configure the run. The parameters of the run are set in the mockspec.config file. There are three sections in this file. The first describes the galaxy and basic code parameters.  These are mostly self-explanatory. The      number of cores only affects the codes that can be run with parallization, namely cellfinder. The root location is not used by anything, so don't change it
     
+
 The second section determines which codes will be run. A 1 turns the code on, a 0 turns it off. 
 
+
 The third section describes the ions to be probed and what instrument will be used for that ion. 
+
+
 
 </li>
 <li> Ensure the directory has all required files, namely the galaxy file 
 
 </li>
 <li> Make all compiled codes. This includes: rates, cellfinder, los7, specsynth, sysabs, and cullabs. To make rates, you need to download and untar the following files:
-+ <a href="http://astronomy.nmsu.edu/jrvander/ratesFiles/coolingtables.tar.gz">http://astronomy.nmsu.edu/jrvander/ratesFiles/coolingtables.tar.gz</a>
-+ <a href="http://astronomy.nmsu.edu/jrvander/ratesFiles/lapack.tar.gz">http://astronomy.nmsu.edu/jrvander/ratesFiles/lapack.tar.gz</a>
-+ <a href="http://astronomy.nmsu.edu/jrvander/ratesFiles/slatec.tar.gz">http://astronomy.nmsu.edu/jrvander/ratesFiles/slatec.tar.gz</a>
+<ul>
+<li> <a href="http://astronomy.nmsu.edu/jrvander/ratesFiles/coolingtables.tar.gz">http://astronomy.nmsu.edu/jrvander/ratesFiles/coolingtables.tar.gz</a>
+</li>
+<li> <a href="http://astronomy.nmsu.edu/jrvander/ratesFiles/lapack.tar.gz">http://astronomy.nmsu.edu/jrvander/ratesFiles/lapack.tar.gz</a>
+</li>
+<li> <a href="http://astronomy.nmsu.edu/jrvander/ratesFiles/slatec.tar.gz">http://astronomy.nmsu.edu/jrvander/ratesFiles/slatec.tar.gz</a>
+</li>
+</ul>
 </li>
 </ol>
   
