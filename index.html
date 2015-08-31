@@ -54,76 +54,89 @@
 <p>There are a few steps that need to be taken before the code can be run. </p>
 
 <ol>
-<li>To run this code, the following python packages need to be installed:</li>
-<li>numpy</li>
-<li>pytables</li>
-<li><p>pandas</p></li>
-<li><p>Get the simulation in the correct format. ART output the entire simulation box, typically 10Mpc along a side. Mockspec does not run on these boxes. It instead runs on a small box selected from the large box. This selection is done using ANA, a code written by Daniel Ceverino and greatly improved by Kenza Arraki. It is found in funcs/ana/. Running ANA can be challenging. It requires the following simulation files:</p></li>
-<li>10MpcBox_HartGal_csf_a0.300.di</li>
-<li>10MpcBox_HartGal_csf.d</li>
-<li>PMcrda0.300.DAT</li>
-<li>PMcrs0a0.300.DAT<br>
+<li> To run this code, the following python packages need to be installed:
+<ul>
+<li> numpy
 </li>
-<li>sf.dat</li>
+<li> pytables
+</li>
+<li> pandas
+</li>
+</ul>
+
+</li>
+<li> Get the simulation in the correct format. ART output the entire simulation box, typically 10Mpc along a side. Mockspec does not run on these boxes. It instead runs on a small box selected from the large box. This selection is done using ANA, a code written by Daniel Ceverino and greatly improved by Kenza Arraki. It is found in funcs/ana/. Running ANA can be challenging. It requires the following simulation files:
+<ul>
+<li> 10MpcBox_HartGal_csf_a0.300.di
+</li>
+<li> 10MpcBox_HartGal_csf.d
+</li>
+<li> PMcrda0.300.DAT
+</li>
+<li> PMcrs0a0.300.DAT    
+</li>
+<li> sf.dat
+</li>
+</ul>
+To control the run of ANA, there are two control file: 
+<ul>
+<li> control.dat 
+</li>
+<li> schedule_R.dat
+</li>
+</ul>    
+Schedule_R.dat has most of the controls in it. The top section has flags as to what the code should read in and what files it should produce. The sections that definitely need to have a 1 are:
+<ul>
+<li> Read N-body file
+</li>
+<li> Read stellar file
+</li>
+<li> Read HYDRO file
+</li>
+<li> Set units and global variables
+</li>
+<li> Find halo center using particle distribution
+</li>
+<li> Compute angular momentum
+</li>
+<li> density, temperature, entropy profiles and Rvir calculation
+</li>
+<li> Binary file with gas cells inside 4Rvir-box
+</li>
+<li> Binary file with gas cells inside 4Rvir-box (metalliciites)
+</li>
+</ul>
+Most of the rest of the file should not be touched. ANA has an interesting behaviour where it finds the center of the galaxy, but is super bad at it. You need to find the center with Rockstar and put it in manually. The coordinates are put in on the lines "xuser", "yuser", "zuser". The flag in front of "ioptCenter=1/2/3--&gt;potential/HF/IFRIT" should be set to 1, indicating the center is from a halo finder.
+
+To setup control.dat, only change after the three repeated lines of "1. 129". The single number on the next line is the number of snapshots to run ANA on. Leave this as one. The rest of the file is the list of expansion parameters of the snapshots. Even if there are several numbers listed here, ANA will only run on the first one, since the number of snapshots to run is set to 1. 
+
+Once both control.dat and schedule_R.dat are set, run ana.R.exe.  The file needed is the GZ file. 
+
+</li>
+<li> The pipeline does not run on the binary files. It runs on an ASCII version of the file. To convert, use readbinary.exe. Run it with the format of 
+        
+            readbinary.exe   GZ
+
+The name of the output ASCII file should be the name of the binary file, but with .dat replaced with .txt
+
+</li>
+<li> Configure the run. The parameters of the run are set in the mockspec.config file. There are three sections in this file. The first describes the galaxy and basic code parameters.  These are mostly self-explanatory. The      number of cores only affects the codes that can be run with parallization, namely cellfinder. The root location is not used by anything, so don't change it
+    
+The second section determines which codes will be run. A 1 turns the code on, a 0 turns it off. 
+
+The third section describes the ions to be probed and what instrument will be used for that ion. 
+
+</li>
+<li> Ensure the directory has all required files, namely the galaxy file 
+
+</li>
+<li> Make all compiled codes. This includes: rates, cellfinder, los7, specsynth, sysabs, and cullabs. To make rates, you need to download and untar the following files:
++ <a href="http://astronomy.nmsu.edu/jrvander/ratesFiles/coolingtables.tar.gz">http://astronomy.nmsu.edu/jrvander/ratesFiles/coolingtables.tar.gz</a>
++ <a href="http://astronomy.nmsu.edu/jrvander/ratesFiles/lapack.tar.gz">http://astronomy.nmsu.edu/jrvander/ratesFiles/lapack.tar.gz</a>
++ <a href="http://astronomy.nmsu.edu/jrvander/ratesFiles/slatec.tar.gz">http://astronomy.nmsu.edu/jrvander/ratesFiles/slatec.tar.gz</a>
+</li>
 </ol>
-
-<p>To control the run of ANA, there are two control file: </p>
-
-<ul>
-<li>control.dat </li>
-<li>schedule_R.dat</li>
-</ul>
-
-<p>Schedule_R.dat has most of the controls in it. The top section has flags as
-to what the code should read in and what files it should produce. The sections 
-that definately need to have a 1 are:</p>
-
-<ul>
-<li>Read N-body file</li>
-<li>Read stellar file</li>
-<li>Read HYDRO file</li>
-<li>Set units and global variables</li>
-<li>Find halo center using particle distribution</li>
-<li>Compute angular momentum</li>
-<li>density, temperature, entropy profiles and Rvir calculation</li>
-<li>Binary file with gas cells inside 4Rvir-box</li>
-<li>Binary file with gas cells inside 4Rvir-box (metalliciites)</li>
-</ul>
-
-<p>Most of the rest of the file should not be touched. ANA has an interesting behaviour where it finds the center of the galaxy, but is super bad at it. You need to find the center with Rockstar and put it in manually. The coordinates are put in on the lines "xuser", "yuser", "zuser". The flag in front of "ioptCenter=1/2/3--&gt;potential/HF/IFRIT" should be set to 1, indicating the center is from a halo finder.</p>
-
-<p>To setup control.dat, only change after the three repeated lines of "1. 129". The single number on the next line is the number of snapshots to run ANA on. Leave this as one. The rest of the file is the list of expansion parameters of the snapshots. Even if there are several numbers listed here, ANA will only run on the first one, since the number of snapshots to run is set to 1. </p>
-
-<p>Once both control.dat and schedule_R.dat are set, run ana.R.exe.  The file needed is the GZ file. </p>
-
-<p>2) The pipeline does not run on the binary files. It runs on an ASCII version of the file. To convert, use readbinary.exe. Run it with the format of </p>
-
-<pre><code>        readbinary.exe &lt;binary file&gt; &lt;name of output ASCII file&gt; GZ
-</code></pre>
-
-<p>The name of the output ASCII file should be the name of the binary file, but with .dat replaced with .txt</p>
-
-<p>3) Configure the run. The parameters of the run are set in the mockspec.config file. There are three sections in this file. The first describes the galaxy and basic code parameters.  These are mostly self-explanatory. The      number of cores only affects the codes that can be run with parallization, namely cellfinder. The root location is not used by anything, so don't change it</p>
-
-<p>The second section determines which codes will be run. A 1 turns the code on, a 0 turns it off. </p>
-
-<p>The third section describes the ions to be probed and what instrument will be used for that ion. </p>
-
-<p>4) Ensure the directory has all required files, namely the galaxy file </p>
-
-<p>5) Make all compiled codes. This includes: rates, cellfinder, los7, specsynth, sysabs, and cullabs. To make rates, you need to download and untar the following files:</p>
-
-<ul>
-<li>
-<a href="http://astronomy.nmsu.edu/jrvander/ratesFiles/coolingtables.tar.gz"></a><a href="http://astronomy.nmsu.edu/jrvander/ratesFiles/coolingtables.tar.gz">http://astronomy.nmsu.edu/jrvander/ratesFiles/coolingtables.tar.gz</a>
-</li>
-<li>
-<a href="http://astronomy.nmsu.edu/jrvander/ratesFiles/lapack.tar.gz"></a><a href="http://astronomy.nmsu.edu/jrvander/ratesFiles/lapack.tar.gz">http://astronomy.nmsu.edu/jrvander/ratesFiles/lapack.tar.gz</a>
-</li>
-<li>
-<a href="http://astronomy.nmsu.edu/jrvander/ratesFiles/slatec.tar.gz"></a><a href="http://astronomy.nmsu.edu/jrvander/ratesFiles/slatec.tar.gz">http://astronomy.nmsu.edu/jrvander/ratesFiles/slatec.tar.gz</a>
-</li>
-</ul>
+  
 
 <h3>
 <a id="running-the-code" class="anchor" href="#running-the-code" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running the code</h3>
