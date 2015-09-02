@@ -1,25 +1,44 @@
-<!DOCTYPE html>
-<html lang="en-us">
+<!doctype html>
+<html>
   <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>Mockspec by jrvliet</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-dark.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
   </head>
   <body>
-    <section class="page-header">
-      <h1 class="project-name">Mockspec</h1>
-      <h2 class="project-tagline">Full Pipeline</h2>
-      <a href="https://github.com/jrvliet/mockspec" class="btn">View on GitHub</a>
-      <a href="https://github.com/jrvliet/mockspec/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/jrvliet/mockspec/tarball/master" class="btn">Download .tar.gz</a>
-    </section>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/jrvliet/mockspec">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/jrvliet/mockspec/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/jrvliet/mockspec/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
 
-    <section class="main-content">
-      <h2>
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Mockspec</h1>
+          <p>Full Pipeline</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/jrvliet">jrvliet</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h2>
 <a id="welcome-to-mockspec" class="anchor" href="#welcome-to-mockspec" aria-hidden="true"><span class="octicon octicon-link"></span></a>Welcome to Mockspec</h2>
 
 <p>This is the main page for the mockspec code. This code generates and analyzes synthetic quasar absorption line profiles in the circumgalactic medium around galaxies simulated with ART. It has been developed by <a href="http://astronomy.nmsu.edu/jrvander">Jacob Vander Vliet</a> and <a href="http://astronomy.nmsu.edu/cwc">Dr. Chris Churchill</a> at <a href="astronomy.nmsu.edu">New Mexico State University</a>. The full details of how the code works can be found: <a href="http://adsabs.harvard.edu/abs/2014arXiv1409.0916C">here</a> and <a href="http://adsabs.harvard.edu/abs/2015ApJ...802...10C">here</a>. </p>
@@ -93,12 +112,12 @@ Most of the rest of the file should not be touched. ANA has an interesting behav
 To setup control.dat, only change after the three repeated lines of "1. 129". The single number on the next line is the number of snapshots to run ANA on. Leave this as one. The rest of the file is the list of expansion parameters of the snapshots. Even if there are several numbers listed here, ANA will only run on the first one, since the number of snapshots to run is set to 1. 
 
 
-Once both control.dat and schedule_R.dat are set, run ana.R.exe.  The file needed is the GZ file. The necessary output files are named &lt;galID&amp;rt;_GZa&lt;expansion parameter&amp;rt;.txt (the gas box) and Jacob.txt (summary file). 
+Once both control.dat and schedule_R.dat are set, run ana.R.exe.  The file needed is the GZ file. The necessary output files are named &lt;galID&amp;rt;_GZa&gt;expansion parameter&gt;.txt (the gas box) and Jacob.txt (summary file). 
 
 
 
 </li>
-<li> To use the summary file, its contents need to be added to the galaxy's summary file. These files are named \.dat and are located in the summaries directory. These properties are required for the rest of the pipeline, mainly cellfinder, to work. The rotation matrix <em>a</em> is one of the most important results from ANA and the main reason we still use it. 
+<li> To use the summary file, its contents need to be added to the galaxy's summary file. These files are named &lt;galID&gt;.dat and are located in the summaries directory. These properties are required for the rest of the pipeline, mainly cellfinder, to work. The rotation matrix <em>a</em> is one of the most important results from ANA and the main reason we still use it. 
 
 
 
@@ -107,7 +126,7 @@ Once both control.dat and schedule_R.dat are set, run ana.R.exe.  The file neede
 </li>
 <li> The pipeline does not run on the binary files. It runs on an ASCII version of the file. To convert, use readbinary.exe. Run it with the format of 
         
-            readbinary.exe   GZ
+            readbinary.exe &lt;binary file&gt; &lt;name of output ASCII file&gt; GZ
 
 The name of the output ASCII file should be the name of the binary file, but with .dat replaced with .txt
 
@@ -170,15 +189,10 @@ The third section describes the ions to be probed and what instrument will be us
 <li> ALL.sysabs: Generated by cullabs, this is all sysabs files culminated into one file.  
 </li>
 </ul>
+      </section>
 
-      <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/jrvliet/mockspec">Mockspec</a> is maintained by <a href="https://github.com/jrvliet">jrvliet</a>.</span>
-
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
-      </footer>
-
-    </section>
-
-  
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
   </body>
 </html>
