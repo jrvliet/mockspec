@@ -112,12 +112,12 @@ Most of the rest of the file should not be touched. ANA has an interesting behav
 To setup control.dat, only change after the three repeated lines of "1. 129". The single number on the next line is the number of snapshots to run ANA on. Leave this as one. The rest of the file is the list of expansion parameters of the snapshots. Even if there are several numbers listed here, ANA will only run on the first one, since the number of snapshots to run is set to 1. 
 
 
-Once both control.dat and schedule_R.dat are set, run ana.R.exe.  The file needed is the GZ file. The necessary output files are named _GZa.txt (the gas box) and Jacob.txt (summary file). 
+Once both control.dat and schedule_R.dat are set, run ana.R.exe.  The file needed is the GZ file. The necessary output files are named \_GZa\.txt (the gas box) and Jacob.txt (summary file). 
 
 
 
 </li>
-<li> To use the summary file, its contents need to be added to the galaxy's summary file. These files are named a is one of the most important results from ANA and the main reason we still use it. 
+<li> To use the summary file, its contents need to be added to the galaxy's summary file. These files are named \.dat and are located in the summaries directory. These properties are required for the rest of the pipeline, mainly cellfinder, to work. The rotation matrix <em>a</em> is one of the most important results from ANA and the main reason we still use it. 
 
 
 
