@@ -4,40 +4,29 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>Mockspec by jrvliet</title>
+
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/github-dark.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/respond.js"></script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <!--[if lt IE 8]>
-    <link rel="stylesheet" href="stylesheets/ie.css">
-    <![endif]-->
+    <script src="javascripts/scale.fix.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
   </head>
   <body>
-      <div id="header">
-        <nav>
-          <li class="fork"><a href="https://github.com/jrvliet/mockspec">View On GitHub</a></li>
-          <li class="downloads"><a href="https://github.com/jrvliet/mockspec/zipball/master">ZIP</a></li>
-          <li class="downloads"><a href="https://github.com/jrvliet/mockspec/tarball/master">TAR</a></li>
-          <li class="title">DOWNLOADS</li>
-        </nav>
-      </div><!-- end header -->
-
     <div class="wrapper">
-
+      <header>
+        <h1>Mockspec</h1>
+        <p>Full Pipeline</p>
+        <p class="view"><a href="https://github.com/jrvliet/mockspec">View the Project on GitHub <small>jrvliet/mockspec</small></a></p>
+        <ul>
+          <li><a href="https://github.com/jrvliet/mockspec/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/jrvliet/mockspec/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/jrvliet/mockspec">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
       <section>
-        <div id="title">
-          <h1>Mockspec</h1>
-          <p>Full Pipeline</p>
-          <hr>
-          <span class="credits left">Project maintained by <a href="https://github.com/jrvliet">jrvliet</a></span>
-          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
-        </div>
-
         <h2>
 <a id="welcome-to-mockspec" class="anchor" href="#welcome-to-mockspec" aria-hidden="true"><span class="octicon octicon-link"></span></a>Welcome to Mockspec</h2>
 
@@ -112,7 +101,7 @@ Most of the rest of the file should not be touched. ANA has an interesting behav
 To setup control.dat, only change after the three repeated lines of "1. 129". The single number on the next line is the number of snapshots to run ANA on. Leave this as one. The rest of the file is the list of expansion parameters of the snapshots. Even if there are several numbers listed here, ANA will only run on the first one, since the number of snapshots to run is set to 1. 
 
 
-Once both control.dat and schedule_R.dat are set, run ana.R.exe.  The file needed is the GZ file. The necessary output files are named &lt;galID&amp;rt;_GZa&gt;expansion parameter&gt;.txt (the gas box) and Jacob.txt (summary file). 
+Once both control.dat and schedule_R.dat are set, run ana.R.exe.  The file needed is the GZ file. The necessary output files are named &lt;galID&gt;_GZa&lt;expansion parameter&gt;.txt (the gas box) and Jacob.txt (summary file). 
 
 
 
@@ -125,9 +114,9 @@ Once both control.dat and schedule_R.dat are set, run ana.R.exe.  The file neede
 
 </li>
 <li> The pipeline does not run on the binary files. It runs on an ASCII version of the file. To convert, use readbinary.exe. Run it with the format of 
-        
+        <p>
             readbinary.exe &lt;binary file&gt; &lt;name of output ASCII file&gt; GZ
-
+        </p>
 The name of the output ASCII file should be the name of the binary file, but with .dat replaced with .txt
 
 
@@ -190,8 +179,11 @@ The third section describes the ions to be probed and what instrument will be us
 </li>
 </ul>
       </section>
-
     </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/jrvliet">jrvliet</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
     <!--[if !IE]><script>fixScale(document);</script><![endif]-->
     
   </body>
