@@ -322,20 +322,20 @@ c--------------------------------------------------------------------
          Vyph = vy(is) - Vyc
          Vzph = vz(is) - Vzc
 
-         IF (IOPT.EQ.4) THEN    ! Spherical distribution with current mass and metallicites                                   
-            IF ( Xph**2 + Yph**2 + Zph**2 .lt. rmax2) THEN                                       
-!               if ( (t-tbirth(istar))*tfact.lt.tage) then                                       
-               ageS = ageU - age(dble( tbirth(istar)))                                           
-               if (ageS.le.tageGyr) then                                                         
-                  Nstars=Nstars+1                                                                
-                  aMassTotal=aMassTotal +  pw(is)                                                
-                  aMassTotal0=aMassTotal0 +  pw0(istar)                                          
-                  write(33,334) istar,                                                           
-     &                 (Xph)*xfact ,                                                             
-     &                 (Yph)*xfact ,                                                             
-     &                 (Zph)*xfact ,                                                             
-     &                 Vxph*vfact, Vyph*vfact, Vzph*vfact,                                       
-     &                 pw(is)*aM0 ,                                                          
+         IF (IOPT.EQ.4) THEN    ! Spherical distribution with current mass and metallicites  
+            IF ( Xph**2 + Yph**2 + Zph**2 .lt. rmax2) THEN         
+!               if ( (t-tbirth(istar))*tfact.lt.tage) then        
+               ageS = ageU - age(dble( tbirth(istar)))           
+               if (ageS.le.tageGyr) then                        
+                  Nstars=Nstars+1                              
+                  aMassTotal=aMassTotal +  pw(is)            
+                  aMassTotal0=aMassTotal0 +  pw0(istar)     
+                  write(33,334) istar,                     
+     &                 (Xph)*xfact ,                      
+     &                 (Yph)*xfact ,                     
+     &                 (Zph)*xfact ,                    
+     &                 Vxph*vfact, Vyph*vfact, Vzph*vfact,    
+     &                 pw(is)*aM0 ,                         
 !     &                 pw0(istar)*aM0 ,   
      &                 ageS,
      &                 zstII(istar),zstIa(istar)

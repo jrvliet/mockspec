@@ -172,7 +172,7 @@ c--------------------------------------------------------------------
          endif
          
 ccccccccccc Kenza for Jacob
-         call Open_ASCII_File(100, 'Jacob.txt', append)
+         call Open_ASCII_File(100, 'summary.txt', append)
 c         write (100,*) 'aexpn	redshift  Mvir        Rvir       a11  ',
 c     &   'a12           a13         a21         a22         a23       ',
 c     &   'a31         a32           a33         vpec_x  vpec_y  vpec_z'
@@ -190,7 +190,7 @@ c     &   'a31         a32           a33         vpec_x  vpec_y  vpec_z'
      &        AXX(1), AxX(2), AxX(3), AXY(1), AXY(2), 
      &        AXY(3), AxZ(1), AxZ(2), AxZ(3), 
      &        v0*Vxc / aexpn, v0*Vyc / aexpn,  v0*Vzc / aexpn
- 65      format(F5.3, 5x, F8.5, 3x, E12.4, 3x, F8.4, 4x, 
+ 65      format(F10.6, 5x, F8.5, 3x, E12.4, 3x, F8.4, 4x, 
      &        F11.7, 2x, F11.7, 3x, F11.7, 3x, F11.7, 3x, F11.7, 3x, 
      &        F11.7, 3x, F11.7, 3x, F11.7, 3x, F11.7, 3x, 
      &        F11.5, 5x, F11.5, 5x, F11.5)

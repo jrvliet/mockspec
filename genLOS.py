@@ -94,8 +94,9 @@ def read_summary(galID, aexpn, summaryLoc):
         l = line.split()
         a = float(l[0])
 
-        if a==aexpn:
-            
+
+#        if a==aexpn:
+        if equal(a, aexpn)==1:           
             found = 1
 
             # Read in data
@@ -122,7 +123,21 @@ def read_summary(galID, aexpn, summaryLoc):
         sys.exit()
 
 
+def equal(a, b):
+    """
+    Determines if the two values are approximately equal.     
+    This is required since the Fortran codes have difficulty
+    printing variables to file accurately.
+    Returns a one if the values are 'equal' and zero otherwise
+    """
 
+    tol = 0.002
+    diff = abs(a-b)
+
+    if diff<=tol:
+        return 1
+    else:
+        return 0
 
 
 

@@ -44,6 +44,10 @@ c
       include           'rates.com'
       include           'com-modes.com'
       include           'getcube.com'
+c      character*300     codeLoc
+
+c      CALL getarg(1, codeLoc)
+
 
 
       OPEN(unit=4,file='rates.runlog',status='unknown')
@@ -67,10 +71,12 @@ c     table, UVB, and Sb99 data paths (global)
 c     TABPATH is where the atomic data tables live
 c     UVBPATH is where the Haardt & Madau UVB SEDs live
 c     SB99PATH is where the Starburst99 SEDs live
-
-      tabpath  = '/home/matrix2/cwc/Projects/Mockspec/GridCode/'
-      UVBpath  = '/home/matrix2/cwc/Projects/Mockspec/UVBspectrum/'
-      Sb99path = '/home/matrix2/cwc/Projects/Mockspec/Sb99spectrum/'
+      tabpath='/lustre/projects/p089_swin/jvander/mockspec/data/grid/'
+      UVBpath='/lustre/projects/p089_swin/jvander/mockspec/data/uvb/'
+      Sb99path='/lustre/projects/p089_swin/jvander/mockspec/data/sb99'
+c      tabpath  = '/home/matrix2/cwc/Projects/Mockspec/GridCode/'
+c      UVBpath  = '/home/matrix2/cwc/Projects/Mockspec/UVBspectrum/'
+c      Sb99path = '/home/matrix2/cwc/Projects/Mockspec/Sb99spectrum/'
 
 c     ............................................
 c     PHASE 1: SET UP THE RUN, COMMUNICATE TO USER

@@ -71,7 +71,8 @@ void read_summary(char *galID, double *aexpn, char *summaryLoc, double *mvir, do
     sscanf(new_line,"%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf ", &expn, &z, mvir, rvir, a11, a12, a13, a21, a22, a23, a31, a32, a33, vpec_x, vpec_y, vpec_z);
 
 
-    if (expn==*aexpn){
+//    if (expn==*aexpn){
+    if (expn-*aexpn<-0.002){
       found = 1;
     }
   }

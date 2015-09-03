@@ -74,6 +74,7 @@ c     set the physical array size
 
  999  WRITE(6,*) 'ERROR(readUVBspec): UVB spectrum file not found'
       WRITE(6,*) uvbfile
+      WRITE(6,*) tabfile
       STOP
 
       END
