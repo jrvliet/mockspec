@@ -4,30 +4,40 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>Mockspec by jrvliet</title>
-
     <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/github-light.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="stylesheets/github-dark.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
     <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
   </head>
   <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/jrvliet/mockspec">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/jrvliet/mockspec/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/jrvliet/mockspec/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
     <div class="wrapper">
-      <header>
-        <h1>Mockspec</h1>
-        <p>Full Pipeline</p>
 
-        <p class="view"><a href="https://github.com/jrvliet/mockspec">View the Project on GitHub <small>jrvliet/mockspec</small></a></p>
-
-
-        <ul>
-          <li><a href="https://github.com/jrvliet/mockspec/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/jrvliet/mockspec/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/jrvliet/mockspec">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
       <section>
+        <div id="title">
+          <h1>Mockspec</h1>
+          <p>Full Pipeline</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/jrvliet">jrvliet</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
+
         <h2>
 <a id="welcome-to-mockspec" class="anchor" href="#welcome-to-mockspec" aria-hidden="true"><span class="octicon octicon-link"></span></a>Welcome to Mockspec</h2>
 
@@ -96,16 +106,21 @@ Schedule_R.dat has most of the controls in it. The top section has flags as to w
 <li> Binary file with gas cells inside 4Rvir-box (metalliciites)
 </li>
 </ul>
-Most of the rest of the file should not be touched. ANA has an interesting behaviour where it finds the center of the galaxy, but is super bad at it. You need to find the center with Rockstar and put it in manually. The coordinates are put in on the lines "xuser", "yuser", "zuser". The flag in front of "ioptCenter=1/2/3--&gt;potential/HF/IFRIT" should be set to 1, indicating the center is from a halo finder.
+ANA has an interesting behaviour where it finds the center of the galaxy, but is super bad at it. You need to find the center with Rockstar and put it in manually. The coordinates are put in on the lines "xuser", "yuser", "zuser". The flag in front of "ioptCenter=1/2/3--&gt;potential/HF/IFRIT" should be set to 1, indicating the center is from a halo finder.
+
+
+Line 30 of schedule_R.dat should be the single word 'test'. This is the prefix appended to the front of all files created by ANA. Change this to the galID, such as D9m4a or vela20.
+
+The rest of the file should not be touched. 
 
 <p>
-To setup control.dat, only change after the three repeated lines of "1. 129". The single number on the next line is the number of snapshots to run ANA on. Leave this as one. The rest of the file is the list of expansion parameters of the snapshots. Even if there are several numbers listed here, ANA will only run on the first one, since the number of snapshots to run is set to 1. 
+To setup control.dat, only change after the three repeated lines of "1. 129". The single number on the next line is the number of snapshots to run ANA on. Leave this as one. The rest of the file is the list of expansion parameters of the snapshots. Even if there are several numbers listed here, ANA will only run on the first one, since the number of snapshots to run is set to 1. Also, ensure the first line, labeled jobname1, is set to 10MpcBox_HartGal_csf. This is the large 10Mpc box that will be read. 
 </p>
 
 
 
 <p>
-Once both control.dat and schedule_R.dat are set, run ana.R.exe.  The file needed is the GZ file. The necessary output files are named &lt;galID&gt;_GZa&lt;expansion parameter&gt;.txt (the gas box) and Jacob.txt (summary file). 
+Once both control.dat and schedule_R.dat are set, run ana.R.exe.  The file needed is the GZ file. The necessary output files are named &lt;galID&gt;_GZa&lt;expansion parameter&gt;.txt (the gas box) and summary.txt (summary file). 
 </p>
 
 
@@ -189,12 +204,9 @@ The third section describes the ions to be probed and what instrument will be us
 </li>
 </ul>
       </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/jrvliet">jrvliet</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
+
     </div>
-    <script src="javascripts/scale.fix.js"></script>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
     
   </body>
 </html>
