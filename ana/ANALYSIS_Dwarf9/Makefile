@@ -12,12 +12,12 @@ OBJS =  analysis_Rec.o ART_Control.o analysis_ART.o \
 includeall = a_tree.h a_control.h a_def.h analysis_Rec.h a_setup.h
 
 # Intel compilers:
-FC = f95
+FC = ifort
 #FFLAGS =  -O3 -axW -ftz -unroll -openmp -mcmodel=medium -i-dynamic -xW -convert big_endian 
 #LDFLAGS = -O3 -axW -ftz -unroll -openmp -mcmodel=medium -i-dynamic -xW -convert big_endian
 
-FFLAGS = -O3      -fconvert='big_endian' -mcmodel=medium  -i-dynamic -aW -axW
-LDFLAGS= -O3      -fconvert='big_endian' -mcmodel=medium  -i-dynamic -aW -axW
+FFLAGS = -O3      -convert big_endian -mcmodel=medium  -i-dynamic -xW -axW
+LDFLAGS= -O3      -convert big_endian -mcmodel=medium  -i-dynamic -xW -axW
 
 
 all: $(PROG)
