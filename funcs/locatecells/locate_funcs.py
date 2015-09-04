@@ -10,12 +10,6 @@ def velcut(linesfile):
     Cuts the cells out of the .lines file that do not fall withing
     the velocity window as found in the sysabs file
     """
-#    import numpy as np
-#    import sys
-#    from  math import sqrt, pow, log10
-#    import os.path
-#    import os
-#    import subprocess as sp
     
     # Define constants
     c = 3.0e5   # Speed of light in km/s
@@ -33,8 +27,9 @@ def velcut(linesfile):
     cell_N = []   # Column density fo each cell
     cell_b = []   # Doppler b parameter of each cell
     cell_ID = []  # ID number of each cell
-
+#    print 'linesfile: ', linesfile
     for line in f_lines:
+#        print line
         l = line.split()
         cell_z.append(float(l[0]))
         cell_N.append(float(l[1]))
@@ -80,7 +75,7 @@ def velcut(linesfile):
 
     #################################################################
     #                                                               #
-    #     Generate a ,lines file containing only cells with         #
+    #     Generate a .lines file containing only cells with         #
     #     peculiar velocity within the velocity limits from         #
     #     the sysabs file                                           #
     #                                                               #
@@ -93,19 +88,25 @@ def velcut(linesfile):
     # Write the first line
     f_newlines.write('{0:.16f}\n'.format(redshift))
     
+#    print 'Neg_vel_limit = ', neg_vel_limit
+#    print 'Pos_vel_limit = ', pos_vel_limit
+#    print len(cell_z)
     # Loop through the original .lines file
     for i in range(0,len(cell_z)):
 
         # Calcuate the peculiar velocity of the cell
         vpec = c*( (cell_z[i]-redshift) / (1+redshift) )
-        
+#        print '\t', vpec,
         # If the cell is inside the velocity range, write to file
         if vpec>neg_vel_limit and vpec<pos_vel_limit:
+#            print 'in window'
             s = '{0:.7f}'.format(cell_z[i]).rjust(8)+'\t'
             s += str(cell_N[i]).rjust(8)+'\t'
             s += str(cell_b[i]).rjust(8)+'\t'
             s += str(cell_ID[i]).rjust(8)+'\n'
-            f_newlines.write(s)
+            f_newlines.write(s) 
+#        else:   
+#            print 'not in window'
 
     f_newlines.close()
 
@@ -116,7 +117,7 @@ def velcut(linesfile):
 ###############################################################################
 ###############################################################################
 
-def sigcells(linesfile, ewcut):
+def sigcells(linesfile, ewcut, codeLoc):
     # Description:
     #  Determines which cells are the significant contributers 
     #  to the EW measurement
@@ -192,7 +193,8 @@ def sigcells(linesfile, ewcut):
     command = 'cp '+linesfile+'.velcut '+linesfile
     sp.call(command, shell=True)
     # Run specsynth on the velcut lines list
-    specsynth_command = '/home/matrix2/cwc/Projects/Mockspec/Codes/mkspec/specsynth los_single.list Mockspec_0SNR.runpars'
+    specsynth_command = codeLoc+'/funcs/mkspec/specsynth los_single.list Mockspec_0SNR.runpars'
+#    specsynth_command = '/home/matrix2/cwc/Projects/Mockspec/Codes/mkspec/specsynth los_single.list Mockspec_0SNR.runpars'
     sp.call(specsynth_command, shell=True)
 
     # Get the EW of this noise-less spectra
@@ -251,8 +253,11 @@ def sigcells(linesfile, ewcut):
     
     ewdiff = 0.5*ewcut
     
-
+#    print 'Length of velcut_N: {0:d}'.format(len(velcut_N))
+    loopcount = 0
     while ewdiff < ewcut:
+#        print 'EWdiff: {0:f}\tewcut: {1:f}'.format(ewdiff, ewcut)
+        loopcount += 1
         
         # Find the cell with the lowest column denstiy
         index = velcut_N.index(min(velcut_N))
@@ -285,7 +290,8 @@ def sigcells(linesfile, ewcut):
         flux = specdata[:,2]
         
         ew = findEW(wavelength, velocity, flux, neg_vel_limit, pos_vel_limit)
-        ewdiff = abs( (ew_velcut_lines - ew) / ew_velcut_lines)
+#        print 'Length of velcut_N in loop {0:d}: {1:d}\tEW: {2:f}, EW_velcut_lines: {3:f}'.format(loopcount, len(velcut_N), ew, ew_velcut_lines)
+        ewdiff = abs( (ew_velcut_lines - ew) / ew_velcut_lines)*100
         f_log.write('{0:d} \t \t{1:0.3f} \t {2:0.3f}\n'.format(
                     len(velcut_z), ew, ewdiff))
         

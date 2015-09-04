@@ -75,7 +75,7 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc):
         lf.velcut(linesfile)
 
         # Find the significant cells
-        lf.sigcells(linesfile, ewcut)
+        lf.sigcells(linesfile, ewcut, codeLoc)
 
         # Get the properties of the cells
         # Open the lines.final file
