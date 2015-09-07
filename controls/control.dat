@@ -1,0 +1,30 @@
+jobname1  10MpcBox_HartGal_csf
+path      .
+Start      : new run/continuation (T/F) .............................         F
+irun       : Input/Output :  irun = 1 (adiabatic), 2 (CSF)...........         2
+nfsave     : dump step ..............................................         4
+lviewout   : output for view on/off .................................         T
+ntc        : time step increase allowed after ntc time steps ........         2 
+gamma      : gamma of the gas .......................................     1.6666666
+cfl        : Courant number..........................................       0.6
+timinc     : time step increase factor ..............................       1.2
+rhohdr     : Magic density floor  ...................................     1.e-6
+aHR        : a value at which L=9 is allowed  .......................     0.080
+wsplit     : split cell if weight > wsplit ..........................       0.2
+wjoin      : join  cell if weight < wjoin ...........................       0.1
+MinL_Jeans : min level to apply Jeans limit on e (if COOLING defined)         9 
+Ndiff      : number of weight diffusion iterations ..................         4
+1         1.        0.1    0      7  
+2         1.        0.1    4      7
+3         0.        0.1    2      9 
+4         0.        0.1    2      9 
+5         0.        0.1    2      9 
+6         0.        0.1    2      9 
+7         0.        0.1    2      9 
+8         0.        0.1    2    256
+9         0.        0.1    2    256 
+1. 129.
+1. 129.
+1. 129.
+1
+0.800
