@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-
+#include <math.h>
 void read_control_file(FILE *propfp, char *gasfile, char *galID, char *rootname, double *aexpn, char *summaryLoc){
 
   char new_line[100], dum[100], gas_dum[100];
@@ -70,9 +70,9 @@ void read_summary(char *galID, double *aexpn, char *summaryLoc, double *mvir, do
     //    printf("Line in summary file\n %s\n",new_line);
     sscanf(new_line,"%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf ", &expn, &z, mvir, rvir, a11, a12, a13, a21, a22, a23, a31, a32, a33, vpec_x, vpec_y, vpec_z);
 
-
+//    printf("expn in file: %lf\t aexpn to match: %lf\n", expn, *aexpn);
 //    if (expn==*aexpn){
-    if (expn-*aexpn<-0.002){
+    if (fabs(expn-*aexpn)<=0.002){
       found = 1;
     }
   }

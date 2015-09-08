@@ -10,7 +10,7 @@
 
 import sys
 import numpy as np
-
+import subprocess as sp
 def read_control_file(filename):
 
     f = open(filename)
@@ -251,10 +251,10 @@ def clean_up():
 
     # Make a directory for the idcells files
     dirName = 'cellIDs'
-    sys.call('mkdir '+dirName, shell=True)
+    sp.call('mkdir '+dirName, shell=True)
 
     # Move all cellid files into the directory
     command = 'mv los*cellID.dat ./cellIDs/'
-    sys.call(command, shell=True)
+    sp.call(command, shell=True)
 
 
