@@ -88,25 +88,18 @@ def velcut(linesfile):
     # Write the first line
     f_newlines.write('{0:.16f}\n'.format(redshift))
     
-#    print 'Neg_vel_limit = ', neg_vel_limit
-#    print 'Pos_vel_limit = ', pos_vel_limit
-#    print len(cell_z)
     # Loop through the original .lines file
     for i in range(0,len(cell_z)):
 
         # Calcuate the peculiar velocity of the cell
         vpec = c*( (cell_z[i]-redshift) / (1+redshift) )
-#        print '\t', vpec,
         # If the cell is inside the velocity range, write to file
         if vpec>neg_vel_limit and vpec<pos_vel_limit:
-#            print 'in window'
             s = '{0:.7f}'.format(cell_z[i]).rjust(8)+'\t'
             s += str(cell_N[i]).rjust(8)+'\t'
             s += str(cell_b[i]).rjust(8)+'\t'
             s += str(cell_ID[i]).rjust(8)+'\n'
             f_newlines.write(s) 
-#        else:   
-#            print 'not in window'
 
     f_newlines.close()
 
@@ -268,32 +261,36 @@ def sigcells(linesfile, ewcut, codeLoc):
         del velcut_b[index]
         del velcut_ID[index]
 
-        # Write the new .lines values to file
-        f_newlines = open(linesfile, 'w')
-        f_newlines.write('{0:.16f}\n'.format(redshift))
-        for i in range(0,len(velcut_z)):
-            s = '{0:.7f}'.format(velcut_z[i]).rjust(8)+'\t'
-            s += str(velcut_N[i]).rjust(8)+'\t'
-            s += str(velcut_b[i]).rjust(8)+'\t'
-            s += str(velcut_ID[i]).rjust(8)+'\n'
-            f_newlines.write(s)  
-        f_newlines.close()
+        # Check that there is still at least one cell left
+        if len(velcut_z)>0:
+
+            # Write the new .lines values to file
+            f_newlines = open(linesfile, 'w')
+            f_newlines.write('{0:.16f}\n'.format(redshift))
+            for i in range(0,len(velcut_z)):
+                s = '{0:.7f}'.format(velcut_z[i]).rjust(8)+'\t'
+                s += str(velcut_N[i]).rjust(8)+'\t'
+                s += str(velcut_b[i]).rjust(8)+'\t'
+                s += str(velcut_ID[i]).rjust(8)+'\n'
+                f_newlines.write(s)  
+            f_newlines.close()
 
 
-        # Run specsynth again
-        sp.call(specsynth_command, shell=True)
+            # Run specsynth again
+            sp.call(specsynth_command, shell=True)
 
-        # Find the new EW 
-        specdata = np.loadtxt(specfile)
-        wavelength = specdata[:,0]
-        velocity = specdata[:,1]
-        flux = specdata[:,2]
-        
-        ew = findEW(wavelength, velocity, flux, neg_vel_limit, pos_vel_limit)
-#        print 'Length of velcut_N in loop {0:d}: {1:d}\tEW: {2:f}, EW_velcut_lines: {3:f}'.format(loopcount, len(velcut_N), ew, ew_velcut_lines)
-        ewdiff = abs( (ew_velcut_lines - ew) / ew_velcut_lines)*100
-        f_log.write('{0:d} \t \t{1:0.3f} \t {2:0.3f}\n'.format(
-                    len(velcut_z), ew, ewdiff))
+            # Find the new EW 
+            specdata = np.loadtxt(specfile)
+            wavelength = specdata[:,0]
+            velocity = specdata[:,1]
+            flux = specdata[:,2]
+            
+            ew = findEW(wavelength, velocity, flux, neg_vel_limit, pos_vel_limit)
+            ewdiff = abs( (ew_velcut_lines - ew) / ew_velcut_lines)*100
+            f_log.write('{0:d} \t \t{1:0.3f} \t {2:0.3f}\n'.format(
+                        len(velcut_z), ew, ewdiff))
+        else:
+            ewdiff = 0.5*ew    
         
     f_log.close()
 
