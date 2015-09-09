@@ -252,17 +252,17 @@ def sigcells(linesfile, ewcut, codeLoc):
 #        print 'EWdiff: {0:f}\tewcut: {1:f}'.format(ewdiff, ewcut)
         loopcount += 1
         
-        # Find the cell with the lowest column denstiy
-        index = velcut_N.index(min(velcut_N))
-        
-        # Delete this index
-        del velcut_z[index]
-        del velcut_N[index]
-        del velcut_b[index]
-        del velcut_ID[index]
-
         # Check that there is still at least one cell left
         if len(velcut_z)>0:
+
+            # Find the cell with the lowest column denstiy
+            index = velcut_N.index(min(velcut_N))
+            
+            # Delete this index
+            del velcut_z[index]
+            del velcut_N[index]
+            del velcut_b[index]
+            del velcut_ID[index]
 
             # Write the new .lines values to file
             f_newlines = open(linesfile, 'w')
@@ -290,7 +290,8 @@ def sigcells(linesfile, ewcut, codeLoc):
             f_log.write('{0:d} \t \t{1:0.3f} \t {2:0.3f}\n'.format(
                         len(velcut_z), ew, ewdiff))
         else:
-            ewdiff = 0.5*ew    
+            print 'Absorption dominated by one cell'
+            ewdiff = ewcut
         
     f_log.close()
 
