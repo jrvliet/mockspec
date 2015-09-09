@@ -91,30 +91,32 @@ def read_summary(galID, aexpn, summaryLoc):
 
     for line in f:
 
-        l = line.split()
-        a = float(l[0])
+        # Check for empty lines
+        if line:
+            l = line.split()
+            a = float(l[0])
 
 
-#        if a==aexpn:
-        if equal(a, aexpn)==1:           
-            found = 1
+    #        if a==aexpn:
+            if equal(a, aexpn)==1:           
+                found = 1
 
-            # Read in data
-            mvir = float(l[2])
-            rvir = float(l[3])
-            a11 = float(l[4])
-            a12 = float(l[5])
-            a13 = float(l[6])
-            a21 = float(l[7])
-            a22 = float(l[8])
-            a23 = float(l[9])
-            a31 = float(l[10])
-            a32 = float(l[11])
-            a33 = float(l[12])
-            vpec_x = float(l[13])
-            vpec_y = float(l[14])
-            vpec_z = float(l[15])
-            
+                # Read in data
+                mvir = float(l[2])
+                rvir = float(l[3])
+                a11 = float(l[4])
+                a12 = float(l[5])
+                a13 = float(l[6])
+                a21 = float(l[7])
+                a22 = float(l[8])
+                a23 = float(l[9])
+                a31 = float(l[10])
+                a32 = float(l[11])
+                a33 = float(l[12])
+                vpec_x = float(l[13])
+                vpec_y = float(l[14])
+                vpec_z = float(l[15])
+                
     f.close()
     if found==1:
         return mvir, rvir, a11, a12, a13, a21, a22, a23, a31, a32, a33, vpec_x, vpec_y, vpec_z
