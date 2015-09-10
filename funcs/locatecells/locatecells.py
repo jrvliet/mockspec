@@ -14,7 +14,7 @@ import locate_funcs as lf
 import os
 
 
-def locateSigCells(galID, expn, ion, ewcut, codeLoc):
+def locateSigCells(galID, expn, ion, ewcut, codeLoc, testing=0):
 
     """
     Locates the significant cells in a line of sight.
@@ -26,10 +26,12 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc):
         <galID>.<expn>.<ion>.abs_cells.dat
     """
 
-    
+    print testing 
     # Read in the galaxy's box
     boxfile = galID+'_GZa'+expn+'.'+ion+'.txt'
     box = np.loadtxt(boxfile, skiprows=2)
+    if testing==1:
+        print 'Box read in'
 
     # Read in the LOS info from lines.info
     los_info = np.loadtxt('lines.info',skiprows=2)
@@ -50,17 +52,22 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc):
     # Get a list of LOS that have a sysabs file associated with it
     sysabs_losnum = []
     for i in range(0,1000):
-        
         losnum = str(i).zfill(4)
         filename = galID+'.'+ion+'.los'+losnum+'.sysabs'
-
+        
         # Check to see if the file exists
         if op.isfile(filename):
             sysabs_losnum.append(losnum)
 
+    if testing==1:
+        print 'Sysabs files aggregated'
+
     for i in range(0,len(sysabs_losnum)):
 
         losnum = sysabs_losnum[i]
+        if testing==1:
+            print 'LOS num: ', losnum
+        
         num = int(losnum)
         linesfile = galID+'.'+ion+'.los'+losnum+'.lines'
         
@@ -72,10 +79,14 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc):
         sp.call(command, shell=True)
 
         # Perform the velocity cut
-        lf.velcut(linesfile)
+        if testing==1:
+            print '\tPerforming velocity cut'
+        lf.velcut(linesfile, testing=testing)
 
         # Find the significant cells
-        lf.sigcells(linesfile, ewcut, codeLoc)
+        if testing==1:
+            print '\t Finding significant cells'
+        lf.sigcells(linesfile, ewcut, codeLoc, testing=testing)
 
         # Get the properties of the cells
         # Open the lines.final file

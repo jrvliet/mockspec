@@ -4,12 +4,13 @@ import sys
 import subprocess as sp
 from ew import findEW 
 
-def velcut(linesfile):
+def velcut(linesfile, testing=0):
 
     """
     Cuts the cells out of the .lines file that do not fall withing
     the velocity window as found in the sysabs file
     """
+    print 'In velcut, testing={0:d}'.format(testing)
     
     # Define constants
     c = 3.0e5   # Speed of light in km/s
@@ -27,16 +28,18 @@ def velcut(linesfile):
     cell_N = []   # Column density fo each cell
     cell_b = []   # Doppler b parameter of each cell
     cell_ID = []  # ID number of each cell
-#    print 'linesfile: ', linesfile
+    
     for line in f_lines:
-#        print line
         l = line.split()
         cell_z.append(float(l[0]))
         cell_N.append(float(l[1]))
         cell_b.append(float(l[2]))
         cell_ID.append(int(float(l[3])))
     f_lines.close()
-    
+
+    if testing==1:
+        print '\t\tBefore velcut, number of cells: ', len(cell_z)
+
     # Open the sysabs file
     sysabsfile  =  linesfile.replace('lines', 'sysabs')
     f_sysabs = open(sysabsfile)
@@ -46,6 +49,13 @@ def velcut(linesfile):
     pos_vel_limit = float(line.split()[2])
     EW_sysabs = float(line.split()[3])
     f_sysabs.close()
+
+    if testing==1:
+        print '\t\tFrom sysabs:'
+        print '\t\t\tNeg Vel Limt: {0:f}'.format(neg_vel_limit)
+        print '\t\t\tPos_vel_limi: {0:f}'.format(pos_vel_limit)
+        print '\t\t\tEW:           {0:f}'.format(EW_sysabs)
+
 
     #################################################################
     #                                                               #
@@ -89,6 +99,7 @@ def velcut(linesfile):
     f_newlines.write('{0:.16f}\n'.format(redshift))
     
     # Loop through the original .lines file
+    velcutCount = 0
     for i in range(0,len(cell_z)):
 
         # Calcuate the peculiar velocity of the cell
@@ -100,17 +111,20 @@ def velcut(linesfile):
             s += str(cell_b[i]).rjust(8)+'\t'
             s += str(cell_ID[i]).rjust(8)+'\n'
             f_newlines.write(s) 
+            velcutCount += 1
 
     f_newlines.close()
+    
+    if testing==1:
+        print '\t\tAfter velcut, number of cells: ', velcutCount
 
-
 ###############################################################################
 ###############################################################################
 ###############################################################################
 ###############################################################################
 ###############################################################################
 
-def sigcells(linesfile, ewcut, codeLoc):
+def sigcells(linesfile, ewcut, codeLoc, testing=0):
     # Description:
     #  Determines which cells are the significant contributers 
     #  to the EW measurement
@@ -144,6 +158,9 @@ def sigcells(linesfile, ewcut, codeLoc):
         cell_ID.append(int(l[3]))
     f_lines.close()
 
+    if testing==1:
+        print 'In sigcells, number of velcut cells read in: ', len(cell_z)
+
     # Open the sysabs file
     sysabsfile  =  linesfile.replace('lines', 'sysabs')
     f_sysabs = open(sysabsfile)
@@ -154,7 +171,8 @@ def sigcells(linesfile, ewcut, codeLoc):
     EW_sysabs = float(line.split()[3])
     f_sysabs.close()
 
-
+    sp.call('wc -l *los0002.lines', shell=True)
+    
 
     #################################################################
     #                                                               #
@@ -168,6 +186,7 @@ def sigcells(linesfile, ewcut, codeLoc):
     f_los.write(datfile)
     f_los.close()
     
+    sp.call('wc -l *los0002.lines', shell=True)
     # Create a Mockspec.runpars file with SNR set to zero
     f_runpars_old = open('Mockspec.runpars')
     f_runpars_new = open('Mockspec_0SNR.runpars', 'w')
@@ -182,13 +201,14 @@ def sigcells(linesfile, ewcut, codeLoc):
     f_runpars_new.close()
     f_runpars_old.close()
 
+    sp.call('wc -l *los0002.lines', shell=True)
     # Rename the velcut .lines to remove velcut from name, so it will be used by specsynth
     command = 'cp '+linesfile+'.velcut '+linesfile
     sp.call(command, shell=True)
     # Run specsynth on the velcut lines list
     specsynth_command = codeLoc+'/funcs/mkspec/specsynth los_single.list Mockspec_0SNR.runpars'
-#    specsynth_command = '/home/matrix2/cwc/Projects/Mockspec/Codes/mkspec/specsynth los_single.list Mockspec_0SNR.runpars'
     sp.call(specsynth_command, shell=True)
+    sp.call('wc -l *los0002.lines', shell=True)
 
     # Get the EW of this noise-less spectra
     if ion == 'HI':
@@ -224,6 +244,8 @@ def sigcells(linesfile, ewcut, codeLoc):
     ew = findEW(wavelength, velocity, flux, neg_vel_limit, pos_vel_limit)
     ewdiff = abs( (EW_sysabs - ew) / EW_sysabs )
     ew_velcut_lines = ew
+    print 'a'
+    sp.call('wc -l *los0002.lines', shell=True)
 
     #################################################################
     #                                                               #
@@ -231,13 +253,16 @@ def sigcells(linesfile, ewcut, codeLoc):
     #     value by more than ewcut                                  #
     #                                                               #
     #################################################################
-
+    
     # Read in .lines.velcut file
     velcutdata = np.loadtxt(linesfile+'.velcut', skiprows=1)
+    if testing==1:
+        print '\t Size of velcut file: ', len(velcutdata[:,0])
     velcut_z = list(velcutdata[:,0])
     velcut_N = list(velcutdata[:,1])
     velcut_b = list(velcutdata[:,2])
     velcut_ID = list(velcutdata[:,3])
+    sp.call('wc -l *los0002.lines', shell=True)
     
     f_log = open('sigcells.log', 'w')
     f_log.write('Numcells \t EW \t EWdiff\n')
