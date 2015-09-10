@@ -10,8 +10,6 @@ def velcut(linesfile, testing=0):
     Cuts the cells out of the .lines file that do not fall withing
     the velocity window as found in the sysabs file
     """
-    print 'In velcut, testing={0:d}'.format(testing)
-    
     # Define constants
     c = 3.0e5   # Speed of light in km/s
 
@@ -129,6 +127,7 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
     #  Determines which cells are the significant contributers 
     #  to the EW measurement
 
+    singleCellCount = 0       # Counts number of LOS dominated by a single cell
     
     # Get the info from the filename
     galID  = linesfile.split('.')[0]
@@ -171,7 +170,6 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
     EW_sysabs = float(line.split()[3])
     f_sysabs.close()
 
-    sp.call('wc -l *los0002.lines', shell=True)
     
 
     #################################################################
@@ -186,7 +184,6 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
     f_los.write(datfile)
     f_los.close()
     
-    sp.call('wc -l *los0002.lines', shell=True)
     # Create a Mockspec.runpars file with SNR set to zero
     f_runpars_old = open('Mockspec.runpars')
     f_runpars_new = open('Mockspec_0SNR.runpars', 'w')
@@ -201,14 +198,12 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
     f_runpars_new.close()
     f_runpars_old.close()
 
-    sp.call('wc -l *los0002.lines', shell=True)
     # Rename the velcut .lines to remove velcut from name, so it will be used by specsynth
     command = 'cp '+linesfile+'.velcut '+linesfile
     sp.call(command, shell=True)
     # Run specsynth on the velcut lines list
     specsynth_command = codeLoc+'/funcs/mkspec/specsynth los_single.list Mockspec_0SNR.runpars'
     sp.call(specsynth_command, shell=True)
-    sp.call('wc -l *los0002.lines', shell=True)
 
     # Get the EW of this noise-less spectra
     if ion == 'HI':
@@ -244,8 +239,6 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
     ew = findEW(wavelength, velocity, flux, neg_vel_limit, pos_vel_limit)
     ewdiff = abs( (EW_sysabs - ew) / EW_sysabs )
     ew_velcut_lines = ew
-    print 'a'
-    sp.call('wc -l *los0002.lines', shell=True)
 
     #################################################################
     #                                                               #
@@ -257,12 +250,25 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
     # Read in .lines.velcut file
     velcutdata = np.loadtxt(linesfile+'.velcut', skiprows=1)
     if testing==1:
-        print '\t Size of velcut file: ', len(velcutdata[:,0])
-    velcut_z = list(velcutdata[:,0])
-    velcut_N = list(velcutdata[:,1])
-    velcut_b = list(velcutdata[:,2])
-    velcut_ID = list(velcutdata[:,3])
-    sp.call('wc -l *los0002.lines', shell=True)
+        print 'Velcutdata: ', velcutdata
+        shap = velcutdata.shape
+        print 'Velcutdata shape: ', shap
+        print 'Number of rows: ', shap[0]
+        print 'Length of shap: ', len(shap)
+#        print 'Number of columns: ', shap[1]
+        print 'Index 0: ', velcutdata[1]
+
+    if len(velcutdata.shape)==1:
+        # Only one cell in file
+        velcut_z = [velcutdata[0]]
+        velcut_N = [velcutdata[1]]
+        velcut_b = [velcutdata[2]]
+        velcut_ID = [velcutdata[3]]
+    else:
+        velcut_z = list(velcutdata[:,0])
+        velcut_N = list(velcutdata[:,1])
+        velcut_b = list(velcutdata[:,2])
+        velcut_ID = list(velcutdata[:,3])
     
     f_log = open('sigcells.log', 'w')
     f_log.write('Numcells \t EW \t EWdiff\n')
@@ -315,7 +321,8 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
             f_log.write('{0:d} \t \t{1:0.3f} \t {2:0.3f}\n'.format(
                         len(velcut_z), ew, ewdiff))
         else:
-            print 'Absorption dominated by one cell'
+#            print 'Absorption dominated by one cell'
+            singleCellCount += 1
             ewdiff = ewcut
         
     f_log.close()
@@ -324,7 +331,7 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
     command = 'cp '+linesfile+' '+linesfile+'.final'
     sp.call(command, shell=True)
 
-
+    return singleCellCount
 
 
 def nT(filename, norm):

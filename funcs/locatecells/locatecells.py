@@ -26,7 +26,8 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, testing=0):
         <galID>.<expn>.<ion>.abs_cells.dat
     """
 
-    print testing 
+    singleCount = 0
+
     # Read in the galaxy's box
     boxfile = galID+'_GZa'+expn+'.'+ion+'.txt'
     box = np.loadtxt(boxfile, skiprows=2)
@@ -86,7 +87,7 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, testing=0):
         # Find the significant cells
         if testing==1:
             print '\t Finding significant cells'
-        lf.sigcells(linesfile, ewcut, codeLoc, testing=testing)
+        singleCount += lf.sigcells(linesfile, ewcut, codeLoc, testing=testing)
 
         # Get the properties of the cells
         # Open the lines.final file
@@ -125,5 +126,5 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, testing=0):
         
     f_out.close()
 
-
+    print 'For {0:s}, {1:d} LOS are dominated by one cell'.format(ion, singleCount)
 
