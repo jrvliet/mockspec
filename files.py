@@ -17,8 +17,11 @@ import subprocess as sp
 
 def read_control_file():
 
-    # Reads in the control file
-    # Filename: mockspec.config
+    """
+    Read in the control file, named mockspec.config
+    Returns everything in the files
+    """
+
     filename = 'mockspec.config'
     try:
         f = open(filename)
@@ -201,7 +204,10 @@ def setup_mockspec(ion_list, instr_list, ewcut, snr, xh_list, requiredLoc):
         else:
             vmax = '1000.'
         element = '\''+element+'\''
-        line = '{0:<11s} {1:<5s} {2:<6s} {3:<7s} {4:<6f} {5:<5f} {6:<6s} {7:<s}\n'.format(element, stage, xh, inst, ewcut, snr, vmax, slev)
+        line = ('{0:<11s} {1:<5s} {2:<6s} {3:<7s} '
+                '{4:<6f} {5:<5f} {6:<6s} {7:<s}\n'.format(element, 
+                stage, xh, inst, ewcut, snr, vmax, slev))
+
         datf.write(line)
         
     call('rm Mockspec.tmp', shell=True)
@@ -277,6 +283,36 @@ def setup_ion_dir(ion, galID, expn, codeLoc):
         print 'Could not complete {0:s}'.format(command)
 
     return ionloc
+
+
+def setup_galaxy_props(galID, expn, mvir, rvir):
+        
+    """
+    Creates a file called galaxy.props in the root directory.
+    Contains relevent galaxy information from the <galID>.dat file
+    stored in the codeLoc's summary directory
+    """
+
+    redshift = 1/expn - 1
+
+    f = open('galaxy.props', 'w')
+
+    s = 'galID          {0:s}\n'.format(galID)
+    f.write(s)
+    s = 'Expn           {0:.3f}\n'.format(expn)
+    f.write(s)
+    s = 'Redshift       {0:.3f}\n'.format(redshift)
+    f.write(s)
+    s = 'Mvir           {0:.4e}\n'.format(mvir)
+    f.write(s)
+    s = 'Rvir           {0:.4f}\n'.format(rvir)
+    f.write(s)
+
+    f.close()
+
+
+    
+
 
 
 

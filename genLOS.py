@@ -11,6 +11,7 @@ from os import popen
 from numpy import linspace as ls
 from numba import jit
 import subprocess as sp
+import files as fi
 
 def inBox(x,y,z,boxsize):
     size = boxsize
@@ -119,6 +120,8 @@ def read_summary(galID, aexpn, summaryLoc):
                 
     f.close()
     if found==1:
+        # Generate the galaxy.props file
+        fi.setup_galaxy_props(galID, aexpn, mvir, rvir)
         return mvir, rvir, a11, a12, a13, a21, a22, a23, a31, a32, a33, vpec_x, vpec_y, vpec_z
     else:
         print 'ERROR: Could not find the expansion factor {0} in file: \n\t'.format(aexpn) + summaryLoc

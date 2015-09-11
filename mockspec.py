@@ -20,6 +20,7 @@ import funcs.locatecells.locatecells as lc
 import funcs.idcells.idcells as ic
 import runFunctions as rf 
 
+# Get the location where the code lives
 pathname = os.path.dirname(sys.argv[0])
 codeLoc = os.path.abspath(pathname)
 summaryLoc = codeLoc+'/summaries/'
