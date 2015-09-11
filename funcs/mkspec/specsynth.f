@@ -28,7 +28,9 @@ c
 c     author: Chris Churchill
 c     email:  cwc@nmsu.edu
 c     
-c     last update: May 2011
+c     last update:    Sep 2015 - modified do_comm logical
+c     created update: May 2011
+c
 c
 c
 c..............................................................................
@@ -43,7 +45,7 @@ c
       include           'specsynth.h' 
       include           'const.dek'
  
-      logical            error,iprint
+      logical            error
       integer            maxqsos,ntran,idum
       parameter          (maxqsos=10000)
       integer            i,j,m
@@ -80,8 +82,8 @@ c     keeping, input the atomic constants, etc., grab the parameters
         WRITE(6,*) ' if $4 is null "Mockspec.instruments" is assumed.'
         WRITE(6,*) ' it is assumed this file has 1 header line.'
         WRITE(6,*) ' '
-        WRITE(6,*) ' if $5 is null the logfile and screen communication'
-        WRITE(6,*) ' is turned on; any other value suppresses them'
+        WRITE(6,*) ' if $5=0 or null, then logfile/screen communication'
+        WRITE(6,*) ' is turned OFF; any other value turns it ON'
         WRITE(6,*) ' '
         WRITE(6,*) ' these files need to be in the present working'
         WRITE(6,*) ' directory: for required file formating, see'
@@ -100,7 +102,7 @@ c     keeping, input the atomic constants, etc., grab the parameters
       IF (instrlist.eq.'') instrlist = 'Mockspec.instruments'
 
       CALL getarg(5,logflag)   
-      IF (logflag.eq.'') then
+      IF ((logflag.eq.'').OR.(logflag.eq.'0')) then
        iprint = .false.
       ELSE
        iprint = .true.

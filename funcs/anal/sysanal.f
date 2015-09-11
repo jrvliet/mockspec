@@ -48,7 +48,7 @@ c
       integer            ntran(mxions)
       integer            i,j,jknt
       double precision   EWtest
-      character*80       qsolist,paramlist,losnum
+      character*80       qsolist,paramlist,losnum,commflag
       character*80       tranilist,instrlist,losindex
       character*80       specname(mxions)
       character*80       trani(mxions,mxtrans),
@@ -64,7 +64,7 @@ c     grab the command line arguments
       CALL getarg(1,qsolist)     ! list of sightlines (QS0.XXX.dat files)
 
       IF (qsolist.eq.'') THEN        
-       WRITE(6,*) 'Usage: sysanal $1 [$2] [$3] [$4]'        
+       WRITE(6,*) 'Usage: sysanal $1 [$2] [$3] [$4] [$5]'        
        WRITE(6,*) '  $1  = filename of list of QS0.XXX.dat files'        
        WRITE(6,*) ' [$2] = survey configuration file'        
        WRITE(6,*) ' [$3] = atomic/transition data file'        
@@ -78,6 +78,9 @@ c     grab the command line arguments
        WRITE(6,*) ' '        
        WRITE(6,*) ' if $4 is null "Mockspec.instruments" is assumed.'       
        WRITE(6,*) ' it is assumed this file has 1 header line.'        
+       WRITE(6,*) ' '        
+       WRITE(6,*) ' if $5=0 ornull I/O is suppressed. All other values' 
+       WRITE(6,*) ' result in I/O to screen and runlog file.'        
        WRITE(6,*) ' '        
        WRITE(6,*) ' these files need to be in the present working'        
        WRITE(6,*) ' directory: for required file formating, see'        
@@ -96,6 +99,13 @@ c     grab the command line arguments
       CALL getarg(4,instrlist)         
       If (instrlist.eq.'') instrlist = 'Mockspec.instruments'      
 
+      CALL getarg(5,commflag)         
+      IF ((commflag.eq.'').OR.(commflag.eq.'0')) then
+        iprint = .false.
+      ELSE
+        iprint = .true.
+      ENDIF
+
 c     check the command line input file sto make sure they exist; if not
 c     communicate and terminate
 
@@ -112,8 +122,10 @@ c
 c     open the runlog file; communicate the input lists; configure for
 c     the run parameters; read in the galaxy systemic redshift
 
-      OPEN(unit=1,file='Mockspec.runlog.anal',status='unknown')
-      CALL comm1(qsolist,paramlist,tranilist,instrlist)
+      IF (iprint) then
+       OPEN(unit=1,file='Mockspec.runlog.anal',status='unknown')
+       CALL comm1(qsolist,paramlist,tranilist,instrlist)
+      ENDIF
 
 c     obtain the survey configuration
 
@@ -125,8 +137,10 @@ c     open the qsolist file (the file containing the sightlines)
 
 c     write the header for the runlog file and to screen
 
-      WRITE(6,600)
-      WRITE(1,600)
+      IF (iprint) then
+       WRITE(6,600)
+       WRITE(1,600)
+      ENDIF
 
 c     loop over the qsolist 
 
@@ -170,7 +184,7 @@ c     if no detections, the communicate no absorption found
 c     move on to the next sightline
 
        IF (nlines.eq.0) THEN
-        CALL comm0(jknt,losindex,specname(jknt))
+        IF (iprint) CALL comm0(jknt,losindex,specname(jknt))
         GOTO 11
        END IF
 
@@ -190,7 +204,7 @@ C     MODIFIED to print out all LOS by commenting out below condition
 C        detect = .true.
         CALL writefiles(losnum)
 C       END IF
-       CALL comm2(jknt,losindex,specname(jknt),detect)
+       IF (iprint) CALL comm2(jknt,losindex,specname(jknt),detect)
 
  11   CONTINUE
 

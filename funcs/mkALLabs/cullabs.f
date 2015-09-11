@@ -49,7 +49,7 @@ c
       integer           i,klos
 
       character*80      qsolist,tranilist
-      character*80      losnum
+      character*80      losnum,io_flag
 
       include           'cullabs.com'
 
@@ -61,12 +61,16 @@ c     grab the command line arguments
       CALL getarg(1,qsolist)     ! list of sightlines (QS0.XXX.dat files)
 
       IF (qsolist.eq.'') THEN
-       WRITE(6,*) 'Usage: cullabs $1 [$2] '
+       WRITE(6,*) 'Usage: cullabs $1 [$2] [$3]'
        WRITE(6,*) '  $1  = filename of list of QS0.XXX.dat files'
        WRITE(6,*) ' [$2] = atomic/transition data file'
+       WRITE(6,*) ' [$3] = I/O flag'
        WRITE(6,*) ' '
        WRITE(6,*) ' if $2 is null "Mockspec.transitions" is assumed.'
        WRITE(6,*) ' it is assumed this file has 1 header line.'
+       WRITE(6,*) ' '
+       WRITE(6,*) ' if $3=0 or null I/O is suppressed. All other'
+       WRITE(6,*) ' values will give I/O to runlog and screen.'
        WRITE(6,*) ' '
        WRITE(6,*) ' these files need to be in the present working'
        WRITE(6,*) ' directory: for required file formating, see'
@@ -77,6 +81,13 @@ c     grab the command line arguments
 
       CALL getarg(2,tranilist)
       If (tranilist.eq.'') tranilist = 'Mockspec.transitions'
+
+      CALL getarg(3,io_flag)
+      IF ((io_flag.eq.'').OR.(io_flag.eq.'0')) then 
+       iprint = .false.
+      ELSE
+       iprint = .true.
+      ENDIF
 
 c     check that the qsolist and the tranilist are accessable in the
 c     present working directory; if not communicate and bail
@@ -112,9 +123,11 @@ c     zero all the sysabs and regabs data matrices
       CALL zeroall
 
       OPEN(unit=1,file=qsolist,status='old')
-      OPEN(unit=45,file='Mockspec.runlog.cullabs',status='unknown')
-      WRITE(6,600)
-      WRITE(45,600)     
+      IF (iprint) then
+       OPEN(unit=45,file='Mockspec.runlog.cullabs',status='unknown')
+       WRITE(6,600)
+       WRITE(45,600)     
+      ENDIF
 
       DO 21 klos=1,maxlos
        nreg(klos)    = 0
@@ -144,13 +157,17 @@ c     terminate
       DO i=1,nlos
        nsys    = nsys + nreg(i)
        nsubsys = nsubsys + nsubreg(i)      
-       WRITE(6,602) losID(i),nreg(i),nsubreg(i)
-       WRITE(45,602) losID(i),nreg(i),nsubreg(i)
+       IF (iprint) then
+        WRITE(6,602) losID(i),nreg(i),nsubreg(i)
+        WRITE(45,602) losID(i),nreg(i),nsubreg(i)
+       ENDIF
       ENDDO
 
 
-      WRITE(6,601)
-      WRITE(45,601)     
+      IF (iprint) then
+       WRITE(6,601)
+       WRITE(45,601)     
+      ENDIF
 
 c     PART 2
 c     make the translation table so that we know which data get written
@@ -168,7 +185,7 @@ c     set the number of sightlines
 
 c     we are done; close the runlog file
 
-      CLOSE(unit=45)
+      IF (iprint) CLOSE(unit=45)
 
       STOP
 

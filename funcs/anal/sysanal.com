@@ -1,5 +1,5 @@
 
-      logical            sf_flag,int_flag
+      logical            sf_flag,int_flag,iprint
       integer            ndata,nfind,f_beg,f_end,mask,norders,
      &                   collim,nlines
       integer            ntie,tie,jtie,njtie
@@ -24,7 +24,7 @@
       character*80       specfiles,element,instr,instrid
 
 
-      COMMON /lllblk/  sf_flag(mxord,mxlin),int_flag
+      COMMON /lllblk/  sf_flag(mxord,mxlin),int_flag,iprint
 
       COMMON /tieblk/  ntie,tie(mxord),jtie(mxord,mxord),
      &                 njtie(mxord)

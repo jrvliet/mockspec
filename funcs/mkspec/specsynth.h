@@ -20,6 +20,10 @@ c  maxvec     --- max number of pixels for concolution
       parameter          (SCREEN = 6, STDIN = 5, STDOUT = SCREEN)
 
 
+c  comm flag
+
+      logical            iprint
+      COMMON/logcomm/    iprint
 
 c  atomic constants and general acounting
 

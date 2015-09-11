@@ -1,4 +1,7 @@
 
+      logical           iprint
+      COMMON/ioblock/   iprint
+
       integer           nlos,nsys,nsubsys,nreg,nsubreg
       COMMON/iblock/    nlos,nsys,nsubsys,
      &                  nreg(maxlos),nsubreg(maxlos)

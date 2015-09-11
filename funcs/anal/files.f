@@ -203,8 +203,10 @@ c     spectra; j is the transition index and i is the pixel index
 
 c     if you get here, then the data was truncated warn and continue
 
-       WRITE(1,600) specname,read_file,vel(nmx,j)
-       WRITE(6,600) specname,read_file,vel(nmx,j)
+       IF (iprint) then
+        WRITE(1,600) specname,read_file,vel(nmx,j)
+        WRITE(6,600) specname,read_file,vel(nmx,j)
+       ENDIF
 
  17    CLOSE(unit=3)
 
@@ -217,8 +219,10 @@ c     if you get here, then the data was truncated warn and continue
 
        GOTO 19  ! increment order counter and continue
 
- 18    WRITE(1,601) specname,read_file
-       WRITE(6,601) specname,read_file
+ 18    IF (iprint) then
+        WRITE(1,601) specname,read_file
+        WRITE(6,601) specname,read_file
+       ENDIF
        error = .true.
 
  19    j = j + 1
