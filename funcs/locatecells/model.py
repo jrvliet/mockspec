@@ -8,7 +8,7 @@ from voigt import *
 def set_atomic(lamb0, f0, gamma0):
 
     c = const.c.cgs.value
-    e = const.e.cgs.value
+    e = const.e.esu.value
     m_e = const.m_e.cgs.value    
 
     con1Const = ( np.sqrt(np.pi)*e*e ) / ( m_e*c*c )
@@ -116,7 +116,7 @@ def do_abs_lines(lamb0, zabs, nline, zline, bline, con1, con2, lamb, wrkflux):
 #def do_lyman_limit():
 #def drop_lines():
 
-def instrument(ndata, wcen, flag):
+def instrument(ndata, wcen, flag, R_fac, dwave):
     """
     Sets up the intrumental spread function for convolving the
     original model spectrum
@@ -144,7 +144,7 @@ def instrument(ndata, wcen, flag):
     # set them here
     slit = 1.0
     resfac = 2.0
-    conwindo = 3`
+    conwindo = 3
 
 
     np2 = 17

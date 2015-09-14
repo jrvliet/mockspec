@@ -67,7 +67,7 @@ def config_spec(instrument, vmax, zabs, lamb0):
 
 
     
-def get_transitions(ion)
+def get_transitions(ion):
     """
     Reads in Mockspec.transitions to get the physical properties of 
     the transition the spectrum is being made for. 
@@ -107,16 +107,16 @@ def get_transitions(ion)
                 k = int(l[2])
                 j = int(l[3])
                 transName = l[5]
-                lamb0 = double(l[6])
-                fosc = double(l[7])
-                gamma = double(l[8])
-                mamu = double(l[9])
-                abund = double(l[10])
-                ip = double(l[11])
+                lamb0 = float(l[6])
+                fosc = float(l[7])
+                gamma = float(l[8])
+                mamu = float(l[9])
+                abund = float(l[10])
+                ip = float(l[11])
                 break
 
     if found==1:
-        return k, j, transName, lamb0, gamma, abund, ip
+        return k, j, transName, lamb0, fosc, gamma, mamu, abund, ip
     else:
         print 'Cannot find ion={0:s} in {1:s}'.format(ion, filename)
         sys.exit()

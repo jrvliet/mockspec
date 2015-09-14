@@ -11,7 +11,7 @@ import model as mo
 
 
 
-def spectrum(zabs, zcell, logN, dopplerb, cellID, ion, vmax, inst, ntrans, 
+def spectrum(zabs, zcell, logN, dopplerb, cellID, ion, vmax, inst, 
               transName, lamb0, fosc, gamma):
 
     """
@@ -45,16 +45,16 @@ def spectrum(zabs, zcell, logN, dopplerb, cellID, ion, vmax, inst, ntrans,
     # obtain this transitions intrumetnal configuration
     con1, con2 = mo.set_atomic( lamb0, fosc, gamma )
     
-    spec =  fi.config_spec( instrument, vmax, zabs, lamb0) #instrlist, j, wcen )
+    spec =  fi.config_spec( inst, vmax, zabs, lamb0) #instrlist, j, wcen )
     R_isf, presel, rn, waveMin, waveMax, wcen, dwave = spec
 
     # Initialize the spectrum continuum
-    ndata, lamb, wrkflux = mo.init_sectrum(waveMin, waveMax, dwave)
+    ndata, lamb, wrkflux = mo.init_spectrum(waveMin, waveMax, dwave)
 
     m = ndata
 
     # Setup the ISF FSWM over the spectrum
-    mo.instrument(m, wcen, 0)
+    mo.instrument(m, wcen, 0, R_isf, dwave)
     
     # Line flux radiative transfer
     wrkflux = do_abs_lines(lamb0, zabs, nline, zline, bline, 
