@@ -34,7 +34,7 @@ def specsynth(zabs, zcell, logN, dopplerb, cellID, ion, Vmax, inst, ntrans,
 
     # Assign atomic constants to all lines for this transition and 
     # obtain this transitions intrumetnal configuration
-    setatomic( j )
+    con1, con2 = setatomic( lam0, f0, gamma0 )
     configspec( instrlist, j, wcen )
 
     # Initialize the spectrum continuum
