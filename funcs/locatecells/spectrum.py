@@ -11,7 +11,7 @@ import model as mo
 
 
 
-def specsynth(zabs, zcell, logN, dopplerb, cellID, ion, vmax, inst, ntrans, 
+def spectrum(zabs, zcell, logN, dopplerb, cellID, ion, vmax, inst, ntrans, 
               transName, lamb0, fosc, gamma):
 
     """
