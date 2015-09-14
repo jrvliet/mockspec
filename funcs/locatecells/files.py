@@ -17,13 +17,14 @@ def config_spec(instrument, vmax, zabs, lamb0):
         lamb0 (central wavelength of the transition)
 
     Returns: 
-        R_isf (resolution)
-        presel (pixels per resolution element)
-        rn (read noise)
-        waveMin (minimum wavelegth of absorption window)
-        waveMax (maxiumum wavelength of absorption window)
-        wcen (central wavelengh of absorption window)
-        dwave (wavelength step size of sprectrum to make)
+        spec (list containing:)
+            R_isf (resolution)
+            presel (pixels per resolution element)
+            rn (read noise)
+            waveMin (minimum wavelegth of absorption window)
+            waveMax (maxiumum wavelength of absorption window)
+            wcen (central wavelengh of absorption window)
+            dwave (wavelength step size of sprectrum to make)
 
     """
     found = 0
@@ -55,7 +56,8 @@ def config_spec(instrument, vmax, zabs, lamb0):
         wcen = (waveMax + waveMin) / 2.0
         dwave = wcen / (presel*R_isf)
 
-        return R_isf, presel, rn, waveMin, waveMax, wcen, dwave
+        spec = R_isf, presel, rn, waveMin, waveMax, wcen, dwave 
+        return spec
 
     else:
         print 'Instrument {0:s} not found in {1:s}'.format(instrument, filename)
