@@ -9,7 +9,8 @@ from scipy import signal as sg
 
 
 
-def specsynth(zabs, zcell, logN, dopplerb, cellID, ion, Vmax, inst):
+def specsynth(zabs, zcell, logN, dopplerb, cellID, ion, Vmax, inst, ntrans, 
+              transName, central, fosc, gamma):
 
     """
     Funtional form of specsynth.f
@@ -27,18 +28,50 @@ def specsynth(zabs, zcell, logN, dopplerb, cellID, ion, Vmax, inst):
         
     """
 
-    # Get transition parameters
-    paramlist = 'Mockspec.runpars'
-    getparams(paramlist)
+    # Open line list file
+#        readlines( linelist[i], trani[i] )
+    # Nope, this is passed in
+
+    # Assign atomic constants to all lines for this transition and 
+    # obtain this transitions intrumetnal configuration
+    setatomic( j )
+    configspec( instrlist, j, wcen )
+
+    # Initialize the spectrum continuum
+    initpsectrum 
+
+    m = ndata
+
+    # Setup the ISF FSWM over the spectrum
+    instrument(m, wcen, 0)
     
-    # Get atomic parametes
-    gettransitions(tranilist, losnum, ntran, trani, linelist)
+    # Line flux radiative transfer
+    doabslines
 
+    # Lyman limit break
+    dolymanlimit
 
-    # Loop over the number of transistions and make the spectrum for each one
-    for i in range(0,ntran):
+    # Convolve with ISF 
+    if (convolving):
+        colvolve
 
-        # Assign atomic constants to all lines for this transition and 
-        # obtain this transitions intrumetnal configuration
-        
     
+    # Return the spectrum
+    return velocity, flux
+
+
+
+
+
+
+
+
+
+
+            
+
+
+
+
+
+
