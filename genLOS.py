@@ -2,6 +2,7 @@
 # Functions to generate lines of sight
 
 from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.pyplot as plt
 import numpy as np
 from numpy import linalg as LA
 import math
@@ -146,7 +147,13 @@ def equal(a, b):
 
 
 
-def genLines(galID, gasfile, summaryLoc, expn, inc, nLOS, maximpact, ncores):
+def genLines(galID, gasfile, summaryLoc, expn, inc, nLOS, 
+             maximpact, ncores, doPlot=0):
+
+    if doPlot==1:
+        print 'Plotting...'
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
 
     tol = 1e-5
     seed(25525)
@@ -210,6 +217,10 @@ def genLines(galID, gasfile, summaryLoc, expn, inc, nLOS, maximpact, ncores):
         b = impacts[j]
         phi = random()*2*math.pi
         
+        if doPlot==1:
+            b = maximpact_kpc*0.2
+            phi = j*math.pi/2.0
+
         finfo.write('{0:>6}       {1:>6,.1f}    {2:>6,.1f}   {3:>6,.1f}\n'.format(j+1, b, math.degrees(phi), math.degrees(inc)))
            
         # Define the LOS directional vector in the sky frame:
@@ -239,7 +250,9 @@ def genLines(galID, gasfile, summaryLoc, expn, inc, nLOS, maximpact, ncores):
         # Get the enter and exit points of the LOS
         xen, yen, zen, ten, xex, yex, zex, tex = findEnds(pb[0,0], pb[1,0], pb[2,0], db[0,0], db[1,0], db[2,0], boxsize)
         
-
+        if doPlot==1:
+            plot_line(ax, ten, tex, pb, db, j)   
+    
         fout.write('{0:>12,.5f}{1:>12,.5f}{2:>12,.5f}{3:>12,.5f}{4:>12,.5f}{5:>12,.5f}\n'.format(xen,yen,zen,xex,yex,zex))
 
         xens.append(xen)
@@ -270,6 +283,9 @@ def genLines(galID, gasfile, summaryLoc, expn, inc, nLOS, maximpact, ncores):
 
     print 'Calculated inclination: {0:.3f} degrees'.format(math.degrees(angle))
 
+    if doPlot==1:
+        plotting(ax, a_gtb, norm_b, boxsize)
+
         
     fout.close()
     finfo.close()
@@ -286,3 +302,66 @@ def runCellfinder(codeLoc, numcores):
         print '\n\nCould not run cellfinder with:\n\t{0:s}'.format(command)
         print 'Exiting...'
         sys.exit()
+
+
+def plot_line(ax, ten, tex, pb, db, j):
+    
+    colors = ['r', 'b', 'g', 'k']
+    c = colors[j%4]
+    
+    t = np.linspace(ten, tex, 1e5)
+
+    x = pb[0,0] + db[0,0]*t
+    y = pb[1,0] + db[1,0]*t
+    z = pb[2,0] + db[2,0]*t
+
+    # Plot the LOS
+    ax.plot(x,y,z,color=c)
+
+    # Plot the endpoints
+#    ax.scatter(xen, yen, zen, 'xk')
+#    ax.scatter(xex, yex, zex, 'xk')
+
+
+
+
+def func(x,y):
+    return 0.0
+
+
+def plotting(ax, a_gtb, norm_b, boxsize):
+    # Plot the rotated xy plane, representing the galaxy disk
+    sx = sy = np.arange(-10.0,10.0,0.1)
+    X, Y = np.meshgrid(sx,sy)
+    sz = np.array([func(i,k) for i,k in zip(np.ravel(X), np.ravel(Y))])
+    Z = sz.reshape(X.shape)
+
+    X2, Y2, Z2 = X, Y, Z
+    for i in range(0,len(X)):
+        for j in range(0,len(X[i])):
+            v1 = np.matrix([X[i,j], Y[i,j], Z[i,j]])
+            v2 = a_gtb*v1.T
+            X2[i,j] = v2[0,0]
+            Y2[i,j] = v2[1,0]
+            Z2[i,j] = v2[2,0]
+
+    ax.plot_surface(X2, Y2, Z2)
+
+    # Plot a vector along the galaxy's angular momentum (positive z in gal frame)
+#    norm_g = np.matrix([0,0,10])
+#    norm_b = a_gtb*norm_g.T
+    nx = [0,norm_b[0,0]]
+    ny = [0,norm_b[1,0]]
+    nz = [0,norm_b[2,0]]
+    ax.plot(nx,ny,nz,'b')
+
+    size = boxsize/2.0
+    ax.set_xlim([-1*size,size])
+    ax.set_ylim([-1*size,size])
+    ax.set_zlim([-1*size,size])
+
+    plt.show()
+
+
+
+
