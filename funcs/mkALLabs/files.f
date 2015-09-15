@@ -1,79 +1,57 @@
-c     PACKAGE: Mockspec/anal
-c     PROGRAM: sysanal
+c     PACKAGE: Mockspec
+c     PROGRAM: cullabs
 c     MODULE:  files.f
-c
-c     DESCRIPTION
-c     routines that manage the I/O to files and screen
-c
 c
 c     this file contains:
 c     SUBROUTINE ckfiles
-c     SUBROUTINE getparams
-c     SUBROUTINE getdata
-c     SUBROUTINE comm1
-c     SUBROUTINE comm0
-c     SUBROUTINE comm2
-c     SUBROUTINE writefiles
+c     SUBROUTINE mkfiles
+c     SUBROUTINE openALLfiles
+c     SUBROUTINE wrtdata
+c     SUBROUTINE cullabsdata
+c     SUBROUTINE cullregdata
 c
 c
 c.............................................................................
 c
 
-      SUBROUTINE ckfiles(qsolist,paramlist,tranilist,instrlist)
+      SUBROUTINE ckfiles(qsolist,tranilist)
 
 c     check that the files entered on the command line can be accessed
 c     in the present working directory; this routine does not confirm
 c     the formating of the contenst of the file; only that they can be
 c     accessed; for formatting contraints, see the file
 c     "Mockspec/Mockspec.help"
+
 c
 c::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 c
-
       implicit          none
       logical           error
       integer           istat,access
-      character*80      qsolist,paramlist,tranilist,instrlist
+      character*80      qsolist,paramlist,tranilist
 
 
       error = .false.
 
-c       checking command line entry $1
+c     checking command line entry $1
 
       istat = access(qsolist,'r')
       IF (istat.ne.0) then
-      WRITE(6,*) 'ERROR(ckfiles): no access to file ',
-     &               qsolist(1:40)
+       WRITE(6,*) 'ERROR(ckfiles): no access to file ',
+     &             qsolist(1:40)
        error = .true.
       END IF
 
 c     checking command line entry $2
 
-      istat = access(paramlist,'r')
-
-      IF (istat.ne.0) then
-       WRITE(6,*) 'ERROR(ckfiles): no access to file ',
-     &               paramlist(1:40)
-       error = .true.
-      END IF
-
-c     checking command line entry $3
-
       istat = access(tranilist,'r')
       IF (istat.ne.0) then
        WRITE(6,*) 'ERROR(ckfiles): no access to file ',
-     &               tranilist(1:40)
+     &             tranilist(1:40)
        error = .true.
       END IF
 
-c     checking command line entry $4
-
-      istat = access(instrlist,'r')
-      IF (istat.ne.0) then
-       WRITE(6,*) 'ERROR(ckfiles): no access to file ',
-     &               instrlist(1:40)
-       error = .true.
-      END IF
+c     terminate if an error occured
 
 c       error trap- terminate program
 
@@ -93,166 +71,46 @@ c     happy! return and GO!
       END
 
 
-c.............................................................................
-c
 
-      SUBROUTINE getparams(paramlist)
+c
+c..............................................................................
+c
+      SUBROUTINE mkfiles(klos)
+
+c     populate the sysabsfile and regabsfile names
+c     these are the files to be READ in
 
 c
 c::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 c
 
-      include           'sysanal.h'
+      include           'cullabs.h'
 
-      integer           i,iknt
-      double precision  dum
-      character*80      paramlist,header
+      integer            klos
+      character*80       infile,outfile
 
-      include           'sysanal.com'
+      include            'cullabs.com'
 
+      infile = losfile(klos)
 
-
-c     inititialize the number of ions we are working with
-
-      nions = 0
-
-c     open the file (default="Mockspec.runpars") ; it is assumed to have a
-c     single header line
-
-      OPEN(unit=3,file=paramlist,status='old')
-      READ(3,*) header
-      DO 11, i=1,mxions
-        READ(3,*,END=12,ERR=99) element(i),ionstage(i),dum,instr(i),
-     &                          EWlim(i),dum,dum,Nsigion(i)
-        nions = nions + 1
- 11   CONTINUE
-
- 12   CLOSE(unit=3)
-
-c     sum check that the paramlist matches the number of ions generated
-c     by the LOS generating program, where nions is determined in
-c     routine gettransitions (celled before this one
-
+      CALL fappend1(infile,'sysabs',outfile)
+      sysabsfile(klos) = outfile
+ 
+      CALL fappend1(infile,'regabs',outfile)
+      regabsfile(klos) = outfile
 
       RETURN
 
-
-c     formatting error?
-
- 99   WRITE(6,*) 'ERROR(getparams): survey configuration file ',
-     &            paramlist(1:40)
-      WRITE(6,*) 'is apparently not formatted correctly. Please'
-      WRITE(6,*) 'read the Mockspec/Mockspec.help file for details.'
-      CLOSE(unit=3)
-      STOP
-
-      END
-
-c
-c.........................................................................
-c
-
-      SUBROUTINE getdata(specname,error)
-
-c
-c:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-c
-
-      implicit   none
-  
-      include            'sysanal.h'
-
-      logical            error
-      integer            i,j,jj,k,kk,nline,ndum
-      integer            access,istat
-      parameter          (ndum = 20)
-      double precision   dum(ndum)
-      character*80       read_file,specname
-      character*200      stringline
-
-      include            'sysanal.com'
-
-
-c     set the error low - it is set high if the file is not found, or it
-c     is set high if there are no pixels in the file
-
-      error = .false.
-
-c     loop through all the ions for this species and store their
-c     spectra; j is the transition index and i is the pixel index
-
-      j = 1
-
-      DO 11 WHILE (j.le.norders)
-
-       ndata(j)  = 0
-       read_file = specfiles(j)
-
-       OPEN(unit=3,file=read_file,err=18,status='old')
-
-       DO 15 i=1,nmx
-        READ(3,'(a200)',END=17) stringline
-        CALL parzeline(nline,ndum,dum,stringline)
-        wave(i,j)  = dum(1)
-        vel(i,j)   = dum(2)
-        flux(i,j)  = dum(3)
-        sigma(i,j) = dum(4)  
-        smsig(i,j) = dum(5)  
-        cont(i,j)  = dum(6)
- 15    CONTINUE
-
-c     if you get here, then the data was truncated warn and continue
-
-       IF (iprint) then
-        WRITE(1,600) specname,read_file,vel(nmx,j)
-        WRITE(6,600) specname,read_file,vel(nmx,j)
-       ENDIF
-
- 17    CLOSE(unit=3)
-
-       ndata(j) = i - 1
-
-       IF (ndata(j).eq.0) then
-         error = .true.
-         RETURN
-       END IF
-
-       GOTO 19  ! increment order counter and continue
-
- 18    IF (iprint) then
-        WRITE(1,601) specname,read_file
-        WRITE(6,601) specname,read_file
-       ENDIF
-       error = .true.
-
- 19    j = j + 1
-
- 11   CONTINUE
-
-c     good return
-
-      RETURN
-
-c     formats
-
- 200  FORMAT(1x,6f11.4)
-
- 600  FORMAT(1x,a9,2x,'WARNING(getdata): NMX exceeded for ',a24,
-     &       1x,'- spectrum truncated at vel > ',f10.2,' km/s')
-      
- 601  FORMAT(1x,a9,2x,'WARNING(getdata): no spectrum for ',a24,
-     &       1x,'- skipping this ion')
-      
       END
 
 
 c
-c..............................................................................
+c......................................................................
 c
 
-      SUBROUTINE comm1(qsolist,paramlist,tranilist,instrlist)
+      SUBROUTINE closeALLfiles
 
-c     communicate the command line input files being used 
+c     this closes the sysabs and regabs files
 
 c
 c::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -260,291 +118,232 @@ c
 
       implicit none
 
-      character*80       qsolist,paramlist
-      character*80       tranilist,instrlist
+      include           'cullabs.h'
 
+      integer           i,icol,funit
+      character*80      infile,outfile1,outfile2
 
-c     write to the runlog file
+      include           'cullabs.com'
 
-      WRITE(1,*) ' '
-      WRITE(1,*) '*******************************************'
-      WRITE(1,*) '- Mockspec/sysanal input files'
-      WRITE(1,'(a,a40)') ' - LOS data list          : ',qsolist
-      WRITE(1,'(a,a40)') ' - absline survey config  : ',paramlist
-      WRITE(1,'(a,a40)') ' - atomic/transition data : ',tranilist
-      WRITE(1,'(a,a40)') ' - instrument config data : ',instrlist
-      WRITE(1,*) ' '
-      WRITE(1,*) '*******************************************'
-
-c     write to screen
-
-      WRITE(6,*) ' '
-      WRITE(6,*) '*******************************************'
-      WRITE(6,*) '- Mockspec/sysanal input files'
-      WRITE(6,'(a,a40)') ' - LOS data list          : ',qsolist
-      WRITE(6,'(a,a40)') ' - absline survey config  : ',paramlist
-      WRITE(6,'(a,a40)') ' - atomic/transition data : ',tranilist
-      WRITE(6,'(a,a40)') ' - instrument config data : ',instrlist
-      WRITE(6,*) ' '
-      WRITE(6,*) '*******************************************'
+      CLOSE(unit=41)
+      CLOSE(unit=42)
 
       RETURN
+
       END
 
 
 c
-c..............................................................................
+c......................................................................
 c
 
-      SUBROUTINE comm0(j,losindex,spcnam)
+      SUBROUTINE openALLfiles
 
-c     communicate non detection for this ion; j=iorder
+c     this routine makes the name and opens the output files (ALL files)
 
 c
 c::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 c
 
-      include           'sysanal.h'
+      implicit none
 
-      integer            j
-      double precision   Wcut,Siglev
-      character*80       spcnam,spectrog,losindex,note
+      include           'cullabs.h'
 
-      include            'sysanal.com'
+      integer           i,icol,funit
+      character*80      infile,outfile1,outfile2,aval
 
-c     grab this ions quantities for writing
-
-      spectrog = instrid(j)
-      Wcut     = EWcut(j)
-      Siglev   = Slevid(j)
-
-c     set the note
-
-      note = 'non detection'
-
-c     write to the runlog file
-
-      WRITE(1,601) losindex,spcnam,spectrog,Wcut,nlines,Siglev,note,
-     &             (order(i),i=1,norders)
+      include           'cullabs.com'
 
 
-c     write to screen
+c     grab the expansion parameter
 
-      WRITE(6,601) losindex,spcnam,spectrog,Wcut,nlines,Siglev,note,
-     &             (order(i),i=1,norders)
+      infile = '../gal_props.dat'
+      OPEN(unit=87,file=infile,status='old')
+       DO i=1,6
+        READ(87,*) outfile1  ! dummy reads
+       ENDDO
+       READ(87,*) aval       ! the a value (dummy variable)
+      CLOSE(unit=87)
 
+      infile = losfile(1)
+
+c     create the ALL sysabs file name and open
+
+      CALL fappend3(infile,'ALL',aval,'sysabs',outfile1)
+      OPEN(unit=41,file=outfile1,status='unknown')
+
+c     create the ALL regabs file name and open
+
+      IF (nsubsys.gt.0) then
+       CALL fappend3(infile,'ALL',aval,'regabs',outfile2)
+       OPEN(unit=42,file=outfile2,status='unknown')
+      ENDIF
 
       RETURN
 
- 601  FORMAT(1x,a8,2x,a9,2x,a10,2x,f6.4,2x,i3,6x,' ...  ',
-     &       2x,f5.2,2x,a18,2x,10a10)
-
       END
 
-c
-c..............................................................................
+
+c......................................................................
 c
 
-      SUBROUTINE comm2(j,losindex,spcnam,detect)
+      SUBROUTINE wrtdata
 
-c     communicate detection for this ion; j=iorder; but account for
-c     whether the EW is above the survey threshold, EWcut (which is
-c     stored in logical "detect"
+c     this routine writes the sysabs data to the ALL sysabs files
 
 c
 c::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 c
 
-      include           'sysanal.h'
+      implicit none
 
-      logical            detect
-      integer            j
-      double precision   Wcut,Siglev
-      character*80       spcnam,spectrog,losindex,note
+      include           'cullabs.h'
 
-      include           'sysanal.com'
+      integer           icell,ireg,icol,i,j,k,m,funit
 
+      include           'cullabs.com'
 
 
-c     grab this ions quantities for writing
 
-      restew   = ewtot(1)/(1.0+zbar)
-      spectrog = instrid(j)
-      Wcut     = EWcut(j)
-      Siglev   = Slevid(j)
+c     loop over the unique ions; grad the relevant indices from the
+c     translation table and write the sysabs data to the ALL file; when
+c     done, close the file
 
+c     the *.ALL.sysabs files
 
-c     determine message
+       WRITE(41,1000) 'los','D',headline
+       DO 21 k=1,nlos
+        IF (nreg(k).ne.0) then
+         DO 23 ireg=1,nreg(k)
+          WRITE(41,1200) losID(k),impact(k),sysdata(k,ireg)
+ 23      CONTINUE
+        END IF
+ 21    CONTINUE
 
-      IF (detect) then
-       note = 'above EWcut'
-C       note = 'detection included'
-      ELSE
-       note = 'below EWcut'
-C       note = 'detection excluded'
+c     the *.ALL.regabs files
+
+      IF (nsubsys.gt.0) then 
+
+       WRITE(42,1200) losID(k),impact(k),sysdata(k,ireg)
+
+       DO 31 k=1,nlos
+        IF (nsubreg(k).ne.0) then
+         DO 33 ireg=1,nsubreg(k)
+          WRITE(42,1200) losID(k),impact(k),regdata(k,ireg)
+ 33      CONTINUE
+        END IF
+ 31    CONTINUE
+
       END IF
 
-c     write to the runlog file
-
-      WRITE(1,602) losindex,spcnam,spectrog,Wcut,nlines,restew,
-     &             Siglev,note,(order(i),i=1,norders)
-
-c     write to screen
-
-      WRITE(6,602) losindex,spcnam,spectrog,Wcut,nlines,restew,
-     &             Siglev,note,(order(i),i=1,norders)
 
       RETURN
 
- 602  FORMAT(1x,a8,2x,a9,2x,a10,2x,f6.4,2x,i3,5x,f7.4,2x,
-     &       f5.2,2x,a18,2x,10a10)
+ 1000 FORMAT(1x,a3,2x,a6,1x,a190)
+ 1200 FORMAT(1x,a4,1x,f6.1,1x,a190)
+     
+      END
+
+
+
+c
+c......................................................................
+c
+
+      SUBROUTINE cullabsdata(klos)
+
+c     this routine is called one los at a time, so we only work on one
+c     los and then return to main; losnum is incremented in main
+
+c     READ in the sysabs data
+
+c
+c::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+c
+
+      implicit none
+
+      include           'cullabs.h'
+
+      integer           ireg,klos
+      character*250     header,stringline,dummyline
+
+      include           'cullabs.com'
+
+
+      dummyline = '  0.0000000      0.00      0.00    0.000    0.000'//
+     &            '    0.000    0.000    0.000      0.00      0.00'//
+     &            '      0.00      0.00      0.00      0.00    0.000'//
+     &            '    0.000    0.000    0.000    0.000    0.000'
+
+c     set the maximum allowed number of columns to a local variable
+
+      OPEN(unit=4,file=sysabsfile(klos),err=100,status='old')
+      READ(4,'(a250)') header    ! header
+      DO 09 ireg=1,mxreg
+       READ(4,'(a250)',END=200) stringline     ! read data
+       sysdata(klos,ireg) = stringline
+ 09   CONTINUE
+
+      CLOSE(unit=4)               
+      WRITE(6,*) 'ERROR(cullabsdata): file truncated; increase mxreg'
+      STOP
+
+ 200  CLOSE(unit=4)
+      nreg(klos) = ireg - 1
+      IF (ireg.gt.0) headline = header  ! apparently not used
+      RETURN
+
+ 100  CLOSE(unit=4)
+      nreg(klos) = 1
+      sysdata(klos,1) = dummyline
+      RETURN
 
       END
 
 
-c.........................................................................
-c
-
-      SUBROUTINE writefiles(losnum)
 
 c
-c     write all the files for all ion transitions
-c
-c
-c:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+c......................................................................
 c
 
-      implicit   none
-  
-      include            'const.dek'
-      include            'sysanal.h'
+      SUBROUTINE cullregdata(klos)
 
-      integer            i,j,k,j2
-      double precision   rw,drw,v1,v2,asym,dasym
-      character*80       write_file,losnum,fileroot
+c     this routine is called one los at a time, so we only work on one
+c     los and then return to main; losnum is incremented in main
 
-      include            'sysanal.com'
-
-
-c     set J=strong member, J2=weaker member
-
-      j  = 1
-      j2 = 2
-
-c     create the root name of the write_files
-
-      IF (nlines.gt.1) THEN
-
-
-c     create and open the file for the region data
-
-      CALL fappend1(losnum,'regabs',write_file)
-      OPEN(unit=13,file=write_file,status='unknown')
-      WRITE(13,1300)
-
-c     if more than one region...
-c     write the velocity moments region by region 
-
-      DO 25 i=1,nlines
-        rw  = ew(i,j)/(1.0d0+zbar)
-        IF (ewsig(i,j).ne.-1.0) then            ! limit ?
-          drw = ewsig(i,j)/(1.0d0+zbar)         ! uncertainty in RW
-        ELSE                                    ! or 
-          drw = -1.0d0                          ! flag as limit 
-        END IF      
-        asym  = vasym(i,j)/(ckms*rw/lambda0(j))
-        dasym = sigvasym(i,j)/(ckms*rw/lambda0(j))
-        v1    = vel(f_beg(i,j,1),j)             ! blue vel extreme
-        v2    = vel(f_end(i,j,1),j)             ! red vel extreme
-        WRITE(13,1301) i,zbar,v1,v2,
-     &        rw,drw,dr(i,j2),drsig(i,j2),
-     &        siglevel(i,j),vbar(i,j),sigvbar(i,j),
-     &        vwidth(i,j),sigvwidth(i,j),asym,dasym,
-     &        0.0,1.25
- 25   CONTINUE
-      CLOSE(unit=13)
-
-      END IF
-
-c     create and open the file for the overall system results
-
-      CALL fappend1(losnum,'sysabs',write_file)
-      OPEN(unit=14,file=write_file,status='unknown')
-      WRITE(14,1400)  
-
-c     write the follwoing quantities to the file
-
-c     1. the redshift, and equivalent widths
+c     READ in the regabs data
 c
-c     2. the total velocity moments; i.e., the mean velocity, velocity
-c     width, and the asymmetry; we convert the asymmetry to asym/vew,
-c     where vew = c*ew/lambda:
+c::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 c
-c     3. total measured optical depths and AOD column densities for each
-c     ion transition; the errors are not symmetric (because of the
-c     natural log), so there is a down error (dd) and an up error (du)
-c     for each of the totals: "sysanal.aod"
 
-       rw  = ewtot(j)/(1.0d0+zbar)                 ! rest frame EW
-       IF (ewsigtot(j).ne.-1.0) then               ! limit ?
-          drw = ewsigtot(j)/(1.0d0+zbar)           ! uncertainty in RW
-       ELSE                                        ! or 
-          drw = -1.0d0                             ! flag as limit 
-       END IF      
-       asym  = vtotasym(j)/(ckms*rw/lambda0(j))    ! vel asymmetry
-       dasym = sigvtotasym(j)/(ckms*rw/lambda0(j)) ! uncertainty in ASYM
-       v1    = vel(f_beg(1,j,1),j)                 ! blue vel extreme
-       v2    = vel(f_end(nlines,j,1),j)            ! red vel extreme
+      implicit none
+
+      include           'cullabs.h'
+
+      integer           ireg,klos
+      character*250     stringline
+
+      include           'cullabs.com'
 
 
-       ddtautot(j) = log10((tautot(j)-ddtautot(j))/tautot(j))
-       dutautot(j) = log10((tautot(j)+dutautot(j))/tautot(j))
-       ddtautot(j) = abs(ddtautot(j))
-       tautot(j)   = log10(tautot(j))
+c     set the maximum allowed number of columns to a local variable
 
-       WRITE(14,1401) zbar,v1,v2,
-     &       rw,drw,drtot(j2),drsigtot(j2),
-     &       sltot(j),vtotbar(j),sigvtotbar(j),
-     &       vtotwidth(j),sigvtotwidth(j),asym,dasym,
-     &       tautot(j),ddtautot(j),dutautot(j),
-     &       coltot(j),ddcoltot(j),ducoltot(j),
-     &       0.0,1.25
+      OPEN(unit=4,file=regabsfile(klos),err=100,status='old')
+      READ(4,'(a250)') stringline    ! header
+      DO 09 ireg=1,mxreg
+       READ(4,'(a250)',END=200) stringline     ! read data
+       regdata(klos,ireg) = stringline
+ 09   CONTINUE
 
-      CLOSE(unit=14)
+      CLOSE(unit=4)                     
+      WRITE(6,*) 'ERROR(cullregdata): file truncated; increase mxreg'
+      STOP
 
-c     we are done looping through the ions
+ 200  CLOSE(unit=4)
+      nsubreg(klos) = ireg - 1
 
-c     debugging
-
-C      OPEN(unit=11,file='ew_regions.dat',status='unknown')
-C      DO 27 i=1,nlines
-C        w1 = wave(f_beg(i,1,1),1)
-C        w2 = wave(f_end(i,1,1),1)
-C        w3 = wbar(i,1)
-C        WRITE(11,1110) i,1.25,w1,w2,w3,lambda0(1)
-C 27   CONTINUE
-C      CLOSE(unit=11)
-
-c     this is a clean return
-
-      RETURN
-
-c     formats
-
- 1300 FORMAT(1x,t4,'reg',t10,'zabs',t24,'v-',t34,'v+',
-     &       t42,'EW_r',t50,'dEW_r',
-     &       t60,'DR',t69,'dDR',t78,'SL',t88,'Vbar',
-     &       t97,'dVbar',t107,'Vsprd',t115,'dVsprd',
-     &       t127,'Vasym',t136,'dVasym',
-     &       t145,'dum',t149,'ytick')
- 1301 FORMAT(1x,i5,f10.7,2f10.2,5f9.3,6f10.2,f6.1,f6.2)
- 1400 FORMAT(1x,t5,'zabs',t19,'v-',t29,'v+',t37,'EW_r',
-     &       t45,'dEW_r',t55,'DR',t64,'dDR',t73,'SL',
-     &       t83,'Vbar',t92,'dVbar',t102,'Vsprd',t111,'dVsprd',
-     &       t122,'Vasym',t131,'dVasym',t142,'lgt',t150,'dtau-',
-     &       t159,'dtau+',t169,'logN',t176,'dNcol-',t185,'dNcol+',
-     &       t194,'dum',t198,'ytick')
- 1401 FORMAT(1x,f10.7,2f10.2,5f9.3,6f10.2,6f9.3,f6.1,f6.2)
+ 100  RETURN
 
       END
 

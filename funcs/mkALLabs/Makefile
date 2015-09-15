@@ -1,8 +1,8 @@
-# Mockspec/anal/sysanal
+# Mockspec/cullabs Makefile
 # all necessary files are local includes; no library linking is
 # required and so the library variables are commented out
-FC=f95
 FFLAGS=-O 
+FC=f95
 #FFLAGS=-O -Bstatic
 #TLIB=/home/matrix/cwc/Programs/tlib/tool.a
 #MGOLIBS=-L/usr/X11R6/lib -lmongo -lX11 -lreadline -lhistory -lcurses
@@ -11,7 +11,7 @@ FFLAGS=-O
 .F.o: ; $(FC) $(FFLAGS) -c $*.F
 #
 
-default:: anal
+default:: cullabs
 
-anal: const.dek files.f zabs.f features.f spectra.f sysanal.com sysanal.f sysanal.h subs.f
-	$(FC) $(FFLAGS) sysanal.f -o sysanal 
+cullabs: cullabs.h cullabs.f access.f files.f subs.f parze.f index.f 
+	$(FC) $(FFLAGS) cullabs.f -o cullabs 

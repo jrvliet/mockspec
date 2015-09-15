@@ -152,8 +152,9 @@ def genLines(galID, gasfile, summaryLoc, expn, inc, nLOS,
 
     if doPlot==1:
         print 'Plotting...'
-        fig = plt.figure()
-        ax = fig.add_subplot(111, projection='3d')
+        print 'Input Inclination: {0:f}'.format(inc)
+#        fig = plt.figure()
+#        ax = fig.add_subplot(111, projection='3d')
 
     tol = 1e-5
     seed(25525)
@@ -217,9 +218,9 @@ def genLines(galID, gasfile, summaryLoc, expn, inc, nLOS,
         b = impacts[j]
         phi = random()*2*math.pi
         
-        if doPlot==1:
-            b = maximpact_kpc*0.2
-            phi = j*math.pi/2.0
+#        if doPlot==1:
+#            b = 15
+#            phi = j*math.pi/2.0
 
         finfo.write('{0:>6}       {1:>6,.1f}    {2:>6,.1f}   {3:>6,.1f}\n'.format(j+1, b, math.degrees(phi), math.degrees(inc)))
            
@@ -250,8 +251,8 @@ def genLines(galID, gasfile, summaryLoc, expn, inc, nLOS,
         # Get the enter and exit points of the LOS
         xen, yen, zen, ten, xex, yex, zex, tex = findEnds(pb[0,0], pb[1,0], pb[2,0], db[0,0], db[1,0], db[2,0], boxsize)
         
-        if doPlot==1:
-            plot_line(ax, ten, tex, pb, db, j)   
+#        if doPlot==1:
+#            plot_line(ax, ten, tex, pb, db, j)   
     
         fout.write('{0:>12,.5f}{1:>12,.5f}{2:>12,.5f}{3:>12,.5f}{4:>12,.5f}{5:>12,.5f}\n'.format(xen,yen,zen,xex,yex,zex))
 
@@ -283,8 +284,12 @@ def genLines(galID, gasfile, summaryLoc, expn, inc, nLOS,
 
     print 'Calculated inclination: {0:.3f} degrees'.format(math.degrees(angle))
 
+
     if doPlot==1:
-        plotting(ax, a_gtb, norm_b, boxsize)
+        f = open('cf.dat', 'a')
+        f.write('{0:f}\t{1:f}\n'.format(inc, math.degrees(angle)))
+        f.close()
+#        plotting(ax, a_gtb, norm_b, boxsize)
 
         
     fout.close()
@@ -356,11 +361,12 @@ def plotting(ax, a_gtb, norm_b, boxsize):
     ax.plot(nx,ny,nz,'b')
 
     size = boxsize/2.0
+    size = 30
     ax.set_xlim([-1*size,size])
     ax.set_ylim([-1*size,size])
     ax.set_zlim([-1*size,size])
 
-    plt.show()
+    #plt.show()
 
 
 
