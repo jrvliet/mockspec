@@ -112,7 +112,7 @@ int main (int argc, char *argv[]){
     // Write header
     fprintf(fpdat, "#        Enter points               Exit Points\n");
     fprintf(fpdat, "# xen      yen         zen      xex      yex       zex\n");
-    fprintf(fpinfo, "More details on each LOS\n");
+    fprintf(fpinfo, "# More details on each LOS\n");
     fprintf(fpinfo, "# LOS num        b(kpc)       phi      Inclination\n");
 
 
@@ -183,7 +183,7 @@ int main (int argc, char *argv[]){
         b = impacts[i];
         phi = ((double)rand()/(double)RAND_MAX)*(2.0*M_PI);
         phiDeg = phi * (180.0/M_PI);
-        fprintf(fpinfo, "%d \t %lf \t %lf \t %lf\n",i,b,phiDeg,incDeg);
+        fprintf(fpinfo, "%d \t %lf \t %lf \t %lf\n",i+1,b,phiDeg,incDeg);
 //        printf("%d \t %lf \t %lf \t %lf\n",i,b,phiDeg,incDeg);
 
         // Fill ps, the position vector in the sky from
