@@ -4,6 +4,43 @@
 import sys
 from subprocess import check_call
 
+def genLOS(codeLoc, galID, summaryLoc, expn, inc, nLOS, maximpact, ncores):
+    
+    """ 
+    Runs genLOS, which generates random LOS for the simulation.
+    Handels all rotation of the simulation to achieve the desired 
+    inclination. Creates lines.dat and lines.info
+    """
+    funcLoc = '/funcs/generateLines/genLOS '
+    args = '{0:s} {1:s} {2:s} {3:f} {4:d} {5:f} {6:d}'.format(
+            galID, summaryLoc, expn, inc, nLOS, maximpact, ncores)
+    command = codeLoc + funcLoc + args
+    
+    try:
+        check_call(command, shell=True)
+    except:    
+        print '\n\nCould not run genLOS with :\n\t{0:s}'.format(command)
+        print 'Exiting...'
+        sys.exit()
+
+
+
+def runCellfinder(codeLoc, numcores):
+    
+    """
+    Runs cellfinder, which determines which cells lie along each LOS.
+    Is fully paralellzied. Creates cellID files.
+    """
+
+    command = codeLoc+'/funcs/cellfinder/cellfinder {0:d}'.format(numcores)
+    try:
+        check_call(command, shell=True)
+    except:
+        print '\n\nCould not run cellfinder with:\n\t{0:s}'.format(command)
+        print 'Exiting...'
+        sys.exit()
+
+
 def los7(codeLoc):
 
     """

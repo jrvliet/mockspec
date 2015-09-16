@@ -14,7 +14,6 @@ import sys
 
 # Code specific libraries
 import files as fi
-import genLOS as gl
 import ratesControl as rc
 import funcs.locatecells.locatecells as lc
 import funcs.idcells.idcells as ic
@@ -88,8 +87,9 @@ else:
 #####
 if runGenLOS==1:
     print '\nGenerating lines of sight...'
-    gl.genLines(galID, gasfile, summaryLoc, expn, incline, nlos, maximpact, ncores)
-else: 
+    rf.genLOS( codeLoc, galID, summaryLoc, expn, incline, 
+               nlos, maximpact, ncores)   
+else:
     print 'Skipping genLOS...'
 
 ##### 
@@ -99,7 +99,7 @@ else:
 #####
 if runCellfinder==1:
     print '\nRunning LOS through box...'
-    gl.runCellfinder(codeLoc, ncores)
+    rf.runCellfinder(codeLoc, ncores)
 else: 
     print 'Skipping cellfinder...'
 
