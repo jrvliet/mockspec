@@ -155,7 +155,7 @@ c       have a single header line
 
 c       required parameters, but not interactive anymore
 
-        convolving = .true.
+        convolving = .false.
         slit     = 1.0
         resfac   = 3.0
         conwindo = 3

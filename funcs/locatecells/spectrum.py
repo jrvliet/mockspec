@@ -11,7 +11,7 @@ import model as mo
 
 
 
-def spectrum(zabs, zcell, logN, dopplerb, cellID, ion, vmax, inst, 
+def spectrum(zabs, zline, nline, bline, cellID, ion, vmax, inst, 
               transName, lamb0, fosc, gamma):
 
     """
@@ -54,22 +54,37 @@ def spectrum(zabs, zcell, logN, dopplerb, cellID, ion, vmax, inst,
     m = ndata
 
     # Setup the ISF FSWM over the spectrum
-    mo.instrument(m, wcen, 0, R_isf, dwave)
-    
+    response =  mo.instrument(m, wcen, 0, R_isf, dwave)
+
     # Line flux radiative transfer
-    wrkflux = do_abs_lines(lamb0, zabs, nline, zline, bline, 
+    wrkflux = mo.do_abs_lines(lamb0, zabs, nline, zline, bline, 
                            con1, con2, lamb, wrkflux)
 
-    # Lyman limit break
-    dolymanlimit
 
     # Convolve with ISF 
-    if (convolving):
-        colvolve
+    rawflux = wrkflux
+    flux = sg.convolve(wrkflux, response)
 
-    
+    # Get the velocity of the spectrum
+    velocity = mo.calc_velocity(lamb, zabs, lamb0)
+
+    # print to file
+    f = open('test.spec', 'w')
+    for i in range(0,len(lamb)):
+        f.write('{0:.6f}\t{1:.6f}\t{2:.6f}\n'.format(lamb[i], velocity[i], rawflux[i]))
+    f.close()
+    f = open('test.convolve', 'w')
+    for i in range(0,len(flux)):
+        f.write('{0:f}\n'.format(flux[i]))
+    f.close()
+    f = open('isf.dat', 'w')
+    for i in range(0,len(response)):
+        f.write('{0:f}\n'.format(response[i]))
+    f.close()
+
+
     # Return the spectrum
-    return velocity, flux
+    return lamb, velocity, wrkflux
 
 
 

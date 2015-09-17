@@ -92,22 +92,24 @@ def do_abs_lines(lamb0, zabs, nline, zline, bline, con1, con2, lamb, wrkflux):
 
     ckms = const.c.to('km/s').value
 
-    # Initalize Voight profile parameters
-    # These must be rest from quantities even though 
-    # the line may be redshifted
-    w0 = lamb0
-    b1 = nline[i]
-    b2 = w0 * (1+zline[i]) / (1+zabs)
-    b3 = w0 * abs(bline[i])/ckms
-    y  = con2 / b3
-    tcon = con1 * (b1/b3)
+    for i in range(0,len(nline)):
 
-    # Loop over the pixels and perfomr the radiative transfer
-    for i in range(0,len(wrkflux)):
-        w = lamb[i] / (1+zabs)
-        x = (w-b2)/b3
-        u, v = voigt(x,y)
-        wrkflux[i] = wrkflux[i] * np.exp(-tcon*u)
+        # Initalize Voight profile parameters
+        # These must be rest from quantities even though 
+        # the line may be redshifted
+        w0 = lamb0
+        b1 = nline[i]
+        b2 = w0 * (1+zline[i]) / (1+zabs)
+        b3 = w0 * abs(bline[i])/ckms
+        y  = con2 / b3
+        tcon = con1 * (b1/b3)
+
+        # Loop over the pixels and perfomr the radiative transfer
+        for j in range(0,len(wrkflux)):
+            w = lamb[j] / (1+zabs)
+            x = (w-b2)/b3
+            u, v = voigt(x,y)
+            wrkflux[j] = wrkflux[j] * np.exp(-tcon*u)
 
     return wrkflux
     
@@ -116,6 +118,7 @@ def do_abs_lines(lamb0, zabs, nline, zline, bline, con1, con2, lamb, wrkflux):
 #def do_lyman_limit():
 #def drop_lines():
 
+# The following functions were originally found in instrument.f
 def instrument(ndata, wcen, flag, R_fac, dwave):
     """
     Sets up the intrumental spread function for convolving the
@@ -134,7 +137,7 @@ def instrument(ndata, wcen, flag, R_fac, dwave):
         flag (a flag as defined above)
 
     Returns:
-
+        response (instrumental ISF)
 
     """
     
@@ -176,6 +179,14 @@ def instrument(ndata, wcen, flag, R_fac, dwave):
         xdv = i*hdv
         response[i] = phi(xdv, profile)
         norm += response[i]
+
+    # Currently the response is one sided. Fold it over
+    isf = []
+    for i in range(0,len(response)):
+        isf.append(response[-1*i])
+    for i in range(0,len(response)):
+        isf.append(response[i])
+    isf[0] = isf[-1]
     
     # For the convolution integral, the response function needs
     # to be normalized or the flux is not conserved
@@ -183,7 +194,9 @@ def instrument(ndata, wcen, flag, R_fac, dwave):
     # in the convolution
     for i in range(0,nresponse):
         response[i] /= norm
-    
+    isf = [i/sum(isf) for i in isf]    
+
+
     # Compute the length of the convolution functions
     ncondat = int(resfac)*(ndata-1) - 1
     nfft = ncondat + (nresponse-1)/2 + 1
@@ -191,11 +204,62 @@ def instrument(ndata, wcen, flag, R_fac, dwave):
         if nfft<pwrsof2[i]:
             nfft = pwrsof2[i]
             break
-    
-    
+
+    return isf
+
+
+def phi(dvw, width):
+
+    """
+    Given the sigma in velocity units, this routine computes
+    the relative Gaussian value of the instrumental profile
+    Called by routine instrument iteratively
+    """
+
+    # dvw is the value at which the instrumental response is to be evaluated
+    z = dvw/width
+    val = np.exp(-1.0*(z*z)/2.0)
+
+    return val
 
 
 
+
+
+
+
+
+def calc_velocity(lamb, zabs, lamb0):
+
+    """
+    Create the velocity array for outputing to the .spec file
+    """
+
+    ckms = const.c.to('km/s').value
+    velocity = []
+    for i in range(0,len(lamb)):
+        wave = lamb[i]
+        w0z = (1.0+zabs) * lamb0
+        vel = ckms*(wave-w0z)/w0z
+        velocity.append(vel)
+
+    return velocity
+
+
+
+def convolve(flux, ):
+
+    """
+    The spectrum is convolved with the instrumental
+    spread function to make the resulting model
+    spectrum. 
+
+    Accepts: 
+
+
+    Returns:
+        wrkflux: Flux after convolution
+    """
 
 
 
