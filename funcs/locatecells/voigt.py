@@ -77,7 +77,7 @@ def voigt(x, y):
         #                   y <= 0.85          for x>18.1
 
         if abs(x)>12:
-            y = np.exp(-x*x)
+            u = np.exp(-x*x)
         y3 = y+3
         for i in range(0,m):
             r  = x - t[i]
