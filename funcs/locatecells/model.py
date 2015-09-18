@@ -86,7 +86,7 @@ def do_abs_lines(lamb0, zabs, nline, zline, bline, con1, con2, lamb, wrkflux):
         wrkflux (array of flux values)
 
     Returns:
-        wkrflux (array of flux values)
+        wrkflux (array of flux values)
 
     """
 

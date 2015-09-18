@@ -287,8 +287,8 @@ def setup_ion_dir(ion, galID, expn, codeLoc):
 
     # Check that nothing exists in the parent directory
     command = 'ls *{0:s}*los*dat | wc -l'.format(ion)
-    numDatFiles = int(sp.check_outpu(command, shell=True).strip())
-    if numDatFile!=0:
+    numDatFiles = int(sp.check_output(command, shell=True).strip())
+    if numDatFiles!=0:
         print 'ERROR in setup_ion_dir in files.py'
         print 'Problem moving .dat file for {0:s}'.format(ion)
         print 'Exitting....'
