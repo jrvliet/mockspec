@@ -143,6 +143,39 @@ int equals(double a, double b){
 
 
 
+void sort_LOS(double *a, int n){
+
+    // Perfmorms a merge sort on the LOS impact parameters
+    // list, a, of length n
+
+    if (n<2) {
+        return;
+    }
+    // Find the halfway point in the list
+    int m = n/2;
+
+    sort_LOS(a,m);
+    sort_LOS(a+m, n-m);
+    merge(a, n, m);
+}
+
+
+
+void merge(double *a, int n, int m){
+    int i, j, k;
+    double *x = calloc(n, sizeof(double));
+    for (i=0, j=m, k=0; k<n; k++){
+        x[k] = j==n      ? a[i++]
+             : i==m      ? a[j++]
+             : a[j]<a[i] ? a[j++]
+             :             a[i++];
+    }
+    for (i=0; i<n; i++){
+        a[i] = x[i];
+    }
+    free(x);
+}
+
 
 
 

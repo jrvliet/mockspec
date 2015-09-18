@@ -176,6 +176,8 @@ int main (int argc, char *argv[]){
         b = ((double)rand()/(double)RAND_MAX)*maximpact_kpc;
         impacts[i] = b;
     }
+    // Sort the impact paramters
+    sort_LOS(impacts, nLOS);
 
     // Loop over LOS
     for(i=0; i<nLOS; i++){

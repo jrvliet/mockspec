@@ -15,4 +15,8 @@ double inclination(double **a_gtb, double *db);
 
 int equals(double a, double b);
 
+void sort_LOS( double *a, int n);
+
+void merge(double *a, int n, int m);
+
 #endif
