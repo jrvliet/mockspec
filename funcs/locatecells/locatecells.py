@@ -74,7 +74,7 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, testing=0):
 
         # Make sure the .lines file has cells in it
         numCells = 0
-        with open(linesfile as f):
+        with open(linesfile) as f:
             for line in f:
                 numCells += 1
         # There is always the galaxy redshift
