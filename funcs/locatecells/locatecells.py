@@ -71,7 +71,18 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, testing=0):
         
         num = int(losnum)
         linesfile = galID+'.'+ion+'.los'+losnum+'.lines'
-        
+
+        # Make sure the .lines file has cells in it
+        numCells = 0
+        with open(linesfile as f):
+            for line in f:
+                numCells += 1
+        # There is always the galaxy redshift
+        if numCells==1:
+            # If there are no cells, continue to the next LOS
+            continue        
+
+
         # Get the impact paramter of this LOS
         imp = los_info[num-1,1]
         
