@@ -196,6 +196,8 @@ for ion in ions:
         lc.locateSigCells(galID, expn, ion, sigcellsCut, codeLoc)
     else:
         print '\tSkipping locatecells...'
+
+    # Move back up to the parent directory
     os.chdir('..')
 
     

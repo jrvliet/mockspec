@@ -245,7 +245,10 @@ def setup_ion_dir(ion, galID, expn, codeLoc):
     ionloc = cwd + '/' + ion
     if not os.path.exists(ionloc):
         command = 'mkdir '+ion
-        sp.call(command, shell=True)
+        try:
+            sp.check_call(command, shell=True)
+        except:
+            print 'Could not complete {0:s}'.format(command)
 
     # Create the los.list file
     command = 'ls *'+ion+'*los*dat > qso.list && mv qso.list ./'+ion+'/'
@@ -282,6 +285,14 @@ def setup_ion_dir(ion, galID, expn, codeLoc):
     except:
         print 'Could not complete {0:s}'.format(command)
 
+    # Check that nothing exists in the parent directory
+    command = 'ls *{0:s}*los*dat | wc -l'.format(ion)
+    numDatFiles = int(sp.check_outpu(command, shell=True).strip())
+    if numDatFile!=0:
+        print 'ERROR in setup_ion_dir in files.py'
+        print 'Problem moving .dat file for {0:s}'.format(ion)
+        print 'Exitting....'
+        sys.exit()
     return ionloc
 
 
