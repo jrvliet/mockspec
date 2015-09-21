@@ -26,6 +26,7 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, testing=0):
         <galID>.<expn>.<ion>.abs_cells.dat
     """
 
+    print testing
     singleCount = 0
 
     # Read in the galaxy's box
@@ -62,12 +63,15 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, testing=0):
 
     if testing==1:
         print 'Sysabs files aggregated'
-
+        print 'Number of sysabs files: ', len(sysabs_losnum)
     for i in range(0,len(sysabs_losnum)):
 
         losnum = sysabs_losnum[i]
+
         if testing==1:
             print 'LOS num: ', losnum
+            if int(losnum)!=234:
+                continue
         
         num = int(losnum)
         linesfile = galID+'.'+ion+'.los'+losnum+'.lines'
