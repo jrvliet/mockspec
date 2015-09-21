@@ -19,7 +19,7 @@ int main(int argc, char *argv[]){
     int badDcells;
 //    double rdum;        
 //    char qsolist[80], paramlist[80], tranilist[80], ion[80];
-    char dum[50];
+//    char dum[50];
     char *qsolist = calloc(80, sizeof(char));
     char *paramlist = calloc(80, sizeof(char));
     char *tranilist = calloc(80, sizeof(char));
@@ -56,6 +56,7 @@ int main(int argc, char *argv[]){
     // cell data
     int cellnum[NMAX], ndata;
     int losnum;
+//    int tmpa, tmpb, tmpc, tmpd, losnum;
     double x[NMAX], y[NMAX], z[NMAX];
     double vx[NMAX], vy[NMAX], vz[NMAX];
     double ndencell[NMAX], fion[NMAX], zmfrac[NMAX];
@@ -109,7 +110,8 @@ int main(int argc, char *argv[]){
 
         // Parse the file name
         cutfname(losdata, &galID, &ion, &lostag, losdatafile);
-        sscanf(lostag, "%s%d", dum, &losnum);
+        sscanf(lostag+3, "%d", &losnum);
+
         mamu = getamu(tranilist, ion);
 
         mkfname(losdata, galID, ion, lostag, linesfile);
