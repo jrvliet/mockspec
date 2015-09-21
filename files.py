@@ -63,10 +63,11 @@ def read_control_file():
     f.readline()
     f.readline()
     for line in f:
-        l = line.split()
-        ions.append(l[0])
-        xh.append(l[1])
-        instruments.append(l[2])
+        if line.startswith('#')==False:
+            l = line.split()
+            ions.append(l[0])
+            xh.append(l[1])
+            instruments.append(l[2])
 
     f.close()
 
