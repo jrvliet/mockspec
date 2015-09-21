@@ -19,7 +19,7 @@ int main(int argc, char *argv[]){
     int badDcells;
 //    double rdum;        
 //    char qsolist[80], paramlist[80], tranilist[80], ion[80];
-
+    char dum[50];
     char *qsolist = calloc(80, sizeof(char));
     char *paramlist = calloc(80, sizeof(char));
     char *tranilist = calloc(80, sizeof(char));
@@ -55,6 +55,7 @@ int main(int argc, char *argv[]){
     
     // cell data
     int cellnum[NMAX], ndata;
+    int losnum;
     double x[NMAX], y[NMAX], z[NMAX];
     double vx[NMAX], vy[NMAX], vz[NMAX];
     double ndencell[NMAX], fion[NMAX], zmfrac[NMAX];
@@ -108,7 +109,7 @@ int main(int argc, char *argv[]){
 
         // Parse the file name
         cutfname(losdata, &galID, &ion, &lostag, losdatafile);
-
+        sscanf(lostag, "%s%d", dum, &losnum);
         mamu = getamu(tranilist, ion);
 
         mkfname(losdata, galID, ion, lostag, linesfile);
@@ -149,7 +150,7 @@ int main(int argc, char *argv[]){
             // Bobby Edmonds' for the getD subroutine); returns the value of dlos
             // in kpc, convert to centimeters upon return
             getD( l, m, n, x0, y0, z0, x[i], y[i], z[i], Lcell[i], &dlos, 
-                  &error, errtype);
+                  &error, errtype, losnum);
             
             // If getD returns clean, convert from Mpc to kpc
             // If getD returns an error, use the cube root of the

@@ -21,7 +21,7 @@ void printArr( double *x, int size){
 
 void getD(double l, double m, double n, double x0, double y0, double z0, 
           double X, double Y, double Z, double lengthcell, double *cellpath, 
-          int *error, int *errtype){
+          int *error, int *errtype, int losnum){
 
     double lq, mq, nq;
     double xu[4], xd[4], yu[4], yd[4], zu[4], zd[4];
@@ -347,9 +347,9 @@ void getD(double l, double m, double n, double x0, double y0, double z0,
     if (xu[3] + xd[3] + yu[3] + yd[3] + zu[3] + zd[3] > 1.5){
         *cellpath = 0.0;
         errtype[2] = 1;
-        printf("Check sum failed:\n\t xu[3]: %lf \t yu[3]: %lf \t zu[3]: %lf\n"
+        printf("Check sum failed for LOS %d:\n\t xu[3]: %lf \t yu[3]: %lf \t zu[3]: %lf\n"
                 "\t xd[3]: %lf \t yd[3]: %lf \t zu[3]: %lf\n",
-                xu[3], yu[3], zu[3],  xd[3], yd[3], zd[3]); 
+                losnum, xu[3], yu[3], zu[3],  xd[3], yd[3], zd[3]); 
     }
 
     if (*cellpath==0.0){
