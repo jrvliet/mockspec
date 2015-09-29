@@ -71,12 +71,12 @@ c     table, UVB, and Sb99 data paths (global)
 c     TABPATH is where the atomic data tables live
 c     UVBPATH is where the Haardt & Madau UVB SEDs live
 c     SB99PATH is where the Starburst99 SEDs live
-      tabpath='/lustre/projects/p089_swin/jvander/mockspec/data/grid/'
-      UVBpath='/lustre/projects/p089_swin/jvander/mockspec/data/uvb/'
-      Sb99path='/lustre/projects/p089_swin/jvander/mockspec/data/sb99'
-c      tabpath  = '/home/matrix2/cwc/Projects/Mockspec/GridCode/'
-c      UVBpath  = '/home/matrix2/cwc/Projects/Mockspec/UVBspectrum/'
-c      Sb99path = '/home/matrix2/cwc/Projects/Mockspec/Sb99spectrum/'
+c      tabpath='/lustre/projects/p089_swin/jvander/mockspec/data/grid/'
+c      UVBpath='/lustre/projects/p089_swin/jvander/mockspec/data/uvb/'
+c      Sb99path='/lustre/projects/p089_swin/jvander/mockspec/data/sb99'
+      tabpath  = '/home/matrix2/cwc/Projects/Mockspec/GridCode/'
+      UVBpath  = '/home/matrix2/cwc/Projects/Mockspec/UVBspectrum/'
+      Sb99path = '/home/matrix2/cwc/Projects/Mockspec/Sb99spectrum/'
 
 c     ............................................
 c     PHASE 1: SET UP THE RUN, COMMUNICATE TO USER
