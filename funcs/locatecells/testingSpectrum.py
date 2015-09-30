@@ -1,0 +1,42 @@
+
+
+# Code to test the spectrum code
+
+import spectrum as sp
+import files as fi
+
+ion = 'CIV'
+inst = 'COSFUV'
+vmax = 1000
+
+# Get transition info
+k,j,transName,lamb0,fosc,gamma,mamu,abund,ip = fi.get_transitions(ion)
+
+print '\nFrom get_transitions:'
+print '\tk         = {0:d}'.format(k)
+print '\tj         = {0:d}'.format(j)
+print '\ttransName = {0:s}'.format(transName)
+print '\tlamb0     = {0:f}'.format(lamb0)
+print '\tfosc      = {0:f}'.format(fosc)
+print '\tgamma     = {0:f}'.format(gamma)
+print '\tmamu      = {0:f}'.format(mamu)
+print '\tabund     = {0:f}'.format(abund)
+print '\tip        = {0:f}'.format(ip)
+
+# Read in test los
+filename = 'vela29v2_1.CIV.los0001.lines'
+f = open(filename)
+zabs = float(f.readline())
+
+zcell, Ncell, bcell, cellID = [], [], [], []
+for line in f:
+    l = line.split()
+    zcell.append(float(l[0]))
+    Ncell.append(float(l[1]))
+    bcell.append(float(l[2]))
+    cellID.append(float(l[3]))
+
+sp.spectrum(zabs, zcell, Ncell, bcell, cellID, ion, vmax, inst, 
+            transName, lamb0, fosc, gamma)
+
+
