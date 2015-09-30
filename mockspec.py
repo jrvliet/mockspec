@@ -4,6 +4,8 @@
 #  Full pipeline for performing synthetic QSO observations
 #  of ART simulations of galaxy CGM
 
+# Streamlined version
+
 # General libraries
 import numpy as np
 import tables as tb
@@ -18,11 +20,9 @@ import ratesControl as rc
 import funcs.locatecells.locatecells as lc
 import funcs.cellfinder.idcells as ic
 
-
 pathname = os.path.dirname(sys.argv[0])
 codeLoc = os.path.abspath(pathname)
 summaryLoc = codeLoc+'/summaries/'
-
 
 #  Read in the control file
 print 'Reading in control file...'
