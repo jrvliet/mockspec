@@ -49,9 +49,9 @@ def voigt(x, y):
     # Intialize this pass and define the x<18.1 REGION boundary
     u = 0.0
     v = 0.0
-    y1 = y+1.5
+    y1 = y + 1.5
     y2 = y1*y1
-    b2 = 18.8*y + 1.65
+    b2 = 18.1*y + 1.65
 
     if y>b1 or abs(x)<b2:
         

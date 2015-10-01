@@ -1,7 +1,7 @@
 
 
 # Code to test the spectrum code
-
+import matplotlib.pyplot as plt
 import spectrum as sp
 import files as fi
 
@@ -40,3 +40,29 @@ sp.spectrum(zabs, zcell, Ncell, bcell, cellID, ion, vmax, inst,
             transName, lamb0, fosc, gamma)
 
 
+specfile = 'test.spec'
+f = open(specfile)
+vel, wave, flux = [], [], []
+for line in f:
+    vel.append(float(line.split()[0]))
+    wave.append(float(line.split()[1]))
+    flux.append(float(line.split()[2]))
+
+plt.step(wave, flux, 'k', label='test')
+f.close()
+
+
+specfile = 'vela29v2_1.CIV.los0001.CIV1548.spec'
+f = open(specfile)
+vel, wave, flux = [], [], []
+for line in f:
+    vel.append(float(line.split()[0]))
+    wave.append(float(line.split()[1]))
+    flux.append(float(line.split()[2]))
+
+plt.step(wave, flux, 'r', label='control')
+f.close()
+
+plt.xlim([50,150])
+plt.legend(frameon=False, loc='lower left')
+plt.savefig('test.pdf')

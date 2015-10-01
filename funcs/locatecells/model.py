@@ -3,7 +3,7 @@
 import numpy as np
 #from scipy import constants as sc
 from astropy import constants as const
-from voigt import *
+import voigt as vp
 
 def set_atomic(lamb0, f0, gamma0):
 
@@ -99,16 +99,16 @@ def do_abs_lines(lamb0, zabs, nline, zline, bline, con1, con2, lamb, wrkflux):
         # the line may be redshifted
         w0 = lamb0
         b1 = nline[i]
-        b2 = w0 * (1+zline[i]) / (1+zabs)
+        b2 = w0 * (1.0+zline[i]) / (1.0+zabs)
         b3 = w0 * abs(bline[i])/ckms
         y  = con2 / b3
         tcon = con1 * (b1/b3)
 
-        # Loop over the pixels and perfomr the radiative transfer
+        # Loop over the pixels and perform the radiative transfer
         for j in range(0,len(wrkflux)):
-            w = lamb[j] / (1+zabs)
+            w = lamb[j] / (1.0+zabs)
             x = (w-b2)/b3
-            u, v = voigt(x,y)
+            u, v = vp.voigt(x,y)
             wrkflux[j] = wrkflux[j] * np.exp(-tcon*u)
 
     return wrkflux
