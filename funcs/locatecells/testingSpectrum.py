@@ -49,8 +49,9 @@ for line in f:
     flux.append(float(line.split()[2]))
 
 plt.step(wave, flux, 'k', label='test')
+plt.plot(wave, flux, 'kx')
 f.close()
-
+print 'Test Wave Step: {0:f}'.format(wave[1]-wave[0]) 
 
 specfile = 'vela29v2_1.CIV.los0001.CIV1548.spec'
 f = open(specfile)
@@ -61,7 +62,9 @@ for line in f:
     flux.append(float(line.split()[2]))
 
 plt.step(wave, flux, 'r', label='control')
+plt.plot(wave, flux, 'rx')
 f.close()
+print 'Control Wave Step: {0:f}'.format(wave[1]-wave[0]) 
 
 plt.xlim([50,150])
 plt.legend(frameon=False, loc='lower left')
