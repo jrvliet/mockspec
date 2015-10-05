@@ -17,3 +17,8 @@ default:: specsynth
 specsynth: specsynth.f specsynth.h const.dek convolve.f fft.f instrument.f voigt.f model.f noise.f files.f strings.f splinecode.f
 	$(FC) $(OPTIONS) specsynth.f -o specsynth 
 #
+
+clean:
+	rm *.o
+
+
