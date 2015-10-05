@@ -45,6 +45,7 @@ c     assign an atomic constant to each line
        con2(i)    = 1.0e-8*gamma0(j)*lam0(j)**2 / (4.0d0*pi*c)
   13  CONTINUE
 
+      write(*,*) con1(1), con2(1)
       RETURN
 
       END

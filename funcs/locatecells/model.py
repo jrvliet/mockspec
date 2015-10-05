@@ -16,6 +16,7 @@ def set_atomic(lamb0, f0, gamma0):
     con1 = 1e5 * f0 * lamb0*lamb0 * con1Const
     con2 = 1e-8 * gamma0 * lamb0*lamb0 / con2Const
 
+    print 'Python version: con1: {0:e}\tcon2: {1:e}\n'.format(con1, con2)
     return con1, con2
 
 
