@@ -51,8 +51,8 @@ def config_spec(instrument, vmax, zabs, lamb0):
     if found == 1:
 
         # Compute the pixelization of the instrument
-        waveMin = (1. + velMin/ckms) * (1+zabs) * lamb0
-        waveMax = (1. + velMax/ckms) * (1+zabs) * lamb0
+        waveMin = (1.0 + velMin/ckms) * (1.0+zabs) * lamb0
+        waveMax = (1.0 + velMax/ckms) * (1.0 +zabs) * lamb0
         wcen = (waveMax + waveMin) / 2.0
         dwave = wcen / (presel*R_isf)
 

@@ -6,7 +6,7 @@ import spectrum as sp
 import files as fi
 
 ion = 'CIV'
-inst = 'COSFUV'
+inst = 'COSNUV'
 vmax = 1000
 
 # Get transition info
