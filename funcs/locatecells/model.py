@@ -49,7 +49,7 @@ def init_spectrum(waveMin, waveMax, dwave):
     lamb = np.zeros(ndata)
     wrkflux = np.ones(ndata)
     for i in range(0,ndata):
-        lamb[i] = waveMin + (i-1)*dwave
+        lamb[i] = waveMin + (i)*dwave
 
     return ndata, lamb, wrkflux
 
@@ -104,7 +104,7 @@ def do_abs_lines(lamb0, zabs, nline, zline, bline, con1, con2, lamb, wrkflux):
         b3 = w0 * abs(bline[i])/ckms
         y  = con2 / b3
         tcon = con1 * (b1/b3)
-
+        print w0, b1, b2, b3, y, tcon
         # Loop over the pixels and perform the radiative transfer
         for j in range(0,len(wrkflux)):
             w = lamb[j] / (1.0+zabs)
