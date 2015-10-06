@@ -44,28 +44,42 @@ specfile = 'test.spec'
 f = open(specfile)
 vel, wave, flux = [], [], []
 for line in f:
-    vel.append(float(line.split()[0]))
-    wave.append(float(line.split()[1]))
+    vel.append(float(line.split()[1]))
+    wave.append(float(line.split()[0]))
     flux.append(float(line.split()[2]))
 
 plt.step(wave, flux, 'k', label='test')
 plt.plot(wave, flux, 'kx')
 f.close()
-print 'Test Wave Step: {0:f}'.format(wave[1]-wave[0]) 
+print 'Test Wave Step: {0:f} starting at {1:f}'.format(wave[1]-wave[0], wave[0]) 
+
+testflux = flux
+
 
 specfile = 'vela29v2_1.CIV.los0001.CIV1548.spec'
 f = open(specfile)
 vel, wave, flux = [], [], []
 for line in f:
-    vel.append(float(line.split()[0]))
-    wave.append(float(line.split()[1]))
+    vel.append(float(line.split()[1]))
+    wave.append(float(line.split()[0]))
     flux.append(float(line.split()[2]))
 
 plt.step(wave, flux, 'r', label='control')
 plt.plot(wave, flux, 'rx')
 f.close()
-print 'Control Wave Step: {0:f}'.format(wave[1]-wave[0]) 
+print 'Control Wave Step: {0:f} starting at {1:f}'.format(wave[1]-wave[0], wave[0]) 
 
-plt.xlim([50,150])
+plt.xlim([3095, 3097.5])
 plt.legend(frameon=False, loc='lower left')
 plt.savefig('test.pdf')
+
+
+diff = 0.0
+total = 0.0
+for i in range(0,len(flux)):
+
+    diff += testflux[i] - flux[i]
+    total += flux[i]
+
+err = diff / total 
+print 'Percent error: {0:%}'.format(err)

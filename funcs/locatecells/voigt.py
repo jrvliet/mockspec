@@ -76,7 +76,7 @@ def voigt(x, y):
         # Eq.(11); REGION 2 y <= (x-1.65)/18.1 for x<=18.1
         #                   y <= 0.85          for x>18.1
 
-        if abs(x)>12:
+        if abs(x)<12:
             u = np.exp(-x*x)
         y3 = y+3
         for i in range(0,m):

@@ -40,6 +40,13 @@ def spectrum(zabs, zline, nline, bline, cellID, ion, vmax, inst,
     # Open line list file
 #        readlines( linelist[i], trani[i] )
     # Nope, this is passed in
+    # But do need to alter the nline to be the in units of 
+    # 10^13 for strange reasons
+    for i in range(0,len(nline)):
+        if nline[i]>=0.0:
+            nline[i] = pow(10.0, nline[i]-13.0)
+        else:
+            nline[i] = -1.0*pow(10.0, abs(nline[i])-13.0)
 
     # Assign atomic constants to all lines for this transition and 
     # obtain this transitions intrumetnal configuration
@@ -71,7 +78,7 @@ def spectrum(zabs, zline, nline, bline, cellID, ion, vmax, inst,
     # print to file
     f = open('test.spec', 'w')
     for i in range(0,len(lamb)):
-        f.write('{0:.6f}\t{1:.6f}\t{2:.6f}\n'.format(lamb[i], velocity[i], rawflux[i]))
+        f.write('{0:.4f}\t{1:.2f}\t{2:.5e}\n'.format(lamb[i], velocity[i], rawflux[i]))
     f.close()
     f = open('test.convolve', 'w')
     for i in range(0,len(flux)):

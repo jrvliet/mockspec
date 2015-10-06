@@ -16,7 +16,6 @@ def set_atomic(lamb0, f0, gamma0):
     con1 = 1e5 * f0 * lamb0*lamb0 * con1Const
     con2 = 1e-8 * gamma0 * lamb0*lamb0 / con2Const
 
-    print 'Python version: con1: {0:e}\tcon2: {1:e}\n'.format(con1, con2)
     return con1, con2
 
 
@@ -104,7 +103,7 @@ def do_abs_lines(lamb0, zabs, nline, zline, bline, con1, con2, lamb, wrkflux):
         b3 = w0 * abs(bline[i])/ckms
         y  = con2 / b3
         tcon = con1 * (b1/b3)
-        print w0, b1, b2, b3, y, tcon
+#        print w0, b1, b2, b3, y, tcon
         # Loop over the pixels and perform the radiative transfer
         for j in range(0,len(wrkflux)):
             w = lamb[j] / (1.0+zabs)
