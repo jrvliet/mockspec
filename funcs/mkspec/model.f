@@ -137,6 +137,7 @@ c     frame quantities even though the line may be redshifted
         y    = con2(linei) / b3
         tcon = con1(linei) * (b1/b3)
 
+        write(*,*) nline(linei), bline(linei)
         write(*,*) w0, b1, b2, b3, y, tcon
 c     inner loop: loop over the pixels and perform the radiative
 c     transfer
