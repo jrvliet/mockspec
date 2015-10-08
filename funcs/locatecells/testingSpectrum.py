@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import spectrum as sp
 import files as fi
 import sys
+import numpy as np
 
 ion = 'CIV'
 inst = 'COSNUV'
@@ -44,14 +45,18 @@ for i in range(1,1000):
         cellID.append(float(l[3]))
     f.close()
 
-    lamb, vel, flux = sp.spectrum(zabs, zcell, Ncell, bcell, cellID, 
+    if len(Ncell)>0:
+        lamb, vel, flux = sp.spectrum(zabs, zcell, Ncell, bcell, cellID, 
                                   ion, vmax, inst, transName, 
                                   lamb0, fosc, gamma)
     
 
     # Read in control
     specFile = filename.replace('lines', 'CIV1548.spec')
-    f = open(specFile)
+    try:
+        f = open(specFile)
+    except IOError:
+         continue
     clamb, cvel, cflux = [], [], []
     for line in f:
         l = line.split()
