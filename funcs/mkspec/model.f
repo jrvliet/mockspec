@@ -45,7 +45,10 @@ c     assign an atomic constant to each line
        con2(i)    = 1.0e-8*gamma0(j)*lam0(j)**2 / (4.0d0*pi*c)
   13  CONTINUE
 
+<<<<<<< HEAD
 c      write(*,*) con1(1), con2(1)
+=======
+>>>>>>> ab3e7186090afaa97623f14237819134448584ac
       RETURN
 
       END
@@ -137,7 +140,6 @@ c     frame quantities even though the line may be redshifted
         y    = con2(linei) / b3
         tcon = con1(linei) * (b1/b3)
 
-c        write(*,*) w0, b1, b2, b3, y, tcon
 c     inner loop: loop over the pixels and perform the radiative
 c     transfer
 
