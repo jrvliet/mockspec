@@ -28,6 +28,7 @@ print '\tip        = {0:f}'.format(ip)
 
 diff = []
 filebase = './files/vela29v2_1.CIV.los'
+flog = open('test.log', 'w')
 for i in range(1,1000):
     losnum = '{0:04}'.format(i)
     filename = filebase+losnum+'.lines'
@@ -66,8 +67,14 @@ for i in range(1,1000):
     f.close()
 
     # Compare results
+    localDiff = []
     for i in range(0,len(flux)):
-        diff.append(abs(flux[i] - cflux[i]))
+        d = abs(flux[i] - cflux[i])
+        diff.append(d)
+        localDiff.append(d)
+
+    if sum(localDiff)>0.0:
+        flog.write('{0:s}\t{1:f}\n'.format(losnum, max(localDiff)))
     
 # Print results
 print 'Mean difference: {0:.6f}'.format(np.mean(diff))
@@ -76,6 +83,7 @@ print 'Max difference:  {0:.6f}'.format(np.max(diff))
 print 'Std difference:  {0:.6f}'.format(np.std(diff))
 
 
+sys.exit()
 ###############3
 # Plot
 
