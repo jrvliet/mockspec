@@ -4,6 +4,7 @@
 import matplotlib.pyplot as plt
 import spectrum as sp
 import files as fi
+import sys
 
 ion = 'CIV'
 inst = 'COSNUV'
@@ -23,22 +24,58 @@ print '\tmamu      = {0:f}'.format(mamu)
 print '\tabund     = {0:f}'.format(abund)
 print '\tip        = {0:f}'.format(ip)
 
-# Read in test los
-filename = 'vela29v2_1.CIV.los0001.lines'
-f = open(filename)
-zabs = float(f.readline())
 
-zcell, Ncell, bcell, cellID = [], [], [], []
-for line in f:
-    l = line.split()
-    zcell.append(float(l[0]))
-    Ncell.append(float(l[1]))
-    bcell.append(float(l[2]))
-    cellID.append(float(l[3]))
+diff = []
+filebase = './files/vela29v2_1.CIV.los'
+for i in range(1,1000):
+    losnum = '{0:04}'.format(i)
+    filename = filebase+losnum+'.lines'
+    
+    # Read in test los
+    f = open(filename)
+    zabs = float(f.readline())
 
-sp.spectrum(zabs, zcell, Ncell, bcell, cellID, ion, vmax, inst, 
-            transName, lamb0, fosc, gamma)
+    zcell, Ncell, bcell, cellID = [], [], [], []
+    for line in f:
+        l = line.split()
+        zcell.append(float(l[0]))
+        Ncell.append(float(l[1]))
+        bcell.append(float(l[2]))
+        cellID.append(float(l[3]))
+    f.close()
 
+    lamb, vel, flux = sp.spectrum(zabs, zcell, Ncell, bcell, cellID, 
+                                  ion, vmax, inst, transName, 
+                                  lamb0, fosc, gamma)
+    
+
+    # Read in control
+    specFile = filename.replace('lines', 'CIV1548.spec')
+    f = open(specFile)
+    clamb, cvel, cflux = [], [], []
+    for line in f:
+        l = line.split()
+        clamb.append(float(l[0]))
+        cvel.append(float(l[1]))
+        cflux.append(float(l[2]))
+    f.close()
+
+    # Compare results
+    for i in range(0,len(flux)):
+        diff.append(abs(flux[i] - cflux[i]))
+    
+# Print results
+print 'Mean difference: {0:.6f}'.format(np.mean(diff))
+print 'Min difference:  {0:.6f}'.format(np.min(diff))
+print 'Max difference:  {0:.6f}'.format(np.max(diff))
+print 'Std difference:  {0:.6f}'.format(np.std(diff))
+
+
+###############3
+# Plot
+
+
+f, (ax1, ax2, ax3) = plt.subplots(3, 1, sharex=True)
 
 specfile = 'test.spec'
 f = open(specfile)
@@ -47,31 +84,55 @@ for line in f:
     vel.append(float(line.split()[1]))
     wave.append(float(line.split()[0]))
     flux.append(float(line.split()[2]))
-
-plt.step(wave, flux, 'k', label='test')
-plt.plot(wave, flux, 'kx')
+ax1.step(wave, flux, 'k', label='raw')
+ax1.plot(wave, flux, 'kx')
 f.close()
-print 'Test Wave Step: {0:f} starting at {1:f}'.format(wave[1]-wave[0], wave[0]) 
 
 testflux = flux
+testwave = wave
 
 
-specfile = 'vela29v2_1.CIV.los0001.CIV1548.spec'
+specfile = 'test.convolve'
 f = open(specfile)
 vel, wave, flux = [], [], []
 for line in f:
     vel.append(float(line.split()[1]))
     wave.append(float(line.split()[0]))
     flux.append(float(line.split()[2]))
-
-plt.step(wave, flux, 'r', label='control')
-plt.plot(wave, flux, 'rx')
+ax2.step(wave, flux, 'g', label='convolve')
+ax2.plot(wave, flux, 'gx')
 f.close()
-print 'Control Wave Step: {0:f} starting at {1:f}'.format(wave[1]-wave[0], wave[0]) 
 
-plt.xlim([3095, 3097.5])
-plt.legend(frameon=False, loc='lower left')
+
+
+specfile = './files/vela29v2_1.CIV.los0001.CIV1548.spec'
+f = open(specfile)
+vel, wave, flux = [], [], []
+for line in f:
+    vel.append(float(line.split()[1]))
+    wave.append(float(line.split()[0]))
+    flux.append(float(line.split()[2]))
+ax3.step(wave, flux, 'r', label='control')
+ax3.plot(wave, flux, 'rx')
+f.close()
+
+#plt.xlim([3093, 3101])
+ax1.legend(frameon=False, loc='lower right')
+ax2.legend(frameon=False, loc='lower right')
+ax3.legend(frameon=False, loc='lower right')
+ax1.set_ylabel('Flux')
+ax2.set_ylabel('Flux')
+ax3.set_ylabel('Flux')
+ax3.set_xlabel('Wavelength')
 plt.savefig('test.pdf')
+plt.savefig('test.jpg')
+
+print 'Length of test wave: {0:d}'.format(len(testwave))
+print 'Length of control wave: {0:d}'.format(len(wave))
+
+print 'Test wave step = {0:f}'.format(testwave[1]-testwave[0])
+print 'Control step = {0:f}'.format(wave[1]-wave[0])
+
 
 
 diff = 0.0
@@ -83,3 +144,27 @@ for i in range(0,len(flux)):
 
 err = diff / total 
 print 'Percent error: {0:%}'.format(err)
+
+plt.cla()
+plt.clf()
+
+
+f = open('./files/fresponse.dat')
+fres = []
+for line in f:
+    fres.append(float(line))
+f.close()
+
+f = open('response.dat')
+res = []
+for line in f:
+    res.append(float(line))
+f.close()
+
+plt.plot(fres, 'rx', label='control')
+plt.plot(res, 'gx', label='test')
+plt.legend(frameon=False, loc='lower right')
+plt.savefig('isf.pdf')
+
+print 'Length of response: ', len(fres), len(res)
+print 'Sum of response: ', sum(fres), sum(res)

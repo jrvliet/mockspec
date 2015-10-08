@@ -62,6 +62,9 @@ c     number of pixels per resolution element = profile/dv
       hdv = dv/resfac
       nresponse  = 2*int(conwindo*profile/hdv) + 1
 
+c      write(*,*) "Instrument"
+c      write(*,*) profile, dwave, wcen, dv, pixpres, hdv, nresponse
+c      write(*,*) dv, resfac, hdv
 c     now stuff the response function in wrap around order
 
       response(1) = phi(0.0d0,profile)
@@ -82,6 +85,14 @@ c     data are discretized by pixel indices in the convolution
       do 13 i=1,nresponse
        response(i) = response(i)/norm
  13   continue
+
+      open(unit=82, file="fresponse.dat")
+      do 83 i=1,nresponse
+       write(82,*) response(i)
+ 83   continue
+      close(83)
+
+
 
 c     compute the length of the convolution functions..  NCONDAT and
 c     NFFT; do a table search on the powers of 2; this ensures the

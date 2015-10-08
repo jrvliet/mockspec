@@ -62,7 +62,9 @@ c     assumes that no features are on the edges of the data array
       do 25 i=ncondat+1,nfft
        convdata(i) = 1.0d0
  25   continue
-
+      
+      write(*,*) "nfft   ncondat"
+      write(*,*) nfft, ncondat
 c     the FFT's do violence to the response function- so re-load it into
 c     phi(v)
 

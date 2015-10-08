@@ -146,7 +146,7 @@ def instrument(ndata, wcen, flag, R_fac, dwave):
     # so in the interest of avoiding long funciton calls, 
     # set them here
     slit = 1.0
-    resfac = 2.0
+    resfac = 3.0
     conwindo = 3
 
 
@@ -169,7 +169,7 @@ def instrument(ndata, wcen, flag, R_fac, dwave):
     pixpres = 2.35 * profile/(dv*slit)
     hdv = dv/resfac
     nresponse = 2*int(conwindo*profile/hdv) + 1
-
+    
     # Stuff the response function
     response = np.zeros(nresponse)
     response[0] = phi(0, profile)
@@ -187,11 +187,12 @@ def instrument(ndata, wcen, flag, R_fac, dwave):
     for i in range(0,len(response)):
         isf.append(response[i])
     isf[0] = isf[-1]
-    
+    norm = norm*2 
     # For the convolution integral, the response function needs
     # to be normalized or the flux is not conserved
     # Unit width is used becuase data are discretized by pixel indices 
     # in the convolution
+    norm = sum(response)
     for i in range(0,nresponse):
         response[i] /= norm
     isf = [i/sum(isf) for i in isf]    
@@ -205,7 +206,13 @@ def instrument(ndata, wcen, flag, R_fac, dwave):
             nfft = pwrsof2[i]
             break
 
-    return isf
+    f = open('response.dat', 'w')
+    for i in isf:
+        f.write('{0:.10f}\n'.format(i))
+    f.close()
+        
+
+    return isf, nfft, ncondat
 
 
 def phi(dvw, width):
