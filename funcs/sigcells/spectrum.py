@@ -80,14 +80,14 @@ def gen_spec(zabs, zline, nline, bline, cellID, ion, vmax, inst,
     velocity = mo.calc_velocity(lamb, zabs, lamb0)
 
     # print to file
-    f = open('test.spec', 'w')
+#    f = open('test.spec', 'w')
 #    for i in range(0,len(lamb)):
 #        f.write('{0:.4f}\t{1:.2f}\t{2:.5e}\n'.format(lamb[i], velocity[i], rawflux[i]))
 #    f.close()
-    f = open('test.convolve', 'w')
-    for i in range(0,len(flux)):
-        f.write('{0:.4f}\t{1:.2f}\t{2:.5e}\n'.format(lamb[i], velocity[i], flux[i]))
-    f.close()
+#    f = open('test.convolve', 'w')
+#    for i in range(0,len(flux)):
+#        f.write('{0:.4f}\t{1:.2f}\t{2:.5e}\n'.format(lamb[i], velocity[i], flux[i]))
+#    f.close()
 #    f = open('isf.dat', 'w')
 #    for i in range(0,len(response)):
 #        f.write('{0:f}\n'.format(response[i]))
@@ -96,20 +96,4 @@ def gen_spec(zabs, zline, nline, bline, cellID, ion, vmax, inst,
 
     # Return the spectrum
     return lamb, velocity, flux
-
-
-
-
-
-
-
-
-
-
-            
-
-
-
-
-
 

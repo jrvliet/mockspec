@@ -18,6 +18,7 @@ import ratesControl as rc
 import funcs.locatecells.locatecells as lc
 import funcs.idcells.idcells as ic
 import runFunctions as rf 
+import funcs.sigcells.sigcells as sc
 
 # Get the location where the code lives
 pathname = os.path.dirname(sys.argv[0])
@@ -193,7 +194,8 @@ for ion in ions:
     #####
     if runLocateCells==1:
         print '\n\tIdentifying significant cells'
-        lc.locateSigCells(galID, expn, ion, sigcellsCut, codeLoc)
+#        lc.locateSigCells(galID, expn, ion, sigcellsCut, codeLoc)
+        sc.sigCells(galID, expn, ion, sigcellsCut, codeLoc)
     else:
         print '\tSkipping locatecells...'
 

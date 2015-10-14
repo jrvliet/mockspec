@@ -11,9 +11,9 @@ import spectrum as spec
 import sig_funcs as sf
 
 
-def sigcells(galID, expn, ion, ewcut, codeLoc, testing=0):
+def sigCells(galID, expn, ion, ewcut, codeLoc, testing=0):
 
-    
+    redshift = 1.0/expn - 1.0
     singleCount = 0     # Counts number of LOS dominated by a single cell 
     
     # Read in the galaxy's box
@@ -83,14 +83,16 @@ def sigcells(galID, expn, ion, ewcut, codeLoc, testing=0):
             # Perform the velocity cut
             if testing==1:
                 print '\t Performing velocity cut'
-            cutz, cutN, cutb, cutID = sf.velcut(cellz, cellN, cellb, cellID, linesfile
-                                               testing=testing)
+            cutz, cutN, cutb, cutID = sf.velcut(cellz, cellN, cellb, cellID, 
+                                                linesfile, redshift, 
+                                                testing=testing)
 
             # Find the significant cells
             if testing==1:
                 print '\t Finding significant cells'
-            sigz, sigN, sigb, sigID = sf.sigcells(cutz, cutN, cutb, cutID, ewcut, 
-                                                   codeLoc, testing=testing)
+            sigz, sigN, sigb, sigID = sf.significant_cells(cutz, cutN, cutb, 
+                                                           cutID, ewcut, codeLoc,
+                                                           testing=testing)
 
             # Get the properties of the cells
             for j in range(0,len(sigz)):
@@ -111,7 +113,19 @@ def sigcells(galID, expn, ion, ewcut, codeLoc, testing=0):
                 r = np.sqrt( x*x + y*y + z*z)
 
                 # Write all to the output file
-                s = '{0:d}'.format(num).ljust(7) +  '{0:.3f}'.format(imp).rjust(7) +  '{0:d}'.format(cellID).rjust(16)     + '{0:-.7f}'.format(redshift).rjust(14) + '{0:.3f}'.format(column).rjust(10) + '{0:.3f}'.format(doppler).rjust(13)     + '{0:.5e}'.format(r).rjust(20) + '{0:.4f}'.format(density).rjust(12) + '{0:.4f}'.format(temperature).rjust(10) + '    {0:.4f}'.format(cell_size).rjust(14) + '{0:.4e}'.format(snII).rjust(19) + '{0:.4e}'.format(snIa).rjust(20) + '{0:.4    e}'.format(alphaZ).rjust(17) + '\n'
+                s = ('{0:d}'.format(num).ljust(7) + 
+                    '{0:.3f}'.format(imp).rjust(7) +
+                    '{0:d}'.format(cellID).rjust(16) + 
+                    '{0:-.7f}'.format(redshift).rjust(14) + 
+                    '{0:.3f}'.format(column).rjust(10) + 
+                    '{0:.3f}'.format(doppler).rjust(13) + 
+                    '{0:.5e}'.format(r).rjust(20) + 
+                    '{0:.4f}'.format(density).rjust(12) + 
+                    '{0:.4f}'.format(temperature).rjust(10) + 
+                    '    {0:.4f}'.format(cell_size).rjust(14) + 
+                    '{0:.4e}'.format(snII).rjust(19) + 
+                    '{0:.4e}'.format(snIa).rjust(20) + 
+                    '{0:.4    e}'.format(alphaZ).rjust(17) + '\n' )
                 f_out.write(s)
 
 
