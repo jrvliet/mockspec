@@ -74,9 +74,14 @@ c     SB99PATH is where the Starburst99 SEDs live
 c      tabpath='/lustre/projects/p089_swin/jvander/mockspec/data/grid/'
 c      UVBpath='/lustre/projects/p089_swin/jvander/mockspec/data/uvb/'
 c      Sb99path='/lustre/projects/p089_swin/jvander/mockspec/data/sb99'
-      tabpath  = '/home/matrix2/cwc/Projects/Mockspec/GridCode/'
-      UVBpath  = '/home/matrix2/cwc/Projects/Mockspec/UVBspectrum/'
-      Sb99path = '/home/matrix2/cwc/Projects/Mockspec/Sb99spectrum/'
+
+c      tabpath  = '/home/matrix2/cwc/Projects/Mockspec/GridCode/'
+c      UVBpath  = '/home/matrix2/cwc/Projects/Mockspec/UVBspectrum/'
+c      Sb99path = '/home/matrix2/cwc/Projects/Mockspec/Sb99spectrum/'
+
+      tabpath  = '/home/jacob/research/code/mockspec/data/grid/'
+      UVBpath  = '/home/jacob/research/code/mockspec/data/uvb/'
+      Sb99path = '/home/jacob/research/code/mockspec/data/sb99/'
 
 c     ............................................
 c     PHASE 1: SET UP THE RUN, COMMUNICATE TO USER
