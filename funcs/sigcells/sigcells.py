@@ -13,8 +13,12 @@ import sig_funcs as sf
 
 def sigCells(galID, expn, ion, ewcut, codeLoc, testing=0):
 
-    redshift = 1.0/expn - 1.0
+    redshift = 1.0/float(expn) - 1.0
     singleCount = 0     # Counts number of LOS dominated by a single cell 
+
+    # Get the properties of the transition
+    transProps = get_transition_properties(ion, codeLoc)
+    
     
     # Read in the galaxy's box
     boxfile = galID+'_GZa'+expn+'.'+ion+'.txt'
@@ -90,9 +94,9 @@ def sigCells(galID, expn, ion, ewcut, codeLoc, testing=0):
             # Find the significant cells
             if testing==1:
                 print '\t Finding significant cells'
-            sigz, sigN, sigb, sigID = sf.significant_cells(cutz, cutN, cutb, 
+            sigz, sigN, sigb, sigID = sf.significant_cells(zabs, cutz, cutN, cutb, 
                                                            cutID, ewcut, codeLoc,
-                                                           testing=testing)
+                                                           transProps, testing=testing)
 
             # Get the properties of the cells
             for j in range(0,len(sigz)):
