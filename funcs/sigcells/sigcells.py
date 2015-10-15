@@ -17,7 +17,7 @@ def sigCells(galID, expn, ion, ewcut, codeLoc, testing=0):
     singleCount = 0     # Counts number of LOS dominated by a single cell 
 
     # Get the properties of the transition
-    transProps = get_transition_properties(ion, codeLoc)
+    transProps = sf.get_transition_properties(ion, codeLoc)
     
     
     # Read in the galaxy's box

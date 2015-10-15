@@ -86,16 +86,16 @@ def velcut(cellz, cellN, cellb, cellID, linesfile, redshift, testing=0):
     velz, velN, velb, velID = [], [], [], []
 
     velcutCount = 0
-    for i in range(0,len(cell_z)):
+    for i in range(0,len(cellz)):
 
         # Calcuate the peculiar velocity of the cell
-        vpec = c*( (cell_z[i]-redshift) / (1+redshift) )
+        vpec = c*( (cellz[i]-redshift) / (1+redshift) )
         # If the cell is inside the velocity range, write to file
         if vpec>neg_vel_limit and vpec<pos_vel_limit:
-            velz.append(cell_z)
-            velN.append(cell_N)
-            velb.append(cell_b)
-            velID.append(cell_ID)
+            velz.append(cellz)
+            velN.append(cellN)
+            velb.append(cellb)
+            velID.append(cellID)
             velcutCount += 1
      
     if testing==1:
@@ -152,12 +152,12 @@ def significant_cells(zabs, cutz, cutN, cutb, cutID, ewcut, codeLoc,
 #        print 'In sigcells, number of velcut cells read in: ', len(cell_z)
 
     # Open the sysabs file
-    sysabsfile  =  linesfile.replace('lines', 'sysabs')
-    f_sysabs = open(sysabsfile)
-    f_sysabs.readline()
-    line = f_sysabs.readline()
-    EW_sysabs = float(line.split()[3])
-    f_sysabs.close()
+#    sysabsfile  =  linesfile.replace('lines', 'sysabs')
+#    f_sysabs = open(sysabsfile)
+#    f_sysabs.readline()
+#    line = f_sysabs.readline()
+#    EW_sysabs = float(line.split()[3])
+#    f_sysabs.close()
 
     
 
@@ -196,7 +196,7 @@ def significant_cells(zabs, cutz, cutN, cutb, cutID, ewcut, codeLoc,
 
 
     # Generate a noise-less spectrum for the full velcut lines
-    cutLamb, cutVel, cutFlux = spec.spectrum(zabs, cutz, vutN, cutb, cutID, 
+    cutLamb, cutVel, cutFlux = spec.gen_spec(zabs, cutz, cutN, cutb, cutID, 
                                              ion, vmax, inst, transName, 
                                              lamb0, fosc, gamma)
 
