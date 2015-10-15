@@ -502,3 +502,40 @@ def wavelength(ion):
         sys.exit()
 
     return bluewave, redwave
+
+
+
+
+def get_transition_properties( ion, codeLoc):
+
+    f = open( codeLoc+'/data/Mockspec.transitions')
+    f.readline()
+    found = 0
+    for line in f:
+        l = line.split()
+        flag = int(l[0])
+        species = l[4]
+        if ion==species and flag==1 and found==0:
+            found = 1
+            element = l[1]
+            j = l[3]
+            transName = l[4]
+            lamb0 = l[6]
+            fosc = l[7]
+            gamma = l[8]
+    f.close()
+
+    f = open('Mockspec.runpars')
+    f.readline()
+    for line in f:
+        l = line.split()
+        if element in l[0] and j==l[1]:
+            inst = l[3]
+            vmax = l[6]
+    f.close()
+
+    return (ion, vmax, inst, transName, lamb0, fosc, gamma)         
+
+
+
+ 
