@@ -8,7 +8,7 @@ def findEW(wavelength, velocity, flux):
     ew = 0.0
     
     # Loop through wavelengths
-    for i in range(0,len(wavelength)):
+    for i in range(0,len(wavelength)-1):
         
 #        if velocity[i]>neglimit and velocity[i]<poslimit:
             

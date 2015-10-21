@@ -9,7 +9,7 @@ from scipy import signal as sg
 import files as fi
 import model as mo
 import convolve as co
-
+import sys
 
 
 def gen_spec(zabs, zline, nline, bline, cellID, ion, vmax, inst, 
@@ -44,9 +44,16 @@ def gen_spec(zabs, zline, nline, bline, cellID, ion, vmax, inst,
     # Nope, this is passed in
     # But do need to alter the nline to be the in units of 
     # 10^13 for strange reasons
+    f = open('genspec.log', 'a')
+    f.write('{0:d}\t{1:f}\t{2:f}\n'.format(len(nline), min(nline), max(nline)))
+    f.close()
     for i in range(0,len(nline)):
         if nline[i]>=0.0:
-            nline[i] = pow(10.0, nline[i]-13.0)
+            try:            
+                nline[i] = pow(10.0, nline[i]-13.0)
+            except OverflowError:
+                print nline[i]
+                #sys.exit()
         else:
             nline[i] = -1.0*pow(10.0, abs(nline[i])-13.0)
 

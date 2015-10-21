@@ -87,9 +87,11 @@ def sigCells(galID, expn, ion, ewcut, codeLoc, testing=0):
             # Perform the velocity cut
             if testing==1:
                 print '\t Performing velocity cut'
+            print 'Before velcut: {0:d}'.format(len(cellN))
             cutz, cutN, cutb, cutID = sf.velcut(cellz, cellN, cellb, cellID, 
                                                 linesfile, redshift, 
                                                 testing=testing)
+            print 'After velcut: {0:d}'.format(len(cutN))
 
             # Find the significant cells
             if testing==1:

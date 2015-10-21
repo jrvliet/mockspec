@@ -17,9 +17,6 @@ def velcut(cellz, cellN, cellb, cellID, linesfile, redshift, testing=0):
 
     # Get the redshift of the absorption
     # This is the first line of the the lines file
-#    f = open(linesfile)
-#    redshift = float(r.readline())
-#    f.close()    
 
     # Open the sysabs file
     sysabsfile  =  linesfile.replace('lines', 'sysabs')
@@ -37,52 +34,6 @@ def velcut(cellz, cellN, cellb, cellID, linesfile, redshift, testing=0):
         print '\t\t\tEW:           {0:f}'.format(EW_sysabs)
 
 
-    #################################################################
-    #                                                               #
-    #     Generate a noise-less spectra for the full .lines file    #
-    #                                                               #
-    #################################################################
-#    spec.gen_spec( zabs, cellz, cellN, cellb, cellID, ion, vmax, inst
-#                    transName, lamb0, fosc, gamma)
-    
-
-    # Create a los.list file containing only this LOS
-#    datfile = linesfile.replace('lines', 'dat') + '\n'
-#    f_los = open('los_single.list', 'w')
-#    f_los.write(datfile)
-#    f_los.close()
-    
-    # Create a Mockspec.runpars file with SNR set to zero
-#    f_runpars_old = open('Mockspec.runpars')
-#    f_runpars_new = open('Mockspec_0SNR.runpars', 'w')
-#    l = f_runpars_old.readline().split()
-#    s = l[0]+'\t\t'+l[1]+'\t'+l[2]+'\t'+l[3]+'\t'+l[4]+'\t'+l[5]+'\t'+l[6]+'\t'+l[7]+'\n'
-#    f_runpars_new.write(s)
-#    for line in f_runpars_old:
-#        l = line.split()
-#        l[5] = '0.'
-#        s = l[0]+'\t'+l[1]+'\t'+l[2]+'\t'+l[3]+'\t'+l[4]+'\t'+l[5]+'\t'+l[6]+'\t'+l[7]+'\n'
-#        f_runpars_new.write(s)
-#    f_runpars_new.close()
-#    f_runpars_old.close()
-
-    #################################################################
-    #                                                               #
-    #     Generate a .lines file containing only cells with         #
-    #     peculiar velocity within the velocity limits from         #
-    #     the sysabs file                                           #
-    #                                                               #
-    #################################################################
-
-    # New .lines file
-#    newlinesfile = linesfile+'.velcut'
-#    f_newlines = open(newlinesfile, 'w')
-    
-    # Write the first line
-#    f_newlines.write('{0:.16f}\n'.format(redshift))
-    
-    # Loop through the original .lines file
-
     velz, velN, velb, velID = [], [], [], []
 
     velcutCount = 0
@@ -92,10 +43,10 @@ def velcut(cellz, cellN, cellb, cellID, linesfile, redshift, testing=0):
         vpec = c*( (cellz[i]-redshift) / (1+redshift) )
         # If the cell is inside the velocity range, write to file
         if vpec>neg_vel_limit and vpec<pos_vel_limit:
-            velz.append(cellz)
-            velN.append(cellN)
-            velb.append(cellb)
-            velID.append(cellID)
+            velz.append(cellz[i])
+            velN.append(cellN[i])
+            velb.append(cellb[i])
+            velID.append(cellID[i])
             velcutCount += 1
      
     if testing==1:
@@ -119,81 +70,6 @@ def significant_cells(zabs, cutz, cutN, cutb, cutID, ewcut, codeLoc,
     ion, vmax, inst, transName, lamb0, fosc, gamma = transProps
 
     singleCellCount = 0       # Counts number of LOS dominated by a single cell
-    
-    # Get the info from the filename
-#    galID  = linesfile.split('.')[0]
-#    ion    = linesfile.split('.')[1]
-#    losnum = (linesfile.split('.')[2]).split('los')[1]
-
-    # Copy the lines file for protection
-#    command = 'cp '+linesfile +' '+linesfile+'.orig'
-#    sp.call(command, shell=True)
-#    command = 'cp '+linesfile +'.velcut '+linesfile+'.velcut.orig'
-#    sp.call(command, shell=True)
-
-    # Read in the linesfile
-#    f_lines = open(linesfile+'.velcut')
-#    redshift = float(f_lines.readline())
-    
-#    cell_z = []   # LOS redshift of each cell
-#    cell_N = []   # Column density fo each cell
-#    cell_b = []   # Doppler b parameter of each cell
-#    cell_ID = []  # ID number of each cell
-    
-#    for line in f_lines:
-#        l = line.split()
-#        cell_z.append(float(l[0]))
-#        cell_N.append(float(l[1]))
-#        cell_b.append(float(l[2]))
-#        cell_ID.append(int(l[3]))
-#    f_lines.close()
-
-#    if testing==1:
-#        print 'In sigcells, number of velcut cells read in: ', len(cell_z)
-
-    # Open the sysabs file
-#    sysabsfile  =  linesfile.replace('lines', 'sysabs')
-#    f_sysabs = open(sysabsfile)
-#    f_sysabs.readline()
-#    line = f_sysabs.readline()
-#    EW_sysabs = float(line.split()[3])
-#    f_sysabs.close()
-
-    
-
-    #################################################################
-    #                                                               #
-    #     Generate a noise-less spectra for the velcut .lines file  #
-    #                                                               #
-    #################################################################
-
-    # Create a los.list file containing only this LOS
-#    datfile = linesfile.replace('lines', 'dat') + '\n'
-#    f_los = open('los_single.list', 'w')
-#    f_los.write(datfile)
-#    f_los.close()
-    
-    # Create a Mockspec.runpars file with SNR set to zero
-#    f_runpars_old = open('Mockspec.runpars')
-#    f_runpars_new = open('Mockspec_0SNR.runpars', 'w')
-#    l = f_runpars_old.readline().split()
-#    s = l[0]+'\t\t'+l[1]+'\t'+l[2]+'\t'+l[3]+'\t'+l[4]+'\t'+l[5]+'\t'+l[6]+'\t'+l[7]+'\n'
-#    f_runpars_new.write(s)
-#    for line in f_runpars_old:
-#        l = line.split()
-#        l[5] = '0.'
-#        s = l[0]+'\t'+l[1]+'\t'+l[2]+'\t'+l[3]+'\t'+l[4]+'\t'+l[5]+'\t'+l[6]+'\t'+l[7]+'\n'
-#        f_runpars_new.write(s)
-#    f_runpars_new.close()
-#    f_runpars_old.close()
-
-    # Rename the velcut .lines to remove velcut from name, so it will be used by specsynth
-#    command = 'cp '+linesfile+'.velcut '+linesfile
-#    sp.call(command, shell=True)
-    # Run specsynth on the velcut lines list
-#    specsynth_command = codeLoc+'/funcs/mkspec/specsynth los_single.list Mockspec_0SNR.runpars'
-#    sp.call(specsynth_command, shell=True)
-
 
     # Generate a noise-less spectrum for the full velcut lines
     cutLamb, cutVel, cutFlux = spec.gen_spec(zabs, cutz, cutN, cutb, cutID, 
@@ -201,21 +77,7 @@ def significant_cells(zabs, cutz, cutN, cutb, cutID, ewcut, codeLoc,
                                              lamb0, fosc, gamma)
 
     # Get the EW of this noise-less spectra
-    bluewave, redwave = wavelegth(ion)
-    
-#    specfile = galID+'.'+ion+'.los'+losnum+'.'+bluewave+'.spec'
-#    redspecfile = galID+'.'+ion+'.los'+losnum+'.'+redwave+'.spec'
-
-    # Copy the initial quiet spectra
-#    command = 'cp '+specfile+' '+specfile+'.velcutclean'
-#    sp.call(command, shell=True)
-#    command = 'cp '+redspecfile+' '+redspecfile+'.velcutclean'
-#    sp.call(command, shell=True)
-    
-#    specdata = np.loadtxt(specfile)
-#    wavelength = specdata[:,0]
-#    velocity = specdata[:,1]
-#    flux = specdata[:,2]
+    bluewave, redwave = wavelength(ion)
     
     cutEW = findEW(cutLamb, cutVel, cutFlux)
     
@@ -223,8 +85,6 @@ def significant_cells(zabs, cutz, cutN, cutb, cutID, ewcut, codeLoc,
     # This is ewcut (a percent) of cutEW
     goalEW = ewcut*cutEW
     ew = cutEW
-
-#    ewdiff = abs( (EW_sysabs - ew) / EW_sysabs )
 
     # Sort the cut list in order of descending N 
     rawCells = zip(cutz, cutN, cutb, cutID)
@@ -236,6 +96,7 @@ def significant_cells(zabs, cutz, cutN, cutb, cutID, ewcut, codeLoc,
     midpoint = numCells/2
     maxInd = numCells
     minInd = 0
+    print numCells
 
     maxIterations = int(np.log2(numCells))
     for i in range(maxIterations):
@@ -243,6 +104,7 @@ def significant_cells(zabs, cutz, cutN, cutb, cutID, ewcut, codeLoc,
         midpoint = int((maxInd - minInd) / 2)
         topCells = cells[:midpoint]
 
+        print len(topCells)
         # Get the ew of a spectrum using only the top 
         topz = [i[0] for i in topCells]
         topN = [i[1] for i in topCells]
@@ -251,12 +113,13 @@ def significant_cells(zabs, cutz, cutN, cutb, cutID, ewcut, codeLoc,
         topLamb, topVel, topFlux = spec.gen_spec(zabs, topz, topN, topb, topID, ion,
                                                  vmax, inst, transName, lamb0, fosc,
                                                  gamma)
-        topEW = findEW(topLamb, topVel, topFLux)
+        topEW = findEW(topLamb, topVel, topFlux)
         if topEW>goalEW:
             minInd = midpoint
         else:
             maxInd = midpoint
 
+        
     
     # Verify this cut point
     roughCells = cell[:midpoint]
@@ -266,7 +129,7 @@ def significant_cells(zabs, cutz, cutN, cutb, cutID, ewcut, codeLoc,
     roughID = [i[3] for i in roughCells]
     roughLamb, roughVel, roughFlux = spec.gen_spec(zabs, roughz, roughN, roughb,
                                                    roughID, ion, vmas, inst, 
-                                                   transName, lamb0, fosc, gamma)
+                                                   transName, lamb1, fosc, gamma)
     roughEW1 = findEW(roughlamb, roughVel, roughFlux)
 
     roughCells = cell[:midpoint+1]
@@ -287,101 +150,6 @@ def significant_cells(zabs, cutz, cutN, cutb, cutID, ewcut, codeLoc,
         raise ValueError        
 
 
-    #################################################################
-    #                                                               #
-    #     Remove cells until the EW differs from full .lines        #
-    #     value by more than ewcut                                  #
-    #                                                               #
-    #################################################################
-    
-    # Read in .lines.velcut file
-#    velcutdata = np.loadtxt(linesfile+'.velcut', skiprows=1)
-#    if testing==1:
-#        print 'Velcutdata: ', velcutdata
-#        shap = velcutdata.shape
-#        print 'Velcutdata shape: ', shap
-#        print 'Number of rows: ', shap[0]
-#        print 'Length of shap: ', len(shap)
-#        print 'Number of columns: ', shap[1]
-#        print 'Index 0: ', velcutdata[1]
-
-#    if len(cutN)==1:
-        # Only one cell in file
-#        velcut_z = [velcutdata[0]]
-#        velcut_N = [velcutdata[1]]
-#        velcut_b = [velcutdata[2]]
-#        velcut_ID = [velcutdata[3]]
-#    else:
-#        velcut_z = list(velcutdata[:,0])
-#        velcut_N = list(velcutdata[:,1])
-#        velcut_b = list(velcutdata[:,2])
-#        velcut_ID = list(velcutdata[:,3])
-#    
-#    f_log = open('sigcells.log', 'w')
-#    f_log.write('Numcells \t EW \t EWdiff\n')
-#    f_log.write('{0:d} \t \t{1:0.3f} \t {2:0.3f}\n'.format(len(velcut_z), ew, ewdiff))
-#
-#    
-#    ewdiff = 0.5*ewcut
-#    
-#
-#    
-#
-#
-#
-#    loopcount = 0
-#    while ewdiff < ewcut:
-#        loopcount += 1
-#        
-#        # Check that there is still at least one cell left
-#        if len(velcut_z)>0:
-#
-#            # Find the cell with the lowest column denstiy
-#            index = velcut_N.index(min(velcut_N))
-#            
-#            # Delete this index
-#            del velcut_z[index]
-#            del velcut_N[index]
-#            del velcut_b[index]
-#            del velcut_ID[index]
-#
-#            # Write the new .lines values to file
-#            f_newlines = open(linesfile, 'w')
-#            f_newlines.write('{0:.16f}\n'.format(redshift))
-#            for i in range(0,len(velcut_z)):
-#                s = '{0:.7f}'.format(velcut_z[i]).rjust(8)+'\t'
-#                s += str(velcut_N[i]).rjust(8)+'\t'
-#                s += str(velcut_b[i]).rjust(8)+'\t'
-#                s += str(velcut_ID[i]).rjust(8)+'\n'
-#                f_newlines.write(s)  
-#            f_newlines.close()
-#
-#
-#            # Run specsynth again
-#            sp.call(specsynth_command, shell=True)
-#
-#            # Find the new EW 
-#            specdata = np.loadtxt(specfile)
-#            wavelength = specdata[:,0]
-#            velocity = specdata[:,1]
-#            flux = specdata[:,2]
-#            
-#            ew = findEW(wavelength, velocity, flux, neg_vel_limit, pos_vel_limit)
-#            ewdiff = abs( (ew_velcut_lines - ew) / ew_velcut_lines)*100
-#            f_log.write('{0:d} \t \t{1:0.3f} \t {2:0.3f}\n'.format(
-#                        len(velcut_z), ew, ewdiff))
-#        else:
-#            print 'Absorption dominated by one cell'
-#            singleCellCount += 1
-#            ewdiff = ewcut
-        
-#    f_log.close()
-
-    # Copy the lines file for protection
-#    command = 'cp '+linesfile+' '+linesfile+'.final'
-#    sp.call(command, shell=True)
-
-#    return singleCellCount
 
 
 def nT(filename, norm):
@@ -520,9 +288,9 @@ def get_transition_properties( ion, codeLoc):
             element = l[1]
             j = l[3]
             transName = l[4]
-            lamb0 = l[6]
-            fosc = l[7]
-            gamma = l[8]
+            lamb0 = float(l[6])
+            fosc = float(l[7])
+            gamma = float(l[8])
     f.close()
 
     f = open('Mockspec.runpars')
@@ -531,7 +299,7 @@ def get_transition_properties( ion, codeLoc):
         l = line.split()
         if element in l[0] and j==l[1]:
             inst = l[3]
-            vmax = l[6]
+            vmax = float(l[6])
     f.close()
 
     return (ion, vmax, inst, transName, lamb0, fosc, gamma)         
