@@ -70,12 +70,18 @@ def significant_cells(zabs, cutz, cutN, cutb, cutID, ewcut, codeLoc,
     ion, vmax, inst, transName, lamb0, fosc, gamma = transProps
 
     singleCellCount = 0       # Counts number of LOS dominated by a single cell
-
+    f = open('cutN_1.log', 'w')
+    for n in cutN:
+        f.write('{0:f}\n'.format(n))
+    f.close()
     # Generate a noise-less spectrum for the full velcut lines
     cutLamb, cutVel, cutFlux = spec.gen_spec(zabs, cutz, cutN, cutb, cutID, 
                                              ion, vmax, inst, transName, 
                                              lamb0, fosc, gamma)
-
+    f = open('cutN_2.log', 'w')
+    for n in cutN:
+        f.write('{0:f}\n'.format(n))
+    f.close()
     # Get the EW of this noise-less spectra
     bluewave, redwave = wavelength(ion)
     
@@ -90,6 +96,10 @@ def significant_cells(zabs, cutz, cutN, cutb, cutID, ewcut, codeLoc,
     rawCells = zip(cutz, cutN, cutb, cutID)
     cells = sorted(rawCells, key=itemgetter(1), reverse=True)
 
+    f = open('cutN_3.log', 'w')
+    for n in cells[1]:
+        f.write('{0:f}\n'.format(n))
+    f.close()
     # Determine which quartile to start searching
 
     numCells = len(cells)
@@ -122,23 +132,23 @@ def significant_cells(zabs, cutz, cutN, cutb, cutID, ewcut, codeLoc,
         
     
     # Verify this cut point
-    roughCells = cell[:midpoint]
+    roughCells = cells[:midpoint]
     roughz = [i[0] for i in roughCells]
     roughN = [i[1] for i in roughCells]
     roughb = [i[2] for i in roughCells]
     roughID = [i[3] for i in roughCells]
     roughLamb, roughVel, roughFlux = spec.gen_spec(zabs, roughz, roughN, roughb,
-                                                   roughID, ion, vmas, inst, 
+                                                   roughID, ion, vmax, inst, 
                                                    transName, lamb1, fosc, gamma)
     roughEW1 = findEW(roughlamb, roughVel, roughFlux)
 
-    roughCells = cell[:midpoint+1]
+    roughCells = cells[:midpoint+1]
     roughz = [i[0] for i in roughCells]
     roughN = [i[1] for i in roughCells]
     roughb = [i[2] for i in roughCells]
     roughID = [i[3] for i in roughCells]
     roughLamb, roughVel, roughFlux = spec.gen_spec(zabs, roughz, roughN, roughb,
-                                                   roughID, ion, vmas, inst, 
+                                                   roughID, ion, vmax, inst, 
                                                    transName, lamb0, fosc, gamma)
     roughEW2 = findEW(roughlamb, roughVel, roughFlux)
 
@@ -148,105 +158,6 @@ def significant_cells(zabs, cutz, cutN, cutb, cutID, ewcut, codeLoc,
         return roughz, roughN, roughb, roughID
     else:
         raise ValueError        
-
-
-
-
-def nT(filename, norm):
-
-    
-    data = np.loadtxt(filename, skiprows=1)
-    
-    # Do the normalized histogram
-    if norm==1:
-        galID = filename.split('.')[0]
-        e1 = filename.split('.')[1]
-        e2 = filename.split('.')[2]
-        expn = e1+'.'+e2
-    
-        fullbox_name = '../'+galID+'_GZa'+expn+'.txt'
-        
-        fullbox = np.loadtxt(fullbox_name, skiprows=2)
-        
-        nfull = np.log10(fullbox[:,7])
-        Tfull = np.log10(fullbox[:,8])
-
-        print max(nfull), min(nfull)
-        print max(Tfull), min(Tfull)
-    
-
-
-    n = data[:,7]
-    T = data[:,8]
-
-    
-    # Bin the data
-    numbins = 50
-    H, xedges, yedges = np.histogram2d( n, T, bins=numbins)
-    extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
-    
-    # Rotate and filp the histogram
-    H = np.rot90(H)
-    H = np.flipud(H)
-
-    # Mask the bins where the count is zero
-    Hmasked = np.ma.masked_where(H==0,H)
-    
-    # Take the log of the count
-    Hmasked = np.log10(Hmasked)
-
-    # Plot and save the figure
-    fig = plt.figure()
-    plt.pcolormesh(xedges,yedges,Hmasked)
-    plt.xlabel(' $\log (n_{H})$ [cm$^{-3}$] ')
-    plt.ylabel(' $\log$ (T) [K] ')
-    plt.xlim([-8, 1])
-    plt.ylim([2,8])
-    cbar = plt.colorbar()
-    cbar.ax.set_ylabel('$\log$ (Counts)')
-
-    outname = filename.replace('dat','phase.pdf')
-    plt.savefig(outname)
-
-
-    print H
-    if norm==1:
-
-        print 'Norm'
-        Hf, xedgesf, yedgesf = np.histogram2d( nfull, Tfull, bins=numbins)
-        extentf = [xedgesf[0], xedgesf[-1], yedgesf[0], yedgesf[-1]]
-
-        Hf = np.rot90(Hf)
-        Hf = np.flipud(Hf)
-
-        print np.max(Hf)
-        print Hf
-        print type(Hf)
-        print Hf.shape
-        Hnorm = H
-        for i in range(0,len(Hf[:,0])):
-            for j in range(0,len(Hf[0,:])):
-                if Hf[i,j]>0:
-                    Hnorm[i,j] = H[i,j] / Hf[i,j]
-                else:
-                    Hnorm[i,j] = 0
-        
-        Hnorm = np.ma.masked_where(Hnorm==0,Hnorm)
-
-        print Hnorm
-        plt.cla()
-        plt.clf()
-        fig = plt.figure()
-        plt.pcolormesh(xedges,yedges,Hnorm)
-        plt.xlabel(' $\log (n_{H})$ [cm$^{-3}$] ')
-        plt.ylabel(' $\log$ (T) [K] ')
-        plt.xlim([-8, 1])
-        plt.ylim([2,8])
-        cbar = plt.colorbar()
-        cbar.ax.set_ylabel('Counts')
-        plt.clim(0,1)
-        outname = filename.replace('dat','normphase.pdf')
-        plt.savefig(outname)
 
 
 
