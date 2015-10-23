@@ -5,6 +5,7 @@ import subprocess as sp
 from ew import findEW 
 import spectrum as spec
 from operator import itemgetter
+import matplotlib.pyplot as plt
 
 def velcut(cellz, cellN, cellb, cellID, linesfile, redshift, testing=0):
 
@@ -78,6 +79,8 @@ def significant_cells(zabs, cutz, cutN, cutb, cutID, ewcut, codeLoc,
     cutLamb, cutVel, cutFlux = spec.gen_spec(zabs, cutz, cutN, cutb, cutID, 
                                              ion, vmax, inst, transName, 
                                              lamb0, fosc, gamma)
+    plt.plot(cutVel, cutFlux, label='Vel Cut')
+
     f = open('cutN_2.log', 'w')
     for n in cutN:
         f.write('{0:f}\n'.format(n))
@@ -96,8 +99,9 @@ def significant_cells(zabs, cutz, cutN, cutb, cutID, ewcut, codeLoc,
     rawCells = zip(cutz, cutN, cutb, cutID)
     cells = sorted(rawCells, key=itemgetter(1), reverse=True)
 
+    
     f = open('cutN_3.log', 'w')
-    for n in cells[1]:
+    for c, n, b, id in cells:
         f.write('{0:f}\n'.format(n))
     f.close()
     # Determine which quartile to start searching
@@ -109,6 +113,14 @@ def significant_cells(zabs, cutz, cutN, cutb, cutID, ewcut, codeLoc,
     print numCells
 
     maxIterations = int(np.log2(numCells))
+
+    flog = open('ew.log', 'w')
+    flog.write('EW = {0:f}\tNum Cells = {1:d}\n'.format(ew, numCells))
+    for c, n, b, id in cells:
+        flog.write('{0:f}\n'.format(n))
+    flog.write('\n')
+ 
+    print 'Max Iterations = ', maxIterations
     for i in range(maxIterations):
 
         midpoint = int((maxInd - minInd) / 2)
@@ -116,21 +128,31 @@ def significant_cells(zabs, cutz, cutN, cutb, cutID, ewcut, codeLoc,
 
         print len(topCells)
         # Get the ew of a spectrum using only the top 
-        topz = [i[0] for i in topCells]
-        topN = [i[1] for i in topCells]
-        topb = [i[2] for i in topCells]
-        topID = [i[3] for i in topCells]
+        topz = [j[0] for j in topCells]
+        topN = [j[1] for j in topCells]
+        topb = [j[2] for j in topCells]
+        topID = [j[3] for j in topCells]
         topLamb, topVel, topFlux = spec.gen_spec(zabs, topz, topN, topb, topID, ion,
                                                  vmax, inst, transName, lamb0, fosc,
                                                  gamma)
         topEW = findEW(topLamb, topVel, topFlux)
+
+        print 'i = ',i
+        plt.plot(topVel, topFlux, label='Cut {0:d}'.format(i+1))
+
+        flog.write('EW = {0:f}\tNum Cells = {1:d}\n'.format(topEW, len(topN)))
+        for c, n, b, id in topCells:
+            flog.write('{0:f}\t{1:f}\n'.format(n, c))
+        flog.write('\n')
+
+
         if topEW>goalEW:
             minInd = midpoint
         else:
             maxInd = midpoint
-
-        
-    
+    flog.close()
+    plt.legend(frameon=False)
+    plt.savefig('ew.pdf')
     # Verify this cut point
     roughCells = cells[:midpoint]
     roughz = [i[0] for i in roughCells]
