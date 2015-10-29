@@ -71,20 +71,20 @@ def significant_cells(zabs, cutz, cutN, cutb, cutID, ewcut, codeLoc,
     ion, vmax, inst, transName, lamb0, fosc, gamma = transProps
 
     singleCellCount = 0       # Counts number of LOS dominated by a single cell
-    f = open('cutN_1.log', 'w')
-    for n in cutN:
-        f.write('{0:f}\n'.format(n))
-    f.close()
+#    f = open('cutN_1.log', 'w')
+#    for n in cutN:
+#        f.write('{0:f}\n'.format(n))
+#    f.close()
     # Generate a noise-less spectrum for the full velcut lines
     cutLamb, cutVel, cutFlux = spec.gen_spec(zabs, cutz, cutN, cutb, cutID, 
                                              ion, vmax, inst, transName, 
                                              lamb0, fosc, gamma)
     plt.plot(cutVel, cutFlux, label='Vel Cut')
 
-    f = open('cutN_2.log', 'w')
-    for n in cutN:
-        f.write('{0:f}\n'.format(n))
-    f.close()
+#    f = open('cutN_2.log', 'w')
+#    for n in cutN:
+#        f.write('{0:f}\n'.format(n))
+#    f.close()
     # Get the EW of this noise-less spectra
     bluewave, redwave = wavelength(ion)
     
@@ -95,19 +95,19 @@ def significant_cells(zabs, cutz, cutN, cutb, cutID, ewcut, codeLoc,
     ewcut = ewcut / 100.0
     goalEW = ewcut*cutEW
     ew = cutEW
-    print 'ewcut = {0:f}'.format(ewcut)
-    print 'cutEW = {0:f}'.format(cutEW)
-    print 'goalEW = {0:f}'.format(goalEW)
+#    print 'ewcut = {0:f}'.format(ewcut)
+#    print 'cutEW = {0:f}'.format(cutEW)
+#    print 'goalEW = {0:f}'.format(goalEW)
 
     # Sort the cut list in order of descending N 
     rawCells = zip(cutz, cutN, cutb, cutID)
     cells = sorted(rawCells, key=itemgetter(1), reverse=True)
 
     
-    f = open('cutN_3.log', 'w')
-    for c, n, b, id in cells:
-        f.write('{0:f}\n'.format(n))
-    f.close()
+#    f = open('cutN_3.log', 'w')
+#    for c, n, b, id in cells:
+#        f.write('{0:f}\n'.format(n))
+#    f.close()
     # Determine which quartile to start searching
 
     numCells = len(cells)
@@ -118,19 +118,19 @@ def significant_cells(zabs, cutz, cutN, cutb, cutID, ewcut, codeLoc,
 
     maxIterations = int(np.log2(numCells))
 
-    flog = open('ew.log', 'w')
-    flog.write('EW = {0:f}\tNum Cells = {1:d}\n'.format(ew, numCells))
-    for c, n, b, id in cells:
-        flog.write('{0:f}\n'.format(n))
-    flog.write('\n')
+#    flog = open('ew.log', 'w')
+#    flog.write('EW = {0:f}\tNum Cells = {1:d}\n'.format(ew, numCells))
+#    for c, n, b, id in cells:
+#        flog.write('{0:f}\n'.format(n))
+#    flog.write('\n')
  
-    print 'Max Iterations = ', maxIterations
+#    print 'Max Iterations = ', maxIterations
     for i in range(maxIterations):
 
         midpoint = int((maxInd - minInd) / 2)
         topCells = cells[:midpoint]
 
-        print '\nMin Index = {0:d} \t Max Index = {1:d} \t Midpoint = {2:d} \t Length of topCells: {3:d}'.format(minInd, maxInd, midpoint, len(topCells))
+#        print '\nMin Index = {0:d} \t Max Index = {1:d} \t Midpoint = {2:d} \t Length of topCells: {3:d}'.format(minInd, maxInd, midpoint, len(topCells))
         # Get the ew of a spectrum using only the top 
         topz = [j[0] for j in topCells]
         topN = [j[1] for j in topCells]
@@ -141,25 +141,25 @@ def significant_cells(zabs, cutz, cutN, cutb, cutID, ewcut, codeLoc,
                                                  gamma)
         topEW = findEW(topLamb, topVel, topFlux)
 
-        print 'i = ',i
-        plt.plot(topVel, topFlux, label='Cut {0:d}'.format(i+1))
+#        print 'i = ',i
+#        plt.plot(topVel, topFlux, label='Cut {0:d}'.format(i+1))
 
-        print 'EW = {0:f}\tGoal = {1:f}\tNum Cells = {2:d}'.format(topEW, goalEW, len(topN))
+#        print 'EW = {0:f}\tGoal = {1:f}\tNum Cells = {2:d}'.format(topEW, goalEW, len(topN))
         
 
-        flog.write('EW = {0:f}\tNum Cells = {1:d}\n'.format(topEW, len(topN)))
-        for c, n, b, id in topCells:
-            flog.write('{0:f}\t{1:f}\n'.format(n, c))
-        flog.write('\n')
+#        flog.write('EW = {0:f}\tNum Cells = {1:d}\n'.format(topEW, len(topN)))
+#        for c, n, b, id in topCells:
+#            flog.write('{0:f}\t{1:f}\n'.format(n, c))
+#        flog.write('\n')
 
         if topEW>goalEW:
-            minInd = midpoint
-        else:
             maxInd = midpoint
+        else:
+            minInd = midpoint
 
-    flog.close()
-    plt.legend(frameon=False)
-    plt.savefig('ew.pdf')
+#    flog.close()
+#    plt.legend(frameon=False)
+#    plt.savefig('ew.pdf')
     # Verify this cut point
     roughCells = cells[:midpoint]
     roughz = [i[0] for i in roughCells]
@@ -170,7 +170,7 @@ def significant_cells(zabs, cutz, cutN, cutb, cutID, ewcut, codeLoc,
                                                    roughID, ion, vmax, inst, 
                                                    transName, lamb0, fosc, gamma)
     roughEW1 = findEW(roughLamb, roughVel, roughFlux)
-    print 'Length of rough 1 = {0:d}'.format(len(roughN))
+#    print 'Length of rough 1 = {0:d}'.format(len(roughN))
     numRoughCells = len(roughN)
     roughCells = cells[:midpoint+1]
     roughz = [i[0] for i in roughCells]
@@ -181,14 +181,14 @@ def significant_cells(zabs, cutz, cutN, cutb, cutID, ewcut, codeLoc,
                                                    roughID, ion, vmax, inst, 
                                                    transName, lamb0, fosc, gamma)
     roughEW2 = findEW(roughLamb, roughVel, roughFlux)
-    print 'Length of rough 2 = {0:d}'.format(len(roughN))
+#    print 'Length of rough 2 = {0:d}'.format(len(roughN))
 
     # roughEW1 should be below the goalEW
     # roughEW2 shoudl be above the goalEW
-    print 'roughEW1 = {0:f}\nroughEW2 = {1:f}\ngoalEW = {2:f}'.format(roughEW1,
-                                                                      roughEW2,
-                                                                      goalEW)
-    print numRoughCells
+#    print 'roughEW1 = {0:f}\nroughEW2 = {1:f}\ngoalEW = {2:f}'.format(roughEW1,
+#                                                                      roughEW2,
+#                                                                      goalEW)
+#    print numRoughCells
     if (roughEW1<goalEW and roughEW2>goalEW) or numRoughCells==1:
         return roughz, roughN, roughb, roughID
     else:

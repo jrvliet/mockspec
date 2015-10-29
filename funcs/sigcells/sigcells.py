@@ -87,11 +87,11 @@ def sigCells(galID, expn, ion, ewcut, codeLoc, testing=0):
             # Perform the velocity cut
             if testing==1:
                 print '\t Performing velocity cut'
-            print 'Before velcut: {0:d}'.format(len(cellN))
+#            print 'Before velcut: {0:d}'.format(len(cellN))
             cutz, cutN, cutb, cutID = sf.velcut(cellz, cellN, cellb, cellID, 
                                                 linesfile, redshift, 
                                                 testing=testing)
-            print 'After velcut: {0:d}'.format(len(cutN))
+#            print 'After velcut: {0:d}'.format(len(cutN))
 
             # Find the significant cells
             if testing==1:
@@ -115,6 +115,24 @@ def sigCells(galID, expn, ion, ewcut, codeLoc, testing=0):
                 snIa = box[index, 10]
                 alphaZ = box[index, 16]
 
+                print type(cellSize)
+                print type(x)
+                print type(y)
+                print type(z)
+                print type(density)
+                print type(temperature)
+                print type(snII)
+                print type(snIa)
+                print type(alphaZ)
+                print type(num)
+                print type(imp)
+                cellID = int(sigID[j])
+                column = float(sigN[j])
+                redshift = float(sigz[j])
+                doppler = float(sigb[j])
+                print type(cellID)
+
+                
                 # Calculate the galactocentric distance
                 r = np.sqrt( x*x + y*y + z*z)
 
@@ -128,10 +146,10 @@ def sigCells(galID, expn, ion, ewcut, codeLoc, testing=0):
                     '{0:.5e}'.format(r).rjust(20) + 
                     '{0:.4f}'.format(density).rjust(12) + 
                     '{0:.4f}'.format(temperature).rjust(10) + 
-                    '    {0:.4f}'.format(cell_size).rjust(14) + 
+                    '    {0:.4f}'.format(cellSize).rjust(14) + 
                     '{0:.4e}'.format(snII).rjust(19) + 
                     '{0:.4e}'.format(snIa).rjust(20) + 
-                    '{0:.4    e}'.format(alphaZ).rjust(17) + '\n' )
+                    '{0:.4e}'.format(alphaZ).rjust(17) + '\n' )
                 f_out.write(s)
 
 
