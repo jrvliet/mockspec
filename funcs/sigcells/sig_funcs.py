@@ -92,8 +92,12 @@ def significant_cells(zabs, cutz, cutN, cutb, cutID, ewcut, codeLoc,
     
     # Get the goal EW
     # This is ewcut (a percent) of cutEW
+    ewcut = ewcut / 100.0
     goalEW = ewcut*cutEW
     ew = cutEW
+    print 'ewcut = {0:f}'.format(ewcut)
+    print 'cutEW = {0:f}'.format(cutEW)
+    print 'goalEW = {0:f}'.format(goalEW)
 
     # Sort the cut list in order of descending N 
     rawCells = zip(cutz, cutN, cutb, cutID)
@@ -126,7 +130,7 @@ def significant_cells(zabs, cutz, cutN, cutb, cutID, ewcut, codeLoc,
         midpoint = int((maxInd - minInd) / 2)
         topCells = cells[:midpoint]
 
-        print len(topCells)
+        print '\nMin Index = {0:d} \t Max Index = {1:d} \t Midpoint = {2:d} \t Length of topCells: {3:d}'.format(minInd, maxInd, midpoint, len(topCells))
         # Get the ew of a spectrum using only the top 
         topz = [j[0] for j in topCells]
         topN = [j[1] for j in topCells]
@@ -140,16 +144,19 @@ def significant_cells(zabs, cutz, cutN, cutb, cutID, ewcut, codeLoc,
         print 'i = ',i
         plt.plot(topVel, topFlux, label='Cut {0:d}'.format(i+1))
 
+        print 'EW = {0:f}\tGoal = {1:f}\tNum Cells = {2:d}'.format(topEW, goalEW, len(topN))
+        
+
         flog.write('EW = {0:f}\tNum Cells = {1:d}\n'.format(topEW, len(topN)))
         for c, n, b, id in topCells:
             flog.write('{0:f}\t{1:f}\n'.format(n, c))
         flog.write('\n')
 
-
         if topEW>goalEW:
             minInd = midpoint
         else:
             maxInd = midpoint
+
     flog.close()
     plt.legend(frameon=False)
     plt.savefig('ew.pdf')
@@ -161,9 +168,10 @@ def significant_cells(zabs, cutz, cutN, cutb, cutID, ewcut, codeLoc,
     roughID = [i[3] for i in roughCells]
     roughLamb, roughVel, roughFlux = spec.gen_spec(zabs, roughz, roughN, roughb,
                                                    roughID, ion, vmax, inst, 
-                                                   transName, lamb1, fosc, gamma)
-    roughEW1 = findEW(roughlamb, roughVel, roughFlux)
-
+                                                   transName, lamb0, fosc, gamma)
+    roughEW1 = findEW(roughLamb, roughVel, roughFlux)
+    print 'Length of rough 1 = {0:d}'.format(len(roughN))
+    numRoughCells = len(roughN)
     roughCells = cells[:midpoint+1]
     roughz = [i[0] for i in roughCells]
     roughN = [i[1] for i in roughCells]
@@ -172,11 +180,16 @@ def significant_cells(zabs, cutz, cutN, cutb, cutID, ewcut, codeLoc,
     roughLamb, roughVel, roughFlux = spec.gen_spec(zabs, roughz, roughN, roughb,
                                                    roughID, ion, vmax, inst, 
                                                    transName, lamb0, fosc, gamma)
-    roughEW2 = findEW(roughlamb, roughVel, roughFlux)
+    roughEW2 = findEW(roughLamb, roughVel, roughFlux)
+    print 'Length of rough 2 = {0:d}'.format(len(roughN))
 
     # roughEW1 should be below the goalEW
     # roughEW2 shoudl be above the goalEW
-    if roughEW1<goalEW and roughEW2>goalEW:
+    print 'roughEW1 = {0:f}\nroughEW2 = {1:f}\ngoalEW = {2:f}'.format(roughEW1,
+                                                                      roughEW2,
+                                                                      goalEW)
+    print numRoughCells
+    if (roughEW1<goalEW and roughEW2>goalEW) or numRoughCells==1:
         return roughz, roughN, roughb, roughID
     else:
         raise ValueError        
