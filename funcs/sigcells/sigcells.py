@@ -115,22 +115,10 @@ def sigCells(galID, expn, ion, ewcut, codeLoc, testing=0):
                 snIa = box[index, 10]
                 alphaZ = box[index, 16]
 
-                print type(cellSize)
-                print type(x)
-                print type(y)
-                print type(z)
-                print type(density)
-                print type(temperature)
-                print type(snII)
-                print type(snIa)
-                print type(alphaZ)
-                print type(num)
-                print type(imp)
                 cellID = int(sigID[j])
                 column = float(sigN[j])
                 redshift = float(sigz[j])
                 doppler = float(sigb[j])
-                print type(cellID)
 
                 
                 # Calculate the galactocentric distance

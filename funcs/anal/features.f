@@ -221,21 +221,21 @@ c     search redward for the ending of the feature
 
 c     front edge effects; warning
 
-         IF (lpix.eq.1) then 
-           WRITE(6,*) ' WARNING: feature',linei,' artificially ',
-     &                'terminated start of ',order(iorder)(1:20)
-           WRITE(1,*) ' WARNING: feature',linei,' artificially ',
-     &                'terminated start of ',order(iorder)(1:20)
-         END IF
+c         IF (lpix.eq.1) then 
+c           WRITE(6,*) ' WARNING: feature',linei,' artificially ',
+c     &                'terminated start of ',order(iorder)(1:20)
+c           WRITE(1,*) ' WARNING: feature',linei,' artificially ',
+c     &                'terminated start of ',order(iorder)(1:20)
+c         END IF
 
 c     back edge effects; warning
 
-         IF (upix.eq.npix) then 
-           WRITE(6,*) ' WARNING: feature',linei,' artificially ',
-     &                'terminated end of ',order(iorder)(1:20)
-           WRITE(1,*) ' WARNING: feature',linei,' artificially ',
-     &                'terminated end of ',order(iorder)(1:20)
-         END IF
+c        IF (upix.eq.npix) then 
+c          WRITE(6,*) ' WARNING: feature',linei,' artificially ',
+c     &                'terminated end of ',order(iorder)(1:20)
+c           WRITE(1,*) ' WARNING: feature',linei,' artificially ',
+c     &                'terminated end of ',order(iorder)(1:20)
+c         END IF
 
 c     got one- store the pixel indices and set the SL_FLAG high
 
