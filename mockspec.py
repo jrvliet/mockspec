@@ -195,7 +195,7 @@ for ion in ions:
     if runLocateCells==1:
         print '\n\tIdentifying significant cells'
 #        lc.locateSigCells(galID, expn, ion, sigcellsCut, codeLoc)
-        sc.sigCells(galID, expn, ion, sigcellsCut, codeLoc)
+        lc.sigCells(galID, expn, ion, sigcellsCut, codeLoc)
     else:
         print '\tSkipping locatecells...'
 
