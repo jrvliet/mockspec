@@ -1,0 +1,34 @@
+ Schedule of analysis (flags= 0 Off , 1 On)-------- RECURSIVE
+           1  	Read N-Body file
+           1 	Read stellar file
+           1 	Read HYDRO file
+           1  	Set units and global variables
+           1 	Find halo center using particle distribution
+           0 	Compute angular momentum
+           0	ASCII file with last specie of stars or DM  ( see icomponent=2,3)
+           1  	density, temperature, entropy profiles and Rvir calculation
+	   0    Binary file with DM particles inside box 4Rvir
+	   1    Binary file with stellar particles inside box 4Rvir
+	   0    Binary file with stellar particles inside 4Rvir-box (initial mass)
+	   0	Binary file with stellar particles inside 4Rvir-box (metallicities)
+	   1    Binary file with gas cells inside 4Rvir-box
+	   0	 Binary file with gas cells inside 4Rvir-box (metallicities)
+ ----PRE-ANALYSIS----------------------------------------
+   1.666667      gamma of the gas (check value in control.dat)
+   0.13000      rminC (Kpc)
+   2.20   0.600000      rmaxC (Kpc)
+           1     ioptCenter=1/2/3-->potential/HF/IFRIT                                                                                                                               
+    10.207       xuser                                                                                                                                                                 
+     9.992      yuser                                                                                                                                            
+     9.238     zuser
+           3     isys for AM calculation 1/2/3 --> dm/stars/cold gas
+ 3.0000000      Rs (Kpc)
+ ----ANALYSIS----------------------------------------
+   0.0300      	rmin (Kpc )  
+150   	  	rmax (Kpc )
+100       nrbin
+test
+	   2  	icomponent=0/1/2/3= all components/gas/stars/DM
+  1.000000E+9      T_gas
+ 1.0000E+10	      tAge
+ 0.5          Zdmax
