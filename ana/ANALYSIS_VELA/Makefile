@@ -13,9 +13,11 @@ includeall = a_tree.h a_control.h a_def.h analysis_Rec.h a_setup.h
 
 # Intel compilers:
 FC = ifort
+#FC = /home/local/intel/intel_fc_80/bin/ifort
 #FFLAGS =  -O3 -axW -ftz -unroll -openmp -mcmodel=medium -i-dynamic -xW -convert big_endian 
 #LDFLAGS = -O3 -axW -ftz -unroll -openmp -mcmodel=medium -i-dynamic -xW -convert big_endian
 
+# What was the right ones
 FFLAGS = -O3      -convert big_endian -mcmodel=medium  -i-dynamic -xW -axW
 LDFLAGS= -O3      -convert big_endian -mcmodel=medium  -i-dynamic -xW -axW
 
