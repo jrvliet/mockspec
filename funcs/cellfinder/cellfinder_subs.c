@@ -17,8 +17,8 @@ void read_control_file(FILE *propfp, char *gasfile, char *galID, char *rootname,
   strcpy(gas_dum, gasfile);
   strtok(gas_dum, "_");
   sscanf(gas_dum, "%s", galID);
-//  printf("gasfile: %s\n", gasfile);
-//  printf("galID: %s\n", galID);
+  printf("gasfile: %s\n", gasfile);
+  printf("galID: %s\n", galID);
 
   // Get rootname
   fgets(new_line,sizeof(new_line),propfp);

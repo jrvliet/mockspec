@@ -79,9 +79,13 @@ c      tabpath  = '/home/matrix2/cwc/Projects/Mockspec/GridCode/'
 c      UVBpath  = '/home/matrix2/cwc/Projects/Mockspec/UVBspectrum/'
 c      Sb99path = '/home/matrix2/cwc/Projects/Mockspec/Sb99spectrum/'
 
-      tabpath  = '/home/jacob/research/code/mockspec/data/grid/'
-      UVBpath  = '/home/jacob/research/code/mockspec/data/uvb/'
-      Sb99path = '/home/jacob/research/code/mockspec/data/sb99/'
+c      tabpath  = '/home/jacob/research/code/mockspec/data/grid/'
+c      UVBpath  = '/home/jacob/research/code/mockspec/data/uvb/'
+c      Sb99path = '/home/jacob/research/code/mockspec/data/sb99/'
+
+      tabpath  = '/home/hyades/jrvander/mockspec/data/grid/'
+      UVBpath  = '/home/hyades/jrvander/mockspec/data/uvb/'
+      Sb99path = '/home/hyades/jrvander/mockspec/data/sb99/'
 
 c     ............................................
 c     PHASE 1: SET UP THE RUN, COMMUNICATE TO USER
