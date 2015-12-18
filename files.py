@@ -305,7 +305,7 @@ def setup_galaxy_props(galID, expn, mvir, rvir):
     stored in the codeLoc's summary directory
     """
 
-    redshift = 1/expn - 1
+    redshift = 1.0/expn - 1.0
 
     f = open('galaxy.props', 'w')
 
