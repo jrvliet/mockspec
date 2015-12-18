@@ -65,8 +65,8 @@ print '\n\nGenerating gal_props.dat...'
 fi.setup_galprops( galID, expn, requiredLoc, summaryLoc )
 
 # Generate galaxy.props file, needed for analysis codes
-print '\n\n Generating galaxy.props...'
-fi.setup_galaxy_props(galID, expn, mvir, rvir)
+#print '\n\n Generating galaxy.props...'
+#fi.setup_galaxy_props(galID, expn, mvir, rvir)
 
 ##### 
 #  
