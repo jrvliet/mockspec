@@ -102,8 +102,13 @@ Schedule_R.dat has most of the controls in it. The top section has flags as to w
 </ul>
 
 <p>
-ANA has an interesting behaviour where it finds the center of the galaxy, but is super bad at it. You need to find the center with Rockstar (found <a href="astronomy.nmsu.edu/jrvander/mockspec/centers.tar.gz&gt;here&lt;/a&gt;%20and%20put%20it%20in%20manually.%20The%20Rockstar%20center%20is%20found%20in%20the%20halos*%20files%20and%20is%20the%20first%20halo%20listed.%20These%20files%20contain%20ALL%20the%20halos%20in%20the%20simulation,%20ordered%20by%20mass.%20Since%20we%20want%20the%20host%20galaxy,%20use%20the%20first%20line.%20%0A&lt;/p&gt;%0A%0A%0A&lt;p&gt;%0AThe%20coordinates%20are%20put%20in%20on%20the%20lines%20">potential/HF/IFRIT" should be set to 2, indicating the center is from a halo finder if the simulation is a VELA, or 1 (indicating the center is the location of maximum potential) if the simulation is a dwarf. This setting is the biggest source of uncertainty in ANA. Always check the output Mvir and Rvir against the value from Rockstar, which is recorded along with the centers. If they differ by a significant amount, change the setting of ioptcenter and try again. 
-</a></p>
+ANA has an interesting behaviour where it finds the center of the galaxy, but is super bad at it. You need to find the center with Rockstar (found <a href="astronomy.nmsu.edu/jrvander/mockspec/centers.tar.gz">here</a> and put it in manually. The Rockstar center is found in the halos* files and is the first halo listed. These files contain ALL the halos in the simulation, ordered by mass. Since we want the host galaxy, use the first line. 
+</p>
+
+
+<p>
+The coordinates are put in on the lines "xuser", "yuser", "zuser". The flag in front of "ioptCenter=1/2/3--&gt;potential/HF/IFRIT" should be set to 2, indicating the center is from a halo finder if the simulation is a VELA, or 1 (indicating the center is the location of maximum potential) if the simulation is a dwarf. This setting is the biggest source of uncertainty in ANA. Always check the output Mvir and Rvir against the value from Rockstar, which is recorded along with the centers. If they differ by a significant amount, change the setting of ioptcenter and try again. 
+</p>
 <p>
 Line 30 of schedule_R.dat should be the single word 'test'. This is the prefix appended to the front of all files created by ANA. Change this to the galID, such as D9m4a or vela20v2.
 </p>
@@ -140,9 +145,8 @@ Once both control.dat and schedule_R.dat are set, run ana.R.exe.  The file neede
 The name of the output ASCII file should be the name of the binary file, but with .dat replaced with .txt
 
 
-<p>
-In most cases, Ceverino's version of ANA is not the version you should use. You should use the version written by Kenza Arraki. It is found in ana/justGZ/. Depending on the type of simulation you are analyzing, you may have to change some of the code. The line to look it is line 294 of ART_IO.F. It should look like:
-</p>
+</li>
+<li> In most cases, Ceverino's version of ANA is not the version you should use. You should use the version written by Kenza Arraki. It is found in ana/justGZ/. Depending on the type of simulation you are analyzing, you may have to change some of the code. The line to look it is line 294 of ART_IO.F. It should look like:
 <p>
 integer lspecies(nspec)
 </p>
