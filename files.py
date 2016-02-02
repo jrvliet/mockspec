@@ -201,7 +201,7 @@ def setup_mockspec(ion_list, instr_list, ewcut, snr, xh_list, requiredLoc):
 
         element, Z, stage = get_transition_info(ion, requiredLoc)
         if element =='hydrogen':
-            vmax = '5000.'
+            vmax = '10000.'
         else:
             vmax = '1000.'
         element = '\''+element+'\''
