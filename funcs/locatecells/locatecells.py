@@ -46,7 +46,7 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, testing=0):
     header = 'LOS \t Imp Param      Cell ID   Redshift        logN'\
             '    Doppler b    Galactocentric d      log nH     log T'\
             '     Cell Size     SNII mass frac      SNIa mass frac'\
-            '       alpha_Zmet\n'
+            '       alpha_Zmet     Ion Density\n'
     f_out.write(header)
 
 
@@ -126,12 +126,13 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, testing=0):
             snII = box[index,9]
             snIa = box[index,10]
             alphaZ = box[index,16]
+            ionDense = box[index,13]
 
             # Calculate the galactocentric distance
             r = np.sqrt(x*x + y*y + z*z)
         
             # Write all to the output file
-            s = '{0:d}'.format(num).ljust(7) +  '{0:.3f}'.format(imp).rjust(7) +  '{0:d}'.format(cellID).rjust(16) + '{0:-.7f}'.format(redshift).rjust(14) + '{0:.3f}'.format(column).rjust(10) + '{0:.3f}'.format(doppler).rjust(13) + '{0:.5e}'.format(r).rjust(20) + '{0:.4f}'.format(density).rjust(12) + '{0:.4f}'.format(temperature).rjust(10) + '{0:.4f}'.format(cell_size).rjust(14) + '{0:.4e}'.format(snII).rjust(19) + '{0:.4e}'.format(snIa).rjust(20) + '{0:.4e}'.format(alphaZ).rjust(17) + '\n'
+            s = '{0:d}'.format(num).ljust(7) +  '{0:.3f}'.format(imp).rjust(7) +  '{0:d}'.format(cellID).rjust(16) + '{0:-.7f}'.format(redshift).rjust(14) + '{0:.3f}'.format(column).rjust(10) + '{0:.3f}'.format(doppler).rjust(13) + '{0:.5e}'.format(r).rjust(20) + '{0:.4f}'.format(density).rjust(12) + '{0:.4f}'.format(temperature).rjust(10) + '{0:.4f}'.format(cell_size).rjust(14) + '{0:.4e}'.format(snII).rjust(19) + '{0:.4e}'.format(snIa).rjust(20) + '{0:.4e}'.format(alphaZ).rjust(17) + '{0:.4e}'.format(ionDense).rjust(17) + '\n'
 
             f_out.write(s)
 
