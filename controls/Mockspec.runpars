@@ -1,5 +1,5 @@
 Element    Stage  [X/H]  Inst    EWcut  SNR   Vmax  Slev
-'hydrogen'  1     0.0    COSFUV  0.00   30.   10000. 5.0
+'hydrogen'  1     0.0    COSFUV  0.00   30.   50000. 5.0
 'magnesium' 2     0.5    HIRES   0.00   30.   1000. 5.0
 'carbon'    4     0.0    COSNUV  0.00   30.   1000. 5.0
 'oxygen'    6     0.0    COSFUV  0.00   30.   1000. 5.0
