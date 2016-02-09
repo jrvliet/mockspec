@@ -291,7 +291,7 @@ c
       include 'a_control.h'
 c
       real    wspecies(nspec)
-      integer lspecies(nspec)
+      integer*8 lspecies(nspec)
       equivalence (wspecies(1),extras(1)), (lspecies(1),extras(11))
       character*256 FileName1 , FileName2
 c 
