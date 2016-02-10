@@ -19,7 +19,7 @@ c
 c
       character*256 filename
       integer io, ip
-      io=20
+      io = 40
 c
       open(io, file=TRIM(filename), form='formatted')
 c
@@ -264,28 +264,30 @@ c
       character*256 filename
       real*8 xc, yc, zc, rmax, rpart, rmax2
       integer ip
+      integer io
+      io = 41
 c
-      open(21, file=TRIM(filename), form='formatted')
-      write(21,'(a)') '#Write out all particles in ASCII format'
-      write(21,'(a)') '#X  Y  Z  VX  VY  VZ  MASS  ENERGY  ID'
-      write(21,'(a)') '#comoving /h Mpc; km/s; /h Msun; energy=0'
-      write(21,'(a,a)') '# file = ',TRIM(jobname1)
-      write(21,'(a,f12.6)') '# a = ',aexpn
-      write(21,'(3(a,f12.6))')
+      open(io, file=TRIM(filename), form='formatted')
+      write(io,'(a)') '#Write out all particles in ASCII format'
+      write(io,'(a)') '#X  Y  Z  VX  VY  VZ  MASS  ENERGY  ID'
+      write(io,'(a)') '#comoving /h Mpc; km/s; /h Msun; energy=0'
+      write(io,'(a,a)') '# file = ',TRIM(jobname1)
+      write(io,'(a,f12.6)') '# a = ',aexpn
+      write(io,'(3(a,f12.6))')
      &     '# h = ',hubble,' Ol = ',Oml0,' Om = ',Om0
-      write(21,'(a)') '# '
+      write(io,'(a)') '# '
 c
       rmax2 = rmax**2
       do ip = nsp(1,1), nsp(nspecies,2) !for all particles
          rpart = (x(ip)-xc)**2 + (y(ip)-yc)**2 + (z(ip)-zc)**2
          if (rpart .le. rmax2) then
-            write(21,'(8(e16.6),i)') (x(ip)-1.)*r0, (y(ip)-1.)*r0,
+            write(io,'(8(e16.6),i)') (x(ip)-1.)*r0, (y(ip)-1.)*r0,
      &           (z(ip)-1.)*r0, vx(ip)*v0/aexpn, vy(ip)*v0/aexpn,
      &           vz(ip)*v0/aexpn, pw(ip)*aM0*hubble, 0.0, ip
          endif
       enddo
 c
-      close(21)
+      close(io)
       return
       END
 c-------------------------------------------------------------------- 
@@ -420,6 +422,10 @@ c--------------------------------------------------------------------
       real tbin(0:nmaxbins),pbin(0:nmaxbins), entbin(0:nmaxbins)
       real gm(0:nmaxbins), gmc(0:nmaxbins)
       integer nbin(0:nmaxbins)
+
+      integer io
+      io = 42
+
       a3 = aexpn**3
       a2 = aexpn**2
       ai = 1.0 / aexpn
@@ -623,11 +629,11 @@ c     calculate outer radius values
 #endif
 c-------------------------------------------------------------------- 
 !     Write outputfile:
-      open(12 , file = TRIM(filename))
-      write(12,10) (xc-1.)*r0  , (yc-1.)*r0 , (zc-1.)*r0    
-      write(12,11) rmin*r0P, rmax*r0P , nrbin 
-      write(12,12) rmax*r0P, Mtot
-      write(12,14) aexpn , 1/aexpn -1.
+      open(io, file = TRIM(filename))
+      write(io,10) (xc-1.)*r0  , (yc-1.)*r0 , (zc-1.)*r0    
+      write(io,11) rmin*r0P, rmax*r0P , nrbin 
+      write(io,12) rmax*r0P, Mtot
+      write(io,14) aexpn , 1/aexpn -1.
  10   format ('# (xc,yc,zc)[Mpc h-1 comoving]= ', 3(F9.4,1x))
  11   format ('# rmin = ',g13.6,' rmax =',g13.6,
      &     ' nrbin =',i5)
@@ -648,7 +654,7 @@ c--------------------------------------------------------------------
      &     (nspecies),'(17x),a,4x,',
      &     (nspecies),'(4x),a)'
 #endif
-      write(12,myformat) '#      <r>',' r_l',' r_m',' r_r',
+      write(io,myformat) '#      <r>',' r_l',' r_m',' r_r',
      &     'T gas (K)',' Rho_g ','Rho_St ','Rho_dm',
      &     'M_insideR_Gas','M_insideR_Stars',' M_insideR_DM ',
      &     'N_dm_Pibin',' M_insideR_tot'
@@ -686,7 +692,7 @@ c--------------------------------------------------------------------
          endif
          rr = 10.**(rlogmin + float(i)*drl) ! rightside
          if ( nbin(i) .gt. 0 ) then
-            write(12,myformat)
+            write(io,myformat)
      &           rbin(i), rl*r0P, rmid*r0P, rr*r0P, tbin(i), 
      &           dgbin(i)*rho0Cm, dStbin(i)*rho0Cm, ddmbin(i)*rho0Cm, 
 #ifdef STARFORM
@@ -708,7 +714,7 @@ c--------------------------------------------------------------------
          endif
       enddo
 c 17   format(13(2x,g14.7),1x,i7,1x,g14.7)
-      close ( 12 )
+      close(io)
       return
       end
 c-------------------------------------------------------------------- 
@@ -1037,18 +1043,20 @@ c    spherical distribution with current mass and metallicity
       real*8 ageS, ageU, age
       real*8 xfact, vfact, tfact, rmax2
       integer is, istar, Nstars
+      integer io
+      io = 43
 c
       xfact = 1000.0*aexpn*r0/hubble 
       vfact = v0 / aexpn 
       tfact = t0*aexpn**2
       rmax2 = rmax**2
 c
-      open (33, file=TRIM(filename))
-      write(33,300) t*tfact, aexpn
+      open(io, file=TRIM(filename))
+      write(io,300) t*tfact, aexpn
  300  format ('# time=', E20.6, ' yrs , a= ', F10.6)
-      write(33,301) (xc-1.)*r0 ,(yc-1.)*r0 ,(zc-1.)*r0
+      write(io,301) (xc-1.)*r0 ,(yc-1.)*r0 ,(zc-1.)*r0
  301  format ('# (xc,yc,zc)[Mpc h-1]= ', 3(F8.3,1x))
-      write(33,'(a,a)') '#X, Y, Z (kpc), Vx, Vy, Vz (km/s), ',
+      write(io,'(a,a)') '#X, Y, Z (kpc), Vx, Vy, Vz (km/s), ',
      &     'm0, m (Msun), age (Gyr), SNII, SIa (metal mass fraction)'
 c
       Nstars = 0
@@ -1068,14 +1076,14 @@ c
             Nstars = Nstars+1 
             aMassTotal = aMassTotal +  pw(is) 
             aMassTotal0 = aMassTotal0 +  pw0(istar) 
-            write(33,334) istar, Xph*xfact, Yph*xfact, Zph*xfact,
+            write(io,334) istar, Xph*xfact, Yph*xfact, Zph*xfact,
      &           Vxph*vfact, Vyph*vfact, Vzph*vfact,
      &           pw0(istar)*aM0, pw(is)*aM0, ageS, 
      &           zstII(istar), zstIa(istar)
  334        format(I7, 2x, 11(e14.6,1x))
          ENDIF
       enddo
-      close(33)
+      close(io)
 c
       write(*,'(a,f12.4,a,i)') ' N stars inside ',rmax*xfact,
      &     ' kpc :',Nstars                   
@@ -1107,6 +1115,8 @@ c    iopt 4 = spherical distribution with current mass and metallicity
       parameter (aLzlow=0.1e3)
       real aMtotal(nmaxbins),aMLzlow(nmaxbins), aMLzhigh(nmaxbins)
       real*8 ageS, ageU, age,tAgeGyr
+      integer io
+      io = 43
 
       xfact = 1000.0*aexpn*r0/hubble 
       vfact = v0 / aexpn 
@@ -1127,13 +1137,13 @@ c    iopt 4 = spherical distribution with current mass and metallicity
          aMLzhigh(i)=0.0
       enddo
 c
-      open (33, file= TRIM(fprofname) )
-      write(33,300) t*tfact, aexpn
-      write(33,301) (xc-1.)*r0 ,(yc-1.)*r0 ,(zc-1.)*r0
+      open(io, file= TRIM(fprofname))
+      write(io,300) t*tfact, aexpn
+      write(io,301) (xc-1.)*r0 ,(yc-1.)*r0 ,(zc-1.)*r0
       if (iopt.eq.4) then
-         write(33,303)
+         write(io,303)
       else
-         write(33,302)
+         write(io,302)
       endif
       Nstars=0
       aMassTotal0=0.0
@@ -1155,7 +1165,7 @@ c
                   Nstars=Nstars+1  
                   aMassTotal=aMassTotal +  pw(is)  
                   aMassTotal0=aMassTotal0 +  pw0(istar) 
-                  write(33,334) istar,
+                  write(io,334) istar,
      &                 (Xph)*xfact , 
      &                 (Yph)*xfact , 
      &                 (Zph)*xfact , 
@@ -1175,7 +1185,7 @@ c
                   Nstars=Nstars+1  
                   aMassTotal=aMassTotal +  pw(is) 
                   aMassTotal0=aMassTotal0 +  pw0(istar)  
-                  write(33,334) istar, 
+                  write(io,334) istar, 
      &                 (Xph)*xfact , 
      &                 (Yph)*xfact ,  
      &                 (Zph)*xfact , 
@@ -1196,7 +1206,7 @@ c     &                 (t-tbirth(istar))*tfact
                   Nstars=Nstars+1
                   aMassTotal=aMassTotal +  pw(is)
                   aMassTotal0=aMassTotal0 +  pw0(istar)      
-                  write(33,334) istar,
+                  write(io,334) istar,
      &                 (Xph)*xfact , 
      &                 (Yph)*xfact ,
      &                 (Zph)*xfact ,
@@ -1236,7 +1246,7 @@ c     &                 (t-tbirth(istar))*tfact
                ageS = ageU - age(dble( tbirth(istar)))
                if (ageS.le.tAgeGyr) then
                   Nstars=Nstars+1
-                  write(33,334) istar,
+                  write(io,334) istar,
      &                 Xpp*xfact , 
      &                 Ypp*xfact ,
      &                 Zpp*xfact ,
@@ -1260,11 +1270,11 @@ c     &                 (t-tbirth(istar))*tfact
             ENDIF
          ENDIF
       enddo
-      write(33,'(a,f8.2,a,i)') ' N stars inside ',rmax*xfact,' kpc :',
+      write(io,'(a,f8.2,a,i)') ' N stars inside ',rmax*xfact,' kpc :',
      &           Nstars
-      write(33,*) 'Total mass:',  aMassTotal*aM0
-      write(33,*) 'Total initial mass:', aMassTotal0*aM0
-      write(33,340) tAge
+      write(io,*) 'Total mass:',  aMassTotal*aM0
+      write(io,*) 'Total initial mass:', aMassTotal0*aM0
+      write(io,340) tAge
 c
       write(*,*)' N stars inside ',rmax*xfact,' kpc :',Nstars                   
       write(*,*) ' Total mass:',  aMassTotal*aM0                               
@@ -1289,11 +1299,11 @@ c
          aMcum=aMcum + aMtotal(i)
          aMcumlow= aMcumlow + aMLzlow(i)
          aMcumhigh=aMcumhigh+ aMLzhigh(i)
-         write (33,341) i, rr*xfact, 
+         write (io,341) i, rr*xfact, 
      &      aMcumlow/aMassTotal, aMcumhigh/aMassTotal,aMcum/aMassTotal 
       enddo
  341  format(I4, 4(g14.3))
-      close ( 33 ) 
+      close(io) 
       end
 c-------------------------------------------------------------------- 
 c-------------------------------------------------------------------- 
@@ -1327,6 +1337,10 @@ c--------------------------------------------------------------------
       real tbin(0:nmaxbins),pbin(0:nmaxbins), entbin(0:nmaxbins)
       real gm(0:nmaxbins), gmc(0:nmaxbins)
       integer nbin(0:nmaxbins)
+
+      integer io
+      io = 44
+
       a3 = aexpn**3
       a2 = aexpn**2
       ai = 1.0 / aexpn
@@ -1511,14 +1525,14 @@ c--------------------------------------------------------------------
       aMvirHalo=aMvir/hubble 
 c--------------------------------------------------------------------
 !     Write outputfile:
-      open(12 , file = TRIM(filename))
-c      write(12,12) ivirDM, rvirDM*r0P, aMvirDM/hubble, deltavir
-      write(12,10) (xc-1.)*r0  , (yc-1.)*r0 , (zc-1.)*r0    
-      write(12,11) rmin*r0P, rmax*r0P , nrbin 
-      write(12,12) ivir, rvir*r0P, aMvir/hubble, deltavir
-      write(12,13) c
-      write(12,14) aexpn , 1/aexpn -1. , Tgas
-      write(12,15)
+      open(io, file = TRIM(filename))
+c      write(io,12) ivirDM, rvirDM*r0P, aMvirDM/hubble, deltavir
+      write(io,10) (xc-1.)*r0  , (yc-1.)*r0 , (zc-1.)*r0    
+      write(io,11) rmin*r0P, rmax*r0P , nrbin 
+      write(io,12) ivir, rvir*r0P, aMvir/hubble, deltavir
+      write(io,13) c
+      write(io,14) aexpn , 1/aexpn -1. , Tgas
+      write(io,15)
  10   format ('# (xc,yc,zc)[Mpc h-1 comoving]= ', 3(F9.4,1x))
  11   format ('# rmin = ',g13.6,' rmax =',g13.6,
      &     ' nrbin =',i5)
@@ -1550,7 +1564,7 @@ c      write(12,12) ivirDM, rvirDM*r0P, aMvirDM/hubble, deltavir
          endif
          rr = 10.**(rlogmin + float(i)*drl) ! rightside
          if ( nbin(i) .gt. 0 ) then
-            write(12,17)
+            write(io,17)
      &           rbin(i), rl*r0P  , 
      &         rmid*r0P , rr*r0P  , 
      &           dgbin(i)*rho0Cm ,dStbin(i)*rho0Cm, ddmbin(i)*rho0Cm, 
@@ -1564,7 +1578,7 @@ c      write(12,12) ivirDM, rvirDM*r0P, aMvirDM/hubble, deltavir
          endif
       enddo
  17   format(13(2x,g14.7),1x,i7,1x,g14.7)
-      close ( 12 )
+      close(io)
       write(*,*) 'done writing spherical profiles.'
       return
       end
@@ -1586,6 +1600,8 @@ c
       real*8 Xph,Yph,Zph,Vxph,Vyph,Vzph
       real*8 xfact, vfact, tfact, rmax2, aMassTotal
       integer is, Ndm
+      integer io
+      io = 45
 c
       write(*,*) ''
       write(*,'(a,a)') ' writing ', TRIM(filename)
@@ -1594,7 +1610,7 @@ c
       vfact = v0 / aexpn 
       tfact = t0*aexpn**2
 c
-      open (33, file=TRIM(filename), form='unformatted')
+      open(io, file=TRIM(filename), form='unformatted')
       Ndm=0
       aMassTotal=0.
       do is=nsp(1,1), nsp(nspecies-1,2) ! all DM species
@@ -1608,12 +1624,12 @@ c
      &        (ABS(Zph).lt.rmax))THEN
             Ndm=Ndm+1
             aMassTotal = aMassTotal + pw(is)
-            write(33) is, Xph*xfact, Yph*xfact, Zph*xfact,
+            write(io) is, Xph*xfact, Yph*xfact, Zph*xfact,
      &           Vxph*vfact, Vyph*vfact, Vzph*vfact,
      &           pw(is)*aM0
          ENDIF
       enddo
-      close (33) 
+      close(io) 
 c
       write(*,'(a,a,f12.4,a,i)') ' N DM particles inside a box with ',
      &     'sides of ',2.*rmax*xfact,' kpc :',Ndm
@@ -1638,6 +1654,8 @@ c--------------------------------------------------------------------
       real*8 Xph,Yph,Zph, Vxph, Vyph, Vzph
       real*8 aMassTotal0, aMassTotal
       real*8 ageS, ageU, age
+      integer io
+      io = 46
 c
       write(*,*) ''
       write(*,'(a,a)') ' writing ', TRIM(filename)
@@ -1647,7 +1665,7 @@ c
       tfact = t0*aexpn**2
       ageU = age(t)             ! in Gyr
 c
-      open ( 33, file=TRIM(filename) , form = 'unformatted' )
+      open(io, file=TRIM(filename), form = 'unformatted')
       Nstars = 0
       aMassTotal = 0.
       aMassTotal0 = 0.
@@ -1665,13 +1683,13 @@ c
             Nstars = Nstars+1
             aMassTotal = aMassTotal + pw(is)
             aMassTotal0 = aMassTotal0 + pw0(istar)      
-            write(33) istar, Xph*xfact, Yph*xfact, Zph*xfact,
+            write(io) istar, Xph*xfact, Yph*xfact, Zph*xfact,
      &           Vxph*vfact, Vyph*vfact, Vzph*vfact,
      &           pw0(istar)*aM0, pw(is)*aM0, sngl(ageS),
      &           zstII(istar), zstIa(istar)
          ENDIF
       enddo
-      close ( 33 ) 
+      close(io)
 c
       write(*,'(a,a,f12.4,a,i)') ' N star particles inside a box ',
      &     'with sides of ',2.*rmax*xfact,' kpc :',Nstars
@@ -1696,6 +1714,8 @@ c
       integer Ncells, i1, icell, i2, idc
       real*8 T_code, ptemp, xfact, gamma1, a2, a2i, ai,
      &     r0Pk, v0P, rho0Cm, Zsolar
+      integer io
+      io = 47
 c
       write(*,*) ''
       write(*,'(a,a)') ' writing ', TRIM(filename)
@@ -1713,7 +1733,7 @@ c
       call Get_MaxLevelNow ()
       Ncells = 0
       aMassTotal = 0.
-      open ( 12 , file = TRIM(filename), form = 'unformatted' )
+      open(io, file=TRIM(filename), form='unformatted')
       DO Level = MaxLevelNow, MinLevel+1,-1 
          nLevel = iNOLL(Level)
          call Select_Cells ( Level , nLevel ) 
@@ -1738,7 +1758,7 @@ c
                      ZII = hvar(izII,idc)/rho ! /Zsolar
                      ZIa = hvar(izIa,idc)/rho ! /Zsolar
 c     
-                     write(12) 2.**(-Level)*r0Pk*1000.,
+                     write(io) 2.**(-Level)*r0Pk*1000.,
      &                    Posxc*r0Pk ,Posyc*r0Pk, Poszc*r0Pk,  
      &                    vx0*v0P,vy0*v0P,vz0*v0P, rho*rho0Cm, ptemp,
      &                    ZII, ZIa
@@ -1769,7 +1789,7 @@ c
                ZII = hvar(izII,i1)/rho ! /Zsolar
                ZIa = hvar(izIa,i1)/rho ! /Zsolar
 c
-               write(12)  2.**(-Level)*r0Pk*1000.,
+               write(io)  2.**(-Level)*r0Pk*1000.,
      &              Posxc*r0Pk ,Posyc*r0Pk, Poszc*r0Pk,  
      &              vx0*v0P, vy0*v0P, vz0*v0P, rho*rho0Cm, ptemp,
      &              ZII, ZIa
@@ -1778,7 +1798,7 @@ c
             ENDIF
          endif
       ENDDO
-      CLOSE(12)
+      close(io)
 c
       write(*,'(a,f12.4,a,i)') ' N cells inside a box with sides of ',
      &     2.*rmax*xfact,' kpc :',Ncells
@@ -1801,6 +1821,8 @@ c
       integer Ncells, i1, icell, i2, idc
       real*8 T_code, ptemp, xfact, gamma1, a2, a2i, ai,
      &     r0Pk, v0P, rho0Cm, Zsolar
+      integer io
+      io = 48
 c
       write(*,*) ''
       write(*,'(a,a)') ' writing ', TRIM(filename)
@@ -1818,10 +1840,10 @@ c
       call Get_MaxLevelNow ()
       Ncells = 0
       aMassTotal = 0.
-      open(12, file = TRIM(filename))
-      write(12,'(5x,9(a,15x),a2,14x,a2)')
+      open(io, file=TRIM(filename))
+      write(io, '(5x,9(a,15x),a2,14x,a2)')
      &     '1','2','3','4','5','6','7','8','9','10','11'
-      write(12,'(a10,11x,3(a1,15x),2(a2,14x),
+      write(io, '(a10,11x,3(a1,15x),2(a2,14x),
      &      a2,11x,a7,8x,a11,3x,a14,3x,a14)')
      &     'cell size','x','y','z','vx','vy','vz','density',
      &     'temperature','SNII mass frac','SNIa mass frac'
@@ -1850,7 +1872,7 @@ c
                      ZII = hvar(izII,idc)/rho ! /Zsolar
                      ZIa = hvar(izIa,idc)/rho ! /Zsolar
 c
-                     write(12,'(es11.4,10es16.4)')
+                     write(io, '(es11.4,10es16.4)')
      &                    2.**(-Level)*r0Pk*1000.,
      &                    Posxc*r0Pk, Posyc*r0Pk, Poszc*r0Pk,
      &                    vx0*v0P, vy0*v0P,vz0*v0P, rho*rho0Cm, ptemp,
@@ -1882,7 +1904,8 @@ c
                ZII = hvar(izII,i1)/rho ! /Zsolar
                ZIa = hvar(izIa,i1)/rho ! /Zsolar
 c
-               write(12)  2.**(-Level)*r0Pk*1000.,
+               write(io, '(es11.4,10es16.4)')
+     &              2.**(-Level)*r0Pk*1000.,
      &              Posxc*r0Pk ,Posyc*r0Pk, Poszc*r0Pk,
      &              vx0*v0P, vy0*v0P, vz0*v0P, rho*rho0Cm, ptemp,
      &              ZII, ZIa
@@ -1891,7 +1914,7 @@ c
             ENDIF
          endif
       ENDDO
-      CLOSE(12)
+      close(io)
 c
       write(*,'(a,f12.4,a,i)') ' N cells inside a box with sides of ',
      &     2.*rmax*xfact,' kpc :',Ncells
@@ -1914,6 +1937,8 @@ c--------------------------------------------------------------------
       character*256 filename
       real*8 rs, rsd, rhogl, T_g, Z_met, xHII, xHI, 
      &     coolrate, cool, heat, gamma1
+      integer io
+      io = 49
 
 !      parameter (QSOBox=28) !300 ) ! 400 ) ! kpc
       QSOBoxcu = QSOBox/ ( r0 * 1000.0 / hubble * aexpn) ! in code units
@@ -1938,7 +1963,7 @@ c--------------------------------------------------------------------
 c
       Ncells=0
 c
-         open ( 12 , file = TRIM(filename), form = 'unformatted' )
+      open(io, file = TRIM(filename), form = 'unformatted')
 
       DO Level = MaxLevelNow, MinLevel+1,-1 
          nLevel = iNOLL(Level)
@@ -1963,7 +1988,7 @@ c
                    T_code = gamma1 * hvar(8,idc)/rho
                    ptemp = T_0 * T_code * a2i
 c     
-               write(12) 2.**(-Level)*r0Pk*1000.,
+               write(io) 2.**(-Level)*r0Pk*1000.,
      &              Posxc*r0Pk ,Posyc*r0Pk, Poszc*r0Pk,  
      &              vx0*v0P,vy0*v0P,vz0*v0P, rho*rho0Cm, ptemp
                Ncells=Ncells+1
@@ -1991,7 +2016,7 @@ c
                   T_code = gamma1 * hvar(8,i1)/rho
                   ptemp = T_0 * T_code * a2i
 c     
-                  write(12)   2.**(-Level)*r0Pk*1000.,
+                  write(io)   2.**(-Level)*r0Pk*1000.,
      &                 Posxc*r0Pk ,Posyc*r0Pk, Poszc*r0Pk,  
      &                 vx0*v0P,vy0*v0P,vz0*v0P, rho*rho0Cm, ptemp
                   Ncells=Ncells+1
@@ -2000,7 +2025,7 @@ c
          endif
       ENDDO
       write (*,*)  'Number of cells= ', Ncells
-      CLOSE(12)
+      close(io)
       END
 c-------------------------------------------------------------------- 
       SUBROUTINE Extract_BOX6(filename,xc,yc,zc,Vxc,Vyc,Vzc,QSOBox)
@@ -2016,6 +2041,8 @@ c--------------------------------------------------------------------
       character*256 filename
       real*8 rs, rsd, rhogl, T_g, Z_met, xHII, xHI, 
      & coolrate, cool, heat, gamma1
+      integer io
+      io = 49
 
 !      parameter (QSOBox=28) !300 ) ! 400 ) ! kpc
 
@@ -2043,7 +2070,7 @@ c--------------------------------------------------------------------
 c
       Ncells=0  
 c 
-         open ( 12 , file = TRIM(filename), form = 'unformatted' )
+      open(io, file = TRIM(filename), form = 'unformatted')
 
       DO Level = MaxLevelNow, MinLevel+1,-1 
          nLevel = iNOLL(Level)
@@ -2071,7 +2098,7 @@ c
                   ZII =hvar(izII,idc)/rho ! /Zsolar
                   ZIa =hvar(izIa,idc)/rho ! /Zsolar
 c 
-                  write(12) 2.**(-Level)*r0Pk*1000.,
+                  write(io) 2.**(-Level)*r0Pk*1000.,
      &                 Posxc*r0Pk ,Posyc*r0Pk, Poszc*r0Pk,  
      &                 vx0*v0P,vy0*v0P,vz0*v0P, rho*rho0Cm, ptemp,
      &                 ZII, ZIa
@@ -2103,7 +2130,7 @@ c
                   ZII =hvar(izII,i1)/rho ! /Zsolar
                   ZIa =hvar(izIa,i1)/rho ! /Zsolar
 c
-                  write(12)   2.**(-Level)*r0Pk*1000.,
+                  write(io)   2.**(-Level)*r0Pk*1000.,
      &                 Posxc*r0Pk ,Posyc*r0Pk, Poszc*r0Pk,  
      &                 vx0*v0P,vy0*v0P,vz0*v0P, rho*rho0Cm, ptemp,
      &                 ZII, ZIa
@@ -2112,7 +2139,7 @@ c
             endif
          ENDDO
       write (*,*)  'Number of cells= ', Ncells
-      CLOSE(12)
+      close(io)
       END
 c
 c     Previously from analysis_ART.F
@@ -2326,6 +2353,8 @@ c
      &             5 , 0 , 0 , 0 , 0 , 0 , 0 , 0  /
       integer nfpn
 
+      integer io
+      io = 49
 
       rlmin = log10(rmin)
       rlmax = log10(rmax)
@@ -2446,7 +2475,7 @@ c....   correct coordinate to insure periodic bundaries
       enddo
 
       if ( lpointsout ) then 
-        open ( 12 , file = 'points.dat' )
+         open(io, file = 'points.dat')
       endif
       do ii = 1 , npoints
         rp = sqrt((xpn(ii)-xc)**2+(ypn(ii)-yc)**2+(zpn(ii)-zc)**2)
@@ -2459,12 +2488,12 @@ c....   correct coordinate to insure periodic bundaries
           tbin(ibin) = tbin(ibin) + ptemp(ii)
 	  entbin(ibin) = entbin(ibin) + pent(ii)
           if ( lpointsout ) then 
-            write(12,*) rp*r0, pd(ii), ptemp(ii),pent(ii)
+            write(io,*) rp*r0, pd(ii), ptemp(ii),pent(ii)
           endif
         endif
       enddo
       if ( lpointsout ) then       
-        close ( 12 )
+         close(io)
       endif
 c
 c.... prepare profiles
@@ -2512,17 +2541,17 @@ c            rvir = rr
         endif
       enddo
 c
-      open ( 12 , file = TRIM(filename) )
+      open(io, file = TRIM(filename))
 c
       aMvir = deltavir * 
      &        4.18879 * (rvir*r0)**3 * rho0 / hubble**2 
-      write(12,10) xc , yc , zc  
-      write(12,11) rmin , rmax , nrbin , ibintype 
-      write(12,12) ivir, rvir*r0, aMvir, deltavir
-      write(12,13) ifindcenter, l_force_center
-      write(12,14)
-      write(12,15)
-      write(12,16)
+      write(io,10) xc , yc , zc  
+      write(io,11) rmin , rmax , nrbin , ibintype 
+      write(io,12) ivir, rvir*r0, aMvir, deltavir
+      write(io,13) ifindcenter, l_force_center
+      write(io,14)
+      write(io,15)
+      write(io,16)
  10   format ('# (xc,yc,zc) = ', 3(g14.7,1x))
  11   format ('# rmin = ',g13.6,' rmax =',g13.6,
      &        ' nrbin =',i5,' ibintype =',i1)
@@ -2545,14 +2574,14 @@ c
         endif
         rr = 10.**(rlmin + float(i)*drl)
 	if ( nbin(i) .gt. 0 ) then
-          write(12,17)
+          write(io,17)
      &         rbin(i), rl*r0, rmid, rr*r0, 
      &         dgbin(i),ddmbin(i),ddmibin(i), dtibin(i), 
      &         tbin(i),entbin(i),int(ndmp(i))
 	endif
       enddo
  17   format(10(2x,g14.7),1x,i7)
-      close ( 12 )
+      close(io)
       write(*,*) 'done writing profiles. exiting...'
 c
       return

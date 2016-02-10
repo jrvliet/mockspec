@@ -355,17 +355,13 @@ c...  Working with new ICs (Daisuke added a line below)
       np = N_particles 
 
       write(iOIO,*) ' N Particles :',N_particles
-
-#ifdef WORKOUT
-      call Open_ASCII_File ( iOWork , workfile , append ) 
+      
       do i = 1 , nspecies
-        write(iOWork,*) 'ispecie =',i,lspecies(i)
+         write(iOIO,*) 'ispecie =',i,lspecies(i)
       enddo
-      write(iOWork,*) 'Read_Particles_Binary: reading np=',np,
-     &                ' particles'
-      close(iOWork)
-#endif
-
+      write(iOIO,*) 'Read_Particles_Binary: reading np=',np,
+     &     ' particles'
+      
       if ( np .eq. 0 .or. np .gt. npmax ) then 
         call Open_ASCII_File ( iOErr , errorfile , append ) 
         write(iOErr,*) '1 : error in Read_Particles_Binary: bad np =',
