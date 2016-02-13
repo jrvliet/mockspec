@@ -297,7 +297,7 @@ def setup_ion_dir(ion, galID, expn, codeLoc):
     return ionloc
 
 
-def setup_galaxy_props(galID, expn, mvir, rvir):
+def setup_galaxy_props(galID, expn, mvir, rvir, inc):
         
     """
     Creates a file called galaxy.props in the root directory.
@@ -318,6 +318,8 @@ def setup_galaxy_props(galID, expn, mvir, rvir):
     s = 'Mvir           {0:.4e}\n'.format(mvir)
     f.write(s)
     s = 'Rvir           {0:.4f}\n'.format(rvir)
+    f.write(s)
+    s = 'Inclination    {0:.4f}\n'.format(inc)
     f.write(s)
 
     f.close()
