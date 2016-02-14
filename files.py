@@ -297,6 +297,38 @@ def setup_ion_dir(ion, galID, expn, codeLoc):
     return ionloc
 
 
+def setup_inclination_dir(incline, ions, runRates, galID, expn):
+
+    """
+    Sets up a directort called i<incline> in the expansion factor
+    directory. Moves all rates output files into it if rates
+    was run. Returns the file path to the new directory
+    """
+    inc = int(incline)    
+
+    # Check to see if the inclination directory already
+    # exits
+    if not os.path.exists('./i{0:d}'.format(inc)):
+        command = 'mkdir i{0:d}'.format(inc)
+        sp.call(command, shell=True)
+
+    # Move the ion files output by rates into this
+    # new directory
+    if runRates==1:
+        for ion in ions:
+            boxName = '{0:s}_GZa{1:s}.{2:s}.txt'.format(galID, expn, ion)
+            command = 'mv {0:s} ./i{1:d}/'.format(boxName, inc)
+            try:
+                sp.check_call(command, shell=True)
+            except CalledProcessError:
+                print 'Could not complete {0:s} in setup_inclination_dir'.format(command)
+        
+    # Return the path to the new directory
+    cwd = os.getcwd()
+    incLoc = '{0:s}/i{1:d}/'.format(cwd, inc)
+    return incLoc
+
+
 def setup_galaxy_props(summaryLoc, galID, expn, inc):
         
     """

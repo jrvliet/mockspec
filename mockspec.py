@@ -29,7 +29,7 @@ requiredLoc = codeLoc+'/controls/'
 #  Read in the control file
 print '\n\nReading in control file...'
 props, flags, ions, xh, instruments = fi.read_control_file()
-galID, expn, nlos, maximpact, incline, ewcut, snr, ncores, rootLoc, sigcellsCut= props
+galID, expn, nlos, maximpact, incline, ewcut, snr, ncores, rootLoc, sigcellsCut = props
 runRates, runGenLOS, runCellfinder, runIdcells, runLos7, runSpecsynth, runSysanal, runCullabs, runLocateCells = flags
 
 # Genearte the name of the gasfile
@@ -63,7 +63,7 @@ print '\n\nGenerating gal_props.dat...'
 fi.setup_galprops( galID, expn, requiredLoc, summaryLoc )
 
 # Generate galaxy.props file, needed for analysis codes
-print '\n\n Generating galaxy.props...'
+print '\n\nGenerating galaxy.props...'
 fi.setup_galaxy_props(summaryLoc, galID, expn, incline)
 
 ##### 
@@ -81,6 +81,18 @@ if runRates==1:
     rc.run_rates(codeLoc)
 else:
     print 'Skipping rates'
+
+
+
+##### 
+#  
+#  Set up inclination directory
+#
+#####
+incLoc = fi.setup_inclination_dir(incline, ions, runRates, galID, expn)
+os.chdir(ionLoc)
+
+
 
 ##### 
 #  
@@ -117,12 +129,11 @@ if runIdcells==1:
 else:
     print 'Skipping IDcells...'
 
-
-
 # Setup Mockspec 
 fi.setup_mockspec(ions, instruments, ewcut, snr, xh, requiredLoc)
 
-#Start looping over ions
+
+# Start looping over ions
 print '\nBegin looping over ions...'
 for ion in ions:
 

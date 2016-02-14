@@ -7,9 +7,9 @@ from mockspec_funcs import getTransitionInfo
 
 def setup_rates_control(gasfile, expn, ion_list, requiredLoc):
 
-    if not os.path.exists('rates.inp'):
-        command = 'cp '+requiredLoc+'rates.inp .'
-        sp.call(command, shell=True)
+#    if not os.path.exists('rates.inp'):
+    command = 'cp '+requiredLoc+'rates.inp .'
+    sp.call(command, shell=True)
 
     # Alter the rates.inp file
     numions = len(ion_list)
