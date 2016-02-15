@@ -312,6 +312,9 @@ def setup_inclination_dir(incline, ions, runRates, galID, expn):
         command = 'mkdir i{0:d}'.format(inc)
         sp.call(command, shell=True)
 
+    cwd = os.getcwd()
+    incLoc = '{0:s}/i{1:d}/'.format(cwd, inc)
+
     # Move the ion files output by rates into this
     # new directory
     if runRates==1:
@@ -322,10 +325,44 @@ def setup_inclination_dir(incline, ions, runRates, galID, expn):
                 sp.check_call(command, shell=True)
             except CalledProcessError:
                 print 'Could not complete {0:s} in setup_inclination_dir'.format(command)
-        
+                sys.exit()
+    else:
+        # Ensure the ion boxes are in the directory
+        for ion in ions:
+            boxName = '{0:s}_GZa{1:s}.{2:s}.txt'.format(galID, expn, ion)
+            boxPath = incLoc+boxName
+
+            # Check if the ion box is in the inclination directory already
+            if not os.path.isfile(boxPath):
+                # Ion boxes are not in the inclination directory
+                # Check if they are in the expansion directory
+                newPath = '{0:s}/{1:s}'.format(cwd, boxName)
+                if os.path.isfile(newPath):
+                    # Move the box to the inclination directory
+                    command = 'mv {0:s} ./i{1:d}/'.format(boxName, inc)
+                    try:
+                        sp.check_call(command, shell=True)
+                    except CalledProcessError:
+                        print 'Could not complete {0:s} in setup_inclination_dir'.format(command)
+                else:
+                    # Ion box is missing
+                    print 'Cannot find ion box in setup_inclination_dir'
+                    print 'Exiting...'
+                    sys.exit()
+
+    # Copy the rest of the control files into the directory
+    boxname = '{0:s}_GZa{1:s}.txt'.format(galID, expn)
+    filenames = ['mockspec.config', 'gal_props.dat', 'galaxy.props', boxname]
+    for fn in filenames:
+        command = 'cp {0:s} ./i{1:d}/'.format(fn, inc)
+        try:
+            sp.check_call(command, shell=True)
+        except CalledProcessError:
+            print 'Cannot find {0:s} in setup_inclination_dir'.format(fn)
+            sys.exit()
+
+
     # Return the path to the new directory
-    cwd = os.getcwd()
-    incLoc = '{0:s}/i{1:d}/'.format(cwd, inc)
     return incLoc
 
 
@@ -379,6 +416,42 @@ def setup_galaxy_props(summaryLoc, galID, expn, inc):
 
 
     
+
+
+def rename(galID, expn, ion, incline, runLocateCells, runCullabs):
+
+    '''
+    Renames files output by the pipeline to incline the 
+    inclination angle
+    '''
+    inc = int(incline)
+    if runCullabs==1:
+        # Need to rename ALL.sysabs file
+        allName = '{0:s}.{1:s}.a{2:s}.ALL.sysabs'.format(galID, ion, expn)
+        newName = allName.replace('ALL','i{0:d}.ALL'.format(inc))
+        command = 'mv {0:s} {1:s}'.format(allName, newName)
+        try:
+            sp.check_call(command, shell=True)
+        except:
+            print 'Error in rename running \n\t{0:s}'.format(command)
+            print 'Exitting...'
+            sys.exit()
+
+    if runLocateCells==1:
+        # Need to rename the abs_cells file
+        absName = '{0:s}.{1:s}.{2:s}.abs_cells.dat'
+        newName = absName.replace('abs','i{0:d}.abs'.format(inc))
+        command = 'mv {0:s} {1:s}'.format(absName, newName)
+        try:
+            sp.check_call(command, shell=True)
+        except:
+            print 'Error in rename running \n\t{0:s}'.format(command)
+            print 'Exitting...'
+            sys.exit()
+
+       
+
+
 
 
 

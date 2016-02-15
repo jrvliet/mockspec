@@ -1,6 +1,7 @@
 
 # Functions to run external codes as part of the pipeline
 
+import os
 import sys
 from subprocess import check_call
 
@@ -31,7 +32,7 @@ def runCellfinder(codeLoc, numcores):
     Runs cellfinder, which determines which cells lie along each LOS.
     Is fully paralellzied. Creates cellID files.
     """
-
+    print os.getcwd()
     command = codeLoc+'/funcs/cellfinder/cellfinder {0:d}'.format(numcores)
     try:
         check_call(command, shell=True)

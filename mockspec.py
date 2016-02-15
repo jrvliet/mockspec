@@ -90,7 +90,7 @@ else:
 #
 #####
 incLoc = fi.setup_inclination_dir(incline, ions, runRates, galID, expn)
-os.chdir(ionLoc)
+os.chdir(incLoc)
 
 
 
@@ -210,6 +210,20 @@ for ion in ions:
 #        lc.sigCells(galID, expn, ion, sigcellsCut, codeLoc)
     else:
         print '\tSkipping locatecells...'
+
+    
+    ##### 
+    #  
+    #  Rename files
+    #  Add inclination angle to filenames
+    #
+    #####
+    print '\n\t Renaming files...'
+    if runCullabs==1 or runLocateCells==1:
+        fi.rename(galID, expn, ion, incline, runLocateCells, runCullabs)
+    else:
+        print 'What was the point...'
+
 
     # Move back up to the parent directory
     os.chdir('..')
