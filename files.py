@@ -381,7 +381,7 @@ def setup_galaxy_props(summaryLoc, galID, expn, inc):
         f = open(summaryLoc+summaryFile)
     except IOError:
         try:
-            f = open('./output/rotmat_a{0:s}.txt'.format(expn))
+            f = open('../output/rotmat_a{0:s}.txt'.format(expn))
             except IOError:
                 print 'Could not open summary file:\n\t{0:s}{1:s}'.format(summaryLoc, summarFile)
                 print 'Coult not find rotmat file'
