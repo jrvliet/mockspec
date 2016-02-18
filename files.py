@@ -374,13 +374,18 @@ def setup_galaxy_props(summaryLoc, galID, expn, inc):
     stored in the codeLoc's summary directory
     """
     
+    cwd = os.getcwd()
     # Read in properties from the summary file
     summaryFile = '{0:s}.dat'.format(galID)
     try:
         f = open(summaryLoc+summaryFile)
     except IOError:
-        print 'Could not open summary file:\n\t{0:s}{1:s}'.format(summaryLoc, summarFile)
-        sys.exit()
+        try:
+            f = open('./output/rotmat_a{0:s}.txt'.format(expn))
+            except IOError:
+                print 'Could not open summary file:\n\t{0:s}{1:s}'.format(summaryLoc, summarFile)
+                print 'Coult not find rotmat file'
+                sys.exit()
     f.readline()
     f.readline()
     found = 0
