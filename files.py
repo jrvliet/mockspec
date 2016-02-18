@@ -342,7 +342,7 @@ def setup_inclination_dir(incline, ions, runRates, galID, expn):
                     command = 'mv {0:s} ./i{1:d}/'.format(boxName, inc)
                     try:
                         sp.check_call(command, shell=True)
-                    except CalledProcessError:
+                    except sp.CalledProcessError:
                         print 'Could not complete {0:s} in setup_inclination_dir'.format(command)
                 else:
                     # Ion box is missing
@@ -379,15 +379,18 @@ def setup_galaxy_props(summaryLoc, galID, expn, inc):
     summaryFile = '{0:s}.dat'.format(galID)
     try:
         f = open(summaryLoc+summaryFile)
+        summ = 1
     except IOError:
         try:
             f = open('../output/rotmat_a{0:s}.txt'.format(expn))
-            except IOError:
-                print 'Could not open summary file:\n\t{0:s}{1:s}'.format(summaryLoc, summarFile)
-                print 'Coult not find rotmat file'
-                sys.exit()
+            summ = 2
+        except IOError:
+            print 'Could not open summary file:\n\t{0:s}{1:s}'.format(summaryLoc, summarFile)
+            print 'Coult not find rotmat file'
+            sys.exit()
     f.readline()
-    f.readline()
+    if summ==1:
+        f.readline()
     found = 0
     for line in f:
         l = line.split()
