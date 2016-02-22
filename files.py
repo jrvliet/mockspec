@@ -357,7 +357,7 @@ def setup_inclination_dir(incline, ions, runRates, galID, expn):
         command = 'cp {0:s} ./i{1:d}/'.format(fn, inc)
         try:
             sp.check_call(command, shell=True)
-        except CalledProcessError:
+        except sp.CalledProcessError:
             print 'Cannot find {0:s} in setup_inclination_dir'.format(fn)
             sys.exit()
 

@@ -66,9 +66,11 @@ if not os.path.isfile(sumFile):
     f = open(sumFile,'w')
     frot = open(rotfile)
     header = frot.readline()
+    print header
     f.write(header)
     f.write(header)
     for line in frot:
+        print line
         f.write(line)
     frot.close()
     f.close()
