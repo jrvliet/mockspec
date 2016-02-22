@@ -62,7 +62,7 @@ sumFile = '{0:s}/{1:s}.dat'.format(summaryLoc, galID)
 if not os.path.isfile(sumFile):
     # Summary file does not exit
     # make it
-    rotfile = './output/rotmat_a{0:s}.txt'.format(expn)
+    rotfile = '../output/rotmat_a{0:s}.txt'.format(expn)
     f = open(sumFile,'w')
     frot = open(rotfile)
     header = frot.readline()
