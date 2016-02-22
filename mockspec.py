@@ -60,7 +60,18 @@ print '\tLocateCells: {0:d}'.format(runLocateCells)
 # Test the summary location
 sumFile = '{0:s}/{1:s}.dat'.format(summaryLoc, galID)
 if not os.path.isfile(sumFile):
-    summaryLoc = './output/'
+    # Summary file does not exit
+    # make it
+    rotfile = './output/rotmat_a{0:s}.txt'.format(expn)
+    f = open(sumFile,'w')
+    frot = open(rotfile)
+    header = frot.readline()
+    f.write(header)
+    f.write(header)
+    for line in frot:
+        f.write(line)
+    frot.close()
+    f.close()
 
 os.getcwd()
 
