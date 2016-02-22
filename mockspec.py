@@ -57,6 +57,13 @@ print '\tSysanal:     {0:d}'.format(runSysanal)
 print '\tCullabs:     {0:d}'.format(runCullabs)
 print '\tLocateCells: {0:d}'.format(runLocateCells)
 
+# Test the summary location
+sumFile = '{0:s}/{1:s}.dat'.format(summaryLoc, galID)
+if not os.path.isfile(sumFile):
+    summaryLoc = './output/'
+
+os.getcwd()
+
 
 # Generate gal_props.dat file
 print '\n\nGenerating gal_props.dat...'
