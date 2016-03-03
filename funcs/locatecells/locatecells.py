@@ -50,6 +50,9 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, testing=0):
     f_out.write(header)
 
 
+    # Make a version of Mockspec.runpars that has zero SNR
+    # Needed for sigcells
+    lf.quiet_mockspec()
 
     # Get a list of LOS that have a sysabs file associated with it
     sysabs_losnum = []
