@@ -315,40 +315,44 @@ def setup_inclination_dir(incline, ions, runRates, galID, expn):
     cwd = os.getcwd()
     incLoc = '{0:s}/i{1:d}/'.format(cwd, inc)
 
-    # Move the ion files output by rates into this
-    # new directory
-    if runRates==1:
-        for ion in ions:
-            boxName = '{0:s}_GZa{1:s}.{2:s}.txt'.format(galID, expn, ion)
-            command = 'mv {0:s} ./i{1:d}/'.format(boxName, inc)
-            try:
-                sp.check_call(command, shell=True)
-            except CalledProcessError:
-                print 'Could not complete {0:s} in setup_inclination_dir'.format(command)
-                sys.exit()
-    else:
-        # Ensure the ion boxes are in the directory
-        for ion in ions:
-            boxName = '{0:s}_GZa{1:s}.{2:s}.txt'.format(galID, expn, ion)
-            boxPath = incLoc+boxName
-
-            # Check if the ion box is in the inclination directory already
-            if not os.path.isfile(boxPath):
-                # Ion boxes are not in the inclination directory
-                # Check if they are in the expansion directory
-                newPath = '{0:s}/{1:s}'.format(cwd, boxName)
-                if os.path.isfile(newPath):
-                    # Move the box to the inclination directory
-                    command = 'mv {0:s} ./i{1:d}/'.format(boxName, inc)
-                    try:
-                        sp.check_call(command, shell=True)
-                    except sp.CalledProcessError:
-                        print 'Could not complete {0:s} in setup_inclination_dir'.format(command)
-                else:
-                    # Ion box is missing
-                    print 'Cannot find ion box in setup_inclination_dir'
-                    print 'Exiting...'
+    # Check to see if the ion boxes are already in the directory
+    testbox = '{0:s}_GZa{1:s}.{2:s}.txt'.format(galID, expn, ions[0])
+    if not os.path.isfile('./i{0:d}/{1:s}'.format(inc,testbox)):
+        # Box is not in the driectory, move them there
+        # Move the ion files output by rates into this
+        # new directory
+        if runRates==1:
+            for ion in ions:
+                boxName = '{0:s}_GZa{1:s}.{2:s}.txt'.format(galID, expn, ion)
+                command = 'mv {0:s} ./i{1:d}/'.format(boxName, inc)
+                try:
+                    sp.check_call(command, shell=True)
+                except CalledProcessError:
+                    print 'Could not complete {0:s} in setup_inclination_dir'.format(command)
                     sys.exit()
+        else:
+            # Ensure the ion boxes are in the directory
+            for ion in ions:
+                boxName = '{0:s}_GZa{1:s}.{2:s}.txt'.format(galID, expn, ion)
+                boxPath = incLoc+boxName
+
+                # Check if the ion box is in the inclination directory already
+                if not os.path.isfile(boxPath):
+                    # Ion boxes are not in the inclination directory
+                    # Check if they are in the expansion directory
+                    newPath = '{0:s}/{1:s}'.format(cwd, boxName)
+                    if os.path.isfile(newPath):
+                        # Move the box to the inclination directory
+                        command = 'mv {0:s} ./i{1:d}/'.format(boxName, inc)
+                        try:
+                            sp.check_call(command, shell=True)
+                        except sp.CalledProcessError:
+                            print 'Could not complete {0:s} in setup_inclination_dir'.format(command)
+                    else:
+                        # Ion box is missing
+                        print 'Cannot find ion box in setup_inclination_dir'
+                        print 'Exiting...'
+                        sys.exit()
 
     # Copy the rest of the control files into the directory
     boxname = '{0:s}_GZa{1:s}.txt'.format(galID, expn)
