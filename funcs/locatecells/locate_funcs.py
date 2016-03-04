@@ -82,11 +82,11 @@ def velcut(linesfile, testing=0):
     for i in range(0,len(cell_z)):
 
         # Calcuate the peculiar velocity of the cell
-       vpec = c*( (cell_z[i]-redshift) / (1.0+redshift) )
+        vpec = c*( (cell_z[i]-redshift) / (1.0+redshift) )
 
         # If the cell is inside the velocity range, write to file
         if vpec>neg_vel_limit and vpec<pos_vel_limit:
-            f_newLines.write(s.format(cell_z[i], cell_N[i], cell_b[i], cell_ID[i])
+            f_newLines.write(s.format(cell_z[i], cell_N[i], cell_b[i], cell_ID[i]))
             velcutCount += 1
 
     f_newlines.close()
