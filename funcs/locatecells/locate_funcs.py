@@ -32,13 +32,12 @@ def quiet_mockspec():
     f_runpars_old = open('Mockspec.runpars')
     f_runpars_new = open('Mockspec_0SNR.runpars', 'w')
     l = f_runpars_old.readline().split()
-    s = l[0]+'\t\t'+l[1]+'\t'+l[2]+'\t'+l[3]+'\t'+l[4]+'\t'+l[5]+'\t'+l[6]+'\t'+l[7]+'\n'
-    f_runpars_new.write(s)
+    s = '{0:s}\t\t{1:s}\t\t{1:s}\t\t{1:s}\t\t{1:s}\t\t{1:s}\t\t{1:s}\t\t{1:s}\n'
+    f_runpars_new.write(s.format(l[0],l[1],l[2],l[3],l[4],l[5],l[6],l[7]))
     for line in f_runpars_old:
         l = line.split()
         l[5] = '0.'
-        s = l[0]+'\t'+l[1]+'\t'+l[2]+'\t'+l[3]+'\t'+l[4]+'\t'+l[5]+'\t'+l[6]+'\t'+l[7]+'\n'
-        f_runpars_new.write(s)
+        f_runpars_new.write(s.format(l[0],l[1],l[2],l[3],l[4],l[5],l[6],l[7]))
     f_runpars_new.close()
     f_runpars_old.close()
 
@@ -138,7 +137,8 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
         datfile = linesfile.replace('lines', 'dat') + '\n'
         fLos.write(datfile)
     
-    # Rename the velcut .lines to remove velcut from name, so it will be used by specsynth
+    # Rename the velcut .lines to remove velcut from name, 
+    # so it will be used by specsynth
     command = 'cp '+linesfile+'.velcut '+linesfile
     sp.call(command, shell=True)
 
@@ -169,9 +169,9 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
 
 
     # Copy the initial quiet spectra
-    command = 'cp '+specfile+' '+specfile+'.velcutclean'
+    command = 'cp {0:s} {0:s}.velcutclean'.format(specfile)
     sp.call(command, shell=True)
-    command = 'cp '+redspecfile+' '+redspecfile+'.velcutclean'
+    command = 'cp {0:s} {0:s}.velcutclean'.format(redspecfile)
     sp.call(command, shell=True)
     
     # Read in the spectra data
@@ -202,13 +202,10 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
     # is responsible for all the absorption
     if numcells == 1:
         singleCellCount += 1
-        # Copy the velcut lines file to the final version
-        command = 'cp {0:s}.velcut {0:s}.final'.format(linesfile)
-        sp.call(command, shell=True)
     
     else:
-            
-        
+        # More than one cell in the .lines.velcut file
+        # Find the ones that are significant
 
         # Read in .lines.velcut file
         velcutdata = np.loadtxt(linesfile+'.velcut', skiprows=1)
@@ -218,36 +215,25 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
             print 'Velcutdata shape: ', shap
             print 'Number of rows: ', shap[0]
             print 'Length of shap: ', len(shap)
-    #        print 'Number of columns: ', shap[1]
             print 'Index 0: ', velcutdata[1]
 
-        if len(velcutdata.shape)==1:
-            # Only one cell in file
-            velcut_z = [velcutdata[0]]
-            velcut_N = [velcutdata[1]]
-            velcut_b = [velcutdata[2]]
-            velcut_ID = [velcutdata[3]]
-        else:
-            velcut_z = list(velcutdata[:,0])
-            velcut_N = list(velcutdata[:,1])
-            velcut_b = list(velcutdata[:,2])
-            velcut_ID = list(velcutdata[:,3])
+        velcut_z = list(velcutdata[:,0])
+        velcut_N = list(velcutdata[:,1])
+        velcut_b = list(velcutdata[:,2])
+        velcut_ID = list(velcutdata[:,3])
         
         f_log = open('sigcells.log', 'w')
         f_log.write('Numcells \t EW \t EWdiff\n')
-        f_log.write('{0:d} \t \t{1:0.3f} \t {2:0.3f}\n'.format(len(velcut_z), ew, ewdiff))
+        sFormat = '{0:d} \t \t{1:0.3f} \t {2:0.3f}\n'
+        f_log.write(sFormat.format(len(velcut_z), ew, ewdiff))
 
-        
         ewdiff = 0.5*ewcut
-        
-    #    print 'Length of velcut_N: {0:d}'.format(len(velcut_N))
         loopcount = 0
         while ewdiff < ewcut:
-    #        print 'EWdiff: {0:f}\tewcut: {1:f}'.format(ewdiff, ewcut)
             loopcount += 1
             
-            # Check that there is still at least one cell left
-            if len(velcut_z)>0:
+            # Check that there are more than one cell left
+            if len(velcut_z)>1:
 
                 # Find the cell with the lowest column denstiy
                 index = velcut_N.index(min(velcut_N))
@@ -261,14 +247,11 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
                 # Write the new .lines values to file
                 f_newlines = open(linesfile, 'w')
                 f_newlines.write('{0:.16f}\n'.format(redshift))
+                s = '{0:>8.7f}\t{1:>8f}\t{2:>8f}\t{3:>8d}\n'
                 for i in range(0,len(velcut_z)):
-                    s = '{0:.7f}'.format(velcut_z[i]).rjust(8)+'\t'
-                    s += str(velcut_N[i]).rjust(8)+'\t'
-                    s += str(velcut_b[i]).rjust(8)+'\t'
-                    s += str(velcut_ID[i]).rjust(8)+'\n'
-                    f_newlines.write(s)  
+                    f_newlines.write(s.format(velcut_z[i], velcut_N[i],
+                                              velcut_b[i], velcut_ID[i]))
                 f_newlines.close()
-
 
                 # Run specsynth again
                 sp.call(specsynth_command, shell=True)
@@ -279,12 +262,11 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
                 velocity = specdata[:,1]
                 flux = specdata[:,2]
                 
-                ew = findEW(wavelength, velocity, flux, neg_vel_limit, pos_vel_limit)
+                ew = findEW(wavelength, velocity, flux, negVelLimit, posVelLimit)
                 ewdiff = abs( (ew_velcut_lines - ew) / ew_velcut_lines)*100
                 f_log.write('{0:d} \t \t{1:0.3f} \t {2:0.3f}\n'.format(
                             len(velcut_z), ew, ewdiff))
             else:
-    #            print 'Absorption dominated by one cell'
                 singleCellCount += 1
                 ewdiff = ewcut
             
