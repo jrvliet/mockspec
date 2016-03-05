@@ -65,9 +65,9 @@ def velcut(linesfile, testing=0):
     if testing==1:
         print '\t\tBefore velcut, number of cells: ', len(cell_z)
         print '\t\tFrom sysabs:'
-        print '\t\t\tNeg Vel Limt: {0:f}'.format(neg_vel_limit)
-        print '\t\t\tPos_vel_limi: {0:f}'.format(pos_vel_limit)
-        print '\t\t\tEW:           {0:f}'.format(EW_sysabs)
+        print '\t\t\tNeg Vel Limt: {0:f}'.format(negVelLimit)
+        print '\t\t\tPos_vel_limi: {0:f}'.format(posVelLimit)
+        print '\t\t\tEW:           {0:f}'.format(ewSysabs)
 
     # New .lines file
     newlinesfile = linesfile+'.velcut'
@@ -85,7 +85,7 @@ def velcut(linesfile, testing=0):
         vpec = c*( (cell_z[i]-redshift) / (1.0+redshift) )
 
         # If the cell is inside the velocity range, write to file
-        if vpec>neg_vel_limit and vpec<pos_vel_limit:
+        if vpec>negVelLimit and vpec<posVelLimitimit:
             f_newLines.write(s.format(cell_z[i], cell_N[i], cell_b[i], cell_ID[i]))
             velcutCount += 1
 
