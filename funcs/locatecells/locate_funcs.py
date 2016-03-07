@@ -3,6 +3,7 @@ import numpy as np
 import sys
 import subprocess as sp
 from ew import findEW 
+import locate_files as lf
 
 def vel_limits(linesfile):
     '''
@@ -147,21 +148,7 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
     sp.call(specsynth_command, shell=True)
 
     # Get the EW of this noise-less spectra
-    if ion == 'HI':
-        bluewave = 'Lya'
-        redwave = ion+'1026'        
-    elif ion == 'MgII':
-        bluewave = ion+'2796'
-        redwave = ion+'2803'
-    elif ion == 'CIV':
-        bluewave = ion+'1548'
-        redwave = ion+'1551'
-    elif ion == 'OVI':
-        bluewave = ion+'1032'
-        redwave = ion+'1038'
-    else:
-        print 'Unkown ion'
-        sys.exit()
+    bluewave, redwave = lf.transition_name(ion, codeLoc)
 
     specFileBase = '{0:s}.{1:s}.los{2:s}.{3:s}.spec'
     specfile = specFileBase.format(galID, ion, losnum, bluewave)
