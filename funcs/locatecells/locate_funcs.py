@@ -85,7 +85,7 @@ def velcut(linesfile, testing=0):
         vpec = c*( (cell_z[i]-redshift) / (1.0+redshift) )
 
         # If the cell is inside the velocity range, write to file
-        if vpec>negVelLimit and vpec<posVelLimitimit:
+        if vpec>negVelLim and vpec<posVelLim:
             f_newLines.write(s.format(cell_z[i], cell_N[i], cell_b[i], cell_ID[i]))
             velcutCount += 1
 
