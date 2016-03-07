@@ -14,7 +14,7 @@ import locate_funcs as lf
 import os
 
 
-def locateSigCells(galID, expn, ion, ewcut, codeLoc, testing=0):
+def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
 
     """
     Locates the significant cells in a line of sight.
@@ -39,7 +39,8 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, testing=0):
     los_info = np.loadtxt('lines.info',skiprows=2)
 
     # Open the output file
-    out_file = galID+'.'+expn+'.'+ion+'.abs_cells.dat'
+    out_file = '{0:s}.{1:s}.{2:d}.{3:s}.abs_cells.dat'.format(galID,expn,int(inc),ion)
+    #out_file = galID+'.'+expn+'.'+ion+'.abs_cells.dat'
     f_out = open(out_file, 'w')
 
     # Write a header to the output file
