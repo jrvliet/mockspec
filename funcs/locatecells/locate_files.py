@@ -34,7 +34,7 @@ def quiet_mockspec():
     l = f_runpars_old.readline().split()
     s = '{0:s}\t\t{1:s}\t\t{1:s}\t\t{1:s}\t\t{1:s}\t\t{1:s}\t\t{1:s}\t\t{1:s}\n'
     f_runpars_new.write(s.format(l[0],l[1],l[2],l[3],l[4],l[5],l[6],l[7]))
-    for line in f_runpars_old
+    for line in f_runpars_old:
         l = line.split()
         l[5] = '0.'
         f_runpars_new.write(s.format(l[0],l[1],l[2],l[3],l[4],l[5],l[6],l[7]))
