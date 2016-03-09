@@ -470,6 +470,13 @@ c     limits for further computations
        sf_flag(iorder,linei) = .false.
       END IF
 
+c     Print the ends found to screen for debugging
+      write(6,*) 'lpix wavelength: ',wave(lpix,1)
+      write(6,*) 'upix wavelength: ',wave(upix,1)
+      write(6,*) 'lpix velocity:   ',vel(lpix,1)
+      write(6,*) 'upix velocity: ',vel(upix,1)
+
+
       subfeat = subregi
 
 c     return
