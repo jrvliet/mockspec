@@ -163,6 +163,7 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
     
     # Read in the spectra data
     specdata = np.loadtxt(specfile)
+    print specdata
     wavelength = specdata[:,0]
     velocity = specdata[:,1]
     flux = specdata[:,2]
