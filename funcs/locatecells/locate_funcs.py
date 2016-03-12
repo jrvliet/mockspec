@@ -33,7 +33,7 @@ def quiet_mockspec():
     f_runpars_old = open('Mockspec.runpars')
     f_runpars_new = open('Mockspec_0SNR.runpars', 'w')
     l = f_runpars_old.readline().split()
-    s = '{0:s}\t\t{1:s}\t\t{1:s}\t\t{1:s}\t\t{1:s}\t\t{1:s}\t\t{1:s}\t\t{1:s}\n'
+    s = '{0:s}\t\t{1:s}\t\t{2:s}\t\t{3:s}\t\t{4:s}\t\t{5:s}\t\t{6:s}\t\t{7:s}\n'
     f_runpars_new.write(s.format(l[0],l[1],l[2],l[3],l[4],l[5],l[6],l[7]))
     for line in f_runpars_old:
         l = line.split()
@@ -140,6 +140,7 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
     
     # Rename the velcut .lines to remove velcut from name, 
     # so it will be used by specsynth
+    print linesfile
     command = 'cp '+linesfile+'.velcut '+linesfile
     sp.call(command, shell=True)
 
@@ -181,7 +182,7 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
     
     # See how many cells are in the velcut file
     with open(linesfile+'.velcut') as fcut:
-        for i,l in enumerate(f):
+        for i,l in enumerate(fcut):
             pass
     numcells = i   # One less than the actual number of lines due to the
                    # absorption redshift in the first line
@@ -196,6 +197,9 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
         # Find the ones that are significant
 
         # Read in .lines.velcut file
+        with open(linesfile+'.velcut') as fvelcut:
+            redshift = float(fvelcut.readline().strip())
+
         velcutdata = np.loadtxt(linesfile+'.velcut', skiprows=1)
         if testing==1:
             print 'Velcutdata: ', velcutdata
@@ -238,7 +242,7 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
                 s = '{0:>8.7f}\t{1:>8f}\t{2:>8f}\t{3:>8d}\n'
                 for i in range(0,len(velcut_z)):
                     f_newlines.write(s.format(velcut_z[i], velcut_N[i],
-                                              velcut_b[i], velcut_ID[i]))
+                                              velcut_b[i], int(velcut_ID[i])))
                 f_newlines.close()
 
                 # Run specsynth again

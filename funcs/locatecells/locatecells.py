@@ -58,6 +58,8 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
 
     # Get a list of LOS that have a sysabs file associated with it
     sysabs_losnum = glob.glob('*los*sysabs')
+    sysabs_losnum.sort()
+    
 #    sysabs_losnum = []
 #    for i in range(0,1000):
 #        losnum = str(i).zfill(4)
@@ -70,9 +72,12 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
     if testing==1:
         print 'Sysabs files aggregated'
         print 'Number of sysabs files: ', len(sysabs_losnum)
+
     for i in range(0,len(sysabs_losnum)):
 
+        print sysabs_losnum[i]
         losnum = sysabs_losnum[i].split('.')[2].split('los')[1]
+        print losnum
 
         if testing==1:
             print 'LOS num: ', losnum
@@ -87,6 +92,8 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
         with open(linesfile) as f:
             for line in f:
                 numCells += 1
+
+        print 'NumCells = ', numCells
         # There is always the galaxy redshift
         if numCells==1:
             # If there are no cells, continue to the next LOS
