@@ -140,7 +140,6 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
     
     # Rename the velcut .lines to remove velcut from name, 
     # so it will be used by specsynth
-    print linesfile
     command = 'cp '+linesfile+'.velcut '+linesfile
     sp.call(command, shell=True)
 
@@ -164,7 +163,6 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
     
     # Read in the spectra data
     specdata = np.loadtxt(specfile)
-    print specdata
     wavelength = specdata[:,0]
     velocity = specdata[:,1]
     flux = specdata[:,2]

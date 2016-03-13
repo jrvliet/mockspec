@@ -27,7 +27,6 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
         <galID>.<expn>.<ion>.abs_cells.dat
     """
 
-    print testing
     singleCount = 0
 
     # Read in the galaxy's box
@@ -75,9 +74,7 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
 
     for i in range(0,len(sysabs_losnum)):
 
-        print sysabs_losnum[i]
         losnum = sysabs_losnum[i].split('.')[2].split('los')[1]
-        print losnum
 
         if testing==1:
             print 'LOS num: ', losnum
@@ -93,7 +90,6 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
             for line in f:
                 numCells += 1
 
-        print 'NumCells = ', numCells
         # There is always the galaxy redshift
         if numCells==1:
             # If there are no cells, continue to the next LOS
