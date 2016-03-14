@@ -4,6 +4,59 @@ import subprocess as sp
 import locate_funcs as lf
 from ew import findEW
 
+
+def search(start, end, ewcut, lines_z, lines_b, lines_N, lines_ID, redshift, 
+            specCommand, specfile, negVelLimit, posVelLimit, ewVelcut):
+
+    '''
+    Recursively search for significant cells
+    '''
+   
+    # Check if are at the end
+    if (start-end)<=1:
+        return end
+    else:
+        # Get midpoint
+        mid = int((end-start)/2)
+        
+        # Cut the lines
+        cut_z = lines_z[:mid]
+        cut_N = lines_N[:mid]
+        cut_b = lines_b[:mid]
+        cut_ID = lines_ID[:mid]
+
+        # Write the new array to the lines file
+        s = '{0:>8.7f}\t{1:>8f}\t{2:>8f}\t{3:>8d}\n'
+        with open(linesfile, 'w') as f:            
+            f.write('{0:.16f}\n'.format(redshift)
+            for i in range(0,len(cut_z)):
+                f_newlines.write(s.format(cut_z[i], cut_N[i],
+                                          cut_b[i], int(cut_ID[i])))
+        # Run specsynth
+        sp.call(specCommand, shell=True)
+
+        # Find the new EW of the cut down list of cells
+        wavelength, velocity, flux = np.loadtxt(specfile, usecols=(0,1,2),
+                                                unpack=True)
+        ew = findEW(wavelength, velocity, flux, negVelLimit, posVelLimit)
+        ewdiff = abs( (ewVelcut - ew) / ewVelcut)*100
+    
+        if ewdiff<ewcut:
+            # Not deep enough cut
+            # Only send in top half
+            end = mid
+            search(start, end, ewcut, lines_z, lines_b, lines_N, lines_ID, 
+                    redshift, specCommand, specfile, negVelLimit, posVelLimit,
+                    ewVelcut)
+        else:
+            # Cut is too deep
+            # Need to include more of cut cells 
+            start = mid
+            search(start, end, ewcut, lines_z, lines_b, lines_N, lines_ID, 
+                    redshift, specCommand, specfile, negVelLimit, posVelLimit,
+                    ewVelcut)
+    return end
+
 def sigcells(linesfile, ewcut, codeLoc, testing=0):
     '''
     Determines which cells are the significiant contributers
@@ -94,120 +147,19 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
         singleCellCount += 1
     
     else:
-        # More than one cell in the .lines.velcut file
-        # Find the ones that are significant
 
-        # Read in .lines.velcut file
-        with open(linesfile+'.velcut') as fvelcut:
-            redshift = float(fvelcut.readline().strip())
+        start = 0
+        end = len(lines_z)
+        sigEnd = search(start, end, ewcut, cell_z, cell_b, cell_N, cells_ID, 
+            redshift, specCommand, specfile, negVelLimit, posVelLimit, ewVelcut)
 
-        velcutdata = np.loadtxt(linesfile+'.velcut', skiprows=1)
-
-        velcut_z = list(velcutdata[:,0])
-        velcut_N = list(velcutdata[:,1])
-        velcut_b = list(velcutdata[:,2])
-        velcut_ID = list(velcutdata[:,3])
+    s = '{0:>8.7f}\t{1:>8f}\t{2:>8f}\t{3:>8d}\n'
+    with open(linesfile+'.lines.final', 'w') as f:
+        f.write('{0:.16f}\n'.format(redshift)
+        for i in range(0,sigEnd):
+            f_newlines.write(s.format(cell_z[i], cell_N[i],
+                                      cell_b[i], int(cell_ID[i])))
         
-        f_log = open('sigcells.log', 'w')
-        f_log.write('Numcells \t EW \t EWdiff\n')
-        sFormat = '{0:d} \t \t{1:0.3f} \t {2:0.3f}\n'
-        f_log.write(sFormat.format(len(velcut_z), ew, ewdiff))
 
-        ewdiff = 0.5*ewcut
-        loopcount = 0
-        while ewdiff < ewcut:
-            loopcount += 1
-
-            # Get the number of cells
-            numcells = len(velcut_z)
-            
-            # Cut this in half to get the midpoint
-            cutIndex = int(numcells/2)
-
-            # Only work with the top half of the list
-            cut_z = velcut_z[:cutIndex]
-            cut_N = velcut_N[:cutIndex]
-            cut_b = velcut_b[:cutIndex]
-            cut_ID = velcut_ID[:cutIndex]
-
-            # Write the new array to the lines file
-            s = '{0:>8.7f}\t{1:>8f}\t{2:>8f}\t{3:>8d}\n'
-            with open(linesfile, 'w') as f:            
-                f.write('{0:.16f}\n'.format(redshift)
-                for i in range(0,len(cut_z)):
-                    f_newlines.write(s.format(cut_z[i], cut_N[i],
-                                              cut_b[i], int(cut_ID[i])))
-            # Run specsynth
-            sp.call(specsynth_command, shell=True)
-
-            # Find the new EW of the cut down list of cells
-            wavelength, velocity, flux = np.loadtxt(specfile, usecols=(0,1,2),
-                                                    unpack=True)
-            ew = findEW(wavelength, velocity, flux, negVelLimit, posVelLimit)
-            ewdiff = abs( (ew_velcut_lines - ew) / ew_velcut_lines)*100
-            
-            # Determine if this cut is too far or not far enough
-            if ewdiff > ewcut:
-                # Too far
-                # New midpoint is halfway between the current midpoint and
-                # the end of the list
-                newmid = (midpoint + len(velcut_z)) / 2.0
-            else:
-                # Not far enough
-                # New midpoint is halfway between the current 
-                newmid = midpoint / 2.0
-
-            newcut_z = velcut_z[:,newmid]
-            newcut_N = velcut_N[:,newmid]
-            newcut_b = velcut_b[:,newmid]
-            newcut_ID = velcut_ID[:,newmid]
-
-
-
-            # Check that there are more than one cell left
-            if len(velcut_z)>1:
-
-                # Find the cell with the lowest column denstiy
-                index = velcut_N.index(min(velcut_N))
-                
-                # Delete this index
-                del velcut_z[index]
-                del velcut_N[index]
-                del velcut_b[index]
-                del velcut_ID[index]
-
-                # Write the new .lines values to file
-                f_newlines = open(linesfile, 'w')
-                f_newlines.write('{0:.16f}\n'.format(redshift))
-                s = '{0:>8.7f}\t{1:>8f}\t{2:>8f}\t{3:>8d}\n'
-                for i in range(0,len(velcut_z)):
-                    f_newlines.write(s.format(velcut_z[i], velcut_N[i],
-                                              velcut_b[i], int(velcut_ID[i])))
-                f_newlines.close()
-
-                # Run specsynth again
-                sp.call(specsynth_command, shell=True)
-
-                # Find the new EW 
-                specdata = np.loadtxt(specfile)
-                wavelength = specdata[:,0]
-                velocity = specdata[:,1]
-                flux = specdata[:,2]
-                
-                ew = findEW(wavelength, velocity, flux, negVelLimit, posVelLimit)
-                ewdiff = abs( (ew_velcut_lines - ew) / ew_velcut_lines)*100
-                f_log.write('{0:d} \t \t{1:0.3f} \t {2:0.3f}\n'.format(
-                            len(velcut_z), ew, ewdiff))
-            else:
-                singleCellCount += 1
-                ewdiff = ewcut
-            
-        f_log.close()
-
-    # Copy the lines file for protection
-    command = 'cp '+linesfile+' '+linesfile+'.final'
-    sp.call(command, shell=True)
-
-    return singleCellCount
 
 
