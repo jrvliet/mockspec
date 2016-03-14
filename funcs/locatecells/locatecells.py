@@ -39,7 +39,7 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
     los_info = np.loadtxt('lines.info',skiprows=2)
 
     # Open the output file
-    out_file = '{0:s}.{1:s}.{2:d}.{3:s}.abs_cells.dat'.format(galID,expn,int(inc),ion)
+    out_file = '{0:s}.{1:s}.{2:s}.abs_cells.dat'.format(galID,expn,ion)
     #out_file = galID+'.'+expn+'.'+ion+'.abs_cells.dat'
     f_out = open(out_file, 'w')
 
