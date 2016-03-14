@@ -149,9 +149,19 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
             # Determine if this cut is too far or not far enough
             if ewdiff > ewcut:
                 # Too far
-                
+                # New midpoint is halfway between the current midpoint and
+                # the end of the list
+                newmid = (midpoint + len(velcut_z)) / 2.0
             else:
                 # Not far enough
+                # New midpoint is halfway between the current 
+                newmid = midpoint / 2.0
+
+            newcut_z = velcut_z[:,newmid]
+            newcut_N = velcut_N[:,newmid]
+            newcut_b = velcut_b[:,newmid]
+            newcut_ID = velcut_ID[:,newmid]
+
 
 
             # Check that there are more than one cell left
