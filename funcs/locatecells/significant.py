@@ -1,105 +1,8 @@
 
 import numpy as np
-import sys
 import subprocess as sp
-from ew import findEW 
-import locate_files as lf
-
-def vel_limits(linesfile):
-    '''
-    Reads in the sysabs file corresponding to the linesfile passed in
-    Returns the velocity limits and ew of the absorption 
-    '''
-    
-    # Open the sysabs file
-    sysabsfile  =  linesfile.replace('lines', 'sysabs')
-    f_sysabs = open(sysabsfile)
-    f_sysabs.readline()
-    line = f_sysabs.readline()
-    neg = float(line.split()[1])
-    pos = float(line.split()[2])
-    ew = float(line.split()[3])
-    f_sysabs.close()
-
-    return neg, pos, ew
-
-
-def quiet_mockspec():
-    '''
-    Makes a version of Mockspec.runpars that has zero SNR
-    '''
-
-    # Create a Mockspec.runpars file with SNR set to zero
-    f_runpars_old = open('Mockspec.runpars')
-    f_runpars_new = open('Mockspec_0SNR.runpars', 'w')
-    l = f_runpars_old.readline().split()
-    s = '{0:s}\t\t{1:s}\t\t{2:s}\t\t{3:s}\t\t{4:s}\t\t{5:s}\t\t{6:s}\t\t{7:s}\n'
-    f_runpars_new.write(s.format(l[0],l[1],l[2],l[3],l[4],l[5],l[6],l[7]))
-    for line in f_runpars_old:
-        l = line.split()
-        l[5] = '0.'
-        f_runpars_new.write(s.format(l[0],l[1],l[2],l[3],l[4],l[5],l[6],l[7]))
-    f_runpars_new.close()
-    f_runpars_old.close()
-
-
-def velcut(linesfile, testing=0):
-
-    """
-    Cuts the cells out of the .lines file that do not fall withing
-    the velocity window as found in the sysabs file
-    """
-    # Define constants
-    c = 3.0e5   # Speed of light in km/s
-
-    cell_z, cell_N, cell_b, cell_ID = np.loadtxt(linesfile, skiprows=1, 
-                                    usecols=(0,1,2,3), unpack=True)
-
-    # Read in the redshift of the absorption
-    # This is the first line of the .lines file
-    with open(linesfile, 'r') as f:
-        redshift = float(f.readline().strip())
-
-    # Get the velcoity limits of the absorption
-    negVelLim, posVelLim, ewSysabs = vel_limits(linesfile)
-
-    if testing==1:
-        print '\t\tBefore velcut, number of cells: ', len(cell_z)
-        print '\t\tFrom sysabs:'
-        print '\t\t\tNeg Vel Limt: {0:f}'.format(negVelLimit)
-        print '\t\t\tPos_vel_limi: {0:f}'.format(posVelLimit)
-        print '\t\t\tEW:           {0:f}'.format(ewSysabs)
-
-    # New .lines file
-    newlinesfile = linesfile+'.velcut'
-    f_newlines = open(newlinesfile, 'w')
-    
-    # Write the first line
-    f_newlines.write('{0:.16f}\n'.format(redshift))
-    
-    # Loop through the original .lines file
-    velcutCount = 0
-    s = '{0:>8.7f}\t{1:>8f}\t{2:>8f}\t{3:>8d}\n'
-    for i in range(0,len(cell_z)):
-
-        # Calcuate the peculiar velocity of the cell
-        vpec = c*( (cell_z[i]-redshift) / (1.0+redshift) )
-
-        # If the cell is inside the velocity range, write to file
-        if vpec>negVelLim and vpec<posVelLim:
-            f_newlines.write(s.format(cell_z[i], cell_N[i], cell_b[i], int(cell_ID[i])))
-            velcutCount += 1
-
-    f_newlines.close()
-    
-    if testing==1:
-        print '\t\tAfter velcut, number of cells: ', velcutCount
-
-###############################################################################
-###############################################################################
-###############################################################################
-###############################################################################
-###############################################################################
+import locate_funcs as lf
+from ew import findEW
 
 def sigcells(linesfile, ewcut, codeLoc, testing=0):
     '''
@@ -125,7 +28,7 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
         print 'In sigcells, number of velcut cells read in: ', len(cell_z)
 
     # Get the EW from sysabs
-    negVelLimit, posVelLimit, ewSysabs = vel_limits(linesfile)
+    negVelLimit, posVelLimit, ewSysabs = lf.vel_limits(linesfile)
 
     #################################################################
     #                                                               #
@@ -199,13 +102,6 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
             redshift = float(fvelcut.readline().strip())
 
         velcutdata = np.loadtxt(linesfile+'.velcut', skiprows=1)
-        if testing==1:
-            print 'Velcutdata: ', velcutdata
-            shap = velcutdata.shape
-            print 'Velcutdata shape: ', shap
-            print 'Number of rows: ', shap[0]
-            print 'Length of shap: ', len(shap)
-            print 'Index 0: ', velcutdata[1]
 
         velcut_z = list(velcutdata[:,0])
         velcut_N = list(velcutdata[:,1])
@@ -221,7 +117,53 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
         loopcount = 0
         while ewdiff < ewcut:
             loopcount += 1
+
+            # Get the number of cells
+            numcells = len(velcut_z)
             
+            # Cut this in half to get the midpoint
+            cutIndex = int(numcells/2)
+
+            # Only work with the top half of the list
+            cut_z = velcut_z[:cutIndex]
+            cut_N = velcut_N[:cutIndex]
+            cut_b = velcut_b[:cutIndex]
+            cut_ID = velcut_ID[:cutIndex]
+
+            # Write the new array to the lines file
+            s = '{0:>8.7f}\t{1:>8f}\t{2:>8f}\t{3:>8d}\n'
+            with open(linesfile, 'w') as f:            
+                f.write('{0:.16f}\n'.format(redshift)
+                for i in range(0,len(cut_z)):
+                    f_newlines.write(s.format(cut_z[i], cut_N[i],
+                                              cut_b[i], int(cut_ID[i])))
+            # Run specsynth
+            sp.call(specsynth_command, shell=True)
+
+            # Find the new EW of the cut down list of cells
+            wavelength, velocity, flux = np.loadtxt(specfile, usecols=(0,1,2),
+                                                    unpack=True)
+            ew = findEW(wavelength, velocity, flux, negVelLimit, posVelLimit)
+            ewdiff = abs( (ew_velcut_lines - ew) / ew_velcut_lines)*100
+            
+            # Determine if this cut is too far or not far enough
+            if ewdiff > ewcut:
+                # Too far
+                # New midpoint is halfway between the current midpoint and
+                # the end of the list
+                newmid = (midpoint + len(velcut_z)) / 2.0
+            else:
+                # Not far enough
+                # New midpoint is halfway between the current 
+                newmid = midpoint / 2.0
+
+            newcut_z = velcut_z[:,newmid]
+            newcut_N = velcut_N[:,newmid]
+            newcut_b = velcut_b[:,newmid]
+            newcut_ID = velcut_ID[:,newmid]
+
+
+
             # Check that there are more than one cell left
             if len(velcut_z)>1:
 

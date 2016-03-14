@@ -451,7 +451,7 @@ def rename(galID, expn, ion, incline, runLocateCells, runCullabs):
 
     if runLocateCells==1:
         # Need to rename the abs_cells file
-        absName = '{0:s}.{1:s}.{2:s}.abs_cells.dat'
+        absName = '{0:s}.{1:s}.{2:s}.abs_cells.dat'.format(galID,expn,ion)
         newName = absName.replace('abs','i{0:d}.abs'.format(inc))
         command = 'mv {0:s} {1:s}'.format(absName, newName)
         try:
