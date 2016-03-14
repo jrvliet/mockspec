@@ -28,7 +28,7 @@ def search(start, end, ewcut, lines_z, lines_b, lines_N, lines_ID, redshift,
         # Write the new array to the lines file
         s = '{0:>8.7f}\t{1:>8f}\t{2:>8f}\t{3:>8d}\n'
         with open(linesfile, 'w') as f:            
-            f.write('{0:.16f}\n'.format(redshift)
+            f.write('{0:.16f}\n'.format(redshift))
             for i in range(0,len(cut_z)):
                 f_newlines.write(s.format(cut_z[i], cut_N[i],
                                           cut_b[i], int(cut_ID[i])))
@@ -155,7 +155,7 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
 
     s = '{0:>8.7f}\t{1:>8f}\t{2:>8f}\t{3:>8d}\n'
     with open(linesfile+'.lines.final', 'w') as f:
-        f.write('{0:.16f}\n'.format(redshift)
+        f.write('{0:.16f}\n'.format(redshift))
         for i in range(0,sigEnd):
             f_newlines.write(s.format(cell_z[i], cell_N[i],
                                       cell_b[i], int(cell_ID[i])))
