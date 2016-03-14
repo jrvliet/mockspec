@@ -13,6 +13,7 @@ import os.path as op
 import locate_funcs as lf
 import os
 import glob
+import significant as sg
 
 
 def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
@@ -111,7 +112,8 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
         # Find the significant cells
         if testing==1:
             print '\t Finding significant cells'
-        singleCount += lf.sigcells(linesfile, ewcut, codeLoc, testing=testing)
+        endCut = sg.sigcells(linesfile, ewcut, codeLoc, testing=testing)
+#        singleCount += lf.sigcells(linesfile, ewcut, codeLoc, testing=testing)
 
         # Get the properties of the cells
         # Open the lines.final file
