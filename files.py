@@ -370,7 +370,8 @@ def setup_inclination_dir(incline, ions, runRates, galID, expn):
     return incLoc
 
 
-def setup_galaxy_props(summaryLoc, galID, expn, inc):
+#def setup_galaxy_props(summaryLoc, galID, expn, inc):
+def setup_galaxy_props(sumFile, galID, expn, inc):
         
     """
     Creates a file called galaxy.props in the root directory.
@@ -378,53 +379,56 @@ def setup_galaxy_props(summaryLoc, galID, expn, inc):
     stored in the codeLoc's summary directory
     """
     
-    cwd = os.getcwd()
+#    cwd = os.getcwd()
     # Read in properties from the summary file
-    summaryFile = '{0:s}.dat'.format(galID)
+#    summaryFile = '{0:s}.dat'.format(galID)
+#    try:
+#        f = open(summaryLoc+summaryFile)
+#        summ = 1
+#    except IOError:
+#        try:
+#            f = open('../output/rotmat_a{0:s}.txt'.format(expn))
+#            summ = 2
+#        except IOError:
+#            print 'Could not open summary file:\n\t{0:s}{1:s}'.format(summaryLoc, summarFile)
+#            print 'Coult not find rotmat file'
+#            sys.exit()
+
     try:
-        f = open(summaryLoc+summaryFile)
-        summ = 1
+        f = open(sumFile, 'r')
     except IOError:
-        try:
-            f = open('../output/rotmat_a{0:s}.txt'.format(expn))
-            summ = 2
-        except IOError:
-            print 'Could not open summary file:\n\t{0:s}{1:s}'.format(summaryLoc, summarFile)
-            print 'Coult not find rotmat file'
-            sys.exit()
+        print 'Cannot open {0:s} in setup_galaxy_props'.format(sumFile)
+        print 'Exitting...'
+        sys.exit()
     f.readline()
-    if summ==1:
-        f.readline()
-    found = 0
-    for line in f:
-        l = line.split()
-        a = l[0]
-        if a==expn:
-            found = 1
-            redshift = float(l[1])
-            mvir = float(l[2])
-            rvir = float(l[3])
-    if found==0:
-        print 'Could not find {0:s} in {1:s}{2:s}'.format(expn, summaryLoc, summaryFile)
+    l = f.readline().split()
+    a = l[0]
+    if a==expn:
+        found = 1
+        redshift = float(l[1])
+        mvir = float(l[2])
+        rvir = float(l[3])
+    else:
+        print 'Could not find {0:s} in {1:s}'.format(expn, sumFile)
         sys.exit()
     f.close()
 
-    f = open('galaxy.props', 'w')
+    # Write the galaxy.props file
+    with open('galaxy.props', 'w') as f:
 
-    s = 'galID          {0:s}\n'.format(galID)
-    f.write(s)
-    s = 'Expn           {0:s}\n'.format(expn)
-    f.write(s)
-    s = 'Redshift       {0:.3f}\n'.format(redshift)
-    f.write(s)
-    s = 'Mvir           {0:.4e}\n'.format(mvir)
-    f.write(s)
-    s = 'Rvir           {0:.4f}\n'.format(rvir)
-    f.write(s)
-    s = 'Inclination    {0:.1f}\n'.format(inc)
-    f.write(s)
+        s = 'galID          {0:s}\n'.format(galID)
+        f.write(s)
+        s = 'Expn           {0:s}\n'.format(expn)
+        f.write(s)
+        s = 'Redshift       {0:.3f}\n'.format(redshift)
+        f.write(s)
+        s = 'Mvir           {0:.4e}\n'.format(mvir)
+        f.write(s)
+        s = 'Rvir           {0:.4f}\n'.format(rvir)
+        f.write(s)
+        s = 'Inclination    {0:.1f}\n'.format(inc)
+        f.write(s)
 
-    f.close()
 
 
     

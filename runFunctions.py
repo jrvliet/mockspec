@@ -32,8 +32,8 @@ def runCellfinder(codeLoc, numcores):
     Runs cellfinder, which determines which cells lie along each LOS.
     Is fully paralellzied. Creates cellID files.
     """
-    print os.getcwd()
-    command = codeLoc+'/funcs/cellfinder/cellfinder {0:d}'.format(numcores)
+    cwd = os.getcwd()
+    command = codeLoc+'/funcs/cellfinder/cellfinder {0:d} {1:s}'.format(numcores, cwd)
     try:
         check_call(command, shell=True)
     except:

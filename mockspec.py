@@ -58,24 +58,25 @@ print '\tCullabs:     {0:d}'.format(runCullabs)
 print '\tLocateCells: {0:d}'.format(runLocateCells)
 
 # Test the summary location
-sumFile = '{0:s}/{1:s}.dat'.format(summaryLoc, galID)
-if not os.path.isfile(sumFile):
+sumFile = '{0:s}/rotmat_a{1:s}.txt'.format(os.getcwd(), expn)
+
+#sumFile = '{0:s}/{1:s}.dat'.format(summaryLoc, galID)
+#if not os.path.isfile(sumFile):
     # Summary file does not exit
     # make it
-    rotfile = '../output/rotmat_a{0:s}.txt'.format(expn)
-    f = open(sumFile,'w')
-    frot = open(rotfile)
-    header = frot.readline()
-    print header
-    f.write(header)
-    f.write(header)
-    for line in frot:
-        print line
-        f.write(line)
-    frot.close()
-    f.close()
+#    rotfile = '../output/rotmat_a{0:s}.txt'.format(expn)
+##    f = open(sumFile,'w')
+#    frot = open(rotfile)
+#    header = frot.readline()
+#    print header
+#    f.write(header)
+#    f.write(header)
+#    for line in frot:
+#        print line
+#        f.write(line)
+#    frot.close()
+#    f.close()
 
-os.getcwd()
 
 
 # Generate gal_props.dat file

@@ -29,8 +29,10 @@
 int main(int argc, char *argv[]){
 
   int numcores;
+  char cwd[200];
   sscanf(argv[1], "%d", &numcores);
   printf("Number of cores to use: %d\n", numcores);
+  strcpy(cwd, argv[2]);
 
   FILE *propfp0 = fopen("gal_props.dat", "r");
   FILE *propfp = propfp0;
@@ -64,7 +66,7 @@ int main(int argc, char *argv[]){
   read_control_file(propfp, gasfile, galID, rootname, &aexpn, summaryLoc);
 
   // Read summary file
-  read_summary(galID, &aexpn, summaryLoc, &mvir, &rvir, &a11, &a12, &a13, &a21, &a22, &a23, &a31, &a32, &a33, &vpec_x, &vpec_y, &vpec_z);
+  read_summary(galID, &aexpn, cwd, &mvir, &rvir, &a11, &a12, &a13, &a21, &a22, &a23, &a31, &a32, &a33, &vpec_x, &vpec_y, &vpec_z);
 
   Xcom = 0.0;
   Ycom = 0.0;

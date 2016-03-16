@@ -40,18 +40,22 @@ void read_control_file(FILE *propfp, char *gasfile, char *galID, char *rootname,
 
 
 
-void read_summary(char *galID, double *aexpn, char *summaryLoc, double *mvir, double *rvir, double *a11, double *a12, double *a13, double *a21, double *a22, double *a23, double *a31, double *a32, double *a33, double *vpec_x, double *vpec_y, double *vpec_z){
+void read_summary(char *galID, double *aexpn, char *cwd, double *mvir, double *rvir, double *a11, double *a12, double *a13, double *a21, double *a22, double *a23, double *a31, double *a32, double *a33, double *vpec_x, double *vpec_y, double *vpec_z){
   
   char new_line[1000];
+  char a[10];
   int found;
   double expn, z;
 
+  sprintf(a, "%.3f", *aexpn);
   // Build the filename of location
   char location[100];
   location[0] = '\0';
-  strcat(location, summaryLoc);
-  strcat(location, galID);
+  strcat(location, cwd);
+  strcat(location, "rotmat_a");
+  strcat(location, a);
   strcat(location, ".dat");
+  
 
   // Open summary file
   FILE *fp = fopen(location, "r");
@@ -62,16 +66,12 @@ void read_summary(char *galID, double *aexpn, char *summaryLoc, double *mvir, do
   }
   // Read past header
   fgets(new_line,sizeof(new_line),fp);
-  fgets(new_line,sizeof(new_line),fp);
 
   // Loop through the file
   found = 0;
   while(fgets(new_line,sizeof(new_line),fp) && found==0) {
-    //    printf("Line in summary file\n %s\n",new_line);
     sscanf(new_line,"%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf ", &expn, &z, mvir, rvir, a11, a12, a13, a21, a22, a23, a31, a32, a33, vpec_x, vpec_y, vpec_z);
 
-//    printf("expn in file: %lf\t aexpn to match: %lf\n", expn, *aexpn);
-//    if (expn==*aexpn){
     if (fabs(expn-*aexpn)<=0.002){
       found = 1;
     }
