@@ -394,6 +394,7 @@ def setup_galaxy_props(sumFile, galID, expn, inc):
 #            print 'Coult not find rotmat file'
 #            sys.exit()
 
+    print 'SumFile = {0:s}'.format(sumFile)
     try:
         f = open(sumFile, 'r')
     except IOError:
