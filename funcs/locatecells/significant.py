@@ -2,6 +2,7 @@
 import numpy as np
 import subprocess as sp
 import locate_funcs as lf
+import locate_files as fi
 from ew import findEW
 
 
@@ -74,6 +75,8 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
     losnum = (linesfile.split('.')[2]).split('los')[1]
 
     # Read in the linesfile
+    with open(linesfile+'.velcut','r') as f:
+        redshift = float(f.readline().strip())
     cell_z, cell_N, cell_b, cell_ID = np.loadtxt(linesfile+'.velcut', skiprows=1,
                                     usecols=(0,1,2,3), unpack=True)
 
@@ -100,11 +103,11 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
     sp.call(command, shell=True)
 
     # Run specsynth on the velcut lines list
-    specsynth_command = codeLoc+'/funcs/mkspec/specsynth los_single.list Mockspec_0SNR.runpars'
-    sp.call(specsynth_command, shell=True)
+    specCommand = codeLoc+'/funcs/mkspec/specsynth los_single.list Mockspec_0SNR.runpars'
+    sp.call(specCommand, shell=True)
 
     # Get the EW of this noise-less spectra
-    bluewave, redwave = lf.transition_name(ion, codeLoc)
+    bluewave, redwave = fi.transition_name(ion, codeLoc)
 
     specFileBase = '{0:s}.{1:s}.los{2:s}.{3:s}.spec'
     specfile = specFileBase.format(galID, ion, losnum, bluewave)
@@ -126,6 +129,7 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
     ew = findEW(wavelength, velocity, flux, negVelLimit, posVelLimit)
     ewdiff = abs( (ewSysabs - ew) / ewSysabs )
     ew_velcut_lines = ew
+    ewVelcut = ew
 
     #################################################################
     #                                                               #
@@ -149,16 +153,15 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
     else:
 
         start = 0
-        end = len(lines_z)
-        sigEnd = search(start, end, ewcut, cell_z, cell_b, cell_N, cells_ID, 
+        end = len(cell_z)
+        sigEnd = search(start, end, ewcut, cell_z, cell_b, cell_N, cell_ID, 
             redshift, specCommand, specfile, negVelLimit, posVelLimit, ewVelcut)
 
     s = '{0:>8.7f}\t{1:>8f}\t{2:>8f}\t{3:>8d}\n'
-    with open(linesfile+'.lines.final', 'w') as f:
+    with open(linesfile+'.final', 'w') as f:
         f.write('{0:.16f}\n'.format(redshift))
         for i in range(0,sigEnd):
-            f_newlines.write(s.format(cell_z[i], cell_N[i],
-                                      cell_b[i], int(cell_ID[i])))
+            f.write(s.format(cell_z[i], cell_N[i], cell_b[i], int(cell_ID[i])))
         
 
 
