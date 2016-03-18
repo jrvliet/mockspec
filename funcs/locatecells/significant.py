@@ -147,22 +147,24 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
     
     # If there is only one cell in the file, stop. Clearly that cell
     # is responsible for all the absorption
-    if numcells == 1:
-        singleCellCount += 1
-    
-    else:
-
-        start = 0
-        end = len(cell_z)
-        sigEnd = search(start, end, ewcut, cell_z, cell_b, cell_N, cell_ID, 
-            redshift, specCommand, specfile, negVelLimit, posVelLimit, ewVelcut)
-
     s = '{0:>8.7f}\t{1:>8f}\t{2:>8f}\t{3:>8d}\n'
     with open(linesfile+'.final', 'w') as f:
         f.write('{0:.16f}\n'.format(redshift))
-        for i in range(0,sigEnd):
-            f.write(s.format(cell_z[i], cell_N[i], cell_b[i], int(cell_ID[i])))
-        
+
+        if numcells == 1:
+            singleCellCount += 1
+            sigEnd = 1    
+            f.write(s.format(cell_z, cell_N, cell_b, int(cell_ID)))
+
+        else:
+            start = 0
+            end = len(cell_z)
+            sigEnd = search(start, end, ewcut, cell_z, cell_b, cell_N, cell_ID, 
+                redshift, specCommand, specfile, negVelLimit, posVelLimit, ewVelcut)
+
+            for i in range(0,sigEnd):
+                f.write(s.format(cell_z[i], cell_N[i], cell_b[i], int(cell_ID[i])))
+            
 
 
 

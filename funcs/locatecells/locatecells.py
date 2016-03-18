@@ -113,8 +113,8 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
         print linesfile
         if testing==1:
             print '\t Finding significant cells'
-        endCut = sg.sigcells(linesfile, ewcut, codeLoc, testing=testing)
-#        singleCount += lf.sigcells(linesfile, ewcut, codeLoc, testing=testing)
+#        endCut = sg.sigcells(linesfile, ewcut, codeLoc, testing=testing)
+        singleCount += lf.sigcells(linesfile, ewcut, codeLoc, testing=testing)
         print linesfile
         # Get the properties of the cells
         # Open the lines.final file

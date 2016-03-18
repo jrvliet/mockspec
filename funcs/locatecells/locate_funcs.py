@@ -52,48 +52,59 @@ def velcut(linesfile, testing=0):
     # Define constants
     c = 3.0e5   # Speed of light in km/s
 
+    print linesfile
     cell_z, cell_N, cell_b, cell_ID = np.loadtxt(linesfile, skiprows=1, 
                                     usecols=(0,1,2,3), unpack=True)
 
-    # Read in the redshift of the absorption
-    # This is the first line of the .lines file
-    with open(linesfile, 'r') as f:
-        redshift = float(f.readline().strip())
+    # Check that are more than one cell in the lines file
+    if type(cell_z) is not np.float64:
 
-    # Get the velcoity limits of the absorption
-    negVelLim, posVelLim, ewSysabs = vel_limits(linesfile)
+        # Read in the redshift of the absorption
+        # This is the first line of the .lines file
+        with open(linesfile, 'r') as f:
+            redshift = float(f.readline().strip())
 
-    if testing==1:
-        print '\t\tBefore velcut, number of cells: ', len(cell_z)
-        print '\t\tFrom sysabs:'
-        print '\t\t\tNeg Vel Limt: {0:f}'.format(negVelLimit)
-        print '\t\t\tPos_vel_limi: {0:f}'.format(posVelLimit)
-        print '\t\t\tEW:           {0:f}'.format(ewSysabs)
+        # Get the velcoity limits of the absorption
+        negVelLim, posVelLim, ewSysabs = vel_limits(linesfile)
 
-    # New .lines file
-    newlinesfile = linesfile+'.velcut'
-    f_newlines = open(newlinesfile, 'w')
-    
-    # Write the first line
-    f_newlines.write('{0:.16f}\n'.format(redshift))
-    
-    # Loop through the original .lines file
-    velcutCount = 0
-    s = '{0:>8.7f}\t{1:>8f}\t{2:>8f}\t{3:>8d}\n'
-    for i in range(0,len(cell_z)):
+        if testing==1:
+            print '\t\tBefore velcut, number of cells: ', len(cell_z)
+            print '\t\tFrom sysabs:'
+            print '\t\t\tNeg Vel Limt: {0:f}'.format(negVelLimit)
+            print '\t\t\tPos_vel_limi: {0:f}'.format(posVelLimit)
+            print '\t\t\tEW:           {0:f}'.format(ewSysabs)
 
-        # Calcuate the peculiar velocity of the cell
-        vpec = c*( (cell_z[i]-redshift) / (1.0+redshift) )
+        # New .lines file
+        newlinesfile = linesfile+'.velcut'
+        f_newlines = open(newlinesfile, 'w')
+        
+        # Write the first line
+        f_newlines.write('{0:.16f}\n'.format(redshift))
+        
+        # Loop through the original .lines file
+        velcutCount = 0
+        s = '{0:>8.7f}\t{1:>8f}\t{2:>8f}\t{3:>8d}\n'
+        for i in range(0,len(cell_z)):
 
-        # If the cell is inside the velocity range, write to file
-        if vpec>negVelLim and vpec<posVelLim:
-            f_newlines.write(s.format(cell_z[i], cell_N[i], cell_b[i], int(cell_ID[i])))
-            velcutCount += 1
+            # Calcuate the peculiar velocity of the cell
+            vpec = c*( (cell_z[i]-redshift) / (1.0+redshift) )
 
-    f_newlines.close()
-    
-    if testing==1:
-        print '\t\tAfter velcut, number of cells: ', velcutCount
+            # If the cell is inside the velocity range, write to file
+            if vpec>negVelLim and vpec<posVelLim:
+                f_newlines.write(s.format(cell_z[i], cell_N[i], cell_b[i], int(cell_ID[i])))
+                velcutCount += 1
+
+        f_newlines.close()
+        
+        if testing==1:
+            print '\t\tAfter velcut, number of cells: ', velcutCount
+
+    else:       
+        # Original lines file only has one cell
+        command = 'cp {0:s} {0:s}.velcut'.format(linesfile)
+        sp.call(command, shell=True) 
+
+
 
 ###############################################################################
 ###############################################################################
