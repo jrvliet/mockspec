@@ -7,14 +7,15 @@ from ew import findEW
 
 
 def search(start, end, ewcut, lines_z, lines_b, lines_N, lines_ID, redshift, 
-            specCommand, specfile, negVelLimit, posVelLimit, ewVelcut):
+            specCommand, specfile, negVelLimit, posVelLimit, ewVelcut, flog):
 
     '''
     Recursively search for significant cells
     '''
    
     # Check if are at the end
-    if (start-end)<=1:
+    if abs(start-end)<=1:
+        flog.write('{0:d}\t{1:d}\tDone\n'.format(start,end))
         return end
     else:
         # Get midpoint
@@ -41,6 +42,7 @@ def search(start, end, ewcut, lines_z, lines_b, lines_N, lines_ID, redshift,
                                                 unpack=True)
         ew = findEW(wavelength, velocity, flux, negVelLimit, posVelLimit)
         ewdiff = abs( (ewVelcut - ew) / ewVelcut)*100
+        flog.write('{0:d}\t{1:d}\t{2:d}\t{3:.3f}\t{4:.3f}\n'.format(len(lines_z), start, end, ew, ewdiff))
     
         if ewdiff<ewcut:
             # Not deep enough cut
@@ -48,17 +50,17 @@ def search(start, end, ewcut, lines_z, lines_b, lines_N, lines_ID, redshift,
             end = mid
             search(start, end, ewcut, lines_z, lines_b, lines_N, lines_ID, 
                     redshift, specCommand, specfile, negVelLimit, posVelLimit,
-                    ewVelcut)
+                    ewVelcut, flog)
         else:
             # Cut is too deep
             # Need to include more of cut cells 
             start = mid
             search(start, end, ewcut, lines_z, lines_b, lines_N, lines_ID, 
                     redshift, specCommand, specfile, negVelLimit, posVelLimit,
-                    ewVelcut)
+                    ewVelcut, flog)
     return end
 
-def sigcells(linesfile, ewcut, codeLoc, testing=0):
+def sigcells(linesfile, ewcut, codeLoc, flog, testing=0):
     '''
     Determines which cells are the significiant contributers
     to the EW measurement. Cells are removed until the EW of 
@@ -73,6 +75,8 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
     galID  = linesfile.split('.')[0]
     ion    = linesfile.split('.')[1]
     losnum = (linesfile.split('.')[2]).split('los')[1]
+
+    flog.write('\n{0:s}\n'.format(losnum))
 
     # Read in the linesfile
     with open(linesfile+'.velcut','r') as f:
@@ -160,7 +164,8 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
             start = 0
             end = len(cell_z)
             sigEnd = search(start, end, ewcut, cell_z, cell_b, cell_N, cell_ID, 
-                redshift, specCommand, specfile, negVelLimit, posVelLimit, ewVelcut)
+                redshift, specCommand, specfile, negVelLimit, posVelLimit, 
+                ewVelcut, flog)
 
             for i in range(0,sigEnd):
                 f.write(s.format(cell_z[i], cell_N[i], cell_b[i], int(cell_ID[i])))

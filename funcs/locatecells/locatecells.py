@@ -73,6 +73,7 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
         print 'Sysabs files aggregated'
         print 'Number of sysabs files: ', len(sysabs_losnum)
 
+    flog = open('sig_cells.log', 'w')
     for i in range(0,len(sysabs_losnum)):
 
         losnum = sysabs_losnum[i].split('.')[2].split('los')[1]
@@ -110,11 +111,10 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
         lf.velcut(linesfile, testing=testing)
 
         # Find the significant cells
-        print linesfile
         if testing==1:
             print '\t Finding significant cells'
-#        endCut = sg.sigcells(linesfile, ewcut, codeLoc, testing=testing)
-        singleCount += lf.sigcells(linesfile, ewcut, codeLoc, testing=testing)
+        endCut = sg.sigcells(linesfile, ewcut, codeLoc, flog, testing=testing)
+#        singleCount += lf.sigcells(linesfile, ewcut, codeLoc, testing=testing)
         print linesfile
         # Get the properties of the cells
         # Open the lines.final file
@@ -135,6 +135,12 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
             z = box[index,3]
             density = np.log10(box[index,7])
             temperature = np.log10(box[index,8])
+#        print '\tMean: {0:f}\t{1:f}'.format(np.mean(new[:,i]), np.mean(old[:,i]))
+#        print '\tMean: {0:f}\t{1:f}'.format(np.mean(new[:,i]), np.mean(old[:,i]))
+#        print '\tMean: {0:f}\t{1:f}'.format(np.mean(new[:,i]), np.mean(old[:,i]))
+#        print '\tMean: {0:f}\t{1:f}'.format(np.mean(new[:,i]), np.mean(old[:,i]))
+#        print '\tMean: {0:f}\t{1:f}'.format(np.mean(new[:,i]), np.mean(old[:,i]))
+#        print '\tMean: {0:f}\t{1:f}'.format(np.mean(new[:,i]), np.mean(old[:,i]))
             snII = box[index,9]
             snIa = box[index,10]
             alphaZ = box[index,16]
@@ -150,7 +156,8 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
         # Rename the original .linse file back to its full name
         command = 'cp '+linesfile+'.tmp '+linesfile
         sp.call(command, shell=True)
-        
+      
+    flog.close()  
     f_out.close()
 
     print 'For {0:s}, {1:d} LOS are dominated by one cell'.format(ion, singleCount)
