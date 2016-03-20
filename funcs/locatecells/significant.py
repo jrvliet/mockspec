@@ -7,17 +7,24 @@ from ew import findEW
 
 
 def search(start, end, ewcut, lines_z, lines_b, lines_N, lines_ID, redshift, 
-            specCommand, specfile, negVelLimit, posVelLimit, ewVelcut, flog):
+            specCommand, linesfile, specfile, negVelLimit, posVelLimit, 
+            ewVelcut, flog, depth):
 
     '''
     Recursively search for significant cells
     '''
-   
+    maxDepth = 500   
+
     # Check if are at the end
+    if depth>maxDepth:
+        flog.write('{0:d}\t{1:d}\tMax Depth Reached\n'.format(start,end))
     if abs(start-end)<=1:
         flog.write('{0:d}\t{1:d}\tDone\n'.format(start,end))
         return end
     else:
+
+        depth += 1
+
         # Get midpoint
         mid = int((end-start)/2)
         
@@ -32,7 +39,7 @@ def search(start, end, ewcut, lines_z, lines_b, lines_N, lines_ID, redshift,
         with open(linesfile, 'w') as f:            
             f.write('{0:.16f}\n'.format(redshift))
             for i in range(0,len(cut_z)):
-                f_newlines.write(s.format(cut_z[i], cut_N[i],
+                f.write(s.format(cut_z[i], cut_N[i],
                                           cut_b[i], int(cut_ID[i])))
         # Run specsynth
         sp.call(specCommand, shell=True)
@@ -49,15 +56,15 @@ def search(start, end, ewcut, lines_z, lines_b, lines_N, lines_ID, redshift,
             # Only send in top half
             end = mid
             search(start, end, ewcut, lines_z, lines_b, lines_N, lines_ID, 
-                    redshift, specCommand, specfile, negVelLimit, posVelLimit,
-                    ewVelcut, flog)
+                    redshift, specCommand, linesfile, specfile, negVelLimit, 
+                    posVelLimit, ewVelcut, flog, depth)
         else:
             # Cut is too deep
             # Need to include more of cut cells 
             start = mid
             search(start, end, ewcut, lines_z, lines_b, lines_N, lines_ID, 
-                    redshift, specCommand, specfile, negVelLimit, posVelLimit,
-                    ewVelcut, flog)
+                    redshift, specCommand, linesfile, specfile, negVelLimit, 
+                    posVelLimit, ewVelcut, flog, depth)
     return end
 
 def sigcells(linesfile, ewcut, codeLoc, flog, testing=0):
@@ -163,9 +170,10 @@ def sigcells(linesfile, ewcut, codeLoc, flog, testing=0):
         else:
             start = 0
             end = len(cell_z)
+            depth = 0
             sigEnd = search(start, end, ewcut, cell_z, cell_b, cell_N, cell_ID, 
-                redshift, specCommand, specfile, negVelLimit, posVelLimit, 
-                ewVelcut, flog)
+                redshift, specCommand, linesfile, specfile, negVelLimit, 
+                posVelLimit, ewVelcut, flog, depth)
 
             for i in range(0,sigEnd):
                 f.write(s.format(cell_z[i], cell_N[i], cell_b[i], int(cell_ID[i])))
