@@ -115,7 +115,6 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
             print '\t Finding significant cells'
         endCut = sg.sigcells(linesfile, ewcut, codeLoc, flog, testing=testing)
 #        singleCount += lf.sigcells(linesfile, ewcut, codeLoc, testing=testing)
-        print linesfile
         # Get the properties of the cells
         # Open the lines.final file
         final_file = open(linesfile+'.final')

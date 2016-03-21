@@ -52,7 +52,6 @@ def velcut(linesfile, testing=0):
     # Define constants
     c = 3.0e5   # Speed of light in km/s
 
-    print linesfile
     cell_z, cell_N, cell_b, cell_ID = np.loadtxt(linesfile, skiprows=1, 
                                     usecols=(0,1,2,3), unpack=True)
 
