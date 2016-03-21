@@ -4,6 +4,7 @@ import subprocess as sp
 import locate_funcs as lf
 import locate_files as fi
 from ew import findEW
+import sys
 
 
 def search(start, end, ewcut, lines_z, lines_b, lines_N, lines_ID, redshift, 
@@ -18,6 +19,7 @@ def search(start, end, ewcut, lines_z, lines_b, lines_N, lines_ID, redshift,
     # Check if are at the end
     if depth>maxDepth:
         flog.write('{0:d}\t{1:d}\tMax Depth Reached\n'.format(start,end))
+        return end
     if abs(start-end)<=1:
         flog.write('{0:d}\t{1:d}\tDone\n'.format(start,end))
         return end
@@ -27,12 +29,14 @@ def search(start, end, ewcut, lines_z, lines_b, lines_N, lines_ID, redshift,
 
         # Get midpoint
         mid = int((end-start)/2)
+        index = mid+start
+        mid = index
         
         # Cut the lines
-        cut_z = lines_z[:mid]
-        cut_N = lines_N[:mid]
-        cut_b = lines_b[:mid]
-        cut_ID = lines_ID[:mid]
+        cut_z = lines_z[:index]
+        cut_N = lines_N[:index]
+        cut_b = lines_b[:index]
+        cut_ID = lines_ID[:index]
 
         # Write the new array to the lines file
         s = '{0:>8.7f}\t{1:>8f}\t{2:>8f}\t{3:>8d}\n'
@@ -49,7 +53,7 @@ def search(start, end, ewcut, lines_z, lines_b, lines_N, lines_ID, redshift,
                                                 unpack=True)
         ew = findEW(wavelength, velocity, flux, negVelLimit, posVelLimit)
         ewdiff = abs( (ewVelcut - ew) / ewVelcut)*100
-        flog.write('{0:d}\t{1:d}\t{2:d}\t{3:.3f}\t{4:.3f}\n'.format(len(lines_z), start, end, ew, ewdiff))
+        flog.write('{0:d}\t{1:d}\t{2:d}\t{3:d}\t{4:d}\t{5:.3f}\t{6:.3f}\n'.format(len(lines_z), start, end, mid, len(cut_z), ew, ewdiff))
     
         if ewdiff<ewcut:
             # Not deep enough cut
