@@ -44,7 +44,7 @@ def search(start, end, ewcut, lines_z, lines_b, lines_N, lines_ID, redshift,
             f.write('{0:.16f}\n'.format(redshift))
             for i in range(0,len(cut_z)):
                 f.write(s.format(cut_z[i], cut_N[i],
-                                          cut_b[i], int(cut_ID[i])))
+                                 cut_b[i], int(cut_ID[i])))
         # Run specsynth
         sp.call(specCommand, shell=True)
 
@@ -94,6 +94,13 @@ def sigcells(linesfile, ewcut, codeLoc, flog, testing=0):
         redshift = float(f.readline().strip())
     cell_z, cell_N, cell_b, cell_ID = np.loadtxt(linesfile+'.velcut', skiprows=1,
                                     usecols=(0,1,2,3), unpack=True)
+
+    # Sort the arrays in decreasing column density
+    inds = np.argsort(cell_N)[::-1]
+    cell_z = np.array(cell_z)[inds]
+    cell_N = np.array(cell_N)[inds]
+    cell_b = np.array(cell_b)[inds]
+    cell_ID = np.array(cell_ID)[inds]
 
     if testing==1:
         print 'In sigcells, number of velcut cells read in: ', len(cell_z)

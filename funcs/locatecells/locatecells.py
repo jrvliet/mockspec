@@ -134,12 +134,6 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
             z = box[index,3]
             density = np.log10(box[index,7])
             temperature = np.log10(box[index,8])
-#        print '\tMean: {0:f}\t{1:f}'.format(np.mean(new[:,i]), np.mean(old[:,i]))
-#        print '\tMean: {0:f}\t{1:f}'.format(np.mean(new[:,i]), np.mean(old[:,i]))
-#        print '\tMean: {0:f}\t{1:f}'.format(np.mean(new[:,i]), np.mean(old[:,i]))
-#        print '\tMean: {0:f}\t{1:f}'.format(np.mean(new[:,i]), np.mean(old[:,i]))
-#        print '\tMean: {0:f}\t{1:f}'.format(np.mean(new[:,i]), np.mean(old[:,i]))
-#        print '\tMean: {0:f}\t{1:f}'.format(np.mean(new[:,i]), np.mean(old[:,i]))
             snII = box[index,9]
             snIa = box[index,10]
             alphaZ = box[index,16]
