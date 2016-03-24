@@ -96,23 +96,19 @@ def sigcells(linesfile, ewcut, codeLoc, flog, testing=0):
                                     usecols=(0,1,2,3), unpack=True)
 
     # Sort the arrays in decreasing column density
-    inds = np.argsort(cell_N)[::-1]
-    cell_z = np.array(cell_z)[inds]
-    cell_N = np.array(cell_N)[inds]
-    cell_b = np.array(cell_b)[inds]
-    cell_ID = np.array(cell_ID)[inds]
+    # as long as there are more than one cell
+    if type(cell_z) is np.ndarray:
+        inds = np.argsort(cell_N)[::-1]
+        cell_z = np.array(cell_z)[inds]
+        cell_N = np.array(cell_N)[inds]
+        cell_b = np.array(cell_b)[inds]
+        cell_ID = np.array(cell_ID)[inds]
 
     if testing==1:
         print 'In sigcells, number of velcut cells read in: ', len(cell_z)
 
     # Get the EW from sysabs
     negVelLimit, posVelLimit, ewSysabs = lf.vel_limits(linesfile)
-
-    #################################################################
-    #                                                               #
-    #     Generate a noise-less spectra for the velcut .lines file  #
-    #                                                               #
-    #################################################################
 
     # Create a los.list file containing only this LOS
     with open('los_single.list', 'w') as fLos:
@@ -130,11 +126,9 @@ def sigcells(linesfile, ewcut, codeLoc, flog, testing=0):
 
     # Get the EW of this noise-less spectra
     bluewave, redwave = fi.transition_name(ion, codeLoc)
-
     specFileBase = '{0:s}.{1:s}.los{2:s}.{3:s}.spec'
     specfile = specFileBase.format(galID, ion, losnum, bluewave)
     redspecfile = specFileBase.format(galID, ion, losnum, redwave)
-
 
     # Copy the initial quiet spectra
     command = 'cp {0:s} {0:s}.velcutclean'.format(specfile)
