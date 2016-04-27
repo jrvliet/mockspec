@@ -110,6 +110,7 @@ else:
 #  Set up inclination directory
 #
 #####
+mainLoc = os.getcwd()
 incLoc = fi.setup_inclination_dir(incline, ions, runRates, galID, expn)
 os.chdir(incLoc)
 
@@ -122,7 +123,7 @@ os.chdir(incLoc)
 #####
 if runGenLOS==1:
     print '\nGenerating lines of sight...'
-    rf.genLOS( codeLoc, galID, summaryLoc, expn, incline, 
+    rf.genLOS( codeLoc, galID, mainLoc, expn, incline, 
                nlos, maximpact, ncores)   
 else:
     print 'Skipping genLOS...'

@@ -3,7 +3,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
-void read_control_file(FILE *propfp, char *gasfile, char *galID, char *rootname, double *aexpn, char *summaryLoc){
+
+void read_control_file(FILE *propfp, char *gasfile, char *galID, char *rootname,
+                         double *aexpn, char *summaryLoc){
 
   char new_line[100], dum[100], gas_dum[100];
   int i;
@@ -40,7 +42,11 @@ void read_control_file(FILE *propfp, char *gasfile, char *galID, char *rootname,
 
 
 
-void read_summary(char *galID, double *aexpn, char *cwd, double *mvir, double *rvir, double *a11, double *a12, double *a13, double *a21, double *a22, double *a23, double *a31, double *a32, double *a33, double *vpec_x, double *vpec_y, double *vpec_z){
+void read_summary(char *galID, double *aexpn, char *cwd, double *mvir, 
+                    double *rvir, double *a11, double *a12, double *a13, 
+                    double *a21, double *a22, double *a23, double *a31, 
+                    double *a32, double *a33, double *vpec_x, double *vpec_y, 
+                    double *vpec_z){
   
   char new_line[1000];
   char a[10];
@@ -52,15 +58,15 @@ void read_summary(char *galID, double *aexpn, char *cwd, double *mvir, double *r
   char location[100];
   location[0] = '\0';
   strcat(location, cwd);
-  strcat(location, "rotmat_a");
+  strcat(location, "/../rotmat_a");
   strcat(location, a);
-  strcat(location, ".dat");
+  strcat(location, ".txt");
   
 
   // Open summary file
   FILE *fp = fopen(location, "r");
   if (fp==NULL){
-    printf("\nERROR in read_summary function in cellfinder-subs.c\n");
+    printf("\nERROR in read_summary function in cellfinder_subs.c\n");
     printf("Cannot open file %s \n", location);
     exit(1);
   }
@@ -70,7 +76,9 @@ void read_summary(char *galID, double *aexpn, char *cwd, double *mvir, double *r
   // Loop through the file
   found = 0;
   while(fgets(new_line,sizeof(new_line),fp) && found==0) {
-    sscanf(new_line,"%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf ", &expn, &z, mvir, rvir, a11, a12, a13, a21, a22, a23, a31, a32, a33, vpec_x, vpec_y, vpec_z);
+    sscanf(new_line,"%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf ", 
+            &expn, &z, mvir, rvir, a11, a12, a13, a21, a22, a23, a31, a32, a33,
+            vpec_x, vpec_y, vpec_z);
 
     if (fabs(expn-*aexpn)<=0.002){
       found = 1;

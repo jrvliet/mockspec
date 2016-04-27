@@ -13,7 +13,7 @@ int main (int argc, char *argv[]){
     
     // Read in command line arguments
     // 1 = galID
-    // 2 = location of summary files
+    // 2 = current location where code is being run
     // 3 = expansion parameter
     // 4 = inclination 
     // 5 = number of LOS
@@ -59,8 +59,9 @@ int main (int argc, char *argv[]){
 
     char sumfile[300];
     strcpy(sumfile, summaryLoc);
-    strcat(sumfile, galID);
-    strcat(sumfile, ".dat");
+    strcat(sumfile, "/rotmat_a");
+    strcat(sumfile, expn);
+    strcat(sumfile, ".txt");
     char new_line[1000];    
     FILE *fp = fopen(sumfile, "r");
 
@@ -70,8 +71,7 @@ int main (int argc, char *argv[]){
         printf("Exitting....\n\n");
         exit(1);
     }
-    // Read in the summary file, skipping past the two headers
-    fgets(new_line, sizeof(new_line), fp);
+    // Read in the summary file, skipping past the one header row
     fgets(new_line, sizeof(new_line), fp);
     int found = 0;
     while(fgets(new_line, sizeof(new_line), fp)){
