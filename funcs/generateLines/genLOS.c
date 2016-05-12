@@ -162,7 +162,7 @@ int main (int argc, char *argv[]){
     a_stg[1][1] = cos(inc);    
     a_stg[1][2] = -1.0*sin(inc);    
 
-    a_stg[2][0] = 1.0;    
+    a_stg[2][0] = 0.0;    
     a_stg[2][1] = sin(inc);    
     a_stg[2][2] = cos(inc);    
 

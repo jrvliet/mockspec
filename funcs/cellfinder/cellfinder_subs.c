@@ -62,6 +62,7 @@ void read_summary(char *galID, double *aexpn, char *cwd, double *mvir,
   strcat(location, a);
   strcat(location, ".txt");
   
+  printf("Summary location in read_summary: %s\n", location);
 
   // Open summary file
   FILE *fp = fopen(location, "r");
