@@ -19,6 +19,7 @@ import funcs.locatecells.locatecells as lc
 import funcs.idcells.idcells as ic
 import runFunctions as rf 
 import funcs.sigcells.sigcells as sc
+import funcs.analysis.analysis_control as ac
 
 # Get the location where the code lives
 pathname = os.path.dirname(sys.argv[0])
@@ -251,6 +252,9 @@ for ion in ions:
     os.chdir('..')
 
     
-
+# Create basic plots
+if runAnalysis==1:
+    print '\n\nGenerating plots'
+    ac.make_plots(ions)
 
 
