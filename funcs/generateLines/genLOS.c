@@ -19,7 +19,7 @@ int main (int argc, char *argv[]){
     // 5 = number of LOS
     // 6 = maximum impact paramter (in Rvir)
     // 7 = number of cores to use (not used anywhere here)
-    char *galID = argv[1];
+//    char *galID = argv[1];
     char *summaryLoc = argv[2];
     char *expn = argv[3];
     sscanf(expn, "%lf", &a);
