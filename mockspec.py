@@ -31,7 +31,7 @@ requiredLoc = codeLoc+'/controls/'
 print '\n\nReading in control file...'
 props, flags, ions, xh, instruments = fi.read_control_file()
 galID, expn, nlos, maximpact, incline, ewcut, snr, ncores, rootLoc, sigcellsCut = props
-runRates, runGenLOS, runCellfinder, runIdcells, runLos7, runSpecsynth, runSysanal, runCullabs, runLocateCells = flags
+runRates, runGenLOS, runCellfinder, runIdcells, runLos7, runSpecsynth, runSysanal, runCullabs, runLocateCells, runPlotting = flags
 
 # Genearte the name of the gasfile
 gasfile = galID+'_GZa'+expn+'.txt'
@@ -57,6 +57,7 @@ print '\tSpecsynth:   {0:d}'.format(runSpecsynth)
 print '\tSysanal:     {0:d}'.format(runSysanal)
 print '\tCullabs:     {0:d}'.format(runCullabs)
 print '\tLocateCells: {0:d}'.format(runLocateCells)
+print '\tPlotting:    {0:d}'.format(runPlotting)
 
 # Test the summary location
 sumFile = '{0:s}/rotmat_a{1:s}.txt'.format(os.getcwd(), expn)
@@ -253,7 +254,7 @@ for ion in ions:
 
     
 # Create basic plots
-if runAnalysis==1:
+if runPlotting==1:
     print '\n\nGenerating plots'
     ac.make_plots(ions)
 
