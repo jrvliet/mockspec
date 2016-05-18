@@ -19,7 +19,7 @@ import funcs.locatecells.locatecells as lc
 import funcs.idcells.idcells as ic
 import runFunctions as rf 
 import funcs.sigcells.sigcells as sc
-import funcs.analysis.analysis_control as ac
+import funcs.plotting.analysis_control as ac
 
 # Get the location where the code lives
 pathname = os.path.dirname(sys.argv[0])

@@ -11,7 +11,7 @@ import subprocess as sp
 import os
 import sys
 
-def column_distribution(ions)
+def column_distribution(ions):
 
     # Read in the galaxy properties from galaxy.props
     f = open('galaxy.props')

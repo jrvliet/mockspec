@@ -14,7 +14,7 @@ import covering as cv
 import ewVsd as ew
 import ewdist as ed
 import nT as nt
-import columdist as co
+import columndist as co
 
 def make_plots(ions):
 

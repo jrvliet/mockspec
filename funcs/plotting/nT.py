@@ -54,7 +54,7 @@ def phase(ions):
     yed = []
     i+=1
     binrange = [[-8, 1], [2, 8]]
-    for ion in is:
+    for ion in ions:
         print galID, '\t', ion
 
         # Open the data 
