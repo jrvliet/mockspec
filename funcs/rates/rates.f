@@ -44,9 +44,8 @@ c
       include           'rates.com'
       include           'com-modes.com'
       include           'getcube.com'
-c      character*300     codeLoc
+      character*300     codeLoc
 
-c      CALL getarg(1, codeLoc)
 
 
 
@@ -71,6 +70,9 @@ c     table, UVB, and Sb99 data paths (global)
 c     TABPATH is where the atomic data tables live
 c     UVBPATH is where the Haardt & Madau UVB SEDs live
 c     SB99PATH is where the Starburst99 SEDs live
+c     Get this information from the command line
+      CALL getarg(1, codeLoc)
+      write(*,*) codeLoc
 c      tabpath='/lustre/projects/p089_swin/jvander/mockspec/data/grid/'
 c      UVBpath='/lustre/projects/p089_swin/jvander/mockspec/data/uvb/'
 c      Sb99path='/lustre/projects/p089_swin/jvander/mockspec/data/sb99'
