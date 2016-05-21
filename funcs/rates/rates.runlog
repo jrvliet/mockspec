@@ -1,8 +1,9 @@
   
  ........................................
  .                                      .
- .         GRID ION CODE V2.0           .
- .           November 2013              .
+ .         GRID ION CODE V3.0           .
+ .         with selfshielding           .
+ .           November 2014              .
  .                                      .
  ........................................
   
@@ -13,35 +14,52 @@
    obtaining ionization physics modes...
    obtaining the chemical mixture...
   
-  DATA CUBE INFO
+  PROCESSING INFO
     Gas Box  =  MW9_GZ932.a1.001.txt                    
     redshift =  0.000000000
-   No. of outfiles =  4
-    outfile =  MW9_GZ932.a1.001.HI.txt                           
-    for ion =  HI                                                
-    outfile =  MW9_GZ932.a1.001.OVI.txt                          
-    for ion =  OVI                                               
-    outfile =  MW9_GZ932.a1.001.CIV.txt                          
-    for ion =  CIV                                               
-    outfile =  MW9_GZ932.a1.001.MgII.txt                         
-    for ion =  MgII                                              
+    No. of iongrids =  4
+    iongrid =  MW9_GZ932.a1.001.HI.txt                           
+    iongrid =  MW9_GZ932.a1.001.OVI.txt                          
+    iongrid =  MW9_GZ932.a1.001.CIV.txt                          
+    iongrid =  MW9_GZ932.a1.001.MgII.txt                         
   
-  LSF DATA
+  SOLUTION CONVERGENCE
    tolerance =  1.490E-08
+  
+  INCLUDED ATOMIC SPECIES
    Nspecies  =  12
+      Z    Elem  Levels
+      1     H         2
+      2     He        3
+      6     C         7
+      7     N         8
+      8     O         9
+     10     Ne       11
+     12     Mg       13
+     13     Al       14
+     14     Si       15
+     16     S        17
+     20     Ca       21
+     26     Fe       27
   
   IONIZATION PHYSICS
-   photoionization is UVB only
-   Auger ionization included
-   loading UVB SED library
-   constructing UVB SED
-   populating photo cross section data
-   collisional processes include:
-   -low T dielectronic recombination
-   -high T dielectronic recombination
-   -charge exchange recombination
-   -direct collisional ionization
-   -excitation autoionization
-   -charge exchange ionization
+   * photoionization is ON
+   * self-shielding is OFF
+    + photoionization is UVB only
+      loading UVB SED library
+      loading photo cross-section data
+   * Auger ionization is ON
+      loading Auger yields
+   * collisional ionization is ON:
+    + direct collisional ionization
+    + excitation autoionization
+    + charge-exchange ionization
+      loading collisional cross-section data
+   * two-body radiative recombination is ON:
+   * low-T dielectronic recombination is ON
+   * high-T dielectronic recombination is ON
+   * charge-exchange recombination is ON
+      loading recombination data
   
-  READING DATA CUBE...
+  HYDRO DATA CUBE
+  processing gas cell data...

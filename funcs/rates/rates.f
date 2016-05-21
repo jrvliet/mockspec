@@ -44,9 +44,9 @@ c
       include           'rates.com'
       include           'com-modes.com'
       include           'getcube.com'
-c      character*300     codeLoc
+      character*300     codeLoc
+      character*20      tab,uvb,sb
 
-c      CALL getarg(1, codeLoc)
 
 
 
@@ -71,6 +71,17 @@ c     table, UVB, and Sb99 data paths (global)
 c     TABPATH is where the atomic data tables live
 c     UVBPATH is where the Haardt & Madau UVB SEDs live
 c     SB99PATH is where the Starburst99 SEDs live
+c     Get this information from the command line
+      CALL getarg(1, codeLoc)
+
+c     Build the path to the tables
+      tab = '/data/grid/'
+      uvb = '/data/uvb/'
+      sb = '/data/sb99/'
+      tabpath  = trim(codeLoc) // trim(tab)
+      UVBpath  = trim(codeLoc) // trim(uvb)
+      Sb99path = trim(codeLoc) // trim(sb)
+
 c      tabpath='/lustre/projects/p089_swin/jvander/mockspec/data/grid/'
 c      UVBpath='/lustre/projects/p089_swin/jvander/mockspec/data/uvb/'
 c      Sb99path='/lustre/projects/p089_swin/jvander/mockspec/data/sb99'
@@ -79,9 +90,9 @@ c      tabpath  = '/home/matrix2/cwc/Projects/Mockspec/GridCode/'
 c      UVBpath  = '/home/matrix2/cwc/Projects/Mockspec/UVBspectrum/'
 c      Sb99path = '/home/matrix2/cwc/Projects/Mockspec/Sb99spectrum/'
 
-      tabpath  = '/home/jacob/research/code/mockspec/data/grid/'
-      UVBpath  = '/home/jacob/research/code/mockspec/data/uvb/'
-      Sb99path = '/home/jacob/research/code/mockspec/data/sb99/'
+c      tabpath  = '/home/jacob/research/code/mockspec/data/grid/'
+c      UVBpath  = '/home/jacob/research/code/mockspec/data/uvb/'
+c      Sb99path = '/home/jacob/research/code/mockspec/data/sb99/'
 
 c      tabpath  = '/home/hyades/jrvander/mockspec/data/grid/'
 c      UVBpath  = '/home/hyades/jrvander/mockspec/data/uvb/'

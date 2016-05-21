@@ -68,10 +68,17 @@ def setup_rates_outputs(galID, expn, ion_list, codeLoc, requiredLoc):
 
 def run_rates(codeLoc):
     
-    command = codeLoc+'/funcs/rates/rates'
+    command = '{0:s}/funcs/rates/rates {0:s}'.format(codeLoc)
     try:
         sp.check_call(command, shell=True) 
     except:
         print '\n\nCould not run rates with \n\t{0:s}'.format(command)
         print 'Exiting....'
         sys.exit()
+
+
+
+
+
+
+
