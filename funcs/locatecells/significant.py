@@ -53,7 +53,8 @@ def search(start, end, ewcut, lines_z, lines_b, lines_N, lines_ID, redshift,
                                                 unpack=True)
         ew = findEW(wavelength, velocity, flux, negVelLimit, posVelLimit)
         ewdiff = abs( (ewVelcut - ew) / ewVelcut)*100
-        flog.write('{0:d}\t{1:d}\t{2:d}\t{3:d}\t{4:d}\t{5:.3f}\t{6:.3f}\n'.format(len(lines_z), start, end, mid, len(cut_z), ew, ewdiff))
+        flog.write('{0:d}\t{1:d}\t{2:d}\t{3:d}\t{4:d}\t{5:.3f}\t{6:.3f}\n'.format(
+                    len(lines_z), start, end, mid, len(cut_z), ew, ewdiff))
     
         if ewdiff<ewcut:
             # Not deep enough cut
@@ -90,77 +91,96 @@ def sigcells(linesfile, ewcut, codeLoc, flog, testing=0):
     flog.write('\n{0:s}\n'.format(losnum))
 
     # Read in the linesfile
+    cell_z, cell_N, cell_b, cell_ID = [], [], [], []
     with open(linesfile+'.velcut','r') as f:
         redshift = float(f.readline().strip())
-    cell_z, cell_N, cell_b, cell_ID = np.loadtxt(linesfile+'.velcut', skiprows=1,
-                                    usecols=(0,1,2,3), unpack=True)
-
-    # Sort the arrays in decreasing column density
-    # as long as there are more than one cell
-    if type(cell_z) is np.ndarray:
-        inds = np.argsort(cell_N)[::-1]
-        cell_z = np.array(cell_z)[inds]
-        cell_N = np.array(cell_N)[inds]
-        cell_b = np.array(cell_b)[inds]
-        cell_ID = np.array(cell_ID)[inds]
-
-    if testing==1:
-        print 'In sigcells, number of velcut cells read in: ', len(cell_z)
-
-    # Get the EW from sysabs
-    negVelLimit, posVelLimit, ewSysabs = lf.vel_limits(linesfile)
-
-    # Create a los.list file containing only this LOS
-    with open('los_single.list', 'w') as fLos:
-        datfile = linesfile.replace('lines', 'dat') + '\n'
-        fLos.write(datfile)
+        for line in f:
+            l = line.split()
+            cell_z.append(float(l[0]))
+            cell_N.append(float(l[1]))
+            cell_b.append(float(l[2]))
+            cell_ID.append(float(l[3]))
     
-    # Rename the velcut .lines to remove velcut from name, 
-    # so it will be used by specsynth
-    command = 'cp '+linesfile+'.velcut '+linesfile
-    sp.call(command, shell=True)
+    numcells = len(cell_z)
+    if numcells>1:
 
-    # Run specsynth on the velcut lines list
-    specCommand = codeLoc+'/funcs/mkspec/specsynth los_single.list Mockspec_0SNR.runpars'
-    sp.call(specCommand, shell=True)
+    #    cell_z, cell_N, cell_b, cell_ID = np.loadtxt(linesfile+'.velcut', skiprows=1,
+    #                                    usecols=(0,1,2,3), unpack=True)
 
-    # Get the EW of this noise-less spectra
-    bluewave, redwave = fi.transition_name(ion, codeLoc)
-    specFileBase = '{0:s}.{1:s}.los{2:s}.{3:s}.spec'
-    specfile = specFileBase.format(galID, ion, losnum, bluewave)
-    redspecfile = specFileBase.format(galID, ion, losnum, redwave)
+        # Sort the arrays in decreasing column density
+        # as long as there are more than one cell
+    #    if type(cell_z) is np.ndarray:
+    #        inds = np.argsort(cell_N)[::-1]
+    #        cell_z = np.array(cell_z)[inds]
+    #        cell_N = np.array(cell_N)[inds]
+    #        cell_b = np.array(cell_b)[inds]
+    #        cell_ID = np.array(cell_ID)[inds]
 
-    # Copy the initial quiet spectra
-    command = 'cp {0:s} {0:s}.velcutclean'.format(specfile)
-    sp.call(command, shell=True)
-    command = 'cp {0:s} {0:s}.velcutclean'.format(redspecfile)
-    sp.call(command, shell=True)
-    
-    # Read in the spectra data
-    specdata = np.loadtxt(specfile)
-    wavelength = specdata[:,0]
-    velocity = specdata[:,1]
-    flux = specdata[:,2]
-    
-    ew = findEW(wavelength, velocity, flux, negVelLimit, posVelLimit)
-    ewdiff = abs( (ewSysabs - ew) / ewSysabs )
-    ew_velcut_lines = ew
-    ewVelcut = ew
+        cells = sorted(zip(cell_N, cell_z, cell_b, cell_ID))
+        try:
+            cell_N, cell_z, cell_b, cell_ID = cells
+        except ValueError:
+            print 'Value Error in {0:s}'.format(linesfile)
+            print cells
+            sys.exit()
 
-    #################################################################
-    #                                                               #
-    #     Remove cells until the EW differs from full .lines        #
-    #     value by more than ewcut                                  #
-    #                                                               #
-    #################################################################
-    
-    # See how many cells are in the velcut file
-    with open(linesfile+'.velcut') as fcut:
-        for i,l in enumerate(fcut):
-            pass
-    numcells = i   # One less than the actual number of lines due to the
-                   # absorption redshift in the first line
-    
+        if testing==1:
+            print 'In sigcells, number of velcut cells read in: ', len(cell_z)
+
+        # Get the EW from sysabs
+        negVelLimit, posVelLimit, ewSysabs = lf.vel_limits(linesfile)
+
+        # Create a los.list file containing only this LOS
+        with open('los_single.list', 'w') as fLos:
+            datfile = linesfile.replace('lines', 'dat') + '\n'
+            fLos.write(datfile)
+        
+        # Rename the velcut .lines to remove velcut from name, 
+        # so it will be used by specsynth
+        command = 'cp '+linesfile+'.velcut '+linesfile
+        sp.call(command, shell=True)
+
+        # Run specsynth on the velcut lines list
+        specCommand = codeLoc+'/funcs/mkspec/specsynth los_single.list Mockspec_0SNR.runpars'
+        sp.call(specCommand, shell=True)
+
+        # Get the EW of this noise-less spectra
+        bluewave, redwave = fi.transition_name(ion, codeLoc)
+        specFileBase = '{0:s}.{1:s}.los{2:s}.{3:s}.spec'
+        specfile = specFileBase.format(galID, ion, losnum, bluewave)
+        redspecfile = specFileBase.format(galID, ion, losnum, redwave)
+
+        # Copy the initial quiet spectra
+        command = 'cp {0:s} {0:s}.velcutclean'.format(specfile)
+        sp.call(command, shell=True)
+        command = 'cp {0:s} {0:s}.velcutclean'.format(redspecfile)
+        sp.call(command, shell=True)
+        
+        # Read in the spectra data
+        specdata = np.loadtxt(specfile)
+        wavelength = specdata[:,0]
+        velocity = specdata[:,1]
+        flux = specdata[:,2]
+        
+        ew = findEW(wavelength, velocity, flux, negVelLimit, posVelLimit)
+        ewdiff = abs( (ewSysabs - ew) / ewSysabs )
+        ew_velcut_lines = ew
+        ewVelcut = ew
+
+        #################################################################
+        #                                                               #
+        #     Remove cells until the EW differs from full .lines        #
+        #     value by more than ewcut                                  #
+        #                                                               #
+        #################################################################
+        
+        # See how many cells are in the velcut file
+        with open(linesfile+'.velcut') as fcut:
+            for i,l in enumerate(fcut):
+                pass
+        numcells = i   # One less than the actual number of lines due to the
+                       # absorption redshift in the first line
+        
     # If there is only one cell in the file, stop. Clearly that cell
     # is responsible for all the absorption
     s = '{0:>8.7f}\t{1:>8f}\t{2:>8f}\t{3:>8d}\n'
@@ -182,7 +202,6 @@ def sigcells(linesfile, ewcut, codeLoc, flog, testing=0):
 
             for i in range(0,sigEnd):
                 f.write(s.format(cell_z[i], cell_N[i], cell_b[i], int(cell_ID[i])))
-            
-
+        
 
 

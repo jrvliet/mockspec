@@ -3,16 +3,17 @@ import locatecells as lc
 from subprocess import call
 
 ion = 'HI'
-galID = 'vela20'
-expn = '0.440'
+galID = 'vela2b-28'
+expn = '0.490'
 sigcellsCut = 5
-codeLoc = '/lustre/projects/p089_swin/jvander/mockspec/'
+codeLoc = '/home/jacob/research/code/mockspec/'
+inc = 90
 test = 1
 
-com='/lustre/projects/p089_swin/jvander/mockspec/funcs/mklos/los7 los_single.list'
+com='{0:s}/funcs/mklos/los7 los_single.list'.format(codeLoc)
 
 call(com, shell=True)
 print 'Starting locateSigCells\n\n'
-lc.locateSigCells(galID, expn, ion, sigcellsCut, codeLoc, testing=test)
+lc.locateSigCells(galID, expn, ion, sigcellsCut, codeLoc, inc, testing=test)
 
  

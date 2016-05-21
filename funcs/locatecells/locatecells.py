@@ -60,15 +60,6 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
     sysabs_losnum = glob.glob('*los*sysabs')
     sysabs_losnum.sort()
     
-#    sysabs_losnum = []
-#    for i in range(0,1000):
-#        losnum = str(i).zfill(4)
-#        filename = galID+'.'+ion+'.los'+losnum+'.sysabs'
-        
-        # Check to see if the file exists
-#        if op.isfile(filename):
-#            sysabs_losnum.append(losnum)
-
     if testing==1:
         print 'Sysabs files aggregated'
         print 'Number of sysabs files: ', len(sysabs_losnum)
@@ -77,13 +68,8 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
     for i in range(0,len(sysabs_losnum)):
 
         losnum = sysabs_losnum[i].split('.')[2].split('los')[1]
-
-        if testing==1:
-            print 'LOS num: ', losnum
-            if int(losnum)!=234:
-                continue
-        
         num = int(losnum)
+
         linesfile = galID+'.'+ion+'.los'+losnum+'.lines'
 
         # Make sure the .lines file has cells in it
@@ -97,7 +83,6 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
             # If there are no cells, continue to the next LOS
             continue        
 
-
         # Get the impact paramter of this LOS
         imp = los_info[num-1,1]
         
@@ -106,13 +91,9 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
         sp.call(command, shell=True)
 
         # Perform the velocity cut
-        if testing==1:
-            print '\tPerforming velocity cut'
         lf.velcut(linesfile, testing=testing)
 
         # Find the significant cells
-        if testing==1:
-            print '\t Finding significant cells'
         endCut = sg.sigcells(linesfile, ewcut, codeLoc, flog, testing=testing)
 #        singleCount += lf.sigcells(linesfile, ewcut, codeLoc, testing=testing)
         # Get the properties of the cells
