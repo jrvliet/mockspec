@@ -89,6 +89,12 @@ def sigcells(linesfile, ewcut, codeLoc, flog, testing=0):
     losnum = (linesfile.split('.')[2]).split('los')[1]
 
     flog.write('\n{0:s}\n'.format(losnum))
+    bluewave, redwave = fi.transition_name(ion, codeLoc)
+    specCommand = codeLoc+'/funcs/mkspec/specsynth los_single.list Mockspec_0SNR.runpars'
+    specFileBase = '{0:s}.{1:s}.los{2:s}.{3:s}.spec'
+    specfile = specFileBase.format(galID, ion, losnum, bluewave)
+    negVelLimit, posVelLimit, ewSysabs = lf.vel_limits(linesfile)
+    ewVelcut = ewSysabs
 
     # Read in the linesfile
     cell_z, cell_N, cell_b, cell_ID = [], [], [], []
@@ -118,7 +124,7 @@ def sigcells(linesfile, ewcut, codeLoc, flog, testing=0):
 
         cells = sorted(zip(cell_N, cell_z, cell_b, cell_ID))
         try:
-            cell_N, cell_z, cell_b, cell_ID = cells
+            cell_N, cell_z, cell_b, cell_ID = zip(*cells)
         except ValueError:
             print 'Value Error in {0:s}'.format(linesfile)
             print cells
@@ -141,11 +147,9 @@ def sigcells(linesfile, ewcut, codeLoc, flog, testing=0):
         sp.call(command, shell=True)
 
         # Run specsynth on the velcut lines list
-        specCommand = codeLoc+'/funcs/mkspec/specsynth los_single.list Mockspec_0SNR.runpars'
         sp.call(specCommand, shell=True)
 
         # Get the EW of this noise-less spectra
-        bluewave, redwave = fi.transition_name(ion, codeLoc)
         specFileBase = '{0:s}.{1:s}.los{2:s}.{3:s}.spec'
         specfile = specFileBase.format(galID, ion, losnum, bluewave)
         redspecfile = specFileBase.format(galID, ion, losnum, redwave)
@@ -190,7 +194,13 @@ def sigcells(linesfile, ewcut, codeLoc, flog, testing=0):
         if numcells == 1:
             singleCellCount += 1
             sigEnd = 1    
-            f.write(s.format(cell_z, cell_N, cell_b, int(cell_ID)))
+            try:
+                f.write(s.format(cell_z[0], cell_N[0], cell_b[0], int(cell_ID[0])))
+            except TypeError:
+                print 'TypeError in significant.py: '
+                print losnum, len(cell_ID), len(cell_z), numcells
+                print type(cell_ID), type(cell_z)
+                sys.exit()
 
         else:
             start = 0
