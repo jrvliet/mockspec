@@ -45,10 +45,10 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
     f_out = open(out_file, 'w')
 
     # Write a header to the output file
-    header = 'LOS \t Imp Param      Cell ID   Redshift        logN'\
-            '    Doppler b    Galactocentric d      log nH     log T'\
-            '     Cell Size     SNII mass frac      SNIa mass frac'\
-            '       alpha_Zmet     Ion Density\n'
+    header = 'LOS \t Imp_Param      CellID    Redshift        logN'\
+            '    Doppler_b    Galactocentric_d      log_nH     log_T'\
+            '     Cell_Size     SNII_mass_frac      SNIa_mass_frac'\
+            '       alpha_Zmet     Ion_Density\n'
     f_out.write(header)
 
 
