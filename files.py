@@ -55,6 +55,7 @@ def read_control_file():
     runSysanal = int(f.readline().split()[0])
     runCullabs = int(f.readline().split()[0])
     runLocateCells = int(f.readline().split()[0])
+    runSummaires = int(f.readline().split()[0])
     runPlotting = int(f.readline().split()[0])
     # Now at ion section
     # Loop over rest of file
@@ -74,7 +75,7 @@ def read_control_file():
 
     props = (galID, expn, nlos, maximpact, incline, ewcut, snr, ncores, rootLoc, sigcellsCut)
     flags = (runRates, runGenLOS, runCellfinder, runIdcells, runLos7, 
-             runSpecsynth, runSysanal, runCullabs, runLocateCells, runPlotting)
+             runSpecsynth, runSysanal, runCullabs, runLocateCells, runSummaries, runPlotting)
     return props, flags, ions, xh, instruments
 
 

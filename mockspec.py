@@ -32,7 +32,7 @@ requiredLoc = codeLoc+'/controls/'
 print '\n\nReading in control file...'
 props, flags, ions, xh, instruments = fi.read_control_file()
 galID, expn, nlos, maximpact, incline, ewcut, snr, ncores, rootLoc, sigcellsCut = props
-runRates, runGenLOS, runCellfinder, runIdcells, runLos7, runSpecsynth, runSysanal, runCullabs, runLocateCells, runPlotting = flags
+runRates, runGenLOS, runCellfinder, runIdcells, runLos7, runSpecsynth, runSysanal, runCullabs, runLocateCells, runSummaries, runPlotting = flags
 
 # Genearte the name of the gasfile
 gasfile = galID+'_GZa'+expn+'.txt'
@@ -256,7 +256,12 @@ for ion in ions:
     # Move back up to the parent directory
     os.chdir('..')
 
-    
+# Generate summary files
+if runSummaries==1:
+    print '\n\nGenearting summary files'
+    hdf.genSummaries(galID, expn, incline, ions, nlos)    
+
+
 # Create basic plots
 if runPlotting==1:
     print '\n\nGenerating plots'
