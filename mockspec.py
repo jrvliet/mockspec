@@ -20,6 +20,7 @@ import funcs.idcells.idcells as ic
 import runFunctions as rf 
 import funcs.sigcells.sigcells as sc
 import funcs.plotting.analysis_control as ac
+import funcs.compileFiles.mkHDF5 as hdf
 
 # Get the location where the code lives
 pathname = os.path.dirname(sys.argv[0])
@@ -102,6 +103,7 @@ if runRates==1:
     rc.setup_rates_outputs(galID, expn, ions, codeLoc, requiredLoc) 
     print '\t Running rates...'
     rc.run_rates(codeLoc)
+    hdf.gasbox_to_hdf5(codeLoc)
 else:
     print 'Skipping rates'
 
@@ -217,6 +219,7 @@ for ion in ions:
     if runCullabs==1:
         print '\n\tCreating sysabs'
         rf.cullabs(codeLoc)
+        hdf.sysabs_to_hdf5(codeLoc)
     else:
         print '\tSkipping sysabs...'
 
@@ -232,6 +235,7 @@ for ion in ions:
         print '\n\tIdentifying significant cells'
         lc.locateSigCells(galID, expn, ion, sigcellsCut, codeLoc, incline)
 #        lc.sigCells(galID, expn, ion, sigcellsCut, codeLoc)
+        hdf.abscells_to_hdf5(codeLoc)
     else:
         print '\tSkipping locatecells...'
 
