@@ -55,7 +55,7 @@ def read_control_file():
     runSysanal = int(f.readline().split()[0])
     runCullabs = int(f.readline().split()[0])
     runLocateCells = int(f.readline().split()[0])
-    runSummaires = int(f.readline().split()[0])
+    runSummaries = int(f.readline().split()[0])
     runPlotting = int(f.readline().split()[0])
     # Now at ion section
     # Loop over rest of file

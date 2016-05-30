@@ -107,7 +107,7 @@ def genSummaries(galID, expn, incline, ions, numlos):
     imp, phi = np.loadtxt('lines.info', skiprows=2,
                         usecols=(1,2), unpack=True)
     
-    for ion in ions
+    for ion in ions:
 
         outfile = '{0:s}_a{1:s}_i{2:d}_{3:s}_cellSummary.txt'.format(
                     galID,expn,incline,ion)

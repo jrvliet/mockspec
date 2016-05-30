@@ -78,9 +78,9 @@ c     Build the path to the tables
       tab = '/data/grid/'
       uvb = '/data/uvb/'
       sb = '/data/sb99/'
-      tabpath  = trim(codeLoc) // trim(tab)
-      UVBpath  = trim(codeLoc) // trim(uvb)
-      Sb99path = trim(codeLoc) // trim(sb)
+c      tabpath  = trim(codeLoc) // trim(tab)
+c      UVBpath  = trim(codeLoc) // trim(uvb)
+c      Sb99path = trim(codeLoc) // trim(sb)
 
 c      tabpath='/lustre/projects/p089_swin/jvander/mockspec/data/grid/'
 c      UVBpath='/lustre/projects/p089_swin/jvander/mockspec/data/uvb/'
@@ -94,9 +94,9 @@ c      tabpath  = '/home/jacob/research/code/mockspec/data/grid/'
 c      UVBpath  = '/home/jacob/research/code/mockspec/data/uvb/'
 c      Sb99path = '/home/jacob/research/code/mockspec/data/sb99/'
 
-c      tabpath  = '/home/hyades/jrvander/mockspec/data/grid/'
-c      UVBpath  = '/home/hyades/jrvander/mockspec/data/uvb/'
-c      Sb99path = '/home/hyades/jrvander/mockspec/data/sb99/'
+      tabpath  = '/home/hyades/jrvander/mockspec/data/grid/'
+      UVBpath  = '/home/hyades/jrvander/mockspec/data/uvb/'
+      Sb99path = '/home/hyades/jrvander/mockspec/data/sb99/'
 
 c     ............................................
 c     PHASE 1: SET UP THE RUN, COMMUNICATE TO USER

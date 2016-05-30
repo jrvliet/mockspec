@@ -155,7 +155,7 @@ def num_in_subhalos(galID, expn, ion, inc, losnum,
             xhalo.append( (float(l[0])-xhost)*1000.0  )
             yhalo.append( (float(l[1])-yhost)*1000.0  )
             zhalo.append( (float(l[2])-zhost)*1000.0  )
-            rhalo.append( (float(l[4]) )
+            rhalo.append( (float(l[4]) ))
 
     
     # Run through the probbed cells
