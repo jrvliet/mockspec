@@ -41,23 +41,33 @@ def column_distribution(ions):
         allfile = './'+ion+'/'+galID+'.'+ion+'.a'+expn+'.ALL.sysabs'
         
         
-        absfile = './{0:s}/{1:s}.{2:s}.a{0:s}.abs_cells.dat'.format(ion, galID, expn)
+        #absfile = './i{4:d}/{0:s}/{1:s}.{2:s}.a{0:s}.i{4:d}.abs_cells.dat'.format(ion, galID, expn, inc)
+        absfile = './i{3:d}/{0:s}/{1:s}.{0:s}.a{2:s}.i{3:d}.ALL.sysabs.dat'.format(ion, galID, expn, inc)
 
         # Run Chris's binning program
-        blankCommand = '{0:s}/bindata-logfreq {1:s} {2:d} {3:d} {4:f} {5:f} {6:f} {7:d}'
+        blankCommand = '{0:s}/funcs/plotting/bindata-logfreq {1:s} {2:d} {3:d} {4:f} {5:f} {6:f} {7:d}'
         command = blankCommand.format(codeLoc, absfile, column, linear, binsize, lowerlimit, upperlimit, header)
 
-        sp.call(command, shell=True)
+        try:
+            sp.call(command, shell=True)
+        except:
+            print 'Error running binning program in columndist.py'
 
         # Output will be named <galID>.logfreqbin
         # Rename to <galID>.<expn>.<ion>.ew.logfreqbin
         oldname = '.logfreqbin'.format(galID)
         newname = '{0:s}.{1:s}.{2:s}.ew.logfreqbin'.format(galID, expn, ion)
         command = 'mv {0:s} {1:s}'.format(oldname, newname)
-        sp.call(command, shell=True)
+        try:
+            sp.call(command, shell=True)
+        except:
+            print 'Error renaming files in columndist.py'
 
         # Read in the binned data
-        data = np.loadtxt(newname, skiprows=4)
+        try:
+            data = np.loadtxt(newname, skiprows=4)
+        except:
+            print 'Error reading in {0:s} in columndist.py'.format(newname)
         binCenter = data[:,0]
         freq = data[:,1]
         halfbin = data[:,2]

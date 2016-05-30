@@ -4,9 +4,14 @@
 import sys
 import matplotlib.pyplot as plt
 import numpy as np
+import warnings
 
 
 def ew_profile(ions):
+
+    # Disable the runtime warnings from taking the 
+    # mean of empty bins
+    warnings.simplefilter('ignore')
 
     # Read in galaxy properties from galaxy.props
     f = open('galaxy.props')
@@ -16,8 +21,6 @@ def ew_profile(ions):
     mvir = float(f.readline().split()[1])
     rvir = float(f.readline().split()[1])
     inc = int(float(f.readline().split()[1]))
-
-
 
     Dmin =  []
     Dmax = []
@@ -30,7 +33,7 @@ def ew_profile(ions):
     yerrAll = []
     xerrPosAll = []
     xerrNegAll = []
-    for ion in ion_list:
+    for ion in ions:
 
         filename = './{0:s}/{1:s}.{0:s}.a{2:s}.i{3:d}.ALL.sysabs'.format(ion,galID,expn,inc)
         try:
@@ -89,7 +92,7 @@ def ew_profile(ions):
         xerrPosAll.append(imp_err_pos)
 
 
-    for i, ion in enumerate(ion_list):
+    for i, ion in enumerate(ions):
         subplotnum = 221+i
         plt.subplot(subplotnum)
         plt.errorbar(impAll[i], ewAll[i], yerr=yerrAll[i], 

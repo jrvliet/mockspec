@@ -57,12 +57,14 @@ def ew_distribution(ions):
     # Loop over ions
     for ion in ions:
         
-        allfile = './{0:s}/{1:s}.{0:s}.a{2:s}.i{3:d}.ALL.sysabs'.format(ion,galID,expn,inc)
+        allfile = './i{4:d}/{0:s}/{1:s}.{0:s}.a{2:s}.i{3:d}.ALL.sysabs'.format(ion,galID,expn,inc)
         
+        print allfile
         # Run Chris's binning program
-        blankCommand = '{0:s}/bindata-logfreq {1:s} {2:d} {3:d} {4:f} {5:f} {6:f} {7:d}'
+        blankCommand = '{0:s}/funcs/plotting/bindata-logfreq {1:s} {2:d} {3:d} {4:f} {5:f} {6:f} {7:d}'
         command = blankCommand.format(codeLoc, allfile, column, linear, binsize, 
                                         lowerlimit, upperlimit, header)
+        print command
         sp.call(command, shell=True)
 
         # Output will be named <galID>.logfreqbin
@@ -110,7 +112,7 @@ def ew_distribution(ions):
 
 
         # Plot the data
-        subplotnum = 221+ion_list.index(ion)
+        subplotnum = 221+ions.index(ion)
         plt.subplot(subplotnum)
         xerrbin = pow(10.0,halfbin)
         yerrbinDown = pow(10.0, errDown)

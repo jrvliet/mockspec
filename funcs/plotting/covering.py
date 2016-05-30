@@ -161,7 +161,7 @@ def covering_fraction(ions):
             verterrneg.append(fraction-bot)
 
             
-        subplotnum = 221+ion_list.index(ion)
+        subplotnum = 221+ions.index(ion)
         plt.subplot(subplotnum)
         plt.errorbar(imp,covering,xerr=[horizerrneg,horizerrpos],
                      yerr=[verterrneg,verterrpos], linestyle='none')
