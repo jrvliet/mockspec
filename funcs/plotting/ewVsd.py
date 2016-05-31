@@ -4,6 +4,7 @@
 import sys
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 import warnings
 
 
@@ -35,9 +36,12 @@ def ew_profile(ions):
     xerrNegAll = []
     for ion in ions:
 
-        filename = './{0:s}/{1:s}.{0:s}.a{2:s}.i{3:d}.ALL.sysabs'.format(ion,galID,expn,inc)
+        filename = './{0:s}/{1:s}.{0:s}.a{2:s}.i{3:d}.ALL.sysabs.h5'.format(ion,galID,expn,inc)
         try:
-            impRaw, ewRaw = np.loadtxt(filename, skiprows=1, usecols=(1, 5), unpack=True)
+            d = pd.read_hdf(filename, 'data')
+            impRaw = d['D']
+            ewRaw = d['EW_r']
+            #impRaw, ewRaw = np.loadtxt(filename, skiprows=1, usecols=(1, 5), unpack=True)
         except IOError:
             print 'Error in ew_profile function in ewVsd.py while reading {0:s}'.format(filename)
             raise
