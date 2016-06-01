@@ -45,13 +45,17 @@ def abscells_to_hdf5(codeLoc):
     # Create the name of the HDF5 file
     hdf5file = filename.replace('dat','h5')
 
+    print filename
     # Get the header
     with open(filename) as f:
         header = f.readline().strip().split()
+    print header
+    print len(header)
 
     # Read in the data
     data = np.loadtxt(filename, skiprows=1)
-    
+    print data.shape    
+
     # WRite data to HDF file
     df = pd.DataFrame(data, columns=header)
     df.to_hdf(hdf5file, 'data', mode='w')
