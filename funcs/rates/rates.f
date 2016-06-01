@@ -78,7 +78,7 @@ c     Since fortran struggles heavily to comprehend the
 c     complexity of command line arguements, read in the 
 c     code's location from file
       open (unit=32, file='ratesDataLoc.txt')
-      read (32,*) codeLoc
+      read (32,'(a)') codeLoc
       close (32)
 
 c     Build the path to the tables
@@ -88,10 +88,6 @@ c     Build the path to the tables
       tabpath  = trim(codeLoc) // trim(tab)
       UVBpath  = trim(codeLoc) // trim(uvb)
       Sb99path = trim(codeLoc) // trim(sb)
-
-      write(*,*) tabpath
-      write(*,*) UVBpath
-      write(*,*) Sb99path
 
 c      tabpath='/lustre/projects/p089_swin/jvander/mockspec/data/grid/'
 c      UVBpath='/lustre/projects/p089_swin/jvander/mockspec/data/uvb/'

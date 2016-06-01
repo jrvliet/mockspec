@@ -51,7 +51,7 @@ def setup_rates_data(codeLoc):
     '''
 
     with open('ratesDataLoc.txt', 'w') as f:
-       f.write(codeLoc)
+       f.write(codeLoc+'\n')
  
 
 
