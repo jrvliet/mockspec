@@ -30,7 +30,7 @@ def sysabs_to_hdf5(codeLoc):
     
     # WRite data to HDF file
     df = pd.DataFrame(data, columns=header)
-    df.to_hdf(hdffile, 'data', mode='w')
+    df.to_hdf(hdf5file, 'data', mode='w')
 
 
 def abscells_to_hdf5(codeLoc):
@@ -54,7 +54,7 @@ def abscells_to_hdf5(codeLoc):
     
     # WRite data to HDF file
     df = pd.DataFrame(data, columns=header)
-    df.to_hdf(hdffile, 'data', mode='w')
+    df.to_hdf(hdf5file, 'data', mode='w')
 
 
 def gasbox_to_hdf5(codeLoc):
