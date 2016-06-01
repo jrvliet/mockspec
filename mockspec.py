@@ -101,6 +101,8 @@ if runRates==1:
     rc.setup_rates_control( gasfile, expn, ions, requiredLoc)
     print '\t Setting up rates.outfiles...'
     rc.setup_rates_outputs(galID, expn, ions, codeLoc, requiredLoc) 
+    print '\t Setting up rates data location...'
+    rc.setup_rates_data(codeLoc)
     print '\t Running rates...'
     rc.run_rates(codeLoc)
     hdf.gasbox_to_hdf5(codeLoc)

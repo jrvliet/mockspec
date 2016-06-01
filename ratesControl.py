@@ -43,6 +43,17 @@ def setup_rates_control(gasfile, expn, ion_list, requiredLoc):
     command = 'mv rates.inp.tmp rates.inp'
     sp.call(command, shell=True)
 
+def setup_rates_data(codeLoc):
+    '''
+    Write a file with the location of the data files
+    because fortran is a terrible language that can't handle
+    the incredibly complicated task of command line arguements
+    '''
+
+    with open('ratesDataLoc.txt', 'w') as f:
+       f.write(codeLoc)
+ 
+
 
 def setup_rates_outputs(galID, expn, ion_list, codeLoc, requiredLoc):
 

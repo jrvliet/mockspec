@@ -72,15 +72,26 @@ c     TABPATH is where the atomic data tables live
 c     UVBPATH is where the Haardt & Madau UVB SEDs live
 c     SB99PATH is where the Starburst99 SEDs live
 c     Get this information from the command line
-      CALL getarg(1, codeLoc)
+c      CALL getarg(1, codeLoc)
+
+c     Since fortran struggles heavily to comprehend the 
+c     complexity of command line arguements, read in the 
+c     code's location from file
+      open (unit=32, file='ratesDataLoc.txt')
+      read (32,*) codeLoc
+      close (32)
 
 c     Build the path to the tables
       tab = '/data/grid/'
       uvb = '/data/uvb/'
       sb = '/data/sb99/'
-c      tabpath  = trim(codeLoc) // trim(tab)
-c      UVBpath  = trim(codeLoc) // trim(uvb)
-c      Sb99path = trim(codeLoc) // trim(sb)
+      tabpath  = trim(codeLoc) // trim(tab)
+      UVBpath  = trim(codeLoc) // trim(uvb)
+      Sb99path = trim(codeLoc) // trim(sb)
+
+      write(*,*) tabpath
+      write(*,*) UVBpath
+      write(*,*) Sb99path
 
 c      tabpath='/lustre/projects/p089_swin/jvander/mockspec/data/grid/'
 c      UVBpath='/lustre/projects/p089_swin/jvander/mockspec/data/uvb/'
@@ -90,9 +101,9 @@ c      tabpath  = '/home/matrix2/cwc/Projects/Mockspec/GridCode/'
 c      UVBpath  = '/home/matrix2/cwc/Projects/Mockspec/UVBspectrum/'
 c      Sb99path = '/home/matrix2/cwc/Projects/Mockspec/Sb99spectrum/'
 
-      tabpath  = '/home/jacob/research/code/mockspec/data/grid/'
-      UVBpath  = '/home/jacob/research/code/mockspec/data/uvb/'
-      Sb99path = '/home/jacob/research/code/mockspec/data/sb99/'
+c      tabpath  = '/home/jacob/research/code/mockspec/data/grid/'
+c      UVBpath  = '/home/jacob/research/code/mockspec/data/uvb/'
+c      Sb99path = '/home/jacob/research/code/mockspec/data/sb99/'
 
 c      tabpath  = '/home/hyades/jrvander/mockspec/data/grid/'
 c      UVBpath  = '/home/hyades/jrvander/mockspec/data/uvb/'
