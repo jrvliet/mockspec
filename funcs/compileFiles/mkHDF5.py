@@ -2,7 +2,6 @@
 '''
 Codes to convert the ALL.sysabs files and 
 abs_cells files to HDF5 format for
-compactness
 '''
 
 import numpy as np
@@ -17,7 +16,7 @@ def sysabs_to_hdf5(codeLoc):
     '''
     
     # Get the name of the file 
-    allfile = glob.glob('*.ALL.sysabs')
+    allfile = (glob.glob('*.ALL.sysabs'))[0]
 
     # Create the name of the HDF5 file
     hdf5file = allfile + '.hdf5'
@@ -41,7 +40,7 @@ def abscells_to_hdf5(codeLoc):
     '''
     
     # Get the name of the file 
-    filename = glob.glob('*.abs_cells.dat')
+    filename = (glob.glob('*.abs_cells.dat'))[0]
 
     # Create the name of the HDF5 file
     hdf5file = filename.replace('dat','hdf5')
