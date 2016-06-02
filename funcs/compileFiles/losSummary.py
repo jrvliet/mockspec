@@ -140,22 +140,26 @@ def num_in_subhalos(galID, expn, ion, inc, losnum,
     numHalos = 10
 
     # Read in the subhalo information
-    halofile = '../input_{0:s}.txt'.format(expn)
+    #halofile = '../input_{0:s}.txt'.format(expn)
+    halofile = '../halos_{0:s}.txt'.format(expn)
+    halos = np.loadtxt(halofile, skiprows=2)
 
+    # Sort the halos array in order of decreasing mvir
+    # mvir = column 7
+    halos[halos[:,7].argsort()]
+
+    xhost = halos[0,1]
+    yhost = halos[0,2]
+    zhost = halos[0,3]
+    
+    # Get the ten largest subhalos
     xhalo, yhalo, zhalo, rhalo = [], [], [], []
-    with open(halofile, 'r') as f:
-        # Read past the main halo
+    for i in range(1,numHalos+1):      
         l = f.readline().split()
-        xhost = float(l[0])
-        yhost = float(l[1])
-        zhost = float(l[2])
-
-        for i in range(numHalos):      
-            l = f.readline().split()
-            xhalo.append( (float(l[0])-xhost)*1000.0  )
-            yhalo.append( (float(l[1])-yhost)*1000.0  )
-            zhalo.append( (float(l[2])-zhost)*1000.0  )
-            rhalo.append( (float(l[4]) ))
+        xhalo.append( (halos[i,1] - xhost)*1000.0 )
+        yhalo.append( (halos[i,2] - yhost)*1000.0 )
+        zhalo.append( (halos[i,3] - zhost)*1000.0 )
+        rhalo.append( (halos[i,8] ))
 
     
     # Run through the probbed cells
