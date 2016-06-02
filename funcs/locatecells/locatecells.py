@@ -25,7 +25,7 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
     with specsynth with no noise. 
     
     Results are reported in a file called
-        <galID>.<expn>.<ion>.abs_cells.dat
+        <galID>.<expn>.<ion>.i<inc>abs_cells.dat
     """
 
     singleCount = 0
@@ -40,8 +40,7 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
     los_info = np.loadtxt('lines.info',skiprows=2)
 
     # Open the output file
-    out_file = '{0:s}.{1:s}.{2:s}.abs_cells.dat'.format(galID,expn,ion)
-    #out_file = galID+'.'+expn+'.'+ion+'.abs_cells.dat'
+    out_file = '{0:s}.{1:s}.{2:s}.i{3:d}.abs_cells.dat'.format(galID,expn,ion,int(inc))
     f_out = open(out_file, 'w')
 
     # Write a header to the output file
