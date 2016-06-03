@@ -62,7 +62,7 @@ def phase(ions):
         try:
             #lognH, logT = np.loadtxt(abs_file, skiprows=1, usecols=(7, 8), unpack=True)
             d = pd.read_hdf(abs_file, 'data')
-            logNH = d['log_nH']
+            lognH = d['log_nH']
             logT = d['log_T']
         except IOError:
             print 'Error in phase funcitno in nT while reading {0:s}'.format(abs_file)
@@ -82,19 +82,18 @@ def phase(ions):
         
     # Create the subplots
     fig,((p11,p12), (p21,p22)) = plt.subplots(2,2,figsize=(11.2,10.8))
-    plot_list = [p11, p21, p12, p22]
-    labels = ['(a)', '(b)', '(c)', '(d)'] 
-    labels = ['(a)', '(c)', '(b)', '(d)'] 
+    plot_list = [p11, p12, p21, p22]
 
     for i in range(0,len(plot_list)):
         ax = plot_list[i]
         H = histos[i]
-        if i==0:
+        ion = ions[i]
+        if ion=='HI':
             # Ion is HI
             cbarmin = 0
             cbarmax = 4
             cbarLabel = '$\log$ (Counts)'
-        elif i==2:
+        elif ion=='MgII':
             # Ion is MgII
             cbarmin = 0
             cbarmax = 3
@@ -109,26 +108,21 @@ def phase(ions):
         H = np.log10(H)
         xedges = xed[i]
         yedges = yed[i]
-    #    mesh = ax.pcolormesh(xedges, yedges, H, vmin=cbarmin, vmax=cbarmax)
         mesh = ax.pcolormesh(xedges, yedges, H)
         ax.set_xlim([-8, 1])
         ax.set_ylim([2,8])
-        ax.text(-1, 7, labels[i])
     #    xlabels = ax.get_xticklabels()
     #    ax.set_xticklabels(xlabels, fontsize=14)
-        if i==0:
-            ax.set_ylabel('HI \n $\log$ (T) [K] ', multialignment='center')
-            ax.set_xlabel(' $\log (n_{H})$ [cm$^{-3}$] ')
-        elif i==2:
-            ax.set_ylabel('MgII \n $\log$ (T) [K] ', multialignment='center')
-            ax.set_xlabel(' $\log (n_{H})$ [cm$^{-3}$] ')
-        elif i==1:
-            ax.set_ylabel('CIV \n $\log$ (T) [K] ', multialignment='center')
-            ax.set_xlabel(' $\log (n_{H})$ [cm$^{-3}$] ')
-        elif i==3:
-            ax.set_ylabel('OVI \n $\log$ (T) [K] ', multialignment='center')
-            ax.set_xlabel(' $\log (n_{H})$ [cm$^{-3}$] ')
+        #if ion=='HI':
+        #    ax.set_ylabel('HI \n $\log$ (T) [K] ', multialignment='center')
+        #elif ion=='MgII':
+        #    ax.set_ylabel('MgII \n $\log$ (T) [K] ', multialignment='center')
+        #elif ion=='CIV':
+        #    ax.set_ylabel('CIV \n $\log$ (T) [K] ', multialignment='center')
+        #elif ion=='OVI':
         
+        ax.set_ylabel('{0:s}\n$\log$ (T) [K]'.format(ion), multialignment='center')
+        ax.set_xlabel(' $\log (n_{H})$ [cm$^{-3}$] ')
         cbar = plt.colorbar(mesh, ax=ax, use_gridspec=True)
         cbar.ax.get_yaxis().labelpad = 20
         cbar.ax.set_ylabel(cbarLabel, rotation=270, fontsize=12)
@@ -145,3 +139,8 @@ def phase(ions):
 
     s = '{0:s}_a{1:s}_i{2:d}_abscell_phase_{3:d}.pdf'.format(galID, expn, inc, numbins)
     plt.savefig(s, bbox_inches='tight')
+
+
+
+ions = ['HI','MgII','CIV','OVI']
+phase(ions)
