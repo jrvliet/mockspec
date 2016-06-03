@@ -26,7 +26,12 @@ def sysabs_to_hdf5(codeLoc):
         header = f.readline().strip().split()
 
     # Read in the data
-    data = np.loadtxt(allfile, skiprows=1)
+    try:
+        data = np.loadtxt(allfile, skiprows=1)
+    except ValueError:
+        print 'Error in sysabs_to_hdf5 in mkHDF5.py'
+        print 'while reading in {0:s}'.format(allfile)
+        return 1
     
     # WRite data to HDF file
     df = pd.DataFrame(data, columns=header)
