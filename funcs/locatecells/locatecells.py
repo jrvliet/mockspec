@@ -157,7 +157,7 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
             sig[19] = ionDense
         
             # Append to the main array
-            d = np.vstack(d,sig)
+            d = np.vstack((d,sig))
 
             # Write all to the output file
             #s = '{0:d}'.format(num).ljust(7) +  '{0:.3f}'.format(imp).rjust(7) +  '{0:d}'.format(cellID).rjust(16) + '{0:-.7f}'.format(redshift).rjust(14) + '{0:.3f}'.format(column).rjust(10) + '{0:.3f}'.format(doppler).rjust(13) + '{0:.5e}'.format(r).rjust(20) + '{0:.4f}'.format(density).rjust(12) + '{0:.4f}'.format(temperature).rjust(10) + '{0:.4f}'.format(cell_size).rjust(14) + '{0:.4e}'.format(snII).rjust(19) + '{0:.4e}'.format(snIa).rjust(20) + '{0:.4e}'.format(alphaZ).rjust(17) + '{0:.4e}'.format(ionDense).rjust(17) + '\n'

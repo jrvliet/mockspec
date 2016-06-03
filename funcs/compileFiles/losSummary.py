@@ -25,7 +25,7 @@ def num_along_los(losnum):
 
 
     filename = 'los{0:s}.cellID.dat'.format(losnum)
-    fileloc = './cellIDs/{1:s}'.format(ion,filename)
+    fileloc = './cellIDs/{0:s}'.format(filename)
     
     # Get the number of cells along the LOS
     ids = []
