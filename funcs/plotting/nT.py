@@ -15,6 +15,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import math
 import sys
+import pandas as pd
 
 
 def phase(ions):
@@ -55,10 +56,14 @@ def phase(ions):
         print galID, '\t', ion
 
         # Open the data 
-        abs_file = './{0:s}/{1:s}.{2:s}.{0:s}.i{3:d}.abs_cells.dat'.format(ion,galID,expn,inc)
+        #abs_file = './{0:s}/{1:s}.{2:s}.{0:s}.i{3:d}.abs_cells.dat'.format(ion,galID,expn,inc)
+        abs_file = './{0:s}/{1:s}.{2:s}.{0:s}.i{3:d}.abs_cells.h5'.format(ion,galID,expn,inc)
         
         try:
-            lognH, logT = np.loadtxt(abs_file, skiprows=1, usecols=(7, 8), unpack=True)
+            #lognH, logT = np.loadtxt(abs_file, skiprows=1, usecols=(7, 8), unpack=True)
+            d = pd.read_hdf(abs_file, 'data')
+            logNH = d['log_nH']
+            logT = d['log_T']
         except IOError:
             print 'Error in phase funcitno in nT while reading {0:s}'.format(abs_file)
             raise
