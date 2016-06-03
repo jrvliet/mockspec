@@ -1,18 +1,15 @@
 #!/usr/bin/python
-# Filename: nT_bulk.py
-#
-# Author: Jacob Vander Vliet
-# Version: 2
-# Date: 4/12/2013
-# Last Modified: 4/12/13
-#
-# Description:
-#   Creates the phase diagram of the gas for cells that
-#   contribute to absorption
-#
-# Instructions:
-#   python nT_bulk.py <numbins = 50>
-#
+'''
+ Filename: nT.py
+
+ Description:
+   Creates the phase diagram of the gas for cells that
+   contribute to absorption
+
+ Instructions:
+   python nT_bulk.py <numbins = 50>
+
+'''
 
 import numpy as np
 import matplotlib.pyplot as plt
