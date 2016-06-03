@@ -142,5 +142,3 @@ def phase(ions):
 
 
 
-ions = ['HI','MgII','CIV','OVI']
-phase(ions)
