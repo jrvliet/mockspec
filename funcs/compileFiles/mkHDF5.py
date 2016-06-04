@@ -75,14 +75,14 @@ def gasbox_to_hdf5(codeLoc):
     # Get the name of the file 
     files = glob.glob('*GZ*.txt')
 
+    header = ['cell_size', 'x', 'y', 'z', 'vx', 'vy', 'vz',
+                'nH', 'temperature', 'SNII', 'SNIa', 'nAtom',
+                'fIon', 'nIon', 'alpha_sol', 'alpha_Zmet',
+                'ID', 't_ph', 't_rec', 't_coll', 't_cool']
     for filename in files:
 
         # Create the name of the HDF5 file
         hdf5file = filename.replace('txt','h5')
-
-        # Get the header
-        with open(filename) as f:
-            header = f.readline().strip().split()
 
         # Read in the data
         data = np.loadtxt(filename, skiprows=2)
