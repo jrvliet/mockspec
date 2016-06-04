@@ -7,37 +7,38 @@
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/github-dark.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/respond.js"></script>
+    <script src="javascripts/main.js"></script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <!--[if lt IE 8]>
-    <link rel="stylesheet" href="stylesheets/ie.css">
     <![endif]-->
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
   </head>
   <body>
-      <div id="header">
-        <nav>
-          <li class="fork"><a href="https://github.com/jrvliet/mockspec">View On GitHub</a></li>
-          <li class="downloads"><a href="https://github.com/jrvliet/mockspec/zipball/master">ZIP</a></li>
-          <li class="downloads"><a href="https://github.com/jrvliet/mockspec/tarball/master">TAR</a></li>
-          <li class="title">DOWNLOADS</li>
-        </nav>
-      </div><!-- end header -->
+
+      <header>
+        <h1>Mockspec</h1>
+        <p>Full Pipeline</p>
+      </header>
+
+      <div id="banner">
+        <span id="logo"></span>
+
+        <a href="https://github.com/jrvliet/mockspec" class="button fork"><strong>View On GitHub</strong></a>
+        <div class="downloads">
+          <span>Downloads:</span>
+          <ul>
+            <li><a href="https://github.com/jrvliet/mockspec/zipball/master" class="button">ZIP</a></li>
+            <li><a href="https://github.com/jrvliet/mockspec/tarball/master" class="button">TAR</a></li>
+          </ul>
+        </div>
+      </div><!-- end banner -->
 
     <div class="wrapper">
-
+      <nav>
+        <ul></ul>
+      </nav>
       <section>
-        <div id="title">
-          <h1>Mockspec</h1>
-          <p>Full Pipeline</p>
-          <hr>
-          <span class="credits left">Project maintained by <a href="https://github.com/jrvliet">jrvliet</a></span>
-          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
-        </div>
-
         <h2>
 <a id="welcome-to-mockspec" class="anchor" href="#welcome-to-mockspec" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Welcome to Mockspec</h2>
 
@@ -244,46 +245,46 @@ The third section describes the ions to be probed and what instrument will be us
 <p>abs_cells:</p>
 
 <ul>
-<li> **LOS**: Line of sight number
-</li>
-<li> **D**: Impact parameter
-</li>
-<li> **cellID**: Identification number of the cell
-</li>
-<li> **redshift**: Redshift of the cell, based on the redshift of the galaxy and the cell's line-of-sight velocity
-</li>
-<li> **logN**: Column density of the ion in the cell
-</li>
-<li> **dobbler_b**: Doppler b parameter = sqrt(2*k*T/m)
-</li>
-<li> **x**: x-coordinate of the cell in the box's coordinate system in [kpc]
-</li>
-<li> **y**: y-coordinate of the cell in the box's coordinate system in [kpc]
-</li>
-<li> **z**: z-coordinate of the cell in the box's coordinate system in [kpc]
-</li>
-<li> **vx**: vx-component of the cell's velocity in the box's coordinate system in [km/s]
-</li>
-<li> **vy**: vy-component of the cell's velocity in the box's coordinate system in [km/s]
-</li>
-<li> **vz**: vz-component of the cell's velocity in the box's coordinate system in [km/s]
-</li>
-<li> **galactocentric_d**: Distance between the cell and the center of the galaxy [kpc]
-</li>
-<li> **log_nH**: Log of the gas density [num/cc] of the cell
-</li>
-<li> **log_T**: Log of the temperature [K] of the cell
-</li>
-<li> **cell_size**: Size of the cell [kpc]
-</li>
-<li> **SNII**: Contribution to the metal mass fraction from SNII
-</li>
-<li> **SNIa**: Contribution to the metal mass fraction from SNIa
-</li>
-<li> **alpha_Zmet**: Metallicity of the cell in standard Z style
-</li>
-<li> **ion_density**: Density of the ion in the cell [num/cc]
-</li>
+<li>
+<strong>LOS</strong>: Line of sight number</li>
+<li>
+<strong>D</strong>: Impact parameter</li>
+<li>
+<strong>cellID</strong>: Identification number of the cell</li>
+<li>
+<strong>redshift</strong>: Redshift of the cell, based on the redshift of the galaxy and the cell's line-of-sight velocity</li>
+<li>
+<strong>logN</strong>: Column density of the ion in the cell</li>
+<li>
+<strong>dobbler_b</strong>: Doppler b parameter = sqrt(2<em>k</em>T/m)</li>
+<li>
+<strong>x</strong>: x-coordinate of the cell in the box's coordinate system in [kpc]</li>
+<li>
+<strong>y</strong>: y-coordinate of the cell in the box's coordinate system in [kpc]</li>
+<li>
+<strong>z</strong>: z-coordinate of the cell in the box's coordinate system in [kpc]</li>
+<li>
+<strong>vx</strong>: vx-component of the cell's velocity in the box's coordinate system in [km/s]</li>
+<li>
+<strong>vy</strong>: vy-component of the cell's velocity in the box's coordinate system in [km/s]</li>
+<li>
+<strong>vz</strong>: vz-component of the cell's velocity in the box's coordinate system in [km/s]</li>
+<li>
+<strong>galactocentric_d</strong>: Distance between the cell and the center of the galaxy [kpc]</li>
+<li>
+<strong>log_nH</strong>: Log of the gas density [num/cc] of the cell</li>
+<li>
+<strong>log_T</strong>: Log of the temperature [K] of the cell</li>
+<li>
+<strong>cell_size</strong>: Size of the cell [kpc]</li>
+<li>
+<strong>SNII</strong>: Contribution to the metal mass fraction from SNII</li>
+<li>
+<strong>SNIa</strong>: Contribution to the metal mass fraction from SNIa</li>
+<li>
+<strong>alpha_Zmet</strong>: Metallicity of the cell in standard Z style</li>
+<li>
+<strong>ion_density</strong>: Density of the ion in the cell [num/cc]</li>
 </ul>
 
 <p>ALL.sysabs:</p>
@@ -331,7 +332,7 @@ The third section describes the ions to be probed and what instrument will be us
 </li>
 <li> **dlogN-**: Lower uncertainty in logN
 </li>
-<li> *dlogN-**: Upper uncertainty in logN
+<li> **dlogN-**: Upper uncertainty in logN
 </li>
 </ul>
 
@@ -382,7 +383,10 @@ The third section describes the ions to be probed and what instrument will be us
 </li>
 </ul>
       </section>
-
+      <footer>
+        <p>Project maintained by <a href="https://github.com/jrvliet">jrvliet</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></small></p>
+      </footer>
     </div>
     <!--[if !IE]><script>fixScale(document);</script><![endif]-->
     
