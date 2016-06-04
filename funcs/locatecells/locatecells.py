@@ -168,7 +168,7 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
         sp.call(command, shell=True)
       
     # Write the outfile
-    df = pdf.DataFrame(d, columns=header)
+    df = pd.DataFrame(d, columns=header)
     df.to_hdr(outfile, 'data', mode='w')
 
     
