@@ -4,40 +4,31 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>Mockspec by jrvliet</title>
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/github-dark.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/main.js"></script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
   </head>
   <body>
-
-      <header>
-        <h1>Mockspec</h1>
-        <p>Full Pipeline</p>
-      </header>
-
-      <div id="banner">
-        <span id="logo"></span>
-
-        <a href="https://github.com/jrvliet/mockspec" class="button fork"><strong>View On GitHub</strong></a>
-        <div class="downloads">
-          <span>Downloads:</span>
-          <ul>
-            <li><a href="https://github.com/jrvliet/mockspec/zipball/master" class="button">ZIP</a></li>
-            <li><a href="https://github.com/jrvliet/mockspec/tarball/master" class="button">TAR</a></li>
-          </ul>
-        </div>
-      </div><!-- end banner -->
-
     <div class="wrapper">
-      <nav>
-        <ul></ul>
-      </nav>
+      <header>
+        <h1 class="header">Mockspec</h1>
+        <p class="header">Full Pipeline</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/jrvliet/mockspec/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/jrvliet/mockspec/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/jrvliet/mockspec">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/jrvliet">jrvliet</a></p>
+
+
+      </header>
       <section>
         <h2>
 <a id="welcome-to-mockspec" class="anchor" href="#welcome-to-mockspec" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Welcome to Mockspec</h2>
@@ -290,105 +281,104 @@ The third section describes the ions to be probed and what instrument will be us
 <p>ALL.sysabs:</p>
 
 <ul>
-<li> **los**: Line of sight number
-</li>
-<li> **D**: Impact parameter [kpc]
-</li>
-<li> **zabs**: Redshift of the absorption feature
-</li>
-<li> **v-**: Lower edge of the absorption feature in velocity space
-</li>
-<li> **v+**: Upper edge of the absorption feature in velocity space
-</li>
-<li> **EW_r**: Rest frame equivalent width of the absorption feature
-</li>
-<li> **dEW_r**: Uncertainty in EW_r
-</li>
-<li> **DR**:
-</li>
-<li> **dDR**: Uncertainty in DR
-</li>
-<li> **SL**: Significance level of the detection
-</li>
-<li> **Vbar**: Mean velocity of the absorption
-</li>
-<li> **dVbar**: Uncertainty in Vbar
-</li>
-<li> **Vsprd**: Spread of the absorption in velocity space
-</li>
-<li> **dVsprd**: Uncertainty in Vsprd
-</li>
-<li> **Vasym**:
-</li>
-<li> **dVasym**: Uncertainty in Vasym
-</li>
-<li> **lgt**: 
-</li>
-<li> **dtau-**: Lower uncertainty in optical depth
-</li>
-<li> **dtau+**: Upper uncertainty in optical depth
-</li>
-<li> **logN**: Log of column density of the absorption
-</li>
-<li> **dlogN-**: Lower uncertainty in logN
-</li>
-<li> **dlogN-**: Upper uncertainty in logN
-</li>
+<li>
+<strong>los</strong>: Line of sight number</li>
+<li>
+<strong>D</strong>: Impact parameter [kpc]</li>
+<li>
+<strong>zabs</strong>: Redshift of the absorption feature</li>
+<li>
+<strong>v-</strong>: Lower edge of the absorption feature in velocity space</li>
+<li>
+<strong>v+</strong>: Upper edge of the absorption feature in velocity space</li>
+<li>
+<strong>EW_r</strong>: Rest frame equivalent width of the absorption feature</li>
+<li>
+<strong>dEW_r</strong>: Uncertainty in EW_r</li>
+<li>
+<strong>DR</strong>:</li>
+<li>
+<strong>dDR</strong>: Uncertainty in DR</li>
+<li>
+<strong>SL</strong>: Significance level of the detection</li>
+<li>
+<strong>Vbar</strong>: Mean velocity of the absorption</li>
+<li>
+<strong>dVbar</strong>: Uncertainty in Vbar</li>
+<li>
+<strong>Vsprd</strong>: Spread of the absorption in velocity space</li>
+<li>
+<strong>dVsprd</strong>: Uncertainty in Vsprd</li>
+<li>
+<strong>Vasym</strong>:</li>
+<li>
+<strong>dVasym</strong>: Uncertainty in Vasym</li>
+<li>
+<strong>lgt</strong>: </li>
+<li>
+<strong>dtau-</strong>: Lower uncertainty in optical depth</li>
+<li>
+<strong>dtau+</strong>: Upper uncertainty in optical depth</li>
+<li>
+<strong>logN</strong>: Log of column density of the absorption</li>
+<li>
+<strong>dlogN-</strong>: Lower uncertainty in logN</li>
+<li>
+<strong>dlogN-</strong>: Upper uncertainty in logN</li>
 </ul>
 
 <p>Gasbox:</p>
 
 <ul>
-<li> **cell_size**: Size of the cell [kpc]
-</li>
-<li> **x**: x-coordinate of the cell in box reference frame [kpc]
-</li>
-<li> **y**: y-coordinate of the cell in box reference frame [kpc]
-</li>
-<li> **z**: z-coordinate of the cell in box reference frame [kpc]
-</li>
-<li> **vx**: vx component of the cell's velocity in box reference frame [km/s]
-</li>
-<li> **vy**: vy component of the cell's velocity in box reference frame [km/s]
-</li>
-<li> **vz**: vz component of the cell's velocity in box reference frame [km/s]
-</li>
-<li> **nH**: Gas density in the cell [num/cc]
-</li>
-<li> **temperature**: Temperature of gas in the cell [K]
-</li>
-<li> **SNII**: Contribution to the metal mass fraction from SNII
-</li>
-<li> **SNIa**: Contribution to the metal mass fraction from SNIa
-</li>
-<li> **nAtom**: Density of the element in question (such as carbon or oxygen) in the cell [num/cc]
-</li>
-<li> **fIon**: Ionization fraction of the ion in question within the cell
-</li>
-<li> **nIon**: Density of the ion in the cell [num/cc]
-</li>
-<li> **alpha_sol**: Solar abundance of the element
-</li>
-<li> **alpha_Zmet**: Abundance of the element in the cell relative to solar
-</li>
-<li> **ID**: Identification number of the cell
-</li>
-<li> **t_ph**: Timescale of photoionization in the cell
-</li>
-<li> **t_rec**: Timescale of recombination in the cell
-</li>
-<li> **t_coll**: Timescale of collisional ionization in the cell
-</li>
-<li> **t_cool**: Timescale of cooling in the cell
-</li>
+<li>
+<strong>cell_size</strong>: Size of the cell [kpc]</li>
+<li>
+<strong>x</strong>: x-coordinate of the cell in box reference frame [kpc]</li>
+<li>
+<strong>y</strong>: y-coordinate of the cell in box reference frame [kpc]</li>
+<li>
+<strong>z</strong>: z-coordinate of the cell in box reference frame [kpc]</li>
+<li>
+<strong>vx</strong>: vx component of the cell's velocity in box reference frame [km/s]</li>
+<li>
+<strong>vy</strong>: vy component of the cell's velocity in box reference frame [km/s]</li>
+<li>
+<strong>vz</strong>: vz component of the cell's velocity in box reference frame [km/s]</li>
+<li>
+<strong>nH</strong>: Gas density in the cell [num/cc]</li>
+<li>
+<strong>temperature</strong>: Temperature of gas in the cell [K]</li>
+<li>
+<strong>SNII</strong>: Contribution to the metal mass fraction from SNII</li>
+<li>
+<strong>SNIa</strong>: Contribution to the metal mass fraction from SNIa</li>
+<li>
+<strong>nAtom</strong>: Density of the element in question (such as carbon or oxygen) in the cell [num/cc]</li>
+<li>
+<strong>fIon</strong>: Ionization fraction of the ion in question within the cell</li>
+<li>
+<strong>nIon</strong>: Density of the ion in the cell [num/cc]</li>
+<li>
+<strong>alpha_sol</strong>: Solar abundance of the element</li>
+<li>
+<strong>alpha_Zmet</strong>: Abundance of the element in the cell relative to solar</li>
+<li>
+<strong>ID</strong>: Identification number of the cell</li>
+<li>
+<strong>t_ph</strong>: Timescale of photoionization in the cell</li>
+<li>
+<strong>t_rec</strong>: Timescale of recombination in the cell</li>
+<li>
+<strong>t_coll</strong>: Timescale of collisional ionization in the cell</li>
+<li>
+<strong>t_cool</strong>: Timescale of cooling in the cell</li>
 </ul>
       </section>
       <footer>
-        <p>Project maintained by <a href="https://github.com/jrvliet">jrvliet</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></small></p>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
       </footer>
     </div>
     <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-    
+		
   </body>
 </html>
