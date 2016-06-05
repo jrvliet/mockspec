@@ -169,7 +169,7 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
       
     # Write the outfile
     df = pd.DataFrame(d, columns=header)
-    df.to_hdr(outfile, 'data', mode='w')
+    df.to_hdf(outfile, 'data', mode='w')
 
     
     #flog.close()  
