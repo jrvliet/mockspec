@@ -33,6 +33,15 @@ def sysabs_to_hdf5(codeLoc):
         print 'while reading in {0:s}'.format(allfile)
         return 1
     
+    # Read in lines.info to get the azimuthal angle
+    linesfile = 'lines.info'
+    phi = np.loadtxt(linesfile, skiprows=2, usecols=(2,), unpack=True)
+    
+    # Insert into the sysabs data file
+    data = np.insert(data, 2, phi, axis=1)
+    header = header.insert(2, 'phi')
+    
+
     # WRite data to HDF file
     df = pd.DataFrame(data, columns=header)
     df.to_hdf(hdf5file, 'data', mode='w')
