@@ -73,23 +73,27 @@ def gasbox_to_hdf5(codeLoc):
     '''
     
     # Get the name of the file 
-    files = glob.glob('*GZ*.txt')
+    files = glob.glob('*GZ*.*.*.txt')
 
     header = ['cell_size', 'x', 'y', 'z', 'vx', 'vy', 'vz',
                 'nH', 'temperature', 'SNII', 'SNIa', 'nAtom',
                 'fIon', 'nIon', 'alpha_sol', 'alpha_Zmet',
                 'ID', 't_ph', 't_rec', 't_coll', 't_cool']
+    print len(header)
     for filename in files:
 
-        # Create the name of the HDF5 file
-        hdf5file = filename.replace('txt','h5')
+        if 'tcdat' not in filename:
 
-        # Read in the data
-        data = np.loadtxt(filename, skiprows=2)
-        
-        # WRite data to HDF file
-        df = pd.DataFrame(data, columns=header)
-        df.to_hdf(hdf5file, 'data', mode='w')
+            # Create the name of the HDF5 file
+            hdf5file = filename.replace('txt','h5')
+
+            # Read in the data
+            data = np.loadtxt(filename, skiprows=2)
+            print filename, data.shape
+            
+            # WRite data to HDF file
+            df = pd.DataFrame(data, columns=header)
+            df.to_hdf(hdf5file, 'data', mode='w')
 
 
 
