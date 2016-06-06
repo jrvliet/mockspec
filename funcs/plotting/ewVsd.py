@@ -58,12 +58,6 @@ def ew_profile(ions):
         ew = np.array(ew)
         imp = np.array(imp)
 
-    #    print len(ew)
-    #    print ew
-    #    print imp
-    #    print np.mean(ew)
-
-
         ew_mean = []
         ew_err = []
         imp_mean = []

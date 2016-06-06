@@ -7,10 +7,12 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
 import subprocess as sp
 import os
 import sys
 from scipy.optimize import curve_fit
+
 
 def schechter(l, phi, lstar, alpha):
 
@@ -57,12 +59,16 @@ def ew_distribution(ions):
     # Loop over ions
     for ion in ions:
         
-        allfile = './i{4:d}/{0:s}/{1:s}.{0:s}.a{2:s}.i{3:d}.ALL.sysabs'.format(ion,galID,expn,inc)
+        allfile = './i{4:d}/{0:s}/{1:s}.{0:s}.a{2:s}.i{3:d}.ALL.sysabs.h5'.format(ion,galID,expn,inc)
         
-        print allfile
+        d = pd.read_hdf(allfile, 'data')
+        ew = d['EW_r']
+        tmpfile = 'ewCols.tmp'
+        np.savetxt(tmpfile, ew)
+
         # Run Chris's binning program
         blankCommand = '{0:s}/funcs/plotting/bindata-logfreq {1:s} {2:d} {3:d} {4:f} {5:f} {6:f} {7:d}'
-        command = blankCommand.format(codeLoc, allfile, column, linear, binsize, 
+        command = blankCommand.format(codeLoc, tmpfile, 0, linear, binsize, 
                                         lowerlimit, upperlimit, header)
         print command
         sp.call(command, shell=True)
@@ -144,6 +150,7 @@ def ew_distribution(ions):
     #    plt.ylim([1e-5, 1e2])
         plt.legend(frameon=False, loc='lower left', prop={'size':8})
 
+        sp.call('rm {0:s}.tmp'.format(tmpfile), shell=True)
     plt.tight_layout()
     plt.subplots_adjust(top=0.92)
     plt.suptitle(r'{0:s}, a={1:s}, Rvir={2:.1f} kpc, i={3:d}'.format(galID, expn, rvir, inc))
