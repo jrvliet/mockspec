@@ -39,7 +39,7 @@ def sysabs_to_hdf5(codeLoc):
     
     # Insert into the sysabs data file
     data = np.insert(data, 2, phi, axis=1)
-    header = header.insert(2, 'phi')
+    header.insert(2, 'phi')
     
 
     # WRite data to HDF file
@@ -133,6 +133,7 @@ def genSummaries(galID, expn, incline, ions, numlos):
         outfile = '{0:s}_a{1:s}_i{2:d}_{3:s}_cellSummary.h5'.format(
                     galID,expn,int(incline),ion)
 
+        print 'Compiling summary for {0:s}'.format(ion)
         # Write the header
         #header = ('LOS\tImpact\tPhi\tProbbed\tProbbed_in_halos\t'
         #            'In_Lines\tLines_in_halos\tSignificant\t'   
