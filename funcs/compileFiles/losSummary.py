@@ -68,7 +68,7 @@ def num_significant(galID, expn, ion, inc, losnum):
     and counting those lines that have that losnum
     '''
     
-    filename = '{0:s}/{1:s}.{2:s}.{0:s}.i{3:s}.abs_cells.dat'.format(ion,galID,expn,ion,inc)
+    filename = '{0:s}/{1:s}.{2:s}.{0:s}.i{3:d}.abs_cells.dat'.format(ion,galID,expn,ion,int(inc))
 
     linecount = 0
     found = 0

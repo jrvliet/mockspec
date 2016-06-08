@@ -131,7 +131,7 @@ def genSummaries(galID, expn, incline, ions, numlos):
     for ion in ions:
 
         outfile = '{0:s}_a{1:s}_i{2:d}_{3:s}_cellSummary.h5'.format(
-                    galID,expn,incline,ion)
+                    galID,expn,int(incline),ion)
 
         # Write the header
         #header = ('LOS\tImpact\tPhi\tProbbed\tProbbed_in_halos\t'
