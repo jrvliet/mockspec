@@ -154,10 +154,10 @@ def genSummaries(galID, expn, incline, ions, numlos):
             losnum = str(i+1).zfill(4)
 
             # Get the id of cells in the .lines file for this LOS 
-            linesIDs = num_in_lines(galID, ion, losnum)
+            linesIDs = ls.num_in_lines(galID, ion, losnum)
 
             # Get the id of the significant cells along this LOS
-            sigIDs = num_significant(galID, expn, ion, incline, losnum)
+            sigIDs = ls.num_significant(galID, expn, ion, incline, losnum)
 
             # Determine the number of these cells that are in subhalos
             probbedinSub, linesinSub, siginSub = ls.num_in_subhalos(galID,
