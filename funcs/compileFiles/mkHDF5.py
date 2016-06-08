@@ -159,10 +159,14 @@ def genSummaries(galID, expn, incline, ions, numlos):
             # Get the id of the significant cells along this LOS
             sigIDs = ls.num_significant(galID, expn, ion, incline, losnum)
 
+            # Get the coordinates of these cells
+            probbedCells, linesCells, sigCells = ls.get_coordinates(galID,
+                expn, probbedIDs, linesIDs, sigIDs)
+
             # Determine the number of these cells that are in subhalos
             probbedinSub, linesinSub, siginSub = ls.num_in_subhalos(galID,
-                expn, ion, incline, losnum, probbedCells, linesCells, 
-                sigCells)
+               expn, ion, incline, losnum, probbedCells, linesCells, 
+               sigCells)
 
             data[i,0] = i+1
             data[i,1] = imp[i]

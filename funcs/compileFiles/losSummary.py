@@ -13,6 +13,7 @@ Contains:
 
 from math import sqrt
 from numpy import loadtxt
+import pandas as pd
 
 
 def num_along_los(losnum):
@@ -70,28 +71,41 @@ def num_significant(galID, expn, ion, inc, losnum):
     
     print ion, type(ion)
     print galID, type(galID)
-    print expn, type(exon)
+    print expn, type(expn)
     print inc, type(inc)
-    filename = '{0:s}/{1:s}.{2:s}.{0:s}.i{3:d}.abs_cells.dat'.format(ion,galID,expn,ion,int(inc))
+    filename = '{0:s}/{1:s}.{2:s}.{0:s}.i{3:d}.abs_cells.h5'.format(ion,galID,expn,int(inc))
 
-    linecount = 0
-    found = 0
-    
-    ids = []
-    with open(filename, 'r') as f:
-        # Read past the header
-        f.readline()
-        for line in f:
-            los = int(line.split()[0])
-            if los == int(losnum):
-                ids.append(int(line.split()[2]))
-                if found == 0:
-                    found = 1
-            else:
-                if found == 1:
-                    break
+    d = pd.read_hdf(filename, 'data')
+
+    los = d['LOS']
+    cellIDs = d['cellID']
+
+    ids = cellIDs[los == int(losnum)]
 
     return ids
+    
+
+    # Get the number of times this los is included
+#    (los == float(losnum)).sum()    
+
+#    linecount = 0
+#    found = 0
+    
+#    ids = []
+#    with open(filename, 'r') as f:
+#        # Read past the header
+#        f.readline()
+#        for line in f:
+#            los = int(line.split()[0])
+#            if los == int(losnum):
+#                ids.append(int(line.split()[2]))
+#                if found == 0:
+#                    found = 1
+#            else:
+#                if found == 1:
+#                    break
+#
+#    return ids
 
 def get_coordinates(galID, expn, probbedIDs, linesIDs, sigIDs):
 
@@ -103,32 +117,48 @@ def get_coordinates(galID, expn, probbedIDs, linesIDs, sigIDs):
     xgas, ygas, zgas = loadtxt(gasfile, skiprows=2, usecols=(1,2,3), unpack=True)
      
     # Loop through probbed cells
-    xprob, yprob, zprob = [], [], []
+    #xprob, yprob, zprob = [], [], []
+    probbedCells = []
     for cell in probbedIDs:
         index = cell-1
-        xprob.append(xgas[index])
-        yprob.append(ygas[index])
-        zprob.append(zgas[index])
+        xprob = xgas[index]
+        yprob = ygas[index]
+        zprob = zgas[index]
+        probbedCells.append( (xprob, yprob, zprob) )
+        #xprob.append(xgas[index])
+        #yprob.append(ygas[index])
+        #zprob.append(zgas[index])
+        
     
     # Loop through lines cells
-    xlines, ylines, zlines = [], [], []
-    for cell in probbedIDs:
+    #xlines, ylines, zlines = [], [], []
+    linesCells = []
+    for cell in linesIDs:
         index = cell-1
-        xlines.append(xgas[index])
-        ylines.append(ygas[index])
-        zlines.append(zgas[index])
+        xlines = xgas[index]
+        ylines = ygas[index] 
+        zlines = zgas[index]
+        linesCells.append( (xlines, ylines, zlines) )
+        #xlines.append(xgas[index])
+        #ylines.append(ygas[index])
+        #zlines.append(zgas[index])
     
     # Loop through sig cells
-    xsig, ysig, zsig = [], [], []
-    for cell in probbedIDs:
+    #xsig, ysig, zsig = [], [], []
+    sigCells = []
+    for cell in sigIDs:
         index = cell-1
-        xsig.append(xgas[index])
-        ysig.append(ygas[index])
-        zsig.append(zgas[index])
+        xsig = xgas[index]
+        ysig = ygas[index]
+        zsig = zgas[index]
+        sigCells.append( (xsig,ysig,zsig) )
+        #xsig.append(xgas[index])
+        #ysig.append(ygas[index])
+        #zsig.append(zgas[index])
     
-    probbedCells = (xprob, yprob, zprob)
-    linesCells = (xlines, ylines, zlines)
-    sigCells = (xsig, ysig, zsig)
+    #probbedCells = (xprob, yprob, zprob)
+    #linesCells = (xlines, ylines, zlines)
+    #sigCells = (xsig, ysig, zsig)
 
     return probbedCells, linesCells, sigCells
 
@@ -146,7 +176,7 @@ def num_in_subhalos(galID, expn, ion, inc, losnum,
     # Read in the subhalo information
     #halofile = '../input_{0:s}.txt'.format(expn)
     halofile = '../halos_{0:s}.txt'.format(expn)
-    halos = np.loadtxt(halofile, skiprows=2)
+    halos = loadtxt(halofile, skiprows=2)
 
     # Sort the halos array in order of decreasing mvir
     # mvir = column 7
@@ -159,7 +189,6 @@ def num_in_subhalos(galID, expn, ion, inc, losnum,
     # Get the ten largest subhalos
     xhalo, yhalo, zhalo, rhalo = [], [], [], []
     for i in range(1,numHalos+1):      
-        l = f.readline().split()
         xhalo.append( (halos[i,1] - xhost)*1000.0 )
         yhalo.append( (halos[i,2] - yhost)*1000.0 )
         zhalo.append( (halos[i,3] - zhost)*1000.0 )
@@ -168,6 +197,7 @@ def num_in_subhalos(galID, expn, ion, inc, losnum,
     
     # Run through the probbed cells
     insubCount = 0
+
     for cell in probbedCells:
         x, y, z = cell
 
