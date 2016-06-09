@@ -105,7 +105,8 @@ if runRates==1:
     rc.setup_rates_data(codeLoc)
     print '\t Running rates...'
     rc.run_rates(codeLoc)
-    hdf.gasbox_to_hdf5(codeLoc)
+    print '\t Converting to hdf5...'
+    hdf.gasbox_to_hdf5(codeLoc, ions)
 else:
     print 'Skipping rates'
 

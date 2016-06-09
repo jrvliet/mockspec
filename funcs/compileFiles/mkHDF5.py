@@ -75,24 +75,30 @@ def abscells_to_hdf5(codeLoc):
     df.to_hdf(hdf5file, 'data', mode='w')
 
 
-def gasbox_to_hdf5(codeLoc):
+def gasbox_to_hdf5(codeLoc, ions):
 
     '''
     Converts the ion boxes file into the HDF5 format
     '''
     
     # Get the name of the file 
-    files = glob.glob('*GZ*.*.*.txt')
+    files = glob.glob('*GZ*.txt')
 
-    header = ['cell_size', 'x', 'y', 'z', 'vx', 'vy', 'vz',
-                'nH', 'temperature', 'SNII', 'SNIa', 'nAtom',
-                'fIon', 'nIon', 'alpha_sol', 'alpha_Zmet',
-                'ID', 't_ph', 't_rec', 't_coll', 't_cool']
     print len(header)
     for filename in files:
 
         if 'tcdat' not in filename:
 
+            ion = filename.split('.')[-2]
+            if ion in ions:     
+                header = ['cell_size', 'x', 'y', 'z', 'vx', 'vy', 'vz',
+                            'nH', 'temperature', 'SNII', 'SNIa', 'nAtom',
+                            'fIon', 'nIon', 'alpha_sol', 'alpha_Zmet',
+                            'ID', 't_ph', 't_rec', 't_coll', 't_cool']
+            else:
+                header = ['cell_size', 'x', 'y', 'z', 'vx', 'vy', 'vz', 
+                            'density', 'temperature', 'SNII', 'SNIa']
+            
             # Create the name of the HDF5 file
             hdf5file = filename.replace('txt','h5')
 
@@ -103,7 +109,7 @@ def gasbox_to_hdf5(codeLoc):
             # WRite data to HDF file
             df = pd.DataFrame(data, columns=header)
             df.to_hdf(hdf5file, 'data', mode='w')
-
+ 
 
 
 
