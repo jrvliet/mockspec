@@ -84,7 +84,6 @@ def gasbox_to_hdf5(codeLoc, ions):
     # Get the name of the file 
     files = glob.glob('*GZ*.txt')
 
-    print len(header)
     for filename in files:
 
         if 'tcdat' not in filename:
