@@ -282,7 +282,19 @@ def setup_ion_dir(ion, galID, expn, codeLoc):
    
 
     # Copy the Mockspec files from the parent directory to here
-    command = 'cp '+codeLoc+'/controls/Mockspec* ./'+ion+'/'
+    command = 'cp {0:s}/controls/Mockspec.instruments ./{1:s}/'.format(codeLoc,ion)
+    try:
+        sp.check_call(command, shell=True)
+    except:
+        print 'Could not complete {0:s}'.format(command)
+
+    command = 'cp {0:s}/controls/Mockspec.transitions ./{1:s}/'.format(codeLoc,ion)
+    try:
+        sp.check_call(command, shell=True)
+    except:
+        print 'Could not complete {0:s}'.format(command)
+
+    command = 'cp ./Mockspec.runpars ./{1:s}/'.format(codeLoc,ion)
     try:
         sp.check_call(command, shell=True)
     except:
