@@ -230,8 +230,8 @@ for ion in ions:
     #  Add inclination angle to filenames
     #
     #####
-    print '\n\t Renaming files...'
     if runCullabs==1 or runLocateCells==1:
+        print '\n\t Renaming files...'
         fi.rename(galID, expn, ion, incline, runLocateCells, runCullabs)
     else:
         print 'What was the point...'

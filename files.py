@@ -455,11 +455,13 @@ def rename(galID, expn, ion, incline, runLocateCells, runCullabs):
     inclination angle
     '''
     inc = int(incline)
+    
     if runCullabs==1:
         # Need to rename ALL.sysabs file
         allName = '{0:s}.{1:s}.a{2:s}.ALL.sysabs'.format(galID, ion, expn)
         newName = allName.replace('ALL','i{0:d}.ALL'.format(inc))
         command = 'mv {0:s} {1:s}'.format(allName, newName)
+        print '\nRenaming command: {0:s}\n'.format(command)
         try:
             sp.check_call(command, shell=True)
         except:
