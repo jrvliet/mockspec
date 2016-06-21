@@ -455,6 +455,7 @@ def rename(galID, expn, ion, incline, runLocateCells, runCullabs):
     inclination angle
     '''
     inc = int(incline)
+    print '\tRenaming files'
     
     if runCullabs==1:
         # Need to rename ALL.sysabs file

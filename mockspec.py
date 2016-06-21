@@ -219,7 +219,7 @@ for ion in ions:
         print '\n\tIdentifying significant cells'
         lc.locateSigCells(galID, expn, ion, sigcellsCut, codeLoc, incline)
 #        lc.sigCells(galID, expn, ion, sigcellsCut, codeLoc)
-        hdf.abscells_to_hdf5(codeLoc)
+#        hdf.abscells_to_hdf5(codeLoc)
     else:
         print '\tSkipping locatecells...'
 
