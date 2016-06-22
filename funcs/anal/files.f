@@ -502,6 +502,11 @@ c     for each of the totals: "sysanal.aod"
        ddtautot(j) = abs(ddtautot(j))
        tautot(j)   = log10(tautot(j))
 
+c      If SL is too high, prints ***** in column -> Cap the value
+       IF (sltot(j).gt.1e3) then
+          sltot(j) = 1e3
+       END IF
+
        WRITE(14,1401) zbar,v1,v2,
      &       rw,drw,drtot(j2),drsigtot(j2),
      &       sltot(j),vtotbar(j),sigvtotbar(j),
