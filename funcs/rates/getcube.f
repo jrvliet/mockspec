@@ -247,7 +247,7 @@ c     set the ion information and write
      +                  'ID','t_ph','t_rec','t_coll','t_cool'
       ENDIF
 
-      write(m+10,'(es11.4,15es16.4,4x,i8,2x,4es11.3)')
+      write(m+10,'(es11.4, 15es16.4e3, 4x, i8, 2x, 4es11.3)')
      +        Lcellkpc,xposn(i),yposn(i),zposn(i),
      +        vx(i),vy(i),vz(i),nH,Tcell(i),
      +        SNII(i),SNIa(i),specden,ionfrac,ionden,
