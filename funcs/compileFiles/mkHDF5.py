@@ -86,29 +86,32 @@ def gasbox_to_hdf5(codeLoc, ions):
 
     for filename in files:
 
-        if 'tcdat' not in filename:
+        ion = filename.split('.')[-2]
+        if ion in ions:     
+            header = ['cell_size', 'x', 'y', 'z', 'vx', 'vy', 'vz',
+                        'nH', 'temperature', 'SNII', 'SNIa', 'nAtom',
+                        'fIon', 'nIon', 'alpha_sol', 'alpha_Zmet',
+                        'ID', 't_ph', 't_rec', 't_coll', 't_cool']
+        elif 'tcdat' in filename:
+            header = ['ID', 'z', 'nH', 'T', 'Zcell', 'ne', 'ntot', 
+                      'nH/nH', 'nHe/nH', 'nC/nH', 'nN/nH', 'nO/nH', 
+                      'nNe/nH', 'nMg/nH', 'nSi/nH', 'nS/nH', 'nCa/nH', 
+                      'nFe/nH']
+        else:
+            header = ['cell_size', 'x', 'y', 'z', 'vx', 'vy', 'vz', 
+                        'density', 'temperature', 'SNII', 'SNIa']
+        
+        # Create the name of the HDF5 file
+        hdf5file = filename.replace('txt','h5')
 
-            ion = filename.split('.')[-2]
-            if ion in ions:     
-                header = ['cell_size', 'x', 'y', 'z', 'vx', 'vy', 'vz',
-                            'nH', 'temperature', 'SNII', 'SNIa', 'nAtom',
-                            'fIon', 'nIon', 'alpha_sol', 'alpha_Zmet',
-                            'ID', 't_ph', 't_rec', 't_coll', 't_cool']
-            else:
-                header = ['cell_size', 'x', 'y', 'z', 'vx', 'vy', 'vz', 
-                            'density', 'temperature', 'SNII', 'SNIa']
-            
-            # Create the name of the HDF5 file
-            hdf5file = filename.replace('txt','h5')
+        # Read in the data
+        data = np.loadtxt(filename, skiprows=2)
+        print filename, data.shape
+        
+        # WRite data to HDF file
+        df = pd.DataFrame(data, columns=header)
+        df.to_hdf(hdf5file, 'data', mode='w')
 
-            # Read in the data
-            data = np.loadtxt(filename, skiprows=2)
-            print filename, data.shape
-            
-            # WRite data to HDF file
-            df = pd.DataFrame(data, columns=header)
-            df.to_hdf(hdf5file, 'data', mode='w')
- 
 
 
 
