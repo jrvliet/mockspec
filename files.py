@@ -467,8 +467,6 @@ def rename(galID, expn, ion, incline, runLocateCells, runCullabs):
             sp.check_call(command, shell=True)
         except:
             print 'Error in rename running \n\t{0:s}'.format(command)
-            print 'Exitting...'
-            sys.exit()
 
     # This is no longer needed, locatecells now has the correct name
     #if runLocateCells==1:
