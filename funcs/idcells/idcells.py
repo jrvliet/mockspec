@@ -11,6 +11,8 @@
 import sys
 import numpy as np
 import subprocess as sp
+import pandas as pd
+
 def read_control_file(filename):
 
     f = open(filename)
@@ -18,12 +20,10 @@ def read_control_file(filename):
     for i in range(0,4):
         line = f.readline()
 
-#    print line
     gasfile = line.split()[0]
     galID = gasfile.split('_')[0]
     aexpn_tmp = (gasfile.split('GZa')[1])
     aexpn = aexpn_tmp.split('.')[0] + '.' + aexpn_tmp.split('.')[1]
-#    print aexpn
     
     line = f.readline()
     summaryLoc = (line.split()[0])
@@ -31,11 +31,7 @@ def read_control_file(filename):
     line = f.readline()
     ion_list = line.split('#')[0].rstrip().split()
 
-#    print ion_list
-
     ion_num = len(ion_list)
-
-#    print ion_num
 
     f.close()
 
@@ -158,19 +154,21 @@ def read_los_props(losnum):
 ###############################################################################
 
 
-def idcells(galID, aexpn, ion_list, codeLoc):
+def idcells(galID, aexpn, ion_list, codeLoc, subset):
 
     """
     Function to select the physical properties of gas cells
     based on the cellID
+
+    Ths subset variable determines which subset of the box to use:
+        0 = Use the full box
+        1 = Low Z; Use only cells with SNII below the 10% percentile
+        2 = Cloud; Use only cells with -5<lognH<-4 and 4<logT<4.5
     """
 
     ion_num = len(ion_list)
 
     width = 15
-
-    # Read in properties from gal_props file
-#    galID, aexpn, ion_list, ion_num = read_control_file(sys.argv[1])
 
     # Read in LOS properties
     los_num, los_b, los_phi = read_lines('lines.info')
@@ -178,20 +176,31 @@ def idcells(galID, aexpn, ion_list, codeLoc):
     # Loop over ions
     for ion in ion_list:
 
-#        print 'Ion: ',ion
         # Read in ion box
-        ionboxfile = galID+'_GZa'+aexpn+'.'+ion+'.txt'
-    #    ionboxfile = galID+'_a'+aexpn+'.'+ion+'.txt'
-        ionbox = np.loadtxt(ionboxfile, skiprows=2)
+        ionboxfile = '{0:s}_GZa{1:s}.{2:s}.h5'.format(galID,aexpn,ion)
+        ionbox = pd.read_hdf(ionboxfile, 'data')
+
+        # Create the subset box
+        if subset==0:
+            subbox = ionbox
+        elif subset==1:
+            snIICutoff = ionbox.quantile(0.1)['SNII']
+            subbox = ionbox[(ionbox.SNII)]
+        elif subset==2:
+            with open('{0:s}/controls/cloud_params.dat'.format(codeLoc, 'r') as f:
+                minT = 10**(float(f.readline().split()[0]))
+                maxT = 10**(float(f.readline().split()[0]))
+                minnH = 10**(float(f.readline().split()[0]))
+                maxnH = 10**(float(f.readline().split()[0]))
+            inds = ((ionbox.temperature<maxT) & (ionbox.temperature>minT) & 
+                    (ionbox.nH<maxnH) & (ionbox.nH>minnH))
+            subbox = ionbox[inds]
 
         # Loop over lines of sight
         for i in range(0,len(los_num)):
-            
-#            print '\tLOS: ',i+1
 
             # Read in LOS properties (entry points)
             xen, yen, zen, losx, losy, losz, a11, a12, a13, a21, a22, a23, a31, a32, a33, Xcom, Ycom, Zcom, VXcom, VYcom, VZcom, x0, y0, z0, vx_obs, vy_obs, vz_obs = read_los_props(i+1)
-            
 
             # Construct filename that contains list of cells
             cell_file = 'los{0:04d}.cellID.dat'.format(i+1)
@@ -199,7 +208,7 @@ def idcells(galID, aexpn, ion_list, codeLoc):
             cf.readline()     # Read past header
 
             # Construct output filename
-            outfile = galID+'.'+ion+'.los{0:04d}.dat'.format(i+1)
+            outfile = '{0:s}.{1:s}.los{2:04d}.dat'.format(galID,ion,i+1)
 
             # Write output header
             l = 0
@@ -214,25 +223,43 @@ def idcells(galID, aexpn, ion_list, codeLoc):
                 
                 # Cell number corresponds to line of gas file
     #            print ionbox[cellnum-1]
-                cellsize = ionbox[cellnum-1,0]
-                x = ionbox[cellnum-1,1]
-                y = ionbox[cellnum-1,2]
-                z = ionbox[cellnum-1,3]
-                vx = ionbox[cellnum-1,4]
-                vy = ionbox[cellnum-1,5]
-                vz = ionbox[cellnum-1,6]
-                nH = ionbox[cellnum-1,7]
-                t = ionbox[cellnum-1,8]
-                SNII_frac = ionbox[cellnum-1,9]
-                SNIa_frac = ionbox[cellnum-1,10]
-                natom = ionbox[cellnum-1,11]
-                fion = ionbox[cellnum-1,12]
-                nion= ionbox[cellnum-1,13]
-                cell_id = int(ionbox[cellnum-1,16])
+                ind = cellnum-1
+                cellsize = subbox['cell_size'][ind]
+                x = subbox['x'][ind]
+                y = subbox['y'][ind]
+                z = subbox['z'][ind]
+                vx = subbox['vx'][ind]
+                vy = subbox['vy'][ind]
+                vz = subbox['vz'][ind]
+                nH = subbox['nH'][ind]
+                t = subbox['temperature'][ind]
+                SNII_frac = subbox['SNII'][ind]
+                SNIa_frac = subbox['SNIa'][ind]
+                natom = subbox['nAtom'][ind]
+                fion = subbox['fIon'][ind]
+                nion = subbox['nIon'][ind]
+                cell_id = subbox['ID'][ind]
+
+#                cellsize = ionbox[cellnum-1,0]
+#                x = ionbox[cellnum-1,1]
+#                y = ionbox[cellnum-1,2]
+#                z = ionbox[cellnum-1,3]
+#                vx = ionbox[cellnum-1,4]
+#                vy = ionbox[cellnum-1,5]
+#                vz = ionbox[cellnum-1,6]
+#                nH = ionbox[cellnum-1,7]
+#                t = ionbox[cellnum-1,8]
+#                SNII_frac = ionbox[cellnum-1,9]
+#                SNIa_frac = ionbox[cellnum-1,10]
+#                natom = ionbox[cellnum-1,11]
+#                fion = ionbox[cellnum-1,12]
+#                nion= ionbox[cellnum-1,13]
+#                cell_id = int(ionbox[cellnum-1,16])
 
                 if cell_id != cellnum:
                     print 'Error'
                     sys.exit()
+
 
                 # Write to file
                 str = ('{0:1.4e}'.format(cellsize)).center(width) + '{0:.4e}'.format(x).center(width) + '{0:.4e}'.format(y).center(width) + '{0:.4e}'.format(z).center(width) + '{0:.4e}'.format(vx).center(width) + '{0:.4e}'.format(vy).center(width ) + '{0:.4e}'.format(vz).center(width) + '{0:.4e}'.format(nH).center(width) + '{0:.4e}'.format(t).center(width) + '{0:.4e}'.format(SNII_frac).center(width) + '{0:.4e}'.format(SNIa_frac).center(width) + '{0:.4e}'.format(natom).center(width) + '{0:.4e}'.format(fion).center(width) + '{0:.4e}'.format(nion).center(width) + '{0:d}\n'.format(cell_id).rjust(width-3)
@@ -243,18 +270,19 @@ def idcells(galID, aexpn, ion_list, codeLoc):
             of.close()
 
     # Clean up the directory
-    clean_up()
+    clean_up(subset)
 
 
 
-def clean_up():
+def clean_up(subset):
 
+    subsetName = ['full', 'lowZ', 'cloud']
     # Make a directory for the idcells files
-    dirName = 'cellIDs'
+    dirName = 'cellIDs_{0:s}'.format(subsetName[subset])
     sp.call('mkdir '+dirName, shell=True)
 
     # Move all cellid files into the directory
-    command = 'mv los*cellID.dat ./cellIDs/'
+    command = 'mv los*cellID.dat ./{0:s}/'.format(dirName)
     sp.call(command, shell=True)
 
 

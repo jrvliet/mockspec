@@ -27,11 +27,12 @@ pathname = os.path.dirname(sys.argv[0])
 codeLoc = os.path.abspath(pathname)
 summaryLoc = codeLoc+'/summaries/'
 requiredLoc = codeLoc+'/controls/'
+subsets = ['Full', 'Low Z', 'Cloud']
 
 #  Read in the control file
 print '\n\nReading in control file...'
 props, flags, ions, xh, instruments = fi.read_control_file()
-galID, expn, nlos, maximpact, incline, ewcut, snr, ncores, rootLoc, sigcellsCut = props
+galID, expn, nlos, maximpact, incline, ewcut, snr, ncores, subset, sigcellsCut = props
 runRates, runGenLOS, runCellfinder, runIdcells, runLos7, runSpecsynth, runSysanal, runCullabs, runLocateCells, runSummaries, runPlotting = flags
 
 # Genearte the name of the gasfile
@@ -45,7 +46,7 @@ print '\tIncline:      ', incline
 print '\tEWCut:        ', ewcut
 print '\tSNR:          ', snr
 print '\tNCores:       ', ncores
-print '\tRoot Loc:     ', rootLoc
+print '\tSubset:       ', subsets[subset]
 print '\tSigcells Cut: {0:.0%}'.format( sigcellsCut/100. )
 
 print '\nRun Flags:'
