@@ -187,7 +187,7 @@ def idcells(galID, aexpn, ion_list, codeLoc, subset):
             snIICutoff = ionbox.quantile(0.1)['SNII']
             subbox = ionbox[(ionbox.SNII)]
         elif subset==2:
-            with open('{0:s}/controls/cloud_params.dat'.format(codeLoc, 'r') as f:
+            with open('{0:s}/controls/cloud_params.dat'.format(codeLoc), 'r') as f:
                 minT = 10**(float(f.readline().split()[0]))
                 maxT = 10**(float(f.readline().split()[0]))
                 minnH = 10**(float(f.readline().split()[0]))
