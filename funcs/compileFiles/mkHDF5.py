@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 import glob
 import losSummary as ls
+import gc
 
 def sysabs_to_hdf5(codeLoc):
 
@@ -106,12 +107,16 @@ def gasbox_to_hdf5(codeLoc, ions):
 
         # Read in the data
         data = np.loadtxt(filename, skiprows=2)
-        print filename, data.shape
+        print 'Converting {0:s} to HDF5...'.format(filename)
         
         # WRite data to HDF file
         df = pd.DataFrame(data, columns=header)
         df.to_hdf(hdf5file, 'data', mode='w')
 
+        # Attempt to free the memory
+        del data
+        gc.collect()
+        gc.collect()
 
 
 
