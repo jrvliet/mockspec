@@ -11,6 +11,7 @@ import sys
 import numpy as np
 import subprocess as sp
 import pandas as pd
+import os
 
 def read_control_file(filename):
 
@@ -171,8 +172,11 @@ def idcells(galID, aexpn, ion_list, codeLoc):
     for ion in ion_list:
 
         #Read in ion box
-        ionboxfile = '{0:s}_GZa{1:s}.{2:s}.h5'.format(galID,aexpn,ion)
-        ionbox = np.read_hdf(ionboxfile, 'data')
+        cwd = os.getcwd()
+        ionboxfile = '{0:s}/{1:s}_GZa{2:s}.{3:s}.h5'.format(cwd,galID,aexpn,ion)
+        ionbox = pd.read_hdf(ionboxfile, 'data')
+        print ionboxfile
+        print ionbox.shape
 
         # Loop over lines of sight
         for i in range(0,len(los_num)):
@@ -201,7 +205,6 @@ def idcells(galID, aexpn, ion_list, codeLoc):
                 
                 # Cell number corresponds to line of gas file
                 cellsize = ionbox['cell_size'][ind]
-                cellsize = ionbox[cellnum-1,0]
                 x = ionbox['x'][ind]
                 y = ionbox['y'][ind]
                 z = ionbox['z'][ind]

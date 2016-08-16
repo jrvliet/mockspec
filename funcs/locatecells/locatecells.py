@@ -32,8 +32,10 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
     singleCount = 0
 
     # Read in the galaxy's box
-    boxfile = galID+'_GZa'+expn+'.'+ion+'.txt'
-    box = np.loadtxt(boxfile, skiprows=2)
+    #boxfile = galID+'_GZa'+expn+'.'+ion+'.txt'
+    #box = np.loadtxt(boxfile, skiprows=2)
+    boxfile = '{0:s}_GZa{1:s}.{2:s}.h5'.format(galID,expn,ion)
+    box = pd.read_hdf(boxfile, 'data')
     if testing==1:
         print 'Box read in'
 
@@ -116,20 +118,21 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
         
             # Get the cell's properties from the boxfile
             index = cellID-1
-            cell_size = box[index,0]
-            x = box[index,1]
-            y = box[index,2]
-            z = box[index,3]
-            vx = box[index,4]
-            vy = box[index,5]
-            vz = box[index,6]
-            density = np.log10(box[index,7])
-            temperature = np.log10(box[index,8])
-            snII = box[index,9]
-            snIa = box[index,10]
-            alphaZ = box[index,16]
-            ionDense = box[index,13]
 
+            cell_size = box['cell_size'].iloc[index]
+            x = box['x'].iloc[index]
+            y = box['y'].iloc[index]
+            z = box['z'].iloc[index]
+            vx = box['vx'].iloc[index]
+            vy = box['vy'].iloc[index]
+            vz = box['vz'].iloc[index]
+            density = box['nH'].iloc[index]
+            temperature = box['temperature'].iloc[index]
+            snII = box['SNII'].iloc[index]
+            snIa = box['SNIa'].iloc[index]
+            alphaZ = box['alpha_Zmet'].iloc[index]
+            ionDense = box['nIon'].iloc[index]
+        
             # Calculate the galactocentric distance
             r = np.sqrt(x*x + y*y + z*z)
             

@@ -201,6 +201,7 @@ def setup_mockspec(ion_list, instr_list, ewcut, snr, xh_list, requiredLoc):
     
     for ion, inst, xh in zip(ion_list, instr_list, xh_list):
 
+        print ion, requiredLoc
         element, Z, stage = get_transition_info(ion, requiredLoc)
         if element =='hydrogen':
             vmax = '10000.'
@@ -301,7 +302,7 @@ def setup_ion_dir(ion, galID, expn, codeLoc):
         print 'Could not complete {0:s}'.format(command)
 
     # Check that nothing exists in the parent directory
-    command = 'ls *{0:s}*los*dat | wc -l'.format(ion)
+    command = 'ls *.{0:s}.*los*dat | wc -l'.format(ion)
     numDatFiles = int(sp.check_output(command, shell=True).strip())
     if numDatFiles!=0:
         print 'ERROR in setup_ion_dir in files.py'
@@ -333,7 +334,7 @@ def setup_inclination_dir(incline, ions, runRates, galID, expn):
     for ion in ions:
         boxName = '{0:s}_GZa{1:s}.{2:s}.h5'.format(galID, expn, ion)
         if not os.path.isfile('{0:s}/{1:s}'.format(incLoc,boxName)):
-            command = 'cp {0:s} {1:s}/'format(boxName, incLoc)
+            command = 'cp {0:s} {1:s}/'.format(boxName, incLoc)
             try:
                 sp.check_call(command, shell=True)
             except CalledProcessError:
