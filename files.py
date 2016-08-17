@@ -263,6 +263,7 @@ def setup_ion_dir(ion, galID, expn, codeLoc):
     
     # Copy the cell files, ion boxes and the lines files into the ion directory
     ionbox =  galID+'_GZa'+expn+'.'+ion+'.txt'
+    ionbox = '{0:s}_GZa{1:s}.{2:s}.h5'.format(galID,expn,ion)
     command = 'cp '+ionbox+' ./'+ion+'/'
     try:
         sp.call(command, shell=True)

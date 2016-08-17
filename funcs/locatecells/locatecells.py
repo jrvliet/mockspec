@@ -34,7 +34,7 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
     # Read in the galaxy's box
     #boxfile = galID+'_GZa'+expn+'.'+ion+'.txt'
     #box = np.loadtxt(boxfile, skiprows=2)
-    boxfile = '{0:s}_GZa{1:s}.{2:s}.h5'.format(galID,expn,ion)
+    boxfile = '../{0:s}_GZa{1:s}.{2:s}.h5'.format(galID,expn,ion)
     box = pd.read_hdf(boxfile, 'data')
     if testing==1:
         print 'Box read in'
