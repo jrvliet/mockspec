@@ -109,7 +109,11 @@ def gasbox_to_hdf5(codeLoc, ions):
         print filename, data.shape
         
         # WRite data to HDF file
-        df = pd.DataFrame(data, columns=header)
+        try:
+            df = pd.DataFrame(data, columns=header)
+        except ValueError:
+            print 'Value Error with covnerting {0:s} in gasbox_to_hdf5'.format(filename)
+            continue
         df.to_hdf(hdf5file, 'data', mode='w')
 
 
