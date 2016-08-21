@@ -60,8 +60,19 @@ def transition_name(ion, codeLoc):
             if flag==1 and ionName==ion:
                 waves.append(trans)
 
-    bluewave = waves[0]
-    redwave = waves[1]
+    if len(waves)==0:
+        # Transition is not turned on in control file
+        print 'Transitions for {0:s} not found in {1:s}'.format(ion,mockspecFile)
+        print 'Exitting...'
+        sys.exit()
+    elif len(waves)==1:
+        # Transition is not a doublet
+        bluewave = waves[0]
+        redwave = bluewave
+    else:
+        # Traisition is a doublet
+        bluewave = waves[0]
+        redwave = waves[1]
 
     return bluewave, redwave
 
