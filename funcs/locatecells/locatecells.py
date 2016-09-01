@@ -46,7 +46,8 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
     outfile = '{0:s}.{1:s}.{2:s}.i{3:d}.abs_cells.h5'.format(galID,expn,ion,int(inc))
     #f_out = open(out_file, 'w')
     header = ['LOS','D','cellID','redshift','logN','dobbler_b','x', 'y', 'z', 'vx', 'vy', 'vz',
-                'galactocentric_d', 'log_nH', 'log_T', 'cell_size', 'SNII', 'SNIa', 'alpha_Zmet', 'ion_density']
+                'galactocentric_d', 'nH', 'temperature', 'cell_size', 'SNII', 'SNIa', 
+                'alpha_Zmet', 'ion_density']
 
     # Write a header to the output file
 
