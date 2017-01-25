@@ -255,7 +255,7 @@ def setup_ion_dir(ion, galID, expn, codeLoc):
             print 'Could not complete {0:s}'.format(command)
 
     # Create the los.list file
-    command = 'ls *'+ion+'*los*dat > qso.list && mv qso.list ./'+ion+'/'
+    command = 'ls *'+ion+'.los*dat > qso.list && mv qso.list ./'+ion+'/'
     try:
         sp.check_call(command, shell=True)
     except:
