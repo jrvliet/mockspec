@@ -15,11 +15,7 @@ int main(int argc, char *argv[]){
 
     // general variables
     int i, klos, error, errtype[3];
-//    int goodTCcells, badICcells, badDcells;
     int badDcells;
-//    double rdum;        
-//    char qsolist[80], paramlist[80], tranilist[80], ion[80];
-//    char dum[50];
     char *qsolist = calloc(80, sizeof(char));
     char *paramlist = calloc(80, sizeof(char));
     char *tranilist = calloc(80, sizeof(char));
@@ -28,8 +24,6 @@ int main(int argc, char *argv[]){
     char *galID = calloc(80, sizeof(char));
     char *lostag = calloc(80, sizeof(char));
     char *losdatafile = calloc(80, sizeof(char));
-
-//    char losdata[80], galID[80], lostag[80], losdatafile[80];
     char new_line[200];    
     char *p;
     FILE *losfp;
@@ -39,7 +33,6 @@ int main(int argc, char *argv[]){
     double pc2cm = 3.261633*9.460528e17;
     double kpc2cm = 1000.0 * pc2cm;
     double amu     = 1.66053878e-24;
-//    double Mpc2kpc = 1.e-3;
     double kboltz  = 1.380658e-16;
 
     // los and galaxy data
@@ -50,13 +43,11 @@ int main(int argc, char *argv[]){
     
     // atomic data
     double mamu;
-//    char ionlabel[80];
     char linesfile[80];
     
     // cell data
     int cellnum[NMAX], ndata;
     int losnum;
-//    int tmpa, tmpb, tmpc, tmpd, losnum;
     double x[NMAX], y[NMAX], z[NMAX];
     double vx[NMAX], vy[NMAX], vz[NMAX];
     double ndencell[NMAX], fion[NMAX], zmfrac[NMAX];
@@ -102,7 +93,7 @@ int main(int argc, char *argv[]){
     // Loop over the lines of sight
     while(fgets(new_line,sizeof(new_line),listfp)){
         klos++;
-//        printf("LOS Num: %d\t",klos); 
+        printf("LOS Num: %d\t",klos); 
         // Remove the return character
         p = strchr(new_line, '\n');
         *p = '\0';
@@ -122,7 +113,6 @@ int main(int argc, char *argv[]){
 
         ndata = readcells( cellnum, x, y, z, vx, vy, vz, Lcell, ndencell, fion, 
                            temp, zmfrac, losdata);
-//        printf("Number of cells: %d\n", ndata);
 
         // Open the .losdata file and write the header
         losfp = fopen(losdatafile, "w");
@@ -201,14 +191,17 @@ int main(int argc, char *argv[]){
 
         }  // Ends loop over cells in a single LOS
 
-    // Write the .lines file, one for each transition
-    // These files used by specsynth to generate the spectra
-    wrtlines(zgal, zline, Nline, bline, cellnum, linesfile, ndata);
-//    printf("Number of cells: %d\n", ndata);
+        // Write the .lines file, one for each transition
+        // These files used by specsynth to generate the spectra
+        wrtlines(zgal, zline, Nline, bline, cellnum, linesfile, ndata);
+        printf("Number of new cells: %d\n", ndata);
 
     } 
+    printf("Close runfp\n");
     fclose(runfp);
+    printf("Close errfp\n");
     fclose(errfp);
+    printf("Return\n");
     return 0;
 }
 

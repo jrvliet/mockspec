@@ -284,6 +284,7 @@ def setup_ion_dir(ion, galID, expn, codeLoc):
    
 
     # Copy the Mockspec files from the parent directory to here
+    # New way: pull files from parent directory, not controls
     command = 'cp {0:s}/controls/Mockspec.instruments ./{1:s}/'.format(codeLoc,ion)
     try:
         sp.check_call(command, shell=True)
@@ -301,6 +302,27 @@ def setup_ion_dir(ion, galID, expn, codeLoc):
         sp.check_call(command, shell=True)
     except:
         print 'Could not complete {0:s}'.format(command)
+
+    # Old way: Copy from controls
+    # This overwrites any local changes made, such as to the transitions file to
+    # observe specific transitions
+#    command = 'cp {0:s}/controls/Mockspec.instruments ./{1:s}/'.format(codeLoc,ion)
+#    try:
+#        sp.check_call(command, shell=True)
+#    except:
+#        print 'Could not complete {0:s}'.format(command)
+#
+#    command = 'cp {0:s}/controls/Mockspec.transitions ./{1:s}/'.format(codeLoc,ion)
+#    try:
+#        sp.check_call(command, shell=True)
+#    except:
+#        print 'Could not complete {0:s}'.format(command)
+#
+#    command = 'cp ./Mockspec.runpars ./{1:s}/'.format(codeLoc,ion)
+#    try:
+#        sp.check_call(command, shell=True)
+#    except:
+#        print 'Could not complete {0:s}'.format(command)
 
     # Check that nothing exists in the parent directory
     command = 'ls *.{0:s}.*los*dat | wc -l'.format(ion)
