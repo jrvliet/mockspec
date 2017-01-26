@@ -92,9 +92,8 @@ int main(int argc, char *argv[]){
 
     // Loop over the lines of sight
     while(fgets(new_line,sizeof(new_line),listfp)){
-        printf("%s",new_line);
         klos++;
-        printf("LOS Num: %d\t",klos); 
+        //printf("LOS Num: %d\t",klos); 
         // Remove the return character
         p = strchr(new_line, '\n');
         *p = '\0';
@@ -195,14 +194,14 @@ int main(int argc, char *argv[]){
         // Write the .lines file, one for each transition
         // These files used by specsynth to generate the spectra
         wrtlines(zgal, zline, Nline, bline, cellnum, linesfile, ndata);
-        printf("Number of new cells: %d\n", ndata);
+        //printf("Number of new cells: %d\n", ndata);
 
     } 
-    printf("Close runfp\n");
+    //printf("Close runfp\n");
     fclose(runfp);
-    printf("Close errfp\n");
+    //printf("Close errfp\n");
     fclose(errfp);
-    printf("Return\n");
+    //printf("Return\n");
     return 0;
 }
 
