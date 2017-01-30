@@ -15,6 +15,7 @@ import os
 import glob
 import significant as sg
 import pandas as pd
+import locate_files as fi
 
 
 def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
@@ -32,8 +33,6 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
     singleCount = 0
 
     # Read in the galaxy's box
-    #boxfile = galID+'_GZa'+expn+'.'+ion+'.txt'
-    #box = np.loadtxt(boxfile, skiprows=2)
     boxfile = '../{0:s}_GZa{1:s}.{2:s}.h5'.format(galID,expn,ion)
     box = pd.read_hdf(boxfile, 'data')
     if testing==1:
@@ -42,9 +41,13 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
     # Read in the LOS info from lines.info
     los_info = np.loadtxt('lines.info',skiprows=2)
 
+    # Determine which transition to use
+    # Only need on, use the transition with the weaker oscillator strength since
+    # this will retain mroe cells than the other transitions
+    wave = fi.transition_name(ion)
+
     # Open the output file
     outfile = '{0:s}.{1:s}.{2:s}.i{3:d}.abs_cells.h5'.format(galID,expn,ion,int(inc))
-    #f_out = open(out_file, 'w')
     header = ['LOS','D','cellID','redshift','logN','dobbler_b','x', 'y', 'z', 'vx', 'vy', 'vz',
                 'galactocentric_d', 'nH', 'temperature', 'cell_size', 'SNII', 'SNIa', 
                 'alpha_Zmet', 'ion_density']
@@ -55,13 +58,6 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
 
     # Create a black row of zeros to build the array with
     d = np.zeros(numcols)
-
-    #header = 'LOS \t Imp_Param      CellID    Redshift        logN'\
-    #        '    Doppler_b    Galactocentric_d      log_nH     log_T'\
-    #        '     Cell_Size     SNII_mass_frac      SNIa_mass_frac'\
-    #        '       alpha_Zmet     Ion_Density\n'
-    #f_out.write(header)
-
 
     # Make a version of Mockspec.runpars that has zero SNR
     # Needed for sigcells
@@ -105,10 +101,13 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
         lf.velcut(linesfile, testing=testing)
 
         # Find the significant cells
-        endCut = sg.sigcells(linesfile, ewcut, codeLoc, flog, testing=testing)
+        endCut = sg.sigcells(linesfile,ewcut,codeLoc,flog,wave,testing=testing)
+
         # Get the properties of the cells
         # Open the lines.final file
-        final_file = open(linesfile+'.final')
+        finalLinesFile = linesfile.replace('.lines',
+                            '{0:s}.lines.final'.format(wave))
+        final_file = open(finalLinesFile)
         final_file.readline()
         for line in final_file:
             l = line.split()

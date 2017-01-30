@@ -72,7 +72,7 @@ def search(start, end, ewcut, lines_z, lines_b, lines_N, lines_ID, redshift,
                     posVelLimit, ewVelcut, flog, depth)
     return end
 
-def sigcells(linesfile, ewcut, codeLoc, flog, testing=0):
+def sigcells(linesfile, ewcut, codeLoc, flog, wave, testing=0):
     '''
     Determines which cells are the significiant contributers
     to the EW measurement. Cells are removed until the EW of 
@@ -89,10 +89,10 @@ def sigcells(linesfile, ewcut, codeLoc, flog, testing=0):
     losnum = (linesfile.split('.')[2]).split('los')[1]
 
     flog.write('\n{0:s}\n'.format(losnum))
-    bluewave, redwave = fi.transition_name(ion, codeLoc)
+
     specCommand = codeLoc+'/funcs/mkspec/specsynth los_single.list Mockspec_0SNR.runpars'
     specFileBase = '{0:s}.{1:s}.los{2:s}.{3:s}.spec'
-    specfile = specFileBase.format(galID, ion, losnum, bluewave)
+    specfile = specFileBase.format(galID, ion, losnum, wave)
     negVelLimit, posVelLimit, ewSysabs = lf.vel_limits(linesfile)
     ewVelcut = ewSysabs
 
@@ -110,18 +110,7 @@ def sigcells(linesfile, ewcut, codeLoc, flog, testing=0):
     numcells = len(cell_z)
     if numcells>1:
 
-    #    cell_z, cell_N, cell_b, cell_ID = np.loadtxt(linesfile+'.velcut', skiprows=1,
-    #                                    usecols=(0,1,2,3), unpack=True)
-
-        # Sort the arrays in decreasing column density
-        # as long as there are more than one cell
-    #    if type(cell_z) is np.ndarray:
-    #        inds = np.argsort(cell_N)[::-1]
-    #        cell_z = np.array(cell_z)[inds]
-    #        cell_N = np.array(cell_N)[inds]
-    #        cell_b = np.array(cell_b)[inds]
-    #        cell_ID = np.array(cell_ID)[inds]
-
+        # Sort the cells by decreasing column density
         cells = sorted(zip(cell_N, cell_z, cell_b, cell_ID))
         try:
             cell_N, cell_z, cell_b, cell_ID = zip(*cells)
@@ -151,13 +140,10 @@ def sigcells(linesfile, ewcut, codeLoc, flog, testing=0):
 
         # Get the EW of this noise-less spectra
         specFileBase = '{0:s}.{1:s}.los{2:s}.{3:s}.spec'
-        specfile = specFileBase.format(galID, ion, losnum, bluewave)
-        redspecfile = specFileBase.format(galID, ion, losnum, redwave)
+        specfile = specFileBase.format(galID, ion, losnum, wave)
 
         # Copy the initial quiet spectra
         command = 'cp {0:s} {0:s}.velcutclean'.format(specfile)
-        sp.call(command, shell=True)
-        command = 'cp {0:s} {0:s}.velcutclean'.format(redspecfile)
         sp.call(command, shell=True)
         
         # Read in the spectra data
@@ -187,8 +173,12 @@ def sigcells(linesfile, ewcut, codeLoc, flog, testing=0):
         
     # If there is only one cell in the file, stop. Clearly that cell
     # is responsible for all the absorption
+
+
+    # Write the significant lines to file
     s = '{0:>8.7f}\t{1:>8f}\t{2:>8f}\t{3:>8d}\n'
-    with open(linesfile+'.final', 'w') as f:
+    finalLinesFile = linesfile.replace('.lines','{0:s}.lines.final'.format(wave))
+    with open(finalLinesFile, 'w') as f:
         f.write('{0:.16f}\n'.format(redshift))
 
         if numcells == 1:
@@ -213,5 +203,7 @@ def sigcells(linesfile, ewcut, codeLoc, flog, testing=0):
             for i in range(0,sigEnd):
                 f.write(s.format(cell_z[i], cell_N[i], cell_b[i], int(cell_ID[i])))
         
+    # Return the wavelength used
+    
 
 

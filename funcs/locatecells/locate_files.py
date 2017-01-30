@@ -42,13 +42,13 @@ def quiet_mockspec():
     f_runpars_old.close()
 
 
-def transition_name(ion, codeLoc):
+def transition_name(ion):
     '''
     Finds the transition name for the ion
     Found in the Mockspec.transitions file
     '''
-    waves = []
-    mockspecFile = '{0:s}/controls/Mockspec.transitions'.format(codeLoc)
+    waves,osc = [],[]
+    mockspecFile = './Mockspec.transitions'
     with open(mockspecFile, 'r') as f:
         f.readline()
         for line in f:
@@ -56,26 +56,32 @@ def transition_name(ion, codeLoc):
             flag = int(l[0])
             ionName = l[4]
             trans = l[5]
+            fosc = float(l[7])
             
             if flag==1 and ionName==ion:
                 waves.append(trans)
+                osc.append(fosc)
 
+    osc = np.array(osc)
     if len(waves)==0:
         # Transition is not turned on in control file
         print 'Transitions for {0:s} not found in {1:s}'.format(ion,mockspecFile)
         print 'Exitting...'
         sys.exit()
-    elif len(waves)==1:
-        # Transition is not a doublet
-        bluewave = waves[0]
-        redwave = bluewave
     else:
-        # Traisition is a doublet
-        bluewave = waves[0]
-        redwave = waves[1]
-
-    return bluewave, redwave
-
+        return waves[osc.argmin()]
+#
+#    elif len(waves)==1:
+#        # Transition is not a doublet
+#        bluewave = waves[0]
+#        redwave = bluewave
+#    else:
+#        # Traisition is a doublet
+#        bluewave = waves[0]
+#        redwave = waves[1]
+#
+#    return bluewave, redwave
+#
 
 
 
