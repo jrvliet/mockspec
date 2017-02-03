@@ -81,6 +81,7 @@ def sigcells(linesfile, ewcut, codeLoc, flog, wave, testing=0):
     cells by a percentage deteremined by ewcut
     '''
 
+    print('In sigcells: ',wave)
     singleCellCount = 0       # Counts number of LOS dominated by a single cell
     
     # Get the info from the filename

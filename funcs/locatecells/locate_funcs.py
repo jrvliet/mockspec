@@ -68,10 +68,6 @@ def velcut(linesfile, testing=0):
 
         if testing==1:
             print '\t\tBefore velcut, number of cells: ', len(cell_z)
-            print '\t\tFrom sysabs:'
-            print '\t\t\tNeg Vel Limt: {0:f}'.format(negVelLimit)
-            print '\t\t\tPos_vel_limi: {0:f}'.format(posVelLimit)
-            print '\t\t\tEW:           {0:f}'.format(ewSysabs)
 
         # New .lines file
         newlinesfile = linesfile+'.velcut'
@@ -277,5 +273,32 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
     sp.call(command, shell=True)
 
     return singleCellCount
+
+
+############################################################3
+############################################################3
+############################################################3
+############################################################3
+############################################################3
+
+def linesLogN(linesFile):
+
+    '''
+    Calculates the column density based on the column density of each cell in the
+    lines file
+    '''
+
+    col = 0
+    with open(linesFile) as f:
+        f.readline()
+        for line in f:
+            logn = float(line.split()[1])
+            col += 10**logn
+
+    return np.log10(col)
+
+
+
+
 
 

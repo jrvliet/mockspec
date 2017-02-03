@@ -42,7 +42,7 @@ def quiet_mockspec():
     f_runpars_old.close()
 
 
-def transition_name(ion):
+def transition_name(ion,testing=0):
     '''
     Finds the transition name for the ion
     Found in the Mockspec.transitions file
@@ -69,7 +69,10 @@ def transition_name(ion):
         print 'Exitting...'
         sys.exit()
     else:
-        return waves[osc.argmin()]
+        if testing==1:
+            return waves
+        else:
+            return waves[osc.argmin()]
 #
 #    elif len(waves)==1:
 #        # Transition is not a doublet

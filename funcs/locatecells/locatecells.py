@@ -44,20 +44,27 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
     # Determine which transition to use
     # Only need on, use the transition with the weaker oscillator strength since
     # this will retain mroe cells than the other transitions
-    wave = fi.transition_name(ion)
+    waves = fi.transition_name(ion,testing)
 
     # Open the output file
     outfile = '{0:s}.{1:s}.{2:s}.i{3:d}.abs_cells.h5'.format(galID,expn,ion,int(inc))
-    header = ['LOS','D','cellID','redshift','logN','dobbler_b','x', 'y', 'z', 'vx', 'vy', 'vz',
-                'galactocentric_d', 'nH', 'temperature', 'cell_size', 'SNII', 'SNIa', 
-                'alpha_Zmet', 'ion_density']
+    header = ['wave','LOS','D','cellID','redshift','logN','dobbler_b',
+                'x', 'y', 'z', 'vx', 'vy', 'vz',
+                'r', 'nH', 'temperature', 'cell_size', 'SNII', 'SNIa', 
+                'alpha_Zmet', 'ion_density', 'fullLogNstart', 'fullLogNend']
+
+    # Open the summary file
+    sumfile = '{0:s}_a{1:s}_{2:s}_i{3:d}_absCellsSummary.h5'.format(galID,
+                        expn,ion,int(inc))
+    sumheader = ['los', 'impact', 'phi', 'wave','startNumCells', 'startEW', 'startlogN', 
+                'endNumCells', 'endEW', 'endlogN']
+    summary = pd.DataFrame(columns=sumheader)
 
     # Write a header to the output file
-
     numcols = len(header)
 
     # Create a black row of zeros to build the array with
-    d = np.zeros(numcols)
+    d = pd.DataFrame(columns=header)
 
     # Make a version of Mockspec.runpars that has zero SNR
     # Needed for sigcells
@@ -72,12 +79,18 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
         print 'Number of sysabs files: ', len(sysabs_losnum)
 
     flog = open('sig_cells.log', 'w')
+
+    # Loop over lines of sight
     for i in range(0,len(sysabs_losnum)):
 
         losnum = sysabs_losnum[i].split('.')[2].split('los')[1]
         num = int(losnum)
+        print(losnum)
 
         linesfile = '{0:s}.{1:s}.los{2:s}.lines'.format(galID,ion,losnum)
+
+        # Get the column density of the LOS from the lines file
+        logNinitial = lf.linesLogN(linesfile)
 
         # Make sure the .lines file has cells in it
         numCells = 0
@@ -92,111 +105,99 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
 
         # Get the impact paramter of this LOS
         imp = los_info[num-1,1]
+        phi = los_info[num-1,2]
         
-        # Copy the original lines file
-        command = 'cp '+linesfile+' '+linesfile+'.tmp'
-        sp.call(command, shell=True)
+        # Loop over the different transitions
+        for wave in waves:
+            print(waves)
+            print(wave)
+            losSummary = pd.Series(index=sumheader)
+            losSummary['wave'] = wave
+            losSummary['los'] = num
+            losSummary['startNumCells'] = numCells
+            losSummary['impact'] = imp
+            losSummary['phi'] = phi
+            losSummary['startlogN'] = lf.linesLogN(linesfile)
 
-        # Perform the velocity cut
-        lf.velcut(linesfile, testing=testing)
+            # Copy the original lines file
+            command = 'cp {0:s} {0:s}.tmp'.format(linesfile)
+            sp.call(command, shell=True)
 
-        # Find the significant cells
-        endCut = sg.sigcells(linesfile,ewcut,codeLoc,flog,wave,testing=testing)
+            # Perform the velocity cut
+            lf.velcut(linesfile, testing=testing)
 
-        # Get the properties of the cells
-        # Open the lines.final file
-        finalLinesFile = linesfile.replace('.lines',
-                            '{0:s}.lines.final'.format(wave))
-        final_file = open(finalLinesFile)
-        final_file.readline()
-        for line in final_file:
-            l = line.split()
-            redshift = float(l[0])
-            column = float(l[1])
-            doppler = float(l[2])
-            cellID = int(float(l[3]))
-        
-            # Get the cell's properties from the boxfile
-            index = cellID-1
+            # Find the significant cells
+            endCut = sg.sigcells(linesfile,ewcut,codeLoc,flog,wave,testing=testing)
 
-            cell_size = box['cell_size'].iloc[index]
-            x = box['x'].iloc[index]
-            y = box['y'].iloc[index]
-            z = box['z'].iloc[index]
-            vx = box['vx'].iloc[index]
-            vy = box['vy'].iloc[index]
-            vz = box['vz'].iloc[index]
-            density = box['nH'].iloc[index]
-            temperature = box['temperature'].iloc[index]
-            snII = box['SNII'].iloc[index]
-            snIa = box['SNIa'].iloc[index]
-            alphaZ = box['alpha_Zmet'].iloc[index]
-            ionDense = box['nIon'].iloc[index]
-        
-            # Calculate the galactocentric distance
-            r = np.sqrt(x*x + y*y + z*z)
-            
-            # Fill an array of these values
-            sig = np.zeros(numcols)
-            sig[0] = float(num)
-            sig[1] = imp
-            sig[2] = cellID
-            sig[3] = redshift
-            sig[4] = column
-            sig[5] = doppler
-            sig[6] = x
-            sig[7] = y
-            sig[8] = z
-            sig[9] = vx
-            sig[10] = vy
-            sig[11] = vz
-            sig[12] = r
-            sig[13] = density
-            sig[14] = temperature
-            sig[15] = cell_size
-            sig[16] = snII
-            sig[17] = snIa
-            sig[18] = alphaZ
-            sig[19] = ionDense
-        
-            # Append to the main array
-            d = np.vstack((d,sig))
+            # Get the properties of the cells
+            # Open the lines.final file
+            finalLinesFile = linesfile.replace('.lines',
+                                '{0:s}.lines.final'.format(wave))
+            logNfinal = lf.linesLogN(finalLinesFile)
+            losSummary['endlogN'] = logNfinal
 
-            # Write all to the output file
-            #s = '{0:d}'.format(num).ljust(7) +  '{0:.3f}'.format(imp).rjust(7) +  '{0:d}'.format(cellID).rjust(16) + '{0:-.7f}'.format(redshift).rjust(14) + '{0:.3f}'.format(column).rjust(10) + '{0:.3f}'.format(doppler).rjust(13) + '{0:.5e}'.format(r).rjust(20) + '{0:.4f}'.format(density).rjust(12) + '{0:.4f}'.format(temperature).rjust(10) + '{0:.4f}'.format(cell_size).rjust(14) + '{0:.4e}'.format(snII).rjust(19) + '{0:.4e}'.format(snIa).rjust(20) + '{0:.4e}'.format(alphaZ).rjust(17) + '{0:.4e}'.format(ionDense).rjust(17) + '\n'
-            #f_out.write(s)
+            final_file = open(finalLinesFile)
+            final_file.readline()
 
-        # Rename the original .lines file back to its full name
-        command = 'cp '+linesfile+'.tmp '+linesfile
-        sp.call(command, shell=True)
-      
-    # Write the outfile
-    df = pd.DataFrame(d, columns=header)
-    df.to_hdf(outfile, 'data', mode='w')
-
+            endNumCells = 0
     
-    #flog.close()  
-    #f_out.close()
+            # Loop over the significant cells
+            for line in final_file:
+                endNumCells += 1
+                l = line.split()
+                redshift = float(l[0])
+                column = float(l[1])
+                doppler = float(l[2])
+                cellID = int(float(l[3]))
+            
+                # Get the cell's properties from the boxfile
+                index = cellID-1
+                x = box['x'].iloc[index]
+                y = box['y'].iloc[index]
+                z = box['z'].iloc[index]
+            
+                # Calculate the galactocentric distance
+                r = np.sqrt(x*x + y*y + z*z)
+                
+                cell = pd.Series(index=header)
+                cell['wave'] = wave
+                cell['LOS'] = num
+                cell['D'] = imp
+                cell['cellID'] = cellID
+                cell['redshift'] = redshift
+                cell['logN'] = column 
+                cell['dobbler_b'] = doppler
+                cell['x'] = x
+                cell['y'] = y 
+                cell['z'] = z 
+                cell['vx'] = box['vx'].iloc[index]
+                cell['vy'] = box['vy'].iloc[index]
+                cell['vz'] = box['vz'].iloc[index]
+                cell['r'] = r
+                cell['nH'] = np.log10(box['nH'].iloc[index])
+                cell['temperature'] = np.log10(box['temperature'].iloc[index])
+                cell['cell_size'] = box['cell_size'].iloc[index]
+                cell['SNII'] = np.log10(box['SNII'].iloc[index])
+                cell['SNIa'] = np.log10(box['SNIa'].iloc[index])
+                cell['alpha_Zmet'] = box['alpha_Zmet'].iloc[index]
+                cell['ion_density'] = np.log10(box['nIon'].iloc[index])
+                cell['fullLogNstart'] = logNinitial
+                cell['fullLogNend'] = logNfinal
+           
+                # Append to the main array
+                d = d.append(cell,ignore_index=True)
+                
+            losSummary['endNumCells'] = endNumCells
+            summary = summary.append(losSummary,ignore_index=True)
+
+            # Rename the original .lines file back to its full name
+            command = 'cp {0:s}.tmp {0:s}'.format(linesfile)
+            sp.call(command, shell=True)
+            print('Length of d: ',len(d))
+          
+    # Write the outfile
+    d.to_hdf(outfile,'data',mode='w')
+    summary.to_hdf(sumfile,'data',mode='w')
 
     print 'For {0:s}, {1:d} LOS are dominated by one cell'.format(ion, singleCount)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
