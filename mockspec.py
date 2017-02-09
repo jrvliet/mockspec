@@ -18,7 +18,7 @@ import ratesControl as rc
 import funcs.locatecells.locatecells as lc
 import funcs.idcells.idcells as ic
 import runFunctions as rf 
-import funcs.sigcells.sigcells as sc
+#import funcs.sigcells.sigcells as sc
 import funcs.plotting.analysis_control as ac
 import funcs.compileFiles.mkHDF5 as hdf
 
