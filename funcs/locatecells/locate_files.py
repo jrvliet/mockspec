@@ -72,7 +72,12 @@ def transition_name(ion,testing=0):
         if testing==1:
             return waves
         else:
-            return waves[osc.argmin()]
+            return waves
+#            return waves[osc.argmin()]
+
+
+
+
 #
 #    elif len(waves)==1:
 #        # Transition is not a doublet
