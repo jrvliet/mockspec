@@ -174,20 +174,36 @@ def setup_idcells(gasfile, ion_list):
 
 def setup_mockspec(ion_list, instr_list, ewcut, snr, xh_list, requiredLoc):
 
+    '''
+    Ensures that the appropriate Mockspc control files are present in 
+    the inclination directory.  Starts in the inclination directory. 
+    Copies Mockspec.runpars, Mockspec.instruments, and Mockspec.transitions 
+    from the control directory if they are not already present.
+    '''
+
     from subprocess import call
+
+    cwd = os.getcwd()
+    runfile = '{0:s}/Mockspec.runpars'.format(cwd)
+    instfile = '{0:s}/Mockspec.instruments'.format(cwd)
+    transfile = '{0:s}/Mockspec.transitions'.format(cwd)
+    print('\n\nIn setup_mockspec\nCWD: {0:s}'.format(cwd))
 
     # Need Mockspec.runpars, Mockspec.instruments, Mockspec.transitions
     basecommand = 'cp '+requiredLoc
-    if not os.path.exists('Mockspec.runpars'):
+    if not os.path.isfile(runfile):
         command = basecommand + 'Mockspec.runpars .'
         call(command, shell=True)
-    if not os.path.exists('Mockspec.instruments'):
+
+    if not os.path.isfile(instfile):
         command = basecommand + 'Mockspec.instruments .'
         call(command, shell=True)
-    if not os.path.exists('Mockspec.transtions'):
+
+    if not os.path.isfile(transfile):
         command = basecommand + 'Mockspec.transitions .'
         call(command, shell=True)
-        
+
+
     # Alter Mockspec.runpars
     # The others should never be altered
     call('cp Mockspec.runpars Mockspec.tmp', shell=True)
@@ -247,6 +263,9 @@ def setup_ion_dir(ion, galID, expn, codeLoc):
     """
     cwd = os.getcwd()
     ionloc = cwd + '/' + ion
+    
+    print('\n\nIn setup_ion_dir:\nCWD: {0:s}'.format(cwd))
+
     if not os.path.exists(ionloc):
         command = 'mkdir '+ion
         try:
@@ -285,15 +304,19 @@ def setup_ion_dir(ion, galID, expn, codeLoc):
 
     # Copy the Mockspec files from the parent directory to here
     # New way: pull files from parent directory, not controls
-    command = 'cp {0:s}/controls/Mockspec.instruments ./{1:s}/'.format(codeLoc,ion)
+    print('HI926 Row')
+    command = 'grep HI926 ./Mockspec.transitions'
+    sp.call(command,shell=True)
+    command = 'cp ./Mockspec.instruments ./{1:s}/'.format(codeLoc,ion)
     try:
         sp.check_call(command, shell=True)
     except:
         print 'Could not complete {0:s}'.format(command)
 
-    command = 'cp {0:s}/controls/Mockspec.transitions ./{1:s}/'.format(codeLoc,ion)
+    command = 'cp ./Mockspec.transitions ./{1:s}/'.format(codeLoc,ion)
     try:
         sp.check_call(command, shell=True)
+        print('Copying Mockspec.transitions: \n{0:s}'.format(command))
     except:
         print 'Could not complete {0:s}'.format(command)
 
