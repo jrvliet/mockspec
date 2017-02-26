@@ -72,8 +72,8 @@ def transition_name(ion,testing=0):
         if testing==1:
             return waves
         else:
-            return waves
-#            return waves[osc.argmin()]
+            #return waves
+            return waves[osc.argmin()]
 
 
 
