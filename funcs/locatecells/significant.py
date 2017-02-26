@@ -89,7 +89,8 @@ def sigcells(linesfile, ewcut, codeLoc, flog, wave, testing=0):
     ion    = linesfile.split('.')[1]
     losnum = (linesfile.split('.')[2]).split('los')[1]
 
-    flog.write('\n{0:s}\n'.format(losnum))
+    flog.write('\n{0:s}\t{1:s}\t{2:.3f}\n'.format(losnum,wave,ewcut))
+    flog.write('Full\tStart\tEnd\tMid\tlenUsed\tEW\tEWdiff\n')
 
     specCommand = codeLoc+'/funcs/mkspec/specsynth los_single.list Mockspec_0SNR.runpars'
     specFileBase = '{0:s}.{1:s}.los{2:s}.{3:s}.spec'
@@ -112,13 +113,15 @@ def sigcells(linesfile, ewcut, codeLoc, flog, wave, testing=0):
     if numcells>1:
 
         # Sort the cells by decreasing column density
-        cells = sorted(zip(cell_N, cell_z, cell_b, cell_ID))
+        cells = list(reversed(sorted(zip(cell_N, cell_z, cell_b, cell_ID))))
         try:
             cell_N, cell_z, cell_b, cell_ID = zip(*cells)
         except ValueError:
             print 'Value Error in {0:s}'.format(linesfile)
             print cells
             sys.exit()
+
+        print(cells[0],cells[-1])
 
         if testing==1:
             print 'In sigcells, number of velcut cells read in: ', len(cell_z)
@@ -172,9 +175,6 @@ def sigcells(linesfile, ewcut, codeLoc, flog, wave, testing=0):
         numcells = i   # One less than the actual number of lines due to the
                        # absorption redshift in the first line
         
-    # If there is only one cell in the file, stop. Clearly that cell
-    # is responsible for all the absorption
-
 
     # Write the significant lines to file
     s = '{0:>8.7f}\t{1:>8f}\t{2:>8f}\t{3:>8d}\n'
