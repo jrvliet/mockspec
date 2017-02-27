@@ -4,6 +4,7 @@
 #  to the EW measurement for all LOS for a given ion/snapshot
 #
 
+from __future__ import print_function
 import numpy as np
 import sys
 from  math import sqrt, pow, log10
@@ -33,10 +34,11 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
     singleCount = 0
 
     # Read in the galaxy's box
-    boxfile = '../{0:s}_GZa{1:s}.{2:s}.h5'.format(galID,expn,ion)
+    print(os.getcwd())
+    boxfile = '{0:s}_GZa{1:s}.{2:s}.h5'.format(galID,expn,ion)
     box = pd.read_hdf(boxfile, 'data')
     if testing==1:
-        print 'Box read in'
+        print('Box read in')
 
     # Read in the LOS info from lines.info
     los_info = np.loadtxt('lines.info',skiprows=2)
@@ -63,7 +65,7 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
     # Write a header to the output file
     numcols = len(header)
 
-    # Create a black row of zeros to build the array with
+    # Create a blank row of zeros to build the array with
     d = pd.DataFrame(columns=header)
 
     # Make a version of Mockspec.runpars that has zero SNR
@@ -75,8 +77,8 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
     sysabs_losnum.sort()
     
     if testing==1:
-        print 'Sysabs files aggregated'
-        print 'Number of sysabs files: ', len(sysabs_losnum)
+        print('Sysabs files aggregated')
+        print('Number of sysabs files: ', len(sysabs_losnum))
 
     flog = open('sig_cells.log', 'w')
 
@@ -109,8 +111,6 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
         
         # Loop over the different transitions
         for wave in waves:
-            print(waves)
-            print(wave)
             losSummary = pd.Series(index=sumheader)
             losSummary['wave'] = wave
             losSummary['los'] = num
@@ -127,14 +127,16 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
             lf.velcut(linesfile, testing=testing)
 
             # Find the significant cells
-            endCut = sg.sigcells(linesfile,ewcut,codeLoc,flog,wave,testing=testing)
+            endCut,startEW,endEW = sg.sigcells(linesfile,ewcut,codeLoc,flog,wave,testing=testing)
 
             # Get the properties of the cells
             # Open the lines.final file
             finalLinesFile = linesfile.replace('.lines',
-                                '{0:s}.lines.final'.format(wave))
+                                '.{0:s}.lines.final'.format(wave))
             logNfinal = lf.linesLogN(finalLinesFile)
             losSummary['endlogN'] = logNfinal
+            losSummary['startEW'] = startEW
+            losSummary['endEW'] = endEW
 
             final_file = open(finalLinesFile)
             final_file.readline()
@@ -193,11 +195,11 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
             # Rename the original .lines file back to its full name
             command = 'cp {0:s}.tmp {0:s}'.format(linesfile)
             sp.call(command, shell=True)
-            print('Length of d: ',len(d))
           
     # Write the outfile
     d.to_hdf(outfile,'data',mode='w')
     summary.to_hdf(sumfile,'data',mode='w')
 
-    print 'For {0:s}, {1:d} LOS are dominated by one cell'.format(ion, singleCount)
+    print('For {0:s}, {1:d} LOS are dominated by one cell'.format(ion,
+singleCount))
 

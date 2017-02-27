@@ -1,4 +1,5 @@
 
+from __future__ import print_function
 import numpy as np
 import sys
 import subprocess as sp
@@ -67,7 +68,7 @@ def velcut(linesfile, testing=0):
         negVelLim, posVelLim, ewSysabs = vel_limits(linesfile)
 
         if testing==1:
-            print '\t\tBefore velcut, number of cells: ', len(cell_z)
+            print('\t\tBefore velcut, number of cells: ', len(cell_z))
 
         # New .lines file
         newlinesfile = linesfile+'.velcut'
@@ -92,7 +93,7 @@ def velcut(linesfile, testing=0):
         f_newlines.close()
         
         if testing==1:
-            print '\t\tAfter velcut, number of cells: ', velcutCount
+            print('\t\tAfter velcut, number of cells: ', velcutCount)
 
     else:       
         # Original lines file only has one cell
@@ -128,7 +129,7 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
                                     usecols=(0,1,2,3), unpack=True)
 
     if testing==1:
-        print 'In sigcells, number of velcut cells read in: ', len(cell_z)
+        print('In sigcells, number of velcut cells read in: ', len(cell_z))
 
     # Get the EW from sysabs
     negVelLimit, posVelLimit, ewSysabs = vel_limits(linesfile)
@@ -206,12 +207,12 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
 
         velcutdata = np.loadtxt(linesfile+'.velcut', skiprows=1)
         if testing==1:
-            print 'Velcutdata: ', velcutdata
+            print('Velcutdata: ', velcutdata)
             shap = velcutdata.shape
-            print 'Velcutdata shape: ', shap
-            print 'Number of rows: ', shap[0]
-            print 'Length of shap: ', len(shap)
-            print 'Index 0: ', velcutdata[1]
+            print('Velcutdata shape: ', shap)
+            print('Number of rows: ', shap[0])
+            print('Length of shap: ', len(shap))
+            print('Index 0: ', velcutdata[1])
 
         velcut_z = list(velcutdata[:,0])
         velcut_N = list(velcutdata[:,1])

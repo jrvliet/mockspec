@@ -1,4 +1,5 @@
 
+from __future__ import print_function
 import numpy as np
 import subprocess as sp
 import locate_funcs as lf
@@ -70,7 +71,7 @@ def search(start, end, ewcut, lines_z, lines_b, lines_N, lines_ID, redshift,
             search(start, end, ewcut, lines_z, lines_b, lines_N, lines_ID, 
                     redshift, specCommand, linesfile, specfile, negVelLimit, 
                     posVelLimit, ewVelcut, flog, depth)
-    return end
+    return end,ew
 
 def sigcells(linesfile, ewcut, codeLoc, flog, wave, testing=0):
     '''
@@ -81,13 +82,13 @@ def sigcells(linesfile, ewcut, codeLoc, flog, wave, testing=0):
     cells by a percentage deteremined by ewcut
     '''
 
-    print('In sigcells: ',wave)
     singleCellCount = 0       # Counts number of LOS dominated by a single cell
     
     # Get the info from the filename
     galID  = linesfile.split('.')[0]
     ion    = linesfile.split('.')[1]
     losnum = (linesfile.split('.')[2]).split('los')[1]
+    print(galID,ion,losnum,wave)
 
     flog.write('\n{0:s}\t{1:s}\t{2:.3f}\n'.format(losnum,wave,ewcut))
     flog.write('Full\tStart\tEnd\tMid\tlenUsed\tEW\tEWdiff\n')
@@ -117,14 +118,13 @@ def sigcells(linesfile, ewcut, codeLoc, flog, wave, testing=0):
         try:
             cell_N, cell_z, cell_b, cell_ID = zip(*cells)
         except ValueError:
-            print 'Value Error in {0:s}'.format(linesfile)
-            print cells
+            print('Value Error in {0:s}'.format(linesfile))
+            print(cells)
             sys.exit()
 
-        print(cells[0],cells[-1])
 
         if testing==1:
-            print 'In sigcells, number of velcut cells read in: ', len(cell_z)
+            print('In sigcells, number of velcut cells read in: ', len(cell_z))
 
         # Get the EW from sysabs
         negVelLimit, posVelLimit, ewSysabs = lf.vel_limits(linesfile)
@@ -178,26 +178,27 @@ def sigcells(linesfile, ewcut, codeLoc, flog, wave, testing=0):
 
     # Write the significant lines to file
     s = '{0:>8.7f}\t{1:>8f}\t{2:>8f}\t{3:>8d}\n'
-    finalLinesFile = linesfile.replace('.lines','{0:s}.lines.final'.format(wave))
+    finalLinesFile = linesfile.replace('.lines','.{0:s}.lines.final'.format(wave))
     with open(finalLinesFile, 'w') as f:
         f.write('{0:.16f}\n'.format(redshift))
 
         if numcells == 1:
             singleCellCount += 1
             sigEnd = 1    
+            endEW = ewVelcut
             try:
                 f.write(s.format(cell_z[0], cell_N[0], cell_b[0], int(cell_ID[0])))
             except TypeError:
-                print 'TypeError in significant.py: '
-                print losnum, len(cell_ID), len(cell_z), numcells
-                print type(cell_ID), type(cell_z)
+                print('TypeError in significant.py: ')
+                print(losnum, len(cell_ID), len(cell_z), numcells)
+                print(type(cell_ID), type(cell_z))
                 sys.exit()
 
         else:
             start = 0
             end = len(cell_z)
             depth = 0
-            sigEnd = search(start, end, ewcut, cell_z, cell_b, cell_N, cell_ID, 
+            sigEnd,endEW = search(start, end, ewcut, cell_z, cell_b, cell_N, cell_ID, 
                 redshift, specCommand, linesfile, specfile, negVelLimit, 
                 posVelLimit, ewVelcut, flog, depth)
 
@@ -205,6 +206,7 @@ def sigcells(linesfile, ewcut, codeLoc, flog, wave, testing=0):
                 f.write(s.format(cell_z[i], cell_N[i], cell_b[i], int(cell_ID[i])))
         
     # Return the wavelength used
+    return sigEnd,ewVelcut,endEW
     
 
 
