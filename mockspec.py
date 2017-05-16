@@ -4,6 +4,9 @@
 #  Full pipeline for performing synthetic QSO observations
 #  of ART simulations of galaxy CGM
 
+print 'Testing'
+
+
 # General libraries
 import numpy as np
 import tables as tb
