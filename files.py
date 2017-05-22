@@ -26,8 +26,8 @@ def read_control_file():
     try:
         f = open(filename)
     except IOError:
-        print 'Missing control file: {0:s}'.format(filename)
-        print 'Quitting...'
+        print('Missing control file: {0:s}'.format(filename))
+        print('Quitting...')
         sys.exit()
 
     # Read past header
@@ -217,7 +217,7 @@ def setup_mockspec(ion_list, instr_list, ewcut, snr, xh_list, requiredLoc):
     
     for ion, inst, xh in zip(ion_list, instr_list, xh_list):
 
-        print ion, requiredLoc
+        print(ion, requiredLoc)
         element, Z, stage = get_transition_info(ion, requiredLoc)
         if element =='hydrogen':
             vmax = '10000.'
@@ -264,42 +264,42 @@ def setup_ion_dir(ion, galID, expn, codeLoc):
     cwd = os.getcwd()
     ionloc = cwd + '/' + ion
     
-    print('\n\nIn setup_ion_dir:\nCWD: {0:s}'.format(cwd))
-
     if not os.path.exists(ionloc):
         command = 'mkdir '+ion
         try:
             sp.check_call(command, shell=True)
         except:
-            print 'Could not complete {0:s}'.format(command)
+            print('Could not complete {0:s}'.format(command))
 
     # Create the los.list file
-    command = 'ls *'+ion+'.los*dat > qso.list && mv qso.list ./'+ion+'/'
+    #command = 'ls *'+ion+'.los*dat > qso.list && mv qso.list ./'+ion+'/'
+    command = 'ls *{0:s}.los*dat > qso.list && mv qso.list ./{0:s}/'.format(ion)
     try:
         sp.check_call(command, shell=True)
     except:
-        print 'Could not complete {0:s}'.format(command)
+        print('Could not complete {0:s}'.format(command))
     
     # Copy the cell files, ion boxes and the lines files into the ion directory
-    ionbox =  galID+'_GZa'+expn+'.'+ion+'.txt'
+    #ionbox =  galID+'_GZa'+expn+'.'+ion+'.txt'
     ionbox = '{0:s}_GZa{1:s}.{2:s}.h5'.format(galID,expn,ion)
-    command = 'cp '+ionbox+' ./'+ion+'/'
+    #command = 'cp '+ionbox+' ./'+ion+'/'
+    command = 'cp {0:s} ./{1:s}/'.format(ionbox,ion)
     try:
         sp.call(command, shell=True)
     except: 
-        print 'Could not complete {0:s}'.format(command)
+        print('Could not complete {0:s}'.format(command))
 
     command = 'mv *'+ion+'.los*.dat ./'+ion+'/'
     try:
         sp.check_call(command, shell=True)
     except:
-        print 'Could not complete {0:s}'.format(command)
+        print('Could not complete {0:s}'.format(command))
         
     command = 'cp lines* ./'+ion+'/'
     try:
         sp.check_call(command, shell=True)
     except:
-        print 'Could not complete {0:s}'.format(command)
+        print('Could not complete {0:s}'.format(command))
    
 
     # Copy the Mockspec files from the parent directory to here
@@ -311,20 +311,20 @@ def setup_ion_dir(ion, galID, expn, codeLoc):
     try:
         sp.check_call(command, shell=True)
     except:
-        print 'Could not complete {0:s}'.format(command)
+        print('Could not complete {0:s}'.format(command))
 
     command = 'cp ./Mockspec.transitions ./{1:s}/'.format(codeLoc,ion)
     try:
         sp.check_call(command, shell=True)
         print('Copying Mockspec.transitions: \n{0:s}'.format(command))
     except:
-        print 'Could not complete {0:s}'.format(command)
+        print('Could not complete {0:s}'.format(command))
 
     command = 'cp ./Mockspec.runpars ./{1:s}/'.format(codeLoc,ion)
     try:
         sp.check_call(command, shell=True)
     except:
-        print 'Could not complete {0:s}'.format(command)
+        print('Could not complete {0:s}'.format(command))
 
     # Old way: Copy from controls
     # This overwrites any local changes made, such as to the transitions file to
@@ -351,9 +351,9 @@ def setup_ion_dir(ion, galID, expn, codeLoc):
     command = 'ls *.{0:s}.*los*dat | wc -l'.format(ion)
     numDatFiles = int(sp.check_output(command, shell=True).strip())
     if numDatFiles!=0:
-        print 'ERROR in setup_ion_dir in files.py'
-        print 'Problem moving .dat file for {0:s}'.format(ion)
-        print 'Exitting....'
+        print('ERROR in setup_ion_dir in files.py')
+        print('Problem moving .dat file for {0:s}'.format(ion))
+        print('Exitting....')
         sys.exit()
     return ionloc
 
@@ -384,8 +384,8 @@ def setup_inclination_dir(incline, ions, runRates, galID, expn):
             try:
                 sp.check_call(command, shell=True)
             except sp.CalledProcessError:
-                print 'Error in files.py in setup_inclination_dir'
-                print 'Could not copy {0:s} into {1:s}'.format(boxName, incLoc)
+                print('Error in files.py in setup_inclination_dir')
+                print('Could not copy {0:s} into {1:s}'.format(boxName, incLoc))
                 continue
                 
     # Copy the rest of the control files into the directory
@@ -396,7 +396,7 @@ def setup_inclination_dir(incline, ions, runRates, galID, expn):
         try:
             sp.check_call(command, shell=True)
         except sp.CalledProcessError:
-            print 'Cannot find {0:s} in setup_inclination_dir'.format(fn)
+            print('Cannot find {0:s} in setup_inclination_dir'.format(fn))
             sys.exit()
 
 
@@ -431,8 +431,8 @@ def setup_galaxy_props(sumFile, galID, expn, inc):
     try:
         f = open(sumFile, 'r')
     except IOError:
-        print 'Cannot open {0:s} in setup_galaxy_props'.format(sumFile)
-        print 'Exitting...'
+        print('Cannot open {0:s} in setup_galaxy_props'.format(sumFile))
+        print('Exitting...')
         sys.exit()
     f.readline()
     l = f.readline().split()
@@ -443,7 +443,7 @@ def setup_galaxy_props(sumFile, galID, expn, inc):
         mvir = float(l[2])
         rvir = float(l[3])
     else:
-        print 'Could not find {0:s} in {1:s}'.format(expn, sumFile)
+        print('Could not find {0:s} in {1:s}'.format(expn, sumFile))
         sys.exit()
     f.close()
 
@@ -475,18 +475,18 @@ def rename(galID, expn, ion, incline, runLocateCells, runCullabs):
     inclination angle
     '''
     inc = int(incline)
-    print '\tRenaming files'
+    print('\tRenaming files')
     
     if runCullabs==1:
         # Need to rename ALL.sysabs file
         allName = '{0:s}.{1:s}.a{2:s}.ALL.sysabs.h5'.format(galID, ion, expn)
         newName = allName.replace('ALL','i{0:d}.ALL'.format(inc))
         command = 'mv {0:s} {1:s}'.format(allName, newName)
-        print '\nRenaming command: {0:s}\n'.format(command)
+        print('\nRenaming command: {0:s}\n'.format(command))
         try:
             sp.check_call(command, shell=True)
         except:
-            print 'Error in rename running \n\t{0:s}'.format(command)
+            print('Error in rename running \n\t{0:s}'.format(command))
 
     # This is no longer needed, locatecells now has the correct name
     #if runLocateCells==1:

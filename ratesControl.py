@@ -83,8 +83,8 @@ def run_rates(codeLoc):
     try:
         sp.check_call(command, shell=True) 
     except:
-        print '\n\nCould not run rates with \n\t{0:s}'.format(command)
-        print 'Exiting....'
+        print('\n\nCould not run rates with \n\t{0:s}'.format(command))
+        print('Exiting....')
         sys.exit()
 
 

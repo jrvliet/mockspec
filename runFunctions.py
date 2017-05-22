@@ -20,8 +20,8 @@ def genLOS(codeLoc, galID, summaryLoc, expn, inc, nLOS, maximpact, ncores):
     try:
         check_call(command, shell=True)
     except:    
-        print '\n\nCould not run genLOS with :\n\t{0:s}'.format(command)
-        print 'Exiting...'
+        print('\n\nCould not run genLOS with :\n\t{0:s}'.format(command))
+        print('Exiting...')
         sys.exit()
 
 
@@ -37,8 +37,8 @@ def runCellfinder(codeLoc, numcores):
     try:
         check_call(command, shell=True)
     except:
-        print '\n\nCould not run cellfinder with:\n\t{0:s}'.format(command)
-        print 'Exiting...'
+        print('\n\nCould not run cellfinder with:\n\t{0:s}'.format(command))
+        print('Exiting...')
         sys.exit()
 
 
@@ -57,8 +57,8 @@ def los7(codeLoc):
     try:
         check_call(command, shell=True)
     except:    
-        print '\n\nCould not run los7 with :\n\t{0:s}'.format(command)
-        print 'Exiting...'
+        print('\n\nCould not run los7 with :\n\t{0:s}'.format(command))
+        print('Exiting...')
         sys.exit()
      
 
@@ -79,8 +79,8 @@ def specsynth(codeLoc):
     try:
         check_call(command, shell=True)
     except:    
-        print '\n\nCould not run specsynth with :\n\t{0:s}'.format(command)
-        print 'Exiting...'
+        print('\n\nCould not run specsynth with :\n\t{0:s}'.format(command))
+        print('Exiting...')
         sys.exit()
      
 
@@ -100,8 +100,8 @@ def sysanal(codeLoc):
     try:
         check_call(command, shell=True)
     except:    
-        print '\n\nCould not run sysanal with :\n\t{0:s}'.format(command)
-        print 'Exiting...'
+        print('\n\nCould not run sysanal with :\n\t{0:s}'.format(command))
+        print('Exiting...')
         sys.exit()
      
     
@@ -123,8 +123,8 @@ def cullabs(codeLoc):
     try:
         check_call(command, shell=True)
     except:    
-        print '\n\nCould not run cullabs with :\n\t{0:s}'.format(command)
-        print 'Exiting...'
+        print('\n\nCould not run cullabs with :\n\t{0:s}'.format(command))
+        print('Exiting...')
         sys.exit()
      
 
