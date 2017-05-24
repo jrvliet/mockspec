@@ -150,7 +150,11 @@ fi.setup_mockspec(ions, instruments, ewcut, snr, xh, requiredLoc)
 print '\nBegin looping over ions...'
 for ion in ions:
 
-    print '\rIon: ', ion
+    if sum([runLos7,runSpecsynth,runSysanal,runCullabs,runLocateCells])==0:
+        print '\t\tNothing to do'
+        break
+
+    print '\tIon: ', ion
 
     # Setup the ion directory
     ionloc = fi.setup_ion_dir(ion, galID, expn, codeLoc) 
