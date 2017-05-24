@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <time.h>
 #include "matrix.h"
 #include "box.h"
 
@@ -99,8 +100,9 @@ int main (int argc, char *argv[]){
     
 
     // Seed random
-    int seed = 25525;
-    srand(seed);
+    //int seed = 25525;
+    //srand(seed);
+    srand(time(NULL));
 
     double maximpact_kpc = 1.5*rvir;
     double boxsize = 4.0*rvir;
