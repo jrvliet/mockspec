@@ -436,7 +436,7 @@ def setup_galaxy_props(sumFile, galID, expn, inc):
         sys.exit()
     f.readline()
     l = f.readline().split()
-    a = l[0]
+    a = '{0:.3f}'.format(float(l[0]))
     if a==expn:
         found = 1
         redshift = float(l[1])
