@@ -4,7 +4,6 @@ of the python code.
 
 To run this code, the following python packgages need to be installed:
     numpy
-    pytables
     pandas
 
 
