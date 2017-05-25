@@ -88,7 +88,6 @@ def sigcells(linesfile, ewcut, codeLoc, flog, wave, testing=0):
     galID  = linesfile.split('.')[0]
     ion    = linesfile.split('.')[1]
     losnum = (linesfile.split('.')[2]).split('los')[1]
-    print(galID,ion,losnum,wave)
 
     flog.write('\n{0:s}\t{1:s}\t{2:.3f}\n'.format(losnum,wave,ewcut))
     flog.write('Full\tStart\tEnd\tMid\tlenUsed\tEW\tEWdiff\n')
