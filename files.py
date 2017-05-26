@@ -83,9 +83,11 @@ def setup_galprops(galID, expn, requiredLoc, summaryLoc):
 
     from subprocess import call
 
-    if not os.path.exists('gal_props.dat'):
-        command = 'cp ' +requiredLoc+ '/gal_props.dat .'
-        call(command, shell=True)
+    #if not os.path.exists('gal_props.dat'):
+    # Too many errors occurred with running with old gal_props
+    # Now overwrite it everytime
+    command = 'cp ' +requiredLoc+ '/gal_props.dat .'
+    call(command, shell=True)
 
     call('cp gal_props.dat gal_props.dat.tmp', shell=True)
     f = open('gal_props.dat.tmp')
