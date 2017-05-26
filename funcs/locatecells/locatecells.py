@@ -34,7 +34,6 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
     singleCount = 0
 
     # Read in the galaxy's box
-    print(os.getcwd())
     boxfile = '{0:s}_GZa{1:s}.{2:s}.h5'.format(galID,expn,ion)
     box = pd.read_hdf(boxfile, 'data')
     if testing==1:
@@ -87,7 +86,6 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
 
         losnum = sysabs_losnum[i].split('.')[2].split('los')[1]
         num = int(losnum)
-        print(losnum)
 
         linesfile = '{0:s}.{1:s}.los{2:s}.lines'.format(galID,ion,losnum)
 
