@@ -90,7 +90,7 @@ def read_control_file():
     f.readline()
 
     run.galID = f.readline().split()[0]
-    expn = f.readline().split()[0]
+    run.expn = f.readline().split()[0]
     run.nlos = int(f.readline().split()[0])
     run.maximpact = float(f.readline().split()[0])
     run.incline = float(f.readline().split()[0])
@@ -115,8 +115,6 @@ def read_control_file():
     # Now at ion section
     # Loop over rest of file
     ions = []
-    xh  []
-    instruments = []
     f.readline()
     f.readline()
     for line in f:

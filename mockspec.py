@@ -39,11 +39,11 @@ run, ions = fi.read_control_file()
 #runRates, runGenLOS, runCellfinder, runIdcells, runLos7, runSpecsynth, runSysanal, runCullabs, runLocateCells, runSummaries, runPlotting = flags
 
 # Genearte the name of the gasfile
-gasfile = galID+'_GZa'+expn+'.txt'
+#gasfile = galID+'_GZa'+expn+'.txt'
 gasfile = '{0:s}_GZa{1:s}.txt'.format(run.galID,run.expn)
 print '\nRun Parameters:'
-print '\tGasfile:      ', run.gasfile
-print '\tIons:         ', run.ions
+print '\tGasfile:      ', gasfile
+print '\tIons:         ', [i.name for i in ions]
 print '\tNLOS:         ', run.nlos
 print '\tMax impact:   ', run.maximpact
 print '\tIncline:      ', run.incline
@@ -51,7 +51,7 @@ print '\tEWCut:        ', run.ewcut
 print '\tSNR:          ', run.snr
 print '\tNCores:       ', run.ncores
 print '\tRoot Loc:     ', run.rootLoc
-print '\tSigcells Cut: {0:.0%}'.format( sigcellsCut/100. )
+print '\tSigcells Cut: {0:.0%}'.format( run.sigcellsCut/100. )
 
 print '\nRun Flags:'
 print '\tRates:       {0:d}'.format(run.runRates)
@@ -83,7 +83,7 @@ fi.setup_galaxy_props(run, sumFile)
 #  Run rates
 #
 #####
-if runRates==1:
+if run.runRates==1:
     print '\nRates:'
     print '\t Setting up rates.inp...'
     rc.setup_rates_control( gasfile, run.expn, ions, requiredLoc)
@@ -117,7 +117,7 @@ os.chdir(incLoc)
 #  Generate the lines of sight
 #
 #####
-if runGenLOS==1:
+if run.runGenLOS==1:
     print '\nGenerating lines of sight...'
     rf.genLOS( codeLoc, mainLoc, run )
 else:
@@ -128,7 +128,7 @@ else:
 #  Run lines of sight through box with cellfinder
 #
 #####
-if runCellfinder==1:
+if run.runCellfinder==1:
     print '\nRunning LOS through box...'
     rf.runCellfinder(codeLoc, run.ncores)
 else: 
@@ -140,7 +140,7 @@ else:
 #  Identify cells in the ion boxes
 #
 #####
-if runIdcells==1:
+if run.runIdcells==1:
     print '\nIdentifying probed cell properites...'
     ic.idcells(run, ions, codeLoc)
 else:
@@ -154,7 +154,7 @@ fi.setup_mockspec(ions, run, requiredLoc)
 print '\nBegin looping over ions...'
 for ion in ions:
 
-    if sum([runLos7,runSpecsynth,runSysanal,runCullabs,runLocateCells])==0:
+    if sum([run.runLos7,run.runSpecsynth,run.runSysanal,run.runCullabs,run.runLocateCells])==0:
         print '\t\tNothing to do'
         break
 
@@ -174,7 +174,7 @@ for ion in ions:
     #  .losdata and .lines files
     #
     #####
-    if runLos7==1:
+    if run.runLos7==1:
         print '\n\tDetermining cell path length and applying rough cut'
         rf.los7(codeLoc)
     else:
@@ -187,7 +187,7 @@ for ion in ions:
     #  Generate the synthetic spectra
     #
     #####
-    if runSpecsynth==1:
+    if run.runSpecsynth==1:
         print '\n\tGenerating spectra'
         rf.specsynth(codeLoc)
     else:
@@ -199,7 +199,7 @@ for ion in ions:
     #  Analyze the spectra
     #
     #####
-    if runSysanal==1:
+    if run.runSysanal==1:
         print '\n\tAnalyzing spectra...'
         rf.sysanal(codeLoc)
     else:
@@ -212,7 +212,7 @@ for ion in ions:
     #  Create sysabs file
     #
     #####
-    if runCullabs==1:
+    if run.runCullabs==1:
         print '\n\tCreating sysabs'
         rf.cullabs(codeLoc)
         hdf.sysabs_to_hdf5(codeLoc)
@@ -227,7 +227,7 @@ for ion in ions:
     #  Identify the cells that are significant contributers to the absorption
     #
     #####
-    if runLocateCells==1:
+    if run.runLocateCells==1:
         print '\n\tIdentifying significant cells'
         lc.locateSigCells(run,ion,codeLoc)
         #lc.locateSigCells(galID, expn, ion, sigcellsCut, codeLoc, incline)
@@ -243,7 +243,7 @@ for ion in ions:
     #  Add inclination angle to filenames
     #
     #####
-    if runCullabs==1 or runLocateCells==1:
+    if run.runCullabs==1 or run.runLocateCells==1:
         print '\n\t Renaming files...'
         fi.rename(run,ion,runLocateCells,runCullabs)
     else:
@@ -254,13 +254,13 @@ for ion in ions:
     os.chdir('..')
 
 # Generate summary files
-if runSummaries==1:
+if run.runSummaries==1:
     print '\n\nGenearting summary files'
     hdf.genSummaries(galID, expn, incline, ions, nlos)    
 
 
 # Create basic plots
-if runPlotting==1:
+if run.runPlotting==1:
     print '\n\nGenerating plots'
     ac.make_plots(ions)
 

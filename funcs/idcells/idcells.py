@@ -155,7 +155,7 @@ def write_OutfileHdr(outfile, aexpn, R0, phi, l, b, los):
         '(kpc)'.center(width) + '(km/s)'.center(width) + '(km/s)'.center(width) + 
         '(km/s)'.center(width) + '(cm^-3)'.center(width) + '(K)'.center(width) + 
         ' '.center(width) + ' '.center(width) + '(cm^-3)'.center(width) + 
-        ' '.center(width) + '(cm^-3)'.center(width)
+        ' '.center(width) + '(cm^-3)'.center(width))
     f.write(s)
     f.write('\n')
 
@@ -316,6 +316,5 @@ def clean_up():
     try:
         sp.chekc_call(command, shell=True)
     except sp.CalledProcessError:
-        continue
-
+        pass
 
