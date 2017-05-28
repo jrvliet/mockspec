@@ -86,7 +86,7 @@ def covering_fraction(ions):
 
     for ion in ions:
         i = 0
-        allfile = './{0:s}/{1:s}.{0:s}.a{2:s}.i{3:d}.ALL.sysabs'.format(ion, galID, expn, inc)
+        allfile = './{0:s}/{1:s}.{0:s}.a{2:s}.i{3:d}.ALL.sysabs'.format(ion.name, galID, expn, inc)
         absimpact=[]
         covering=[]
         imp=[]
@@ -167,7 +167,7 @@ def covering_fraction(ions):
                      yerr=[verterrneg,verterrpos], linestyle='none')
         i+=1
         plt.xlabel('D / R$_{vir}$')
-        ylab = 'C$_f$ ['+ion+']'
+        ylab = 'C$_f$ ['+ion.name+']'
         plt.ylabel(ylab)
         plt.ylim([-0.1,1.1])
         plt.xlim([min(Dmin),1.5])

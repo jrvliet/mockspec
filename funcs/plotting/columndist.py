@@ -38,11 +38,12 @@ def column_distribution(ions):
     # Loop over ions
     for ion in ions:
             
-        allfile = './'+ion+'/'+galID+'.'+ion+'.a'+expn+'.ALL.sysabs'
-        
+        allfile = './{0:s}/{1:s}.{0:s}.a{2:s}.ALL.sysabs'.format(ion.name,
+                    galID,expn)
         
         #absfile = './i{4:d}/{0:s}/{1:s}.{2:s}.a{0:s}.i{4:d}.abs_cells.dat'.format(ion, galID, expn, inc)
-        absfile = './i{3:d}/{0:s}/{1:s}.{0:s}.a{2:s}.i{3:d}.ALL.sysabs.dat'.format(ion, galID, expn, inc)
+        absfile = './i{3:d}/{0:s}/{1:s}.{0:s}.a{2:s}.i{3:d}.ALL.sysabs.dat'.format(
+                    ion.name, galID, expn, inc)
 
         # Run Chris's binning program
         blankCommand = '{0:s}/funcs/plotting/bindata-logfreq {1:s} {2:d} {3:d} {4:f} {5:f} {6:f} {7:d}'
@@ -56,7 +57,7 @@ def column_distribution(ions):
         # Output will be named <galID>.logfreqbin
         # Rename to <galID>.<expn>.<ion>.ew.logfreqbin
         oldname = '.logfreqbin'.format(galID)
-        newname = '{0:s}.{1:s}.{2:s}.ew.logfreqbin'.format(galID, expn, ion)
+        newname = '{0:s}.{1:s}.{2:s}.ew.logfreqbin'.format(galID, expn, ion.name)
         command = 'mv {0:s} {1:s}'.format(oldname, newname)
         try:
             sp.call(command, shell=True)

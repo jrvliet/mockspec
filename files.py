@@ -15,12 +15,67 @@ import numpy as np
 import os
 import subprocess as sp
 
+
+class runProps(object):
+
+    '''
+    A class to describe the parameters of the run of mockspec. 
+    Basically holds everything read in from mockspec.config
+    in read_control_file except ion information
+    '''
+    
+    def __init__ (self):
+        
+        # General properties
+        self.galID = 'galID'
+        self.expn = '1.000'
+        self.nlos = 1000
+        self.maximpact = 1.5
+        self.incline = 0
+        self.ewcut = 0.0
+        self.snr = 30
+        self.ncores = 1
+        self.rootLoc = ''
+        self.sigcellsCut = 5.
+        
+        # Flags
+        self.runRates = 1
+        self.runGenLOS = 1
+        self.runCellfinder = 1
+        self.runIdcells = 1
+        self.runLos7 = 1
+        self.runSpecsynth = 1
+        self.runSysanal = 1
+        self.runCullabs = 1
+        self.runLocateCells = 1
+        self.runSummaries = 1
+        self.runPlotting = 1
+        
+        
+class ionProps(object):
+
+    '''
+    Class to describe an ion being studied. Atributtes include the 
+    ion name, the metallicity enhancement, and the instrument
+    '''
+    
+    def __init__ (self):
+        
+        self.name = 'HI'
+        self.xh = 0.
+        self.instrument = 'COSNUV'
+    
+
+
+
 def read_control_file():
 
     """
     Read in the control file, named mockspec.config
-    Returns everything in the files
+    Returns a runProps object
     """
+
+    run = runProps() 
 
     filename = 'mockspec.config'
     try:
@@ -34,59 +89,63 @@ def read_control_file():
     f.readline()
     f.readline()
 
-    galID = f.readline().split()[0]
+    run.galID = f.readline().split()[0]
     expn = f.readline().split()[0]
-    nlos = int(f.readline().split()[0])
-    maximpact = float(f.readline().split()[0])
-    incline = float(f.readline().split()[0])
-    ewcut = float(f.readline().split()[0])
-    snr = float(f.readline().split()[0])
-    ncores = int(f.readline().split()[0])
-    rootLoc = f.readline().split()[0]
-    sigcellsCut = float(f.readline().split()[0])
+    run.nlos = int(f.readline().split()[0])
+    run.maximpact = float(f.readline().split()[0])
+    run.incline = float(f.readline().split()[0])
+    run.ewcut = float(f.readline().split()[0])
+    run.snr = float(f.readline().split()[0])
+    run.ncores = int(f.readline().split()[0])
+    run.rootLoc = f.readline().split()[0]
+    run.sigcellsCut = float(f.readline().split()[0])
     # Now at flags for running the various subfunctions
     f.readline()
-    runRates = int(f.readline().split()[0])
-    runGenLOS = int(f.readline().split()[0])
-    runCellfinder = int(f.readline().split()[0])
-    runIdcells = int(f.readline().split()[0])
-    runLos7 = int(f.readline().split()[0])
-    runSpecsynth = int(f.readline().split()[0])
-    runSysanal = int(f.readline().split()[0])
-    runCullabs = int(f.readline().split()[0])
-    runLocateCells = int(f.readline().split()[0])
-    runSummaries = int(f.readline().split()[0])
-    runPlotting = int(f.readline().split()[0])
+    run.runRates = int(f.readline().split()[0])
+    run.runGenLOS = int(f.readline().split()[0])
+    run.runCellfinder = int(f.readline().split()[0])
+    run.runIdcells = int(f.readline().split()[0])
+    run.runLos7 = int(f.readline().split()[0])
+    run.runSpecsynth = int(f.readline().split()[0])
+    run.runSysanal = int(f.readline().split()[0])
+    run.runCullabs = int(f.readline().split()[0])
+    run.runLocateCells = int(f.readline().split()[0])
+    run.runSummaries = int(f.readline().split()[0])
+    run.runPlotting = int(f.readline().split()[0])
     # Now at ion section
     # Loop over rest of file
     ions = []
-    xh = []
+    xh  []
     instruments = []
     f.readline()
     f.readline()
     for line in f:
         if line.startswith('#')==False:
             l = line.split()
-            ions.append(l[0])
-            xh.append(l[1])
-            instruments.append(l[2])
+            ion = ionProps()
+            ion.name = l[0]
+            ion.xh = l[1]
+            ion.instrument = l[2]
+            ions.append(ion)
 
     f.close()
 
-    props = (galID, expn, nlos, maximpact, incline, ewcut, snr, ncores, rootLoc, sigcellsCut)
-    flags = (runRates, runGenLOS, runCellfinder, runIdcells, runLos7, 
-             runSpecsynth, runSysanal, runCullabs, runLocateCells, runSummaries, runPlotting)
-    return props, flags, ions, xh, instruments
+    #props = (galID, expn, nlos, maximpact, incline, ewcut, snr, ncores, rootLoc, sigcellsCut)
+    #flags = (runRates, runGenLOS, runCellfinder, runIdcells, runLos7, 
+    #         runSpecsynth, runSysanal, runCullabs, runLocateCells, runSummaries, runPlotting)
+    #return props, flags, ions, xh, instruments
+    return run,ions
 
 
-def setup_galprops(galID, expn, requiredLoc, summaryLoc):
+def setup_galprops(run, requiredLoc, summaryLoc):
 
     from subprocess import call
 
     #if not os.path.exists('gal_props.dat'):
     # Too many errors occurred with running with old gal_props
     # Now overwrite it everytime
-    command = 'cp ' +requiredLoc+ '/gal_props.dat .'
+    #command = 'cp ' +requiredLoc+ '/gal_props.dat .'
+    command = 'cp {0:s} /gal_props.dat'.format(requiredLoc)
     call(command, shell=True)
 
     call('cp gal_props.dat gal_props.dat.tmp', shell=True)
@@ -97,15 +156,15 @@ def setup_galprops(galID, expn, requiredLoc, summaryLoc):
         line = f.readline()
         gpf.write(line)
 
-    gasfile = galID+'_GZa'+expn+'.txt'
+    gasfile = '{0:s}_GZa{1:s}.txt'.format(run.galID,run.expn)
     line = f.readline()
     gpf.write(line.replace('MW9_GZ932.a1.001.HI.txt', gasfile))
     
     line = f.readline()
-    gpf.write(line.replace('MW9', galID))
+    gpf.write(line.replace('MW9', run.galID))
 
     line = f.readline()
-    gpf.write(line.replace('1.001', expn))
+    gpf.write(line.replace('1.001', run.expn))
 
     gpf.write(f.readline())
     gpf.write(f.readline())
@@ -174,7 +233,8 @@ def setup_idcells(gasfile, ion_list):
 
 
 
-def setup_mockspec(ion_list, instr_list, ewcut, snr, xh_list, requiredLoc):
+#def setup_mockspec(ion_list, instr_list, ewcut, snr, xh_list, requiredLoc):
+def setup_mockspec(ions,run,requiredLoc):
 
     '''
     Ensures that the appropriate Mockspc control files are present in 
@@ -189,7 +249,6 @@ def setup_mockspec(ion_list, instr_list, ewcut, snr, xh_list, requiredLoc):
     runfile = '{0:s}/Mockspec.runpars'.format(cwd)
     instfile = '{0:s}/Mockspec.instruments'.format(cwd)
     transfile = '{0:s}/Mockspec.transitions'.format(cwd)
-    print('\n\nIn setup_mockspec\nCWD: {0:s}'.format(cwd))
 
     # Need Mockspec.runpars, Mockspec.instruments, Mockspec.transitions
     basecommand = 'cp '+requiredLoc
@@ -217,10 +276,9 @@ def setup_mockspec(ion_list, instr_list, ewcut, snr, xh_list, requiredLoc):
 
     slev = '5.0'  # Significance level of detection
     
-    for ion, inst, xh in zip(ion_list, instr_list, xh_list):
+    for ion in ions:
 
-        print ion, requiredLoc
-        element, Z, stage = get_transition_info(ion, requiredLoc)
+        element, Z, stage = get_transition_info(ion.name, requiredLoc)
         if element =='hydrogen':
             vmax = '10000.'
         else:
@@ -228,7 +286,8 @@ def setup_mockspec(ion_list, instr_list, ewcut, snr, xh_list, requiredLoc):
         element = '\''+element+'\''
         line = ('{0:<11s} {1:<5s} {2:<6s} {3:<7s} '
                 '{4:<6f} {5:<5f} {6:<6s} {7:<s}\n'.format(element, 
-                stage, xh, inst, ewcut, snr, vmax, slev))
+                stage, ion.xh, ion.instrument, run.ewcut, 
+                run.snr, vmax, slev))
 
         datf.write(line)
         
@@ -256,7 +315,8 @@ def get_transition_info(ion, requiredLoc):
     
 
 
-def setup_ion_dir(ion, galID, expn, codeLoc):
+#def setup_ion_dir(ion, galID, expn, codeLoc):
+def setup_ion_dir(ion, run, codeLoc):
     
     """ 
     Creates a directory for this ion if one does not exit
@@ -264,27 +324,25 @@ def setup_ion_dir(ion, galID, expn, codeLoc):
     Returns the path to the ion directory
     """
     cwd = os.getcwd()
-    ionloc = cwd + '/' + ion
+    ionloc = cwd + '/' + ion.name
     
-    print('\n\nIn setup_ion_dir:\nCWD: {0:s}'.format(cwd))
-
     if not os.path.exists(ionloc):
-        command = 'mkdir '+ion
+        command = 'mkdir '+ion.name
         try:
             sp.check_call(command, shell=True)
         except:
             print 'Could not complete {0:s}'.format(command)
 
     # Create the los.list file
-    command = 'ls *'+ion+'.los*dat > qso.list && mv qso.list ./'+ion+'/'
+    command = ('ls *{0:s}.los*dat > qso.list && mv qso.list '
+                './{0:s}/'.format(ion.name))
     try:
         sp.check_call(command, shell=True)
     except:
         print 'Could not complete {0:s}'.format(command)
     
     # Copy the cell files, ion boxes and the lines files into the ion directory
-    ionbox =  galID+'_GZa'+expn+'.'+ion+'.txt'
-    ionbox = '{0:s}_GZa{1:s}.{2:s}.h5'.format(galID,expn,ion)
+    ionbox = '{0:s}_GZa{1:s}.{2:s}.h5'.format(run.galID,run.expn,ion.name)
     command = 'cp '+ionbox+' ./'+ion+'/'
     try:
         sp.call(command, shell=True)
@@ -292,12 +350,13 @@ def setup_ion_dir(ion, galID, expn, codeLoc):
         print 'Could not complete {0:s}'.format(command)
 
     command = 'mv *'+ion+'.los*.dat ./'+ion+'/'
+    command = 'mv *{0:s}.los*.dat ./{0:s}/'.format(ion.name)
     try:
         sp.check_call(command, shell=True)
     except:
         print 'Could not complete {0:s}'.format(command)
         
-    command = 'cp lines* ./'+ion+'/'
+    command = 'cp lines* ./'+ion.name+'/'
     try:
         sp.check_call(command, shell=True)
     except:
@@ -306,23 +365,20 @@ def setup_ion_dir(ion, galID, expn, codeLoc):
 
     # Copy the Mockspec files from the parent directory to here
     # New way: pull files from parent directory, not controls
-    print('HI926 Row')
-    command = 'grep HI926 ./Mockspec.transitions'
-    sp.call(command,shell=True)
-    command = 'cp ./Mockspec.instruments ./{1:s}/'.format(codeLoc,ion)
+    command = 'cp ./Mockspec.instruments ./{1:s}/'.format(codeLoc,ion.name)
     try:
         sp.check_call(command, shell=True)
     except:
         print 'Could not complete {0:s}'.format(command)
 
-    command = 'cp ./Mockspec.transitions ./{1:s}/'.format(codeLoc,ion)
+    command = 'cp ./Mockspec.transitions ./{1:s}/'.format(codeLoc,ion.name)
     try:
         sp.check_call(command, shell=True)
         print('Copying Mockspec.transitions: \n{0:s}'.format(command))
     except:
         print 'Could not complete {0:s}'.format(command)
 
-    command = 'cp ./Mockspec.runpars ./{1:s}/'.format(codeLoc,ion)
+    command = 'cp ./Mockspec.runpars ./{1:s}/'.format(codeLoc,ion.name)
     try:
         sp.check_call(command, shell=True)
     except:
@@ -350,24 +406,25 @@ def setup_ion_dir(ion, galID, expn, codeLoc):
 #        print 'Could not complete {0:s}'.format(command)
 
     # Check that nothing exists in the parent directory
-    command = 'ls *.{0:s}.*los*dat | wc -l'.format(ion)
+    command = 'ls *.{0:s}.*los*dat | wc -l'.format(ion.name)
     numDatFiles = int(sp.check_output(command, shell=True).strip())
     if numDatFiles!=0:
         print 'ERROR in setup_ion_dir in files.py'
-        print 'Problem moving .dat file for {0:s}'.format(ion)
+        print 'Problem moving .dat file for {0:s}'.format(ion.name)
         print 'Exitting....'
         sys.exit()
     return ionloc
 
 
-def setup_inclination_dir(incline, ions, runRates, galID, expn):
+#def setup_inclination_dir(incline, ions, runRates, galID, expn):
+def setup_inclination_dir(run, ions):
 
     """
     Sets up a directort called i<incline> in the expansion factor
     directory. Moves all rates output files into it if rates
     was run. Returns the file path to the new directory
     """
-    inc = int(incline)    
+    inc = int(run.incline)    
 
     # Check to see if the inclination directory already
     # exits
@@ -380,7 +437,7 @@ def setup_inclination_dir(incline, ions, runRates, galID, expn):
 
     # Check to see if the ion boxes are already in the directory
     for ion in ions:
-        boxName = '{0:s}_GZa{1:s}.{2:s}.h5'.format(galID, expn, ion)
+        boxName = '{0:s}_GZa{1:s}.{2:s}.h5'.format(run.galID, run.expn, ion.name)
         if not os.path.isfile('{0:s}/{1:s}'.format(incLoc,boxName)):
             command = 'cp {0:s} {1:s}/'.format(boxName, incLoc)
             try:
@@ -391,7 +448,7 @@ def setup_inclination_dir(incline, ions, runRates, galID, expn):
                 continue
                 
     # Copy the rest of the control files into the directory
-    boxname = '{0:s}_GZa{1:s}.txt'.format(galID, expn)
+    boxname = '{0:s}_GZa{1:s}.txt'.format(run.galID, run.expn)
     filenames = ['mockspec.config', 'gal_props.dat', 'galaxy.props', boxname]
     for fn in filenames:
         command = 'cp {0:s} ./i{1:d}/'.format(fn, inc)
@@ -407,7 +464,7 @@ def setup_inclination_dir(incline, ions, runRates, galID, expn):
 
 
 #def setup_galaxy_props(summaryLoc, galID, expn, inc):
-def setup_galaxy_props(sumFile, galID, expn, inc):
+def setup_galaxy_props(run, sumFile):
         
     """
     Creates a file called galaxy.props in the root directory.
@@ -439,22 +496,22 @@ def setup_galaxy_props(sumFile, galID, expn, inc):
     f.readline()
     l = f.readline().split()
     a = '{0:.3f}'.format(float(l[0]))
-    if a==expn:
+    if a==run.expn:
         found = 1
         redshift = float(l[1])
         mvir = float(l[2])
         rvir = float(l[3])
     else:
-        print 'Could not find {0:s} in {1:s}'.format(expn, sumFile)
+        print 'Could not find {0:s} in {1:s}'.format(run.expn, sumFile)
         sys.exit()
     f.close()
 
     # Write the galaxy.props file
     with open('galaxy.props', 'w') as f:
 
-        s = 'galID          {0:s}\n'.format(galID)
+        s = 'galID          {0:s}\n'.format(run.galID)
         f.write(s)
-        s = 'Expn           {0:s}\n'.format(expn)
+        s = 'Expn           {0:s}\n'.format(run.expn)
         f.write(s)
         s = 'Redshift       {0:.3f}\n'.format(redshift)
         f.write(s)
@@ -462,7 +519,7 @@ def setup_galaxy_props(sumFile, galID, expn, inc):
         f.write(s)
         s = 'Rvir           {0:.4f}\n'.format(rvir)
         f.write(s)
-        s = 'Inclination    {0:.1f}\n'.format(inc)
+        s = 'Inclination    {0:.1f}\n'.format(run.incline)
         f.write(s)
 
 
@@ -470,37 +527,27 @@ def setup_galaxy_props(sumFile, galID, expn, inc):
     
 
 
-def rename(galID, expn, ion, incline, runLocateCells, runCullabs):
+#def rename(galID, expn, ion, incline, runLocateCells, runCullabs):
+def rename(run,ion,runLocateCells,runCullabs):
 
     '''
     Renames files output by the pipeline to incline the 
     inclination angle
     '''
-    inc = int(incline)
+    inc = int(run.incline)
     print '\tRenaming files'
     
     if runCullabs==1:
         # Need to rename ALL.sysabs file
-        allName = '{0:s}.{1:s}.a{2:s}.ALL.sysabs.h5'.format(galID, ion, expn)
-        newName = allName.replace('ALL','i{0:d}.ALL'.format(inc))
+        allName = '{0:s}.{1:s}.a{2:s}.ALL.sysabs.h5'.format(run.galID,
+                     ion.name,run.expn)
+        newName = allName.replace('ALL','i{0:d}.ALL'.format(run.incline))
         command = 'mv {0:s} {1:s}'.format(allName, newName)
         print '\nRenaming command: {0:s}\n'.format(command)
         try:
             sp.check_call(command, shell=True)
         except:
             print 'Error in rename running \n\t{0:s}'.format(command)
-
-    # This is no longer needed, locatecells now has the correct name
-    #if runLocateCells==1:
-    #    # Need to rename the abs_cells file
-    #    absName = '{0:s}.{1:s}.{2:s}.abs_cells.dat'.format(galID,expn,ion)
-    #    newName = absName.replace('abs','i{0:d}.abs'.format(inc))
-    #    command = 'mv {0:s} {1:s}'.format(absName, newName)
-    #    try:
-    #        sp.check_call(command, shell=True)
-    #    except:
-    #        print 'Error in rename running \n\t{0:s}'.format(command)
-
        
 
 

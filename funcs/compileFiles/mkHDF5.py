@@ -75,52 +75,65 @@ def abscells_to_hdf5(codeLoc):
     df.to_hdf(hdf5file, 'data', mode='w')
 
 
-def gasbox_to_hdf5(codeLoc, ions):
+def gasbox_to_hdf5(codeLoc, ions, run):
 
     '''
     Converts the ion boxes file into the HDF5 format
     '''
-    
-    # Get the name of the file 
-    files = glob.glob('*GZ*.txt')
 
-    for filename in files:
-
-        ion = filename.split('.')[-2]
-        if ion in ions:     
-            header = ['cell_size', 'x', 'y', 'z', 'vx', 'vy', 'vz',
+    # Convert the ion boxes
+    for ion in ions:
+        
+        filename = '{0:s}_GZa{1:s}.{2:s}.txt'.format(run.galID,
+                                                run.expn,ion.name)
+        header = ['cell_size', 'x', 'y', 'z', 'vx', 'vy', 'vz',
                         'nH', 'temperature', 'SNII', 'SNIa', 'nAtom',
                         'fIon', 'nIon', 'alpha_sol', 'alpha_Zmet',
                         'ID', 't_ph', 't_rec', 't_coll', 't_cool']
-        elif 'tcdat' in filename:
-            header = ['ID', 'z', 'nH', 'T', 'Zcell', 'ne', 'ntot', 
+        
+        box_conversion(filename,header)
+        
+    # Convert the normal gas box
+    filename = '{0:s}_GZa{1:s}.txt'.format(run.galID,run.expn) 
+    header = ['cell_size', 'x', 'y', 'z', 'vx', 'vy', 'vz', 
+                        'density', 'temperature', 'SNII', 'SNIa']
+    box_conversion(filename,header)
+
+    # Convert the timescale gas box
+    filename = '{0:s}_GZa{1:s}.tcdat.txt'.format(run.galID,run.expn)
+    header = ['ID', 'z', 'nH', 'T', 'Zcell', 'ne', 'ntot', 
                       'nH/nH', 'nHe/nH', 'nC/nH', 'nN/nH', 'nO/nH', 
                       'nNe/nH', 'nMg/nH', 'nSi/nH', 'nS/nH', 'nCa/nH', 
                       'nFe/nH']
-        else:
-            header = ['cell_size', 'x', 'y', 'z', 'vx', 'vy', 'vz', 
-                        'density', 'temperature', 'SNII', 'SNIa']
-        
-        # Create the name of the HDF5 file
-        hdf5file = filename.replace('txt','h5')
+    box_conversion(filename,header)    
 
-        # Read in the data
+
+def box_conversion(filename, header):
+        
+    hdf5file = filename.replace('txt','h5')
+
+    # Read in the data
+    try:
         data = np.loadtxt(filename, skiprows=2)
-        print filename, data.shape
-        
-        # WRite data to HDF file
-        try:
-            df = pd.DataFrame(data, columns=header)
-        except ValueError:
-            print 'Value Error with converting {0:s} in gasbox_to_hdf5'.format(filename)
-            continue
+    except IOError:
+        print 'Unable to open {0:s} to convert to HDF5'.format(filename)
+        print 'Exitting'
+        sys.exit()
+    
+    # Write data to HDF file
+    try:
+        df = pd.DataFrame(data, columns=header)
         df.to_hdf(hdf5file, 'data', mode='w')
+    except ValueError:
+        print 'Value Error with converting {0:s} in gasbox_to_hdf5'.format(filename)
+        continue
 
 
 
 
 
-def genSummaries(galID, expn, incline, ions, numlos):
+#def genSummaries(galID, expn, incline, ions, numlos):
+def genSummaries(run,ions):
 
     '''
     A controlling function to generate LOS summary files.
@@ -132,7 +145,7 @@ def genSummaries(galID, expn, incline, ions, numlos):
 
     # Get the IDs of cells along the LOS
     probbedIDsAll = []
-    for i in range(numlos):
+    for i in range(run.nlos):
         losnum = str(i+1).zfill(4)
         probbedIDsAll.append(ls.num_along_los(losnum))
 
@@ -143,13 +156,10 @@ def genSummaries(galID, expn, incline, ions, numlos):
     for ion in ions:
 
         outfile = '{0:s}_a{1:s}_i{2:d}_{3:s}_cellSummary.h5'.format(
-                    galID,expn,int(incline),ion)
+                    run.galID,run.expn,int(run.incline),ion.name)
 
-        print 'Compiling summary for {0:s}'.format(ion)
+        print 'Compiling summary for {0:s}'.format(ion.name)
         # Write the header
-        #header = ('LOS\tImpact\tPhi\tProbbed\tProbbed_in_halos\t'
-        #            'In_Lines\tLines_in_halos\tSignificant\t'   
-        #            'Sig_in_halos\n')
         header = ['LOS','Impact','Phi','Probbed','Probbed_in_halos',
                     'In_Lines','Lines_in_halos','Significant',   
                     'Sig_in_halos']
@@ -159,26 +169,27 @@ def genSummaries(galID, expn, incline, ions, numlos):
         s = ('{0:d}\t{1:.3f}\t{2:.3f}\t{3:d}\t{4:d}\t{5:d}\t{6:d}\t'
                 '{7:d}\t{8:d}\n')
         numcols = 9
-        data = np.zeros((numlos,numcols))
+        data = np.zeros((run.nlos,numcols))
         # Loop over the lines of sight
-        for i in range(numlos):
+        for i in range(run.nlos):
             
             probbedIDs = probbedIDsAll[i]
             losnum = str(i+1).zfill(4)
 
             # Get the id of cells in the .lines file for this LOS 
-            linesIDs = ls.num_in_lines(galID, ion, losnum)
+            linesIDs = ls.num_in_lines(run.galID, ion.name, losnum)
 
             # Get the id of the significant cells along this LOS
-            sigIDs = ls.num_significant(galID, expn, ion, incline, losnum)
+            sigIDs = ls.num_significant(run.galID, run.expn, ion.name, 
+                        run.incline, losnum)
 
             # Get the coordinates of these cells
-            probbedCells, linesCells, sigCells = ls.get_coordinates(galID,
-                expn, probbedIDs, linesIDs, sigIDs)
+            probbedCells, linesCells, sigCells = ls.get_coordinates(run.galID,
+                run.expn, probbedIDs, linesIDs, sigIDs)
 
             # Determine the number of these cells that are in subhalos
-            probbedinSub, linesinSub, siginSub = ls.num_in_subhalos(galID,
-               expn, ion, incline, losnum, probbedCells, linesCells, 
+            probbedinSub, linesinSub, siginSub = ls.num_in_subhalos(run.galID,
+               run.expn, ion.name, run.incline, losnum, probbedCells, linesCells, 
                sigCells)
 
             data[i,0] = i+1

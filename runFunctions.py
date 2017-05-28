@@ -5,7 +5,8 @@ import os
 import sys
 from subprocess import check_call
 
-def genLOS(codeLoc, galID, summaryLoc, expn, inc, nLOS, maximpact, ncores):
+#def genLOS(codeLoc, galID, summaryLoc, expn, inc, nLOS, maximpact, ncores):
+def genLOS(codeLoc, summaryLoc, run):
     
     """ 
     Runs genLOS, which generates random LOS for the simulation.
@@ -14,7 +15,8 @@ def genLOS(codeLoc, galID, summaryLoc, expn, inc, nLOS, maximpact, ncores):
     """
     funcLoc = '/funcs/generateLines/genLOS '
     args = '{0:s} {1:s} {2:s} {3:f} {4:d} {5:f} {6:d}'.format(
-            galID, summaryLoc, expn, inc, nLOS, maximpact, ncores)
+            run.galID, summaryLoc, run.expn, run.incline, 
+            run.nlos, run.maximpact, run.ncores)
     command = codeLoc + funcLoc + args
     
     try:

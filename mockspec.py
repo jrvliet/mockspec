@@ -33,46 +33,50 @@ requiredLoc = codeLoc+'/controls/'
 
 #  Read in the control file
 print '\n\nReading in control file...'
-props, flags, ions, xh, instruments = fi.read_control_file()
-galID, expn, nlos, maximpact, incline, ewcut, snr, ncores, rootLoc, sigcellsCut = props
-runRates, runGenLOS, runCellfinder, runIdcells, runLos7, runSpecsynth, runSysanal, runCullabs, runLocateCells, runSummaries, runPlotting = flags
+run, ions = fi.read_control_file()
+#props, flags, ions, xh, instruments = fi.read_control_file()
+#galID, expn, nlos, maximpact, incline, ewcut, snr, ncores, rootLoc, sigcellsCut = props
+#runRates, runGenLOS, runCellfinder, runIdcells, runLos7, runSpecsynth, runSysanal, runCullabs, runLocateCells, runSummaries, runPlotting = flags
 
 # Genearte the name of the gasfile
 gasfile = galID+'_GZa'+expn+'.txt'
+gasfile = '{0:s}_GZa{1:s}.txt'.format(run.galID,run.expn)
 print '\nRun Parameters:'
-print '\tGasfile:      ', gasfile
-print '\tIons:         ', ions
-print '\tNLOS:         ', nlos
-print '\tMax impact:   ', maximpact
-print '\tIncline:      ', incline
-print '\tEWCut:        ', ewcut
-print '\tSNR:          ', snr
-print '\tNCores:       ', ncores
-print '\tRoot Loc:     ', rootLoc
+print '\tGasfile:      ', run.gasfile
+print '\tIons:         ', run.ions
+print '\tNLOS:         ', run.nlos
+print '\tMax impact:   ', run.maximpact
+print '\tIncline:      ', run.incline
+print '\tEWCut:        ', run.ewcut
+print '\tSNR:          ', run.snr
+print '\tNCores:       ', run.ncores
+print '\tRoot Loc:     ', run.rootLoc
 print '\tSigcells Cut: {0:.0%}'.format( sigcellsCut/100. )
 
 print '\nRun Flags:'
-print '\tRates:       {0:d}'.format(runRates)
-print '\tGenLOS:      {0:d}'.format(runGenLOS)
-print '\tCellfinder:  {0:d}'.format(runCellfinder)
-print '\tIDCells:     {0:d}'.format(runIdcells)
-print '\tLos7:        {0:d}'.format(runLos7)
-print '\tSpecsynth:   {0:d}'.format(runSpecsynth)
-print '\tSysanal:     {0:d}'.format(runSysanal)
-print '\tCullabs:     {0:d}'.format(runCullabs)
-print '\tLocateCells: {0:d}'.format(runLocateCells)
-print '\tPlotting:    {0:d}'.format(runPlotting)
+print '\tRates:       {0:d}'.format(run.runRates)
+print '\tGenLOS:      {0:d}'.format(run.runGenLOS)
+print '\tCellfinder:  {0:d}'.format(run.runCellfinder)
+print '\tIDCells:     {0:d}'.format(run.runIdcells)
+print '\tLos7:        {0:d}'.format(run.runLos7)
+print '\tSpecsynth:   {0:d}'.format(run.runSpecsynth)
+print '\tSysanal:     {0:d}'.format(run.runSysanal)
+print '\tCullabs:     {0:d}'.format(run.runCullabs)
+print '\tLocateCells: {0:d}'.format(run.runLocateCells)
+print '\tPlotting:    {0:d}'.format(run.runPlotting)
 
 # Test the summary location
-sumFile = '{0:s}/rotmat_a{1:s}.txt'.format(os.getcwd(), expn)
+sumFile = '{0:s}/rotmat_a{1:s}.txt'.format(os.getcwd(), run.expn)
 
 # Generate gal_props.dat file
 print '\n\nGenerating gal_props.dat...'
-fi.setup_galprops( galID, expn, requiredLoc, summaryLoc )
+#fi.setup_galprops( galID, expn, requiredLoc, summaryLoc )
+fi.setup_galprops( run, requiredLoc, summaryLoc )
 
 # Generate galaxy.props file, needed for analysis codes
 print '\n\nGenerating galaxy.props...'
-fi.setup_galaxy_props(sumFile, galID, expn, incline)
+#fi.setup_galaxy_props(sumFile, galID, expn, incline)
+fi.setup_galaxy_props(run, sumFile)
 
 ##### 
 #  
@@ -82,9 +86,9 @@ fi.setup_galaxy_props(sumFile, galID, expn, incline)
 if runRates==1:
     print '\nRates:'
     print '\t Setting up rates.inp...'
-    rc.setup_rates_control( gasfile, expn, ions, requiredLoc)
+    rc.setup_rates_control( gasfile, run.expn, ions, requiredLoc)
     print '\t Setting up rates.outfiles...'
-    rc.setup_rates_outputs(galID, expn, ions, codeLoc, requiredLoc) 
+    rc.setup_rates_outputs(run, ions, codeLoc, requiredLoc) 
     print '\t Setting up rates data location...'
     rc.setup_rates_data(codeLoc)
     print '\t Running rates...'
@@ -103,6 +107,7 @@ else:
 #####
 mainLoc = os.getcwd()
 incLoc = fi.setup_inclination_dir(incline, ions, runRates, galID, expn)
+incLoc = fi.setup_inclination_dir(run, ions)
 os.chdir(incLoc)
 
 
@@ -114,8 +119,7 @@ os.chdir(incLoc)
 #####
 if runGenLOS==1:
     print '\nGenerating lines of sight...'
-    rf.genLOS( codeLoc, galID, mainLoc, expn, incline, 
-               nlos, maximpact, ncores)   
+    rf.genLOS( codeLoc, mainLoc, run )
 else:
     print 'Skipping genLOS...'
 
@@ -126,7 +130,7 @@ else:
 #####
 if runCellfinder==1:
     print '\nRunning LOS through box...'
-    rf.runCellfinder(codeLoc, ncores)
+    rf.runCellfinder(codeLoc, run.ncores)
 else: 
     print 'Skipping cellfinder...'
 
@@ -138,12 +142,12 @@ else:
 #####
 if runIdcells==1:
     print '\nIdentifying probed cell properites...'
-    ic.idcells(galID, expn, ions, codeLoc)
+    ic.idcells(run, ions, codeLoc)
 else:
     print 'Skipping IDcells...'
 
 # Setup Mockspec 
-fi.setup_mockspec(ions, instruments, ewcut, snr, xh, requiredLoc)
+fi.setup_mockspec(ions, run, requiredLoc)
 
 
 # Start looping over ions
@@ -157,7 +161,8 @@ for ion in ions:
     print '\tIon: ', ion
 
     # Setup the ion directory
-    ionloc = fi.setup_ion_dir(ion, galID, expn, codeLoc) 
+    #ionloc = fi.setup_ion_dir(ion, galID, expn, codeLoc) 
+    ionloc = fi.setup_ion_dir(ion, run, codeLoc) 
 
     # Move into the ion directory
     os.chdir(ionloc)
@@ -224,7 +229,8 @@ for ion in ions:
     #####
     if runLocateCells==1:
         print '\n\tIdentifying significant cells'
-        lc.locateSigCells(galID, expn, ion, sigcellsCut, codeLoc, incline)
+        lc.locateSigCells(run,ion,codeLoc)
+        #lc.locateSigCells(galID, expn, ion, sigcellsCut, codeLoc, incline)
 #        lc.sigCells(galID, expn, ion, sigcellsCut, codeLoc)
 #        hdf.abscells_to_hdf5(codeLoc)
     else:
@@ -239,7 +245,7 @@ for ion in ions:
     #####
     if runCullabs==1 or runLocateCells==1:
         print '\n\t Renaming files...'
-        fi.rename(galID, expn, ion, incline, runLocateCells, runCullabs)
+        fi.rename(run,ion,runLocateCells,runCullabs)
     else:
         print 'What was the point...'
 

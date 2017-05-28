@@ -55,18 +55,20 @@ def setup_rates_data(codeLoc):
  
 
 
-def setup_rates_outputs(galID, expn, ion_list, codeLoc, requiredLoc):
+def setup_rates_outputs(run, ion_list, codeLoc, requiredLoc):
 
     if not os.path.exists('rates.outfiles'):
-        command = 'cp '+requiredLoc+'rates.outfiles .'
+        #command = 'cp '+requiredLoc+'rates.outfiles .'
+        command = 'cp {0:s} rates.outfiles .'.format(requiredLoc)
         sp.call(command, shell=True)
     
     # Alter the rates.outfiles file
     defoutfile = open('rates.outfiles')
     outfiles = open('rates.outfiles.tmp', 'w')
     for ion in ion_list:
-        ionbox = galID+'_GZa'+expn+'.'+ion+'.txt'
-        element, Z, excitation = getTransitionInfo(ion, codeLoc)
+        #ionbox = galID+'_GZa'+expn+'.'+ion+'.txt'
+        ionbox = '{0:s}_GZa{1:s}.{2:s}.txt'.format(run.galID,run.expn,ion.name)
+        element, Z, excitation = getTransitionInfo(ion.name, codeLoc)
         line = '{0:<27s} {1:>2s} {2:>2s}\n'.format(ionbox, Z, excitation)
         outfiles.write(line)
     outfiles.close()

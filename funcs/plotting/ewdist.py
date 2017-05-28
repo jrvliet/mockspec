@@ -59,7 +59,8 @@ def ew_distribution(ions):
     # Loop over ions
     for ion in ions:
         
-        allfile = './i{4:d}/{0:s}/{1:s}.{0:s}.a{2:s}.i{3:d}.ALL.sysabs.h5'.format(ion,galID,expn,inc)
+        allfile = './i{4:d}/{0:s}/{1:s}.{0:s}.a{2:s}.i{3:d}.ALL.sysabs.h5'.format(
+                    ion.name,galID,expn,inc)
         
         d = pd.read_hdf(allfile, 'data')
         ew = d['EW_r']
@@ -76,7 +77,7 @@ def ew_distribution(ions):
         # Output will be named <galID>.logfreqbin
         # Rename to <galID>.<expn>.<ion>.ew.logfreqbin
         oldname = '.logfreqbin'.format(galID)
-        newname = '{0:s}.{1:s}.{2:s}.ew.logfreqbin'.format(galID, expn, ion)
+        newname = '{0:s}.{1:s}.{2:s}.ew.logfreqbin'.format(galID, expn, ion.name)
         command = 'mv {0:s} {1:s}'.format(oldname, newname)
         sp.call(command, shell=True)
 
@@ -113,7 +114,7 @@ def ew_distribution(ions):
 
         # Write results to file
         s = '{0:s}\t{1:f} +/- {2:f}\t{3:f} +/- {4:f}\t{5:f} +/- {6:f}\n'.format(
-            ion, phi, sigma[0], lstar, sigma[1], alpha, sigma[2])
+            ion.name, phi, sigma[0], lstar, sigma[1], alpha, sigma[2])
         fout.write(s)
 
 

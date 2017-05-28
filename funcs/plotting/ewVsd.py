@@ -36,7 +36,8 @@ def ew_profile(ions):
     xerrNegAll = []
     for ion in ions:
 
-        filename = './{0:s}/{1:s}.{0:s}.a{2:s}.i{3:d}.ALL.sysabs.h5'.format(ion,galID,expn,inc)
+        filename = './{0:s}/{1:s}.{0:s}.a{2:s}.i{3:d}.ALL.sysabs.h5'.format(
+                    ion.name,galID,expn,inc)
         try:
             d = pd.read_hdf(filename, 'data')
             impRaw = d['D']
@@ -100,7 +101,7 @@ def ew_profile(ions):
         plt.yscale('log')
         plt.xlim([0,1.5])
         plt.xlabel('Impact Parameter [Rvir]')
-        plt.ylabel(r'$\log(EW_{'+ion+'})$')
+        plt.ylabel(r'$\log(EW_{'+ion.name+'})$')
 
     plt.tight_layout()
     plt.subplots_adjust(top=0.92)

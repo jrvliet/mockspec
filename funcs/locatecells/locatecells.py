@@ -19,7 +19,7 @@ import pandas as pd
 import locate_files as fi
 
 
-def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
+def locateSigCells(run,ion,codeLoc,testing=0):
 
     """
     Locates the significant cells in a line of sight.
@@ -34,7 +34,7 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
     singleCount = 0
 
     # Read in the galaxy's box
-    boxfile = '{0:s}_GZa{1:s}.{2:s}.h5'.format(galID,expn,ion)
+    boxfile = '{0:s}_GZa{1:s}.{2:s}.h5'.format(run.galID,run.expn,ion.name)
     box = pd.read_hdf(boxfile, 'data')
     if testing==1:
         print('Box read in')
@@ -45,18 +45,19 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
     # Determine which transition to use
     # Only need on, use the transition with the weaker oscillator strength since
     # this will retain mroe cells than the other transitions
-    waves = fi.transition_name(ion,testing)
+    waves = fi.transition_name(ion.name,testing)
 
     # Open the output file
-    outfile = '{0:s}.{1:s}.{2:s}.i{3:d}.abs_cells.h5'.format(galID,expn,ion,int(inc))
+    outfile = '{0:s}.{1:s}.{2:s}.i{3:d}.abs_cells.h5'.format(run.galID,
+                        run.expn,ion.name,int(run.incline))
     header = ['wave','LOS','D','cellID','redshift','logN','dobbler_b',
                 'x', 'y', 'z', 'vx', 'vy', 'vz',
                 'r', 'nH', 'temperature', 'cell_size', 'SNII', 'SNIa', 
                 'alpha_Zmet', 'ion_density', 'fullLogNstart', 'fullLogNend']
 
     # Open the summary file
-    sumfile = '{0:s}_a{1:s}_{2:s}_i{3:d}_absCellsSummary.h5'.format(galID,
-                        expn,ion,int(inc))
+    sumfile = '{0:s}_a{1:s}_{2:s}_i{3:d}_absCellsSummary.h5'.format(run.galID,
+                        run.expn,ion.name,int(run.incline))
     sumheader = ['los', 'impact', 'phi', 'wave','startNumCells', 'startEW', 'startlogN', 
                 'endNumCells', 'endEW', 'endlogN']
     summary = pd.DataFrame(columns=sumheader)
@@ -87,7 +88,7 @@ def locateSigCells(galID, expn, ion, ewcut, codeLoc, inc, testing=0):
         losnum = sysabs_losnum[i].split('.')[2].split('los')[1]
         num = int(losnum)
 
-        linesfile = '{0:s}.{1:s}.los{2:s}.lines'.format(galID,ion,losnum)
+        linesfile = '{0:s}.{1:s}.los{2:s}.lines'.format(run.galID,ion.name,losnum)
 
         # Get the column density of the LOS from the lines file
         logNinitial = lf.linesLogN(linesfile)
