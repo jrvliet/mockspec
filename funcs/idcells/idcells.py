@@ -212,7 +212,7 @@ def read_los_props(losnum):
 ###############################################################################
 
 
-def idcells(run, ionx, codeLoc):
+def idcells(run, ions, codeLoc):
 
     """
     Function to select the physical properties of gas cells
@@ -232,7 +232,7 @@ def idcells(run, ionx, codeLoc):
         #Read in ion box
         cwd = os.getcwd()
         ionboxfile = '{0:s}/{1:s}_GZa{2:s}.{3:s}.h5'.format(cwd,run.galID,
-                                                            run.aexpn,ion.name)
+                                                            run.expn,ion.name)
         ionbox = pd.read_hdf(ionboxfile, 'data')
 
         # Loop over lines of sight

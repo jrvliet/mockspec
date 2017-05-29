@@ -127,6 +127,8 @@ def box_conversion(filename, header):
     except ValueError:
         print 'Value Error with converting {0:s} in gasbox_to_hdf5'.format(filename)
         pass
+    del df
+    del data
 
 
 

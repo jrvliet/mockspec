@@ -86,15 +86,15 @@ fi.setup_galaxy_props(run, sumFile)
 if run.runRates==1:
     print '\nRates:'
     print '\t Setting up rates.inp...'
-    rc.setup_rates_control( gasfile, run.expn, ions, requiredLoc)
+    #rc.setup_rates_control( gasfile, run.expn, ions, requiredLoc)
     print '\t Setting up rates.outfiles...'
-    rc.setup_rates_outputs(run, ions, codeLoc, requiredLoc) 
+    #rc.setup_rates_outputs(run, ions, codeLoc, requiredLoc) 
     print '\t Setting up rates data location...'
-    rc.setup_rates_data(codeLoc)
+    #rc.setup_rates_data(codeLoc)
     print '\t Running rates...'
-    rc.run_rates(codeLoc)
+    #rc.run_rates(codeLoc)
     print '\t Converting to hdf5...'
-    hdf.gasbox_to_hdf5(codeLoc, ions)
+    #hdf.gasbox_to_hdf5(codeLoc, ions, run)
 else:
     print 'Skipping rates'
 
@@ -106,7 +106,7 @@ else:
 #
 #####
 mainLoc = os.getcwd()
-incLoc = fi.setup_inclination_dir(incline, ions, runRates, galID, expn)
+#incLoc = fi.setup_inclination_dir(incline, ions, runRates, galID, expn)
 incLoc = fi.setup_inclination_dir(run, ions)
 os.chdir(incLoc)
 
