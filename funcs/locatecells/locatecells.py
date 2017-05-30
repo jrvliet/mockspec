@@ -126,7 +126,7 @@ def locateSigCells(run,ion,codeLoc,testing=0):
             lf.velcut(linesfile, testing=testing)
 
             # Find the significant cells
-            endCut,startEW,endEW = sg.sigcells(linesfile,ewcut,codeLoc,flog,wave,testing=testing)
+            endCut,startEW,endEW = sg.sigcells(linesfile,run.ewcut,codeLoc,flog,wave,testing=testing)
 
             # Get the properties of the cells
             # Open the lines.final file

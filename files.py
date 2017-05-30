@@ -341,13 +341,14 @@ def setup_ion_dir(ion, run, codeLoc):
     
     # Copy the cell files, ion boxes and the lines files into the ion directory
     ionbox = '{0:s}_GZa{1:s}.{2:s}.h5'.format(run.galID,run.expn,ion.name)
-    command = 'cp '+ionbox+' ./'+ion+'/'
+    #command = 'cp '+ionbox+' ./'+ion+'/'
+    command = 'cp {0:s} ./{1:s}'.format(ionbox,ion.name)
     try:
         sp.call(command, shell=True)
     except: 
         print 'Could not complete {0:s}'.format(command)
 
-    command = 'mv *'+ion+'.los*.dat ./'+ion+'/'
+    #command = 'mv *'+ion+'.los*.dat ./'+ion+'/'
     command = 'mv *{0:s}.los*.dat ./{0:s}/'.format(ion.name)
     try:
         sp.check_call(command, shell=True)

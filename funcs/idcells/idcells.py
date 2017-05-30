@@ -314,7 +314,7 @@ def clean_up():
     # Move all cellid files into the directory
     command = 'mv los*cellID.dat ./cellIDs/'
     try:
-        sp.chekc_call(command, shell=True)
+        sp.check_call(command, shell=True)
     except sp.CalledProcessError:
         pass
 
