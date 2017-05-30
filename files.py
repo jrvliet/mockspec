@@ -35,7 +35,7 @@ class runProps(object):
         self.ewcut = 0.0
         self.snr = 30
         self.ncores = 1
-        self.rootLoc = ''
+        self.runLoc = ''
         self.sigcellsCut = 5.
         
         # Flags
@@ -97,7 +97,7 @@ def read_control_file():
     run.ewcut = float(f.readline().split()[0])
     run.snr = float(f.readline().split()[0])
     run.ncores = int(f.readline().split()[0])
-    run.rootLoc = f.readline().split()[0]
+    run.runLoc = f.readline().split()[0]
     run.sigcellsCut = float(f.readline().split()[0])
     # Now at flags for running the various subfunctions
     f.readline()
@@ -128,6 +128,7 @@ def read_control_file():
 
     f.close()
 
+    run.runLoc = os.getcwd()
     #props = (galID, expn, nlos, maximpact, incline, ewcut, snr, ncores, rootLoc, sigcellsCut)
     #flags = (runRates, runGenLOS, runCellfinder, runIdcells, runLos7, 
     #         runSpecsynth, runSysanal, runCullabs, runLocateCells, runSummaries, runPlotting)
@@ -321,8 +322,7 @@ def setup_ion_dir(ion, run, codeLoc):
     Copies the all required files into this directory
     Returns the path to the ion directory
     """
-    cwd = os.getcwd()
-    ionloc = cwd + '/' + ion.name
+    ionloc = '{0:s}/i{1:d}/{2:s}'.format(run.runLoc,int(run.incline),ion.name)
     
     if not os.path.exists(ionloc):
         command = 'mkdir '+ion.name
@@ -527,7 +527,7 @@ def setup_galaxy_props(run, sumFile):
 
 
 #def rename(galID, expn, ion, incline, runLocateCells, runCullabs):
-def rename(run,ion,runLocateCells,runCullabs):
+def rename(run,ion):
 
     '''
     Renames files output by the pipeline to incline the 
@@ -536,17 +536,21 @@ def rename(run,ion,runLocateCells,runCullabs):
     inc = int(run.incline)
     print '\tRenaming files'
     
-    if runCullabs==1:
+    rootLoc = '{0:s}/i{1:d}/{2:s}/'.format(run.runLoc,
+                int(run.incline),ion.name)
+    if run.runCullabs==1:
         # Need to rename ALL.sysabs file
         allName = '{0:s}.{1:s}.a{2:s}.ALL.sysabs.h5'.format(run.galID,
                      ion.name,run.expn)
-        newName = allName.replace('ALL','i{0:d}.ALL'.format(run.incline))
-        command = 'mv {0:s} {1:s}'.format(allName, newName)
+        newName = allName.replace('ALL','i{0:d}.ALL'.format(int(run.incline)))
+        command = 'mv {0:s}{1:s} {0:s}{2:s}'.format(rootLoc,
+                    allName, newName)
         print '\nRenaming command: {0:s}\n'.format(command)
         try:
             sp.check_call(command, shell=True)
         except:
             print 'Error in rename running \n\t{0:s}'.format(command)
+            print '\tCWD: ',os.getcwd()
        
 
 

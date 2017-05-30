@@ -4,16 +4,14 @@
 #  Full pipeline for performing synthetic QSO observations
 #  of ART simulations of galaxy CGM
 
-print 'Testing'
-
-
 # General libraries
 import numpy as np
-import tables as tb
+#import tables as tb
 import os
-import pandas
+import pandas as pd
 import subprocess as sp
 import sys
+import joblib as jl
 
 # Code specific libraries
 import files as fi
@@ -24,6 +22,96 @@ import runFunctions as rf
 import funcs.sigcells.sigcells as sc
 import funcs.plotting.analysis_control as ac
 import funcs.compileFiles.mkHDF5 as hdf
+
+
+
+def ionLoop(run,ion):
+
+    if sum([run.runLos7,run.runSpecsynth,run.runSysanal,run.runCullabs,run.runLocateCells])==0:
+        print '\t\tNothing to do'
+        return 1
+
+    print '\tIon: ', ion.name
+    # Move into the ion directory
+    os.chdir(ionloc)
+    print os.getcwd()
+
+    ##### 
+    #  
+    #  los7
+    #  Determine path length through each cell and create the
+    #  .losdata and .lines files
+    #
+    #####
+    if run.runLos7==1:
+        print '\n\tDetermining cell path length and applying rough cut'
+        rf.los7(codeLoc)
+    else:
+        print '\tSkipping los7...'
+
+
+    ##### 
+    #  
+    #  specsynth
+    #  Generate the synthetic spectra
+    #
+    #####
+    if run.runSpecsynth==1:
+        print '\n\tGenerating spectra'
+        rf.specsynth(codeLoc)
+    else:
+        print '\tSkipping specsynth...'
+
+    ##### 
+    #  
+    #  sysanal
+    #  Analyze the spectra
+    #
+    #####
+    if run.runSysanal==1:
+        print '\n\tAnalyzing spectra...'
+        rf.sysanal(codeLoc)
+    else:
+        print '\tSkipping sysanal...'
+
+
+    ##### 
+    #  
+    #  cullabs
+    #  Create sysabs file
+    #
+    #####
+    if run.runCullabs==1:
+        print '\n\tCreating sysabs'
+        rf.cullabs(codeLoc)
+        hdf.sysabs_to_hdf5(codeLoc)
+    else:
+        print '\tSkipping sysabs...'
+
+    ##### 
+    #  
+    #  locatecells
+    #  Identify the cells that are significant contributers to the absorption
+    #
+    #####
+    if run.runLocateCells==1:
+        print '\n\tIdentifying significant cells'
+        lc.locateSigCells(run,ion,codeLoc)
+        #lc.locateSigCells(galID, expn, ion, sigcellsCut, codeLoc, incline)
+#        lc.sigCells(galID, expn, ion, sigcellsCut, codeLoc)
+#        hdf.abscells_to_hdf5(codeLoc)
+    else:
+        print '\tSkipping locatecells...'
+
+
+    # Move back up to the parent directory
+    print ion.name,os.getcwd()
+    os.chdir('..')
+    print ion.name,os.getcwd()
+
+
+
+
 
 # Get the location where the code lives
 pathname = os.path.dirname(sys.argv[0])
@@ -50,7 +138,7 @@ print '\tIncline:      ', run.incline
 print '\tEWCut:        ', run.ewcut
 print '\tSNR:          ', run.snr
 print '\tNCores:       ', run.ncores
-print '\tRoot Loc:     ', run.rootLoc
+print '\tRun Loc:      ', run.runLoc
 print '\tSigcells Cut: {0:.0%}'.format( run.sigcellsCut/100. )
 
 print '\nRun Flags:'
@@ -86,15 +174,15 @@ fi.setup_galaxy_props(run, sumFile)
 if run.runRates==1:
     print '\nRates:'
     print '\t Setting up rates.inp...'
-    #rc.setup_rates_control( gasfile, run.expn, ions, requiredLoc)
+    rc.setup_rates_control( gasfile, run.expn, ions, requiredLoc)
     print '\t Setting up rates.outfiles...'
-    #rc.setup_rates_outputs(run, ions, codeLoc, requiredLoc) 
+    rc.setup_rates_outputs(run, ions, codeLoc, requiredLoc) 
     print '\t Setting up rates data location...'
-    #rc.setup_rates_data(codeLoc)
+    rc.setup_rates_data(codeLoc)
     print '\t Running rates...'
-    #rc.run_rates(codeLoc)
+    rc.run_rates(codeLoc)
     print '\t Converting to hdf5...'
-    #hdf.gasbox_to_hdf5(codeLoc, ions, run)
+    hdf.gasbox_to_hdf5(codeLoc, ions, run)
 else:
     print 'Skipping rates'
 
@@ -150,92 +238,14 @@ else:
 fi.setup_mockspec(ions, run, requiredLoc)
 
 
-# Start looping over ions
-print '\nBegin looping over ions...'
+
+# Setup the ion directory
+#ionloc = fi.setup_ion_dir(ion, galID, expn, codeLoc) 
 for ion in ions:
-
-    if sum([run.runLos7,run.runSpecsynth,run.runSysanal,run.runCullabs,run.runLocateCells])==0:
-        print '\t\tNothing to do'
-        break
-
-    print '\tIon: ', ion
-
-    # Setup the ion directory
-    #ionloc = fi.setup_ion_dir(ion, galID, expn, codeLoc) 
     ionloc = fi.setup_ion_dir(ion, run, codeLoc) 
 
-    # Move into the ion directory
-    os.chdir(ionloc)
-
-    ##### 
-    #  
-    #  los7
-    #  Determine path length through each cell and create the
-    #  .losdata and .lines files
-    #
-    #####
-    if run.runLos7==1:
-        print '\n\tDetermining cell path length and applying rough cut'
-        rf.los7(codeLoc)
-    else:
-        print '\tSkipping los7...'
-
-
-    ##### 
-    #  
-    #  specsynth
-    #  Generate the synthetic spectra
-    #
-    #####
-    if run.runSpecsynth==1:
-        print '\n\tGenerating spectra'
-        rf.specsynth(codeLoc)
-    else:
-        print '\tSkipping specsynth...'
-
-    ##### 
-    #  
-    #  sysanal
-    #  Analyze the spectra
-    #
-    #####
-    if run.runSysanal==1:
-        print '\n\tAnalyzing spectra...'
-        rf.sysanal(codeLoc)
-    else:
-        print '\tSkipping sysanal...'
-
-
-    ##### 
-    #  
-    #  cullabs
-    #  Create sysabs file
-    #
-    #####
-    if run.runCullabs==1:
-        print '\n\tCreating sysabs'
-        rf.cullabs(codeLoc)
-        hdf.sysabs_to_hdf5(codeLoc)
-    else:
-        print '\tSkipping sysabs...'
-
-    
-
-    ##### 
-    #  
-    #  locatecells
-    #  Identify the cells that are significant contributers to the absorption
-    #
-    #####
-    if run.runLocateCells==1:
-        print '\n\tIdentifying significant cells'
-        lc.locateSigCells(run,ion,codeLoc)
-        #lc.locateSigCells(galID, expn, ion, sigcellsCut, codeLoc, incline)
-#        lc.sigCells(galID, expn, ion, sigcellsCut, codeLoc)
-#        hdf.abscells_to_hdf5(codeLoc)
-    else:
-        print '\tSkipping locatecells...'
-
+# Start looping over ions
+jl.Parallel(n_jobs=run.ncores)(jl.delayed(ionLoop)(run,ion) for ion in ions)
     
     ##### 
     #  
@@ -243,15 +253,14 @@ for ion in ions:
     #  Add inclination angle to filenames
     #
     #####
-    if run.runCullabs==1 or run.runLocateCells==1:
+if run.runCullabs==1 or run.runLocateCells==1:
+    for ion in ions:
         print '\n\t Renaming files...'
-        fi.rename(run,ion,runLocateCells,runCullabs)
-    else:
-        print 'What was the point...'
+        fi.rename(run,ion)
+else:
+    print 'What was the point...'
 
 
-    # Move back up to the parent directory
-    os.chdir('..')
 
 # Generate summary files
 if run.runSummaries==1:

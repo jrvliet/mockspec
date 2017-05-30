@@ -60,6 +60,7 @@ def los7(codeLoc):
         check_call(command, shell=True)
     except:    
         print '\n\nCould not run los7 with :\n\t{0:s}'.format(command)
+        print 'In ',os.getcwd()
         print 'Exiting...'
         sys.exit()
      

@@ -79,10 +79,12 @@ def cellsearch(line, gas, outfile):
     gas['dmin'] = gas.apply(dmin_calc,line=line,axis=1)
     
     # Select out cells with dmin < distance between cell center and corner
-    alongInds = gas['dmin']<df['cell_size'].apply(lambda x: x*np.sqrt(3.)/2.)
+    alongInds = gas['dmin']<gas['cell_size'].apply(lambda x: x*np.sqrt(3.)/2.)
 
     # Confirm the LOS actually passes through these cells
     gas['along'] = gas[alongInds].apply(confirm_cell,line=line,axis=1)
+    gas.fillna(False,inplace=True,axis=1)
+    #gas.to_csv('gasAlong.txt',sep=' ',index=False)
     
     cellsFound = gas['cellID'][gas['along']]
 
@@ -154,9 +156,9 @@ def cellfinder(run):
 
 
     # Read in gas box
-    gasbox = '{0:s}_GZa{1:s}.h5'.format(run.galID,run.expn)
+    gasbox = '../{0:s}_GZa{1:s}.h5'.format(run.galID,run.expn)
     gas = pd.read_hdf(gasbox,'data')
-    gas['cellID'] = [i+1 for i in df.index.tolist()]
+    gas['cellID'] = [i+1 for i in gas.index.tolist()]
     
     # Convert the cellsize from parsecs to kiloparsecs
     gas['cell_size'] = gas['cell_size']/1000.
@@ -164,10 +166,10 @@ def cellfinder(run):
 
     # Read in LSO info
     linesHeader = 'xen yen zen xex yex zex'.split()
-    losDat = pd.read_csv('lines.dat',skip_rows=2,sep='\s+',names=linesHeader)
+    losDat = pd.read_csv('lines.dat',skiprows=2,sep='\s+',names=linesHeader)
     
     linesHeader = 'losnum impact phi incline'.split()
-    losInfo = pd.read_csv('lines.info',skip_rows=2,sep='\s+',names=linesHeader)
+    losInfo = pd.read_csv('lines.info',skiprows=2,sep='\s+',names=linesHeader)
 
     
     # Loop over lines of sight
@@ -198,9 +200,11 @@ def cellfinder(run):
         zPosLim = max([line.zen,line.zex]) + maxCellSize
         zNegLim = min([line.zen,line.zex]) - maxCellSize
         
-        subbox = box[ (box['x']<xPosLim) & (box['x']>xNegLim) & 
-                      (box['y']<yPosLim) & (box['y']>yNegLim) & 
-                      (box['z']<zPosLim) & (box['z']>zNegLim) ]
+        subbox = gas[ (gas['x']<xPosLim) & (gas['x']>xNegLim) & 
+                      (gas['y']<yPosLim) & (gas['y']>yNegLim) & 
+                      (gas['z']<zPosLim) & (gas['z']>zNegLim) ]
+
+        print( len(gas), len(subbox), maxCellSize)
 
         # Generate filename 
         outfile = 'los{0:04d}.cellID.dat'.format(line.number)
