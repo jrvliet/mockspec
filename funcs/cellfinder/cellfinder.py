@@ -15,7 +15,7 @@ class los(object):
     Class to describe a line of sight vector
     '''
     
-    def __inti__ (self):
+    def __init__ (self):
 
         # Entrance and exit points
         self.xen = 0
@@ -82,8 +82,13 @@ def cellsearch(line, gas, outfile):
     alongInds = gas['dmin']<df['cell_size'].apply(lambda x: x*np.sqrt(3.)/2.)
 
     # Confirm the LOS actually passes through these cells
-    along = gas[alongInds].apply(confirm_cell,line=line,axis=1)
+    gas['along'] = gas[alongInds].apply(confirm_cell,line=line,axis=1)
     
+    cellsFound = gas['cellID'][gas['along']]
+
+    # Write to file
+    cellsFound.to_csv(outfile,index=False)
+
 
 def confirm_cell(cell,line):
 
@@ -102,6 +107,23 @@ def confirm_cell(cell,line):
 
     # Calculate intersection point
     d_x1 =(cell['x']-line.xen)**2 + (cell['y']-line.yen)**2 + (cell['z']-line.zen)**2    
+    
+    r_xpt = np.sqrt(d_x1 - cell['dmin']**2)
+    
+    # Find value of parameter 't' corresponding to the point r_xpt on the
+    # parametric line
+    #rdist = (cell['x']-line.x0)**2 + (cell['y']-line.y0)**2 + (cell['z']-line.z0)**2 
+    #rXptObs = np.sqrt( rdist - cell['dmin']**2 )
+
+    rxXpt = line.xen + line.losx*r_xpt
+    ryXpt = line.yen + line.losy*r_xpt
+    rzXpt = line.zen + line.losz*r_xpt
+
+    # Does the point (rx_xpt,ry_xpt,rz_xpt) lie inside the cell?
+    if rxXpt>xLeft and rxXpt<xRight and  ryXpt>yLeft and ryXpt<yRight and rzXpt>zLeft and rzXpt<zRight:
+        return True
+    else:
+        return False
     
 
 def dmin_calc(cell,line):
@@ -168,7 +190,6 @@ def cellfinder(run):
         # head at (x0,y0,z0)
         line = lmn(line)
 
-
         # Select out a subset of box constrained by the entrance and exit points
         xPosLim = max([line.xen,line.xex]) + maxCellSize
         xNegLim = min([line.xen,line.xex]) - maxCellSize
@@ -187,6 +208,7 @@ def cellfinder(run):
         # Find all cells along the LOS
         cellsearch(line, subbox, outfile)
 
+        
 
 
 
