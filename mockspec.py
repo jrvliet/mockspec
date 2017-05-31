@@ -31,10 +31,10 @@ def ionLoop(run,ion):
         print '\t\tNothing to do'
         return 1
 
-    print '\tIon: ', ion.name
+    ionloc = '{0:s}/i{1:d}/{2:s}'.format(run.runLoc,int(run.incline),ion.name)
+    print '\n\n\tIon: ', ion.name
     # Move into the ion directory
     os.chdir(ionloc)
-    print os.getcwd()
 
     ##### 
     #  
@@ -105,9 +105,7 @@ def ionLoop(run,ion):
 
 
     # Move back up to the parent directory
-    print ion.name,os.getcwd()
     os.chdir('..')
-    print ion.name,os.getcwd()
 
 
 
@@ -245,14 +243,17 @@ for ion in ions:
     ionloc = fi.setup_ion_dir(ion, run, codeLoc) 
 
 # Start looping over ions
-jl.Parallel(n_jobs=run.ncores)(jl.delayed(ionLoop)(run,ion) for ion in ions)
+jl.Parallel(n_jobs=run.ncores,verbose=5)(
+        jl.delayed(ionLoop)(run,ion) for ion in ions)
+#jl.Parallel(n_jobs=1)(
+#        jl.delayed(ionLoop)(run,ion) for ion in ions)
     
-    ##### 
-    #  
-    #  Rename files
-    #  Add inclination angle to filenames
-    #
-    #####
+##### 
+#  
+#  Rename files
+#  Add inclination angle to filenames
+#
+#####
 if run.runCullabs==1 or run.runLocateCells==1:
     for ion in ions:
         print '\n\t Renaming files...'

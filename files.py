@@ -335,7 +335,7 @@ def setup_ion_dir(ion, run, codeLoc):
     command = ('ls *{0:s}.los*dat > qso.list && mv qso.list '
                 './{0:s}/'.format(ion.name))
     try:
-        sp.check_call(command, shell=True)
+        sp.check_call(command, shell=True, stderr=sp.PIPE)
     except:
         print 'Could not complete {0:s}'.format(command)
     
@@ -405,8 +405,14 @@ def setup_ion_dir(ion, run, codeLoc):
 #        print 'Could not complete {0:s}'.format(command)
 
     # Check that nothing exists in the parent directory
-    command = 'ls *.{0:s}.*los*dat | wc -l'.format(ion.name)
-    numDatFiles = int(sp.check_output(command, shell=True).strip())
+    #command = 'ls *.{0:s}.*los*dat | wc -l'.format(ion.name)
+    command = 'ls *{0:s}*los*dat &> dum.txt && grep -c dat$ dum.txt'.format(ion.name)
+    try:
+        numDatFiles = int(sp.check_output(command, shell=True).strip())
+    except sp.CalledProcessError:
+        numDatFiles = 0
+        pass
+
     if numDatFiles!=0:
         print 'ERROR in setup_ion_dir in files.py'
         print 'Problem moving .dat file for {0:s}'.format(ion.name)
@@ -534,8 +540,6 @@ def rename(run,ion):
     inclination angle
     '''
     inc = int(run.incline)
-    print '\tRenaming files'
-    
     rootLoc = '{0:s}/i{1:d}/{2:s}/'.format(run.runLoc,
                 int(run.incline),ion.name)
     if run.runCullabs==1:
@@ -545,9 +549,8 @@ def rename(run,ion):
         newName = allName.replace('ALL','i{0:d}.ALL'.format(int(run.incline)))
         command = 'mv {0:s}{1:s} {0:s}{2:s}'.format(rootLoc,
                     allName, newName)
-        print '\nRenaming command: {0:s}\n'.format(command)
         try:
-            sp.check_call(command, shell=True)
+            sp.check_call(command,shell=True,stderr=sp.PIPE)
         except:
             print 'Error in rename running \n\t{0:s}'.format(command)
             print '\tCWD: ',os.getcwd()

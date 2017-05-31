@@ -28,7 +28,7 @@ int main(int argc, char *argv[]){
     char *p;
     FILE *losfp;
 
-    // Constants
+   // Constants
     double ckms = 2.99792458e5;
     double pc2cm = 3.261633*9.460528e17;
     double kpc2cm = 1000.0 * pc2cm;
@@ -90,6 +90,8 @@ int main(int argc, char *argv[]){
 
     klos = 0;
 
+    //printf("%s\n",qsolist);
+    //printf("%p\n",listfp);
     // Loop over the lines of sight
     while(fgets(new_line,sizeof(new_line),listfp)){
         klos++;
@@ -202,6 +204,7 @@ int main(int argc, char *argv[]){
     //printf("Close errfp\n");
     fclose(errfp);
     //printf("Return\n");
+    printf("\n");
     return 0;
 }
 

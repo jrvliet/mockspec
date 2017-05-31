@@ -22,8 +22,9 @@ def sysabs_to_hdf5(codeLoc):
     hdf5file = allfile + '.h5'
 
     # Get the header
-    with open(allfile) as f:
-        header = f.readline().strip().split()
+    header = ['los','D','zabs','v-','v+','EW_r','dEW_r','DR','dDR',
+               'SL','Vbar','dVbar','Vsprd','dVsprd','Vasym','dVasym',
+                'lgt','dtau-','dtau+','logN','dNcol-','dNcol+']
 
     # Read in the data
     try:
