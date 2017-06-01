@@ -42,11 +42,10 @@ def make_plots(ions):
 
     # Make column density distribuion
     print '\tPlotting column density distribution'
-#    try:
-#        co.column_distribution(ions)
-#    except:
-#        print 'Error running coldense'
-    co.column_distribution(ions)
+    try:
+        co.column_distribution(ions)
+    except:
+        print 'Error running coldense'
 
     # Make phase plots
     print '\tPlotting phase'

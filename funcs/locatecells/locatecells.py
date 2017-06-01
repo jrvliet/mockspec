@@ -199,6 +199,6 @@ def locateSigCells(run,ion,codeLoc,testing=0):
     d.to_hdf(outfile,'data',mode='w')
     summary.to_hdf(sumfile,'data',mode='w')
 
-    print('For {0:s}, {1:d} LOS are dominated by one cell'.format(ion,
-singleCount))
+    print('For {0:s}, {1:d} LOS are dominated by one cell'.format(ion.name,
+            singleCount))
 
