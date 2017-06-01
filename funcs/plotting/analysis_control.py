@@ -31,6 +31,7 @@ def make_plots(ions):
         ed.ewdist(ions)
     except:
         print 'Error running ewdist'
+    ed.ewdist(ions)
     
     # Make covering fraction
     print '\tPlotting covering fraction'
@@ -41,10 +42,11 @@ def make_plots(ions):
 
     # Make column density distribuion
     print '\tPlotting column density distribution'
-    try:
-        co.column_distribution(ions)
-    except:
-        print 'Error running coldense'
+#    try:
+#        co.column_distribution(ions)
+#    except:
+#        print 'Error running coldense'
+    co.column_distribution(ions)
 
     # Make phase plots
     print '\tPlotting phase'

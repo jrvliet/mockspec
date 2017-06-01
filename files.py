@@ -144,7 +144,7 @@ def setup_galprops(run, requiredLoc, summaryLoc):
     # Too many errors occurred with running with old gal_props
     # Now overwrite it everytime
     #command = 'cp ' +requiredLoc+ '/gal_props.dat .'
-    command = 'cp {0:s} /gal_props.dat'.format(requiredLoc)
+    command = 'cp {0:s}/gal_props.dat .'.format(requiredLoc)
     call(command, shell=True)
 
     call('cp gal_props.dat gal_props.dat.tmp', shell=True)

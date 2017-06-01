@@ -31,7 +31,7 @@ int main(int argc, char *argv[]){
   int numcores;
   char cwd[200];
   sscanf(argv[1], "%d", &numcores);
-  printf("Number of cores to use: %d\n", numcores);
+  //printf("Number of cores to use: %d\n", numcores);
   strcpy(cwd, argv[2]);
 
   FILE *propfp0 = fopen("gal_props.dat", "r");

@@ -20,7 +20,9 @@
 # Bulk flag: if=1, will plot all four ions on one plot
 
 
+from __future__ import print_function
 import numpy as np
+import pandas as pd
 import scipy.special as sc
 import scipy.optimize as opt
 import matplotlib.pyplot as plt
@@ -28,6 +30,7 @@ import sys
 import math
 import matplotlib
 import subprocess as sp
+import os
 
 # Function for determining vertical error bars
 # Uses incomplete Beta functions
@@ -86,7 +89,8 @@ def covering_fraction(ions):
 
     for ion in ions:
         i = 0
-        allfile = './{0:s}/{1:s}.{0:s}.a{2:s}.i{3:d}.ALL.sysabs'.format(ion.name, galID, expn, inc)
+        allfile = './{0:s}/{1:s}.{0:s}.a{2:s}.i{3:d}.ALL.sysabs.h5'.format(ion.name, 
+                                                                   galID, expn, inc)
         absimpact=[]
         covering=[]
         imp=[]
@@ -96,10 +100,12 @@ def covering_fraction(ions):
         verterrpos=[]
 
         # Read in the allfile
+        print(os.getcwd())
         try:
-            data = np.loadtxt(allfile, skiprows=1)
+            #data = np.loadtxt(allfile, skiprows=1)
+            data = pd.read_hdf(allfile,'data')
         except IOError: 
-            print  'Error in covering.py reading in {0:s}'.format(allfile)
+            print('Error in covering.py reading in {0:s}'.format(allfile))
             raise 
 
         # Loop over the different impact parameters
@@ -116,10 +122,10 @@ def covering_fraction(ions):
             # Loop over all lines from the .sysabs file to get the
             # number of lines with significant absorption (SL > 3)
             # with an impact parameter between minrad and maxrad
-            for k in range(0,len(data[:,0])):
-                impact = data[k,1] / rvir
+            for k in range(0,len(data)):
+                impact = data['D'].iloc[k] / rvir
                 absimpact.append(impact)
-                width = data[k][5]
+                width = data['EW_r'].iloc[k]
                 
                 if impact>minrad and impact<maxrad:
                     if width>ewcut:
@@ -127,7 +133,7 @@ def covering_fraction(ions):
                         xaxispoint += impact
                         total+=1
                         if minrad==0.0:
-                            zerobinabs.append( data[k][0] )
+                            zerobinabs.append( data['los'].iloc[k] )
                     else:
                         total+=1
             

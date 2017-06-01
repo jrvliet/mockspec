@@ -8,7 +8,8 @@ from mockspec_funcs import getTransitionInfo
 def setup_rates_control(gasfile, expn, ion_list, requiredLoc):
 
 #    if not os.path.exists('rates.inp'):
-    command = 'cp '+requiredLoc+'rates.inp .'
+    #command = 'cp '+requiredLoc+'rates.inp .'
+    command = 'cp {0:s}/rates.inp .'.format(requiredLoc)
     sp.call(command, shell=True)
 
     # Alter the rates.inp file
@@ -59,7 +60,7 @@ def setup_rates_outputs(run, ion_list, codeLoc, requiredLoc):
 
     if not os.path.exists('rates.outfiles'):
         #command = 'cp '+requiredLoc+'rates.outfiles .'
-        command = 'cp {0:s} rates.outfiles .'.format(requiredLoc)
+        command = 'cp {0:s}/rates.outfiles .'.format(requiredLoc)
         sp.call(command, shell=True)
     
     # Alter the rates.outfiles file

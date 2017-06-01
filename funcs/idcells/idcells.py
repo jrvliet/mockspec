@@ -89,7 +89,9 @@ def read_lines(filename):
     return los_num, los_b, los_phi
 
     
-#def write_OutfileHdr(outfile, aexpn, R0, phi, l, b, xen, yen, zen, losx, losy, losz, a11, a12, a13, a21, a22, a23, a31, a32, a33, Xcom, Ycom, Zcom, VXcom, VYcom, VZcom, x0, y0, z0, vx_obs, vy_obs, vz_obs):
+#def write_OutfileHdr(outfile, aexpn, R0, phi, l, b, xen, yen, zen, losx, losy, losz, 
+#                        a11, a12, a13, a21, a22, a23, a31, a32, a33, Xcom, Ycom, Zcom, 
+#                        VXcom, VYcom, VZcom, x0, y0, z0, vx_obs, vy_obs, vz_obs):
 def write_OutfileHdr(outfile, aexpn, R0, phi, l, b, los):
 
     # Write header information to output file

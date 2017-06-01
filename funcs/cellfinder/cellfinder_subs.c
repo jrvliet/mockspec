@@ -19,8 +19,8 @@ void read_control_file(FILE *propfp, char *gasfile, char *galID, char *rootname,
   strcpy(gas_dum, gasfile);
   strtok(gas_dum, "_");
   sscanf(gas_dum, "%s", galID);
-  printf("gasfile: %s\n", gasfile);
-  printf("galID: %s\n", galID);
+  //printf("gasfile: %s\n", gasfile);
+  //printf("galID: %s\n", galID);
 
   // Get rootname
   fgets(new_line,sizeof(new_line),propfp);
@@ -62,7 +62,7 @@ void read_summary(char *galID, double *aexpn, char *cwd, double *mvir,
   strcat(location, a);
   strcat(location, ".txt");
   
-  printf("Summary location in read_summary: %s\n", location);
+  //printf("Summary location in read_summary: %s\n", location);
 
   // Open summary file
   FILE *fp = fopen(location, "r");
