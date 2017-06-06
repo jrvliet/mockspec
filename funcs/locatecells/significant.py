@@ -181,7 +181,11 @@ def sigcells(linesfile, ewcut, codeLoc, flog, wave, testing=0):
     with open(finalLinesFile, 'w') as f:
         f.write('{0:.16f}\n'.format(redshift))
 
-        if numcells == 1:
+        if numcells ==0:
+            # None of the gas cells lie within the velocity limits
+            # Detection was false
+            f.write('Detection for LOS {0:s} was false\n'.format(losnum))
+        elif numcells == 1:
             singleCellCount += 1
             sigEnd = 1    
             endEW = ewVelcut
@@ -192,7 +196,6 @@ def sigcells(linesfile, ewcut, codeLoc, flog, wave, testing=0):
                 print(losnum, len(cell_ID), len(cell_z), numcells)
                 print(type(cell_ID), type(cell_z))
                 sys.exit()
-
         else:
             start = 0
             end = len(cell_z)
