@@ -107,8 +107,8 @@ def write_OutfileHdr(outfile, aexpn, R0, phi, l, b, los):
     f.write(s)
     
     s = ('Galactic Coordinates (l:b) in degrees:     {0:.1f}    {1:.1f}  '
-        'Observer Position (R(kpc):phi(deg)):     {2:.2f} '
-        '{3:.2f}\n'.format(l,b,R0,phi))
+        'Observer Position (R(kpc):phi(deg)):     {2:.6f} '
+        '{3:.6f}\n'.format(l,b,R0,phi))
     f.write(s)
     
     s = ('Observer Velocity (vx vy vz) in km/s in Box Frame:        '

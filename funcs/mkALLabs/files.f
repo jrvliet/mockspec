@@ -239,8 +239,8 @@ c     the *.ALL.regabs files
 
       RETURN
 
- 1000 FORMAT(1x,a3,2x,a6,1x,a190)
- 1200 FORMAT(1x,a4,1x,f6.1,1x,a190)
+ 1000 FORMAT(1x,a3,1x,a6,1x,a190)
+ 1200 FORMAT(1x,a2,1x,f6.3,1x,a190)
      
       END
 
