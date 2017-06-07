@@ -293,10 +293,16 @@ def linesLogN(linesFile):
     with open(linesFile) as f:
         f.readline()
         for line in f:
-            logn = float(line.split()[1])
-            col += 10**logn
+            try:
+                logn = float(line.split()[1])
+                col += 10**logn
+            except ValueError:
+                continue
 
-    return np.log10(col)
+    if col>0:
+        return np.log10(col)
+    else:
+        return 0
 
 
 

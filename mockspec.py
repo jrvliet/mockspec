@@ -5,10 +5,10 @@
 #  of ART simulations of galaxy CGM
 
 # General libraries
-import numpy as np
+#import numpy as np
 #import tables as tb
 import os
-import pandas as pd
+#import pandas as pd
 import subprocess as sp
 import sys
 import joblib as jl

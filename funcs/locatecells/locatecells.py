@@ -81,6 +81,8 @@ def locateSigCells(run,ion,codeLoc,testing=0):
         print('Number of sysabs files: ', len(sysabs_losnum))
 
     flog = open('sig_cells.log', 'w')
+    falselog = open('falseDetections.log','w')
+    falselog.write('los\tEWsysabs\tv-\tv+\tInitNumCells\n')
 
     # Loop over lines of sight
     for i in range(0,len(sysabs_losnum)):
@@ -126,7 +128,8 @@ def locateSigCells(run,ion,codeLoc,testing=0):
             lf.velcut(linesfile, testing=testing)
 
             # Find the significant cells
-            endCut,startEW,endEW = sg.sigcells(linesfile,run.ewcut,codeLoc,flog,wave,testing=testing)
+            endCut,startEW,endEW = sg.sigcells(linesfile,run.sigcellsCut,codeLoc,
+                                                flog,falselog,wave,testing=testing)
 
             # Get the properties of the cells
             # Open the lines.final file
@@ -202,3 +205,5 @@ def locateSigCells(run,ion,codeLoc,testing=0):
     print('For {0:s}, {1:d} LOS are dominated by one cell'.format(ion.name,
             singleCount))
 
+    flog.close()
+    falselog.close()

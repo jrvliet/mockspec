@@ -73,7 +73,7 @@ def search(start, end, ewcut, lines_z, lines_b, lines_N, lines_ID, redshift,
                     posVelLimit, ewVelcut, flog, depth)
     return end,ew
 
-def sigcells(linesfile, ewcut, codeLoc, flog, wave, testing=0):
+def sigcells(linesfile,ewcut,codeLoc,flog,falselog,wave,testing=0):
     '''
     Determines which cells are the significiant contributers
     to the EW measurement. Cells are removed until the EW of 
@@ -110,6 +110,7 @@ def sigcells(linesfile, ewcut, codeLoc, flog, wave, testing=0):
             cell_ID.append(float(l[3]))
     
     numcells = len(cell_z)
+    initialNumCells = numcells
     if numcells>1:
 
         # Sort the cells by decreasing column density
@@ -178,13 +179,17 @@ def sigcells(linesfile, ewcut, codeLoc, flog, wave, testing=0):
     # Write the significant lines to file
     s = '{0:>8.7f}\t{1:>8f}\t{2:>8f}\t{3:>8d}\n'
     finalLinesFile = linesfile.replace('.lines','.{0:s}.lines.final'.format(wave))
+    falses = '{0:s}\t{1:.6f}\t{2:.6f}\t{3:.6f}\t{4:d}\n'
     with open(finalLinesFile, 'w') as f:
         f.write('{0:.16f}\n'.format(redshift))
 
-        if numcells ==0:
+        if numcells == 0:
             # None of the gas cells lie within the velocity limits
             # Detection was false
-            f.write('Detection for LOS {0:s} was false\n'.format(losnum))
+            flog.write('Detection for LOS {0:s} was false\n'.format(losnum))
+            falselog.write(s.format(losnum,ewSysabs,negVelLimit,posVelLimit,initialNumCells))
+            sigEnd = 0
+            endEW = 0
         elif numcells == 1:
             singleCellCount += 1
             sigEnd = 1    
