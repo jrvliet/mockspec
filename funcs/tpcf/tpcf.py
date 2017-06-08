@@ -16,7 +16,9 @@ from __future__ import print_function,division
 import pandas as pd
 import numpy as np
 import subprocess as sp
+import itertools as it 
 
+import sys
 
 def absorber_tpcf(run,ion):
 
@@ -27,11 +29,16 @@ def absorber_tpcf(run,ion):
 
     # Set up a dataframe with regabs information
     absorbers = regabs(run,ion)
+    print(len(absorbers))
+    absorbers.to_csv('absorbers.csv',index=False)
 
     # Set up a dataframe with pixel velocity information
     # Each column is a seperate absorber
-    vels = velocities(run,ion,absorbers)
+    pixVel = velocities(run,ion,absorbers)
     
+    # Get the seperation between each possible pair of 
+    # pixel velocties
+    velDiff = seperations(run,ion,pixVel)
 
 def regabs(run,ion):
 
@@ -127,24 +134,38 @@ def velocities(run,ion,absorbers):
             vhi = regions['vpos'].iloc[j]
             selection = (spec['velocity']>=vlo) & (spec['velocity']<=vhi)
             vels = spec[selection]['velocity']
-    
-            #try:
-            pixVel[system] = vels
-            system += 1
-            #pixVel = pixVel.join(vels,how='outer')
-            #except ValueError:
-            #    print(i,j,vlo,vhi)
-            #    print(vels)
-            #    catch = 1
-            #    break
-        
-            if catch==1:
-                break
+            vels.reset_index(inplace=True,drop=True)
+            label = '{0:d}.{1:d}'.format(i,j)
+            vels.name = label
+            vels = pd.DataFrame(vels)
+            
+            pixVel = pd.concat([pixVel,vels],axis=1)
     
     pixVel.to_csv('pixVel.csv',index=False)
             
+    return pixVel
     
 
+def seperations(run,rion,pixVel):
+    '''
+    Calculates the velocity seperation for all possible combinations
+    of pixel velocities in each column of pixVel
+    Returns a dataframe were each column is an absorber containing all the
+    seperations within the absorber
+    '''
+
+    velDiff = pd.DataFrame(columns=pixVel.columns)
+
+
+    for col in pixVel.columns:
+        
+        velDiff[col] = pixVel[col].apply(pixSep)
+        comb = it.combinations(pixVel[col],2)
+
+def pix_sep(data):
+    comb = np.array(it.combinations(data.dropna(),2))
+    return np.diff(comb)
+    
 
 if __name__ == '__main__':
 
@@ -154,11 +175,13 @@ if __name__ == '__main__':
     run.galID = 'D9o2'
     run.expn = '1.002'
     run.rootLoc = '/mnt/cluster/abs/cgm/dwarfs/D9o2/a1.002/'
+    run.rootLoc = '/Users/jacob/research/dwarfs/D9o2/a1.002/'
     run.incline = 90
     
     ion = ionProps()
-    ion.name = 'CIV'
+    ion.name = 'MgII'
 
+    print(ion.name)
     absorber_tpcf(run,ion)
 
 
