@@ -31,14 +31,50 @@ def absorber_tpcf(run,ion):
     absorbers = regabs(run,ion)
     print(len(absorbers))
     absorbers.to_csv('absorbers.csv',index=False)
+    print('Absorber Size = {0:d}'.format(len(absorbers)))
 
     # Set up a dataframe with pixel velocity information
     # Each column is a seperate absorber
     pixVel = velocities(run,ion,absorbers)
+    pixVel.to_csv('pixVel.csv',index=False)
+    print('PixVel Size = {0:d}'.format(len(pixVel)))
     
     # Get the seperation between each possible pair of 
     # pixel velocties
     velDiff = seperations(run,ion,pixVel)
+    velDiff.to_csv('velDiff.csv',index=False)
+    print('velDiff Size = {0:d}'.format(len(velDiff)))
+
+
+    # Bin the data to create TPCF
+    # Set up bins
+    maxDiff = velDiff.fillna(0).values.max()
+    print('Maxdiff = {0:.4f}'.format(maxDiff))
+    binSize = 10.
+    nbins = int(np.ceil(maxDiff/binSize))
+    print('nbins = {0:d}'.format(nbins))
+    endPoint = binSize*(nbins+1)
+    print('endPoint = {0:.4f}'.format(endPoint))
+    bins = np.arange(0,endPoint,binSize)
+    labels = [(bins[i]+bins[i+1])/2. for i in range(nbins)]
+
+    # Bin the velDiff dataframe
+    velBins = velDiff.apply(lambda x: 
+                pd.cut(x,bins,labels=labels,include_lowest=True))
+    c = pd.Series(velBins.values.flatten()).value_counts().sort_index()
+    
+    fig,ax = plt.subplots(1,1,figsize=(7,7))
+    #ax.scatter(c.index,c,marker='s',s=5)
+    ax.plot(c.index,c,marker='s',ms=3)
+    fig.savefig('tpcf_bin.png',bbox_inches='tight',dpi=300)
+    plt.close(fig)
+
+    # Plot
+    fig,ax = plt.subplots(1,1,figsize=(7,7))
+    ax.hist(pd.Series(velDiff.values.flatten()).dropna(),bins=50,histtype='step')
+    fig.savefig('tpcf_hist.png',bbox_inches='tight',dpi=300)
+    plt.close(fig)
+
 
 def regabs(run,ion):
 
@@ -141,7 +177,6 @@ def velocities(run,ion,absorbers):
             
             pixVel = pd.concat([pixVel,vels],axis=1)
     
-    pixVel.to_csv('pixVel.csv',index=False)
             
     return pixVel
     
@@ -156,20 +191,28 @@ def seperations(run,rion,pixVel):
 
     velDiff = pd.DataFrame(columns=pixVel.columns)
 
-
+    print(len(pixVel.columns))
     for col in pixVel.columns:
         
-        velDiff[col] = pixVel[col].apply(pixSep)
-        comb = it.combinations(pixVel[col],2)
+        # Create pairs of all possible combinations
+        comb = np.array(list(it.combinations(pixVel[col].dropna(),2)))
 
-def pix_sep(data):
-    comb = np.array(it.combinations(data.dropna(),2))
-    return np.diff(comb)
-    
+        # Get the difference between the pairs
+        diff = np.abs(np.diff(comb))
+        diff = pd.Series(diff.flatten(),name=col)
+        velDiff = pd.concat([velDiff,diff],axis=1,ignore_index=True)
+
+    return velDiff
+
+
+
+
+
 
 if __name__ == '__main__':
 
     from testclass import *
+    import matplotlib.pyplot as plt
 
     run = runProps()
     run.galID = 'D9o2'
