@@ -187,7 +187,7 @@ def sigcells(linesfile,ewcut,codeLoc,flog,falselog,wave,testing=0):
             # None of the gas cells lie within the velocity limits
             # Detection was false
             flog.write('Detection for LOS {0:s} was false\n'.format(losnum))
-            falselog.write(s.format(losnum,ewSysabs,negVelLimit,posVelLimit,initialNumCells))
+            falselog.write(falses.format(losnum,ewSysabs,negVelLimit,posVelLimit,initialNumCells))
             sigEnd = 0
             endEW = 0
         elif numcells == 1:
