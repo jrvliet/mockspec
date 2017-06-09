@@ -156,6 +156,8 @@ def velocities(run,ion,absorbers):
 
     catch = 0
     system = 0
+    noiseMu = 0
+    noiseSigma = 0.25
     for i in range(1,run.nlos+1):
 
         sfile = loc+specFile.format(run.galID,ion.name,i,transition)
@@ -173,8 +175,11 @@ def velocities(run,ion,absorbers):
             vels.reset_index(inplace=True,drop=True)
             label = '{0:d}.{1:d}'.format(i,j)
             vels.name = label
+
+            # Add random noise to the velocities
+            vels = vels+np.random.normal(noiseMu,noiseSigma,len(vels))
+
             vels = pd.DataFrame(vels)
-            
             pixVel = pd.concat([pixVel,vels],axis=1)
     
             
