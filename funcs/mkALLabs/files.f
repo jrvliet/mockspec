@@ -224,7 +224,8 @@ c     the *.ALL.regabs files
 
       IF (nsubsys.gt.0) then 
 
-       WRITE(42,1200) losID(k),impact(k),sysdata(k,ireg)
+c       WRITE(42,1200) losID(k),impact(k),sysdata(k,ireg)
+       WRITE(42,1100) 'los','D','region',headline
 
        DO 31 k=1,nlos
         IF (nsubreg(k).ne.0) then
@@ -240,7 +241,8 @@ c     the *.ALL.regabs files
       RETURN
 
  1000 FORMAT(1x,a3,1x,a6,1x,a190)
- 1200 FORMAT(1x,a2,1x,f6.3,1x,a190)
+ 1100 FORMAT(1x,a3,1x,a6,1x,a6,1x,a148)
+ 1200 FORMAT(1x,a4,1x,f6.3,1x,a190)
      
       END
 
