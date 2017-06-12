@@ -71,14 +71,14 @@ def absorber_tpcf(run,ion,tpcfProp):
     velBins = velDiff.apply(lambda x: 
                 pd.cut(x,bins,labels=labels,include_lowest=True))
     c = pd.Series(velBins.values.flatten()).value_counts().sort_index()
-    #c = c/c.sum()
+    c = c/c.sum()
     
     # Bootstrap for errors
-    cMean,cStd = bootstrap(c,bins,tpcfProp,velDiff)
+    cMean,cStd = bootstrap(bins,labels,tpcfProp,velDiff)
 
     return c,cMean,cStd
 
-def bootstrap(c,bins,tpcfProp,velDiff):
+def bootstrap(bins,labels,tpcfProp,velDiff):
     
     '''
     Calculates errors using bootstrap, randomly selecting 
@@ -86,14 +86,26 @@ def bootstrap(c,bins,tpcfProp,velDiff):
     '''
     print('BootNum ',type(tpcfProp.bootNum))
 
+    # Create dataframe to hold all resulting TPCFs
+    # Each row will be a TPCF from a sample of absorbers
     df = pd.DataFrame()
-    for i in range(10):
-
-        print(i)
-        sample = velDiff.sample(frac=tpcfProp.fraction,axis=1)
-        df = pd.concat([df,sample],ignore_index=True)
     
-    return df.mean(),df.std()
+    # Loop over all bootstrap instances
+    for i in range(tpcfProp.bootNum):
+
+        # Pick out a sample of absorbers from velDiff
+        sample = velDiff.sample(frac=tpcfProp.fraction,axis=1)
+
+        # Bin the samples
+        velBins = sample.apply(lambda x: 
+                    pd.cut(x,bins,labels=labels,include_lowest=True))
+        c = pd.Series(velBins.values.flatten()).value_counts().sort_index()
+        c = c/c.sum()
+            
+        df = pd.concat([df,c],ignore_index=True,axis=1)
+    
+    df.to_csv('bootstrap.csv',index=False)
+    return df.mean(axis=1),df.std(axis=1)
         
 
     
@@ -269,28 +281,33 @@ if __name__ == '__main__':
     run.rootLoc = '/mnt/cluster/abs/cgm/dwarfs/D9o2/a1.002/'
     run.incline = 90
     
-    ion = ionProps()
-    ion.name = 'MgII'
 
     tpcfProp = tpcfProps()
     tpcfProp.ewLo = 0.
     tpcfProp.ewHi = 10.
-    tpcfProp.dLo = 5.0
+    tpcfProp.dLo = 2.0
     tpcfProp.dHi = 200.
-    tpcfProp.fraction = 0.1
-    tpcfProp.binSize = 10.
-    tpcfProp.bootNum = 10
+    tpcfProp.fraction = 0.20
+    tpcfProp.binSize = 20.
+    tpcfProp.bootNum = 1000
 
-    fig,ax = plt.subplots(1,1,figsize=(10,10))
+    ionP = ionProps()
+    ions = 'HI MgII CIV OVI'.split()
+    fig,axes = plt.subplots(2,2,figsize=(10,10))
     
-    c,cMean,cStd = absorber_tpcf(run,ion,tpcfProp)
+    for ion,ax in zip(ions,axes.flatten()):
+        print('\nIon = {0:s}'.format(ion))
+        ionP.name = ion
 
-    ax.plot(c.index,c,marker='s',color='b',label='Full')
-    ax.plot(c.index,cMean,marker='o',color='g',label='Mean')
-    ax.plot(c.index,cMean-cStd,color='r',label='Err Down')
-    ax.plot(c.index,cMean+cStd,color='r',label='Err Up')
-    ax.legend(loc='upper right',frameon=True)
-    
+        c,cMean,cStd = absorber_tpcf(run,ionP,tpcfProp)
+
+        ax.plot(c.index,c,marker='s',color='b',label='Full')
+        ax.plot(c.index,cMean,marker='o',color='g',label='Mean')
+        ax.plot(c.index,cMean-cStd,color='r',label='Err Down')
+        ax.plot(c.index,cMean+cStd,color='r',label='Err Up')
+        ax.legend(loc='upper right',frameon=True)
+        
+        ax.set_title(ion)
     
     fig.tight_layout()
     fig.savefig('tpcf_bin.png',bbox_inches='tight',dpi=300)
