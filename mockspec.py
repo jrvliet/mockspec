@@ -84,7 +84,8 @@ def ionLoop(run,ion):
     if run.runCullabs==1:
         print '\n\tCreating sysabs'
         rf.cullabs(codeLoc)
-        hdf.sysabs_to_hdf5(codeLoc)
+        hdf.sysabs_to_hdf5(run,ion,codeLoc)
+        hdf.regabs_to_hdf5(run,ion,codeLoc)
     else:
         print '\tSkipping sysabs...'
 
@@ -245,8 +246,6 @@ for ion in ions:
 # Start looping over ions
 jl.Parallel(n_jobs=run.ncores,verbose=5)(
         jl.delayed(ionLoop)(run,ion) for ion in ions)
-#jl.Parallel(n_jobs=1)(
-#        jl.delayed(ionLoop)(run,ion) for ion in ions)
     
 ##### 
 #  

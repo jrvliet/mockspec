@@ -9,17 +9,19 @@ import pandas as pd
 import glob
 import losSummary as ls
 
-def sysabs_to_hdf5(codeLoc):
+def sysabs_to_hdf5(run,ion,codeLoc):
 
     '''
     Converts the ALL.sysabs file into the HDF5 format
     '''
     
     # Get the name of the file 
-    allfile = (glob.glob('*.ALL.sysabs'))[0]
+    allfile = '{0:s}/i{1:d}/{2:s}/{3:s}.{2:s}.a{4:s}.ALL.sysabs'.format(
+                run.runLoc,int(run.incline),ion.name,run.galID,run.expn)
+    #allfile = (glob.glob('*.ALL.sysabs'))[0]
 
     # Create the name of the HDF5 file
-    hdf5file = allfile + '.h5'
+    hdf5file = allfile+'.h5'
 
     # Get the header
     header = ['los','D','zabs','v-','v+','EW_r','dEW_r','DR','dDR',
@@ -28,7 +30,8 @@ def sysabs_to_hdf5(codeLoc):
 
     # Read in the data
     try:
-        data = np.loadtxt(allfile, skiprows=1)
+        #data = np.loadtxt(allfile, skiprows=1)
+        data = pd.read_csv(allfile,sep='\s+',names=header,skiprows=1)
     except ValueError:
         print 'Error in sysabs_to_hdf5 in mkHDF5.py'
         print 'while reading in {0:s}'.format(allfile)
@@ -39,13 +42,56 @@ def sysabs_to_hdf5(codeLoc):
     phi = np.loadtxt(linesfile, skiprows=2, usecols=(2,), unpack=True)
     
     # Insert into the sysabs data file
-    data = np.insert(data, 2, phi, axis=1)
-    header.insert(2, 'phi')
+    #data = np.insert(data, 2, phi, axis=1)
+    data['phi'] = phi
+    #header.insert(2, 'phi')
     
 
     # WRite data to HDF file
-    df = pd.DataFrame(data, columns=header)
-    df.to_hdf(hdf5file, 'data', mode='w')
+    #df = pd.DataFrame(data, columns=header)
+    data.to_hdf(hdf5file, 'data', mode='w')
+
+
+def regabs_to_hdf5(run,ion,codeLoc):
+
+    '''
+    Converts the ALL.regabs file into the HDF5 format
+    '''
+    
+    # Get the name of the file 
+    allfile = '{0:s}/i{1:d}/{2:s}/{3:s}.{2:s}.a{4:s}.ALL.regabs'.format(
+                run.runLoc,int(run.incline),ion.name,run.galID,run.expn)
+    #allfile = (glob.glob('*.ALL.regabs'))[0]
+
+    # Create the name of the HDF5 file
+    hdf5file = allfile + '.h5'
+
+    # Get the header
+    header = ['los','D','reg','zabs','v-','v+','EW_r','dEW_r','DR',
+                'dDr','SL','Vbar','dVbar','Vsprd','dVsprd',
+                'Vasym','dVasym','dum','ytick']
+
+    # Read in the data
+    try:
+        data = np.loadtxt(allfile, skiprows=1)
+        df = pd.read_csv(allfile,sep='\s+',skiprows=1,names=header)
+    except ValueError:
+        print 'Error in sysabs_to_hdf5 in mkHDF5.py'
+        print 'while reading in {0:s}'.format(allfile)
+        return 1
+    
+    # Read in lines.info to get the azimuthal angle
+    #linesfile = 'lines.info'
+    #phi = np.loadtxt(linesfile, skiprows=2, usecols=(2,), unpack=True)
+    
+    # Insert into the sysabs data file
+    #data = np.insert(data, 2, phi, axis=1)
+    #header.insert(2, 'phi')
+    
+
+    # WRite data to HDF file
+    #df = pd.DataFrame(data, columns=header)
+    data.to_hdf(hdf5file, 'data', mode='w')
 
 
 def abscells_to_hdf5(codeLoc):

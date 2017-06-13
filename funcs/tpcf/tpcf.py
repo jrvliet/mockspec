@@ -41,22 +41,27 @@ def absorber_tpcf(run,ion,tpcfProp):
     '''
 
     # Set up a dataframe with regabs information
+    print('Reading Absorbers')
     absorbers = regabs(run,ion,tpcfProp)
-    print(len(absorbers))
-    absorbers.to_csv('absorbers.csv',index=False)
-    print('Absorber Size = {0:d}'.format(len(absorbers)))
+    absorbersName = '{0:s}_{1:s}_{2:s}_absorbers.csv'.format(
+                    run.galID,run.expn,ion.name)
+    absorbers.to_csv(absorbersName,index=False)
 
     # Set up a dataframe with pixel velocity information
     # Each column is a seperate absorber
+    print('Creating pixel velocity')
     pixVel = velocities(run,ion,absorbers)
-    pixVel.to_csv('pixVel.csv',index=False)
-    print('PixVel Size = {0:d}'.format(len(pixVel)))
+    pixVelName = '{0:s}_{1:s}_{2:s}_pixVel.csv'.format(
+                    run.galID,run.expn,ion.name)
+    pixVel.to_csv(pixVelName,index=False)
     
     # Get the seperation between each possible pair of 
     # pixel velocties
+    print('Calculating velocity seperations')
     velDiff = seperations(run,ion,pixVel)
-    velDiff.to_csv('velDiff.csv',index=False)
-    print('velDiff Size = {0:d}'.format(len(velDiff)))
+    velDiffName = '{0:s}_{1:s}_{2:s}_velDiff.csv'.format(
+                    run.galID,run.expn,ion.name)
+    velDiff.to_csv(velDiffName,index=False)
 
     # Bin the data to create TPCF
     # Set up bins
@@ -68,12 +73,14 @@ def absorber_tpcf(run,ion,tpcfProp):
     labels = [(bins[i]+bins[i+1])/2. for i in range(nbins)]
 
     # Bin the velDiff dataframe
+    print('Binning')
     velBins = velDiff.apply(lambda x: 
                 pd.cut(x,bins,labels=labels,include_lowest=True))
     c = pd.Series(velBins.values.flatten()).value_counts().sort_index()
     c = c/c.sum()
     
     # Bootstrap for errors
+    print('Bootstrapping')
     cMean,cStd = bootstrap(bins,labels,tpcfProp,velDiff)
 
     return c,cMean,cStd
@@ -84,7 +91,6 @@ def bootstrap(bins,labels,tpcfProp,velDiff):
     Calculates errors using bootstrap, randomly selecting 
     fraction of total lines from velDiff a number of times
     '''
-    print('BootNum ',type(tpcfProp.bootNum))
 
     # Create dataframe to hold all resulting TPCFs
     # Each row will be a TPCF from a sample of absorbers
@@ -129,6 +135,9 @@ def regabs(run,ion,tpcfProp):
     Returns a dataframe
     '''
 
+    fname = '{0:s}/i{1:d}/{2:s}/{3:s}.{2:s}.a{4:s}.i{1:d}.ALL.regabs.h5'.format(
+            run.rootLoc,int(run.incline),ion.name,run.galID,run.expn)
+
     fname = '{0:s}/i{1:d}/{2:s}/{3:s}.{2:s}.a{4:s}.i{1:d}.ALL.sysabs.h5'.format(
             run.rootLoc,int(run.incline),ion.name,run.galID,run.expn)
     alldf = pd.read_hdf(fname,'data')
@@ -138,56 +147,9 @@ def regabs(run,ion,tpcfProp):
                  (alldf['EW_r']<=tpcfProp.ewHi) &
                  (alldf['D']>=tpcfProp.dLo) & 
                  (alldf['D']<=tpcfProp.dHi))
-    print('LOS in selection: {0:d}'.format(selection.sum()))
     df = alldf[header][selection]
 
     return df
-
-#    loc = '{0:s}/i{1:d}/{2:s}/'.format(run.rootLoc,int(run.incline),ion.name)
-#    sysName = '{0:s}.{1:s}.los{2:04d}.sysabs'
-#    regName = sysName.replace('sys','reg')
-#    
-#    los,regnum,zabs,vneg,vpos,ew = [],[],[],[],[],[]
-#
-#    for i in range(1,run.nlos):
-#
-#        sName = loc+sysName.format(run.galID,ion.name,i)
-#        rName = loc+regName.format(run.galID,ion.name,i)
-
-#        try:
-#            with open(rName) as f:
-#                f.readline()
-#                for j,line in enumerate(f):
-#                    l = line.split()
-#                    los.append(i)
-#                    regnum.append(int(l[0]))
-#                    zabs.append(float(l[1]))
-#                    vneg.append(float(l[2]))
-#                    vpos.append(float(l[3]))
-#                    ew.append(float(l[4]))
-#        except IOError:
-#            try:
-#                 with open(sName) as f:
-#                    f.readline()
-#                    for j,line in enumerate(f):
-#                        l = line.split()
-#                        los.append(i)
-#                        regnum.append(0)
-#                        zabs.append(float(l[0]))
-#                        vneg.append(float(l[1]))
-#                        vpos.append(float(l[2]))
-#                        ew.append(float(l[3]))           
-#            except IOError:
-#                pass
-#                    
-
-#    header = 'los regnum zabs vneg vpos ew'.split()
-#    df = pd.DataFrame(index=range(len(los)),columns=header)
-#    fields = [los,regnum,zabs,vneg,vpos,ew]
-#    for col,field in zip(header,fields):
-#        df[col] = field
-#    return df
-    
 
 def velocities(run,ion,absorbers):
 
@@ -284,12 +246,12 @@ if __name__ == '__main__':
 
     tpcfProp = tpcfProps()
     tpcfProp.ewLo = 0.
-    tpcfProp.ewHi = 10.
-    tpcfProp.dLo = 2.0
+    tpcfProp.ewHi = 5.
+    tpcfProp.dLo = 10.0
     tpcfProp.dHi = 200.
     tpcfProp.fraction = 0.20
-    tpcfProp.binSize = 20.
-    tpcfProp.bootNum = 1000
+    tpcfProp.binSize = 10.
+    tpcfProp.bootNum = 10
 
     ionP = ionProps()
     ions = 'HI MgII CIV OVI'.split()
@@ -314,7 +276,6 @@ if __name__ == '__main__':
     plt.close(fig)
 
        
-
 
 
 
