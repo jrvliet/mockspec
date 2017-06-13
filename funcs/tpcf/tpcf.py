@@ -17,24 +17,25 @@ import pandas as pd
 import numpy as np
 import subprocess as sp
 import itertools as it 
+import joblib as jl
+import os
+
 
 import sys
 
-class tpcfProps(object):
+def absorber_tpcf(run,ions,tpcfProp):
+    
+    # Check if TPCF directory exits
+    tpcfDir = '{0:s}/i{1:d}/tpcf/'.format(run.runLoc,int(run.incline))
+    if not os.path.isdir(tpcfDir):
+        command = 'mkdir {0:s}'.format(tpcfDir)
+        sp.call(command,shell=True)
+    
+    #print(', '.join('%s: %s' % item for item in vars(tpcfProp)))
+    jl.Parallel(n_jobs=run.ncores,verbose=5)(
+        jl.delayed(tpcf_ion_loop)(run,ion,tpcfProp,tpcfDir) for ion in ions)
 
-    def __init__ (self):
-       
-        self.ewLo = 0.
-        self.ewHi = 10.
-        self.dLo = 0.
-        self.dHi = 200.
-        self.fraction = 0.1
-        self.binSize = 10.
-        self.bootNum = 10.
-
- 
-#def absorber_tpcf(run,ion):
-def absorber_tpcf(run,ion,tpcfProp):
+def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
 
     '''
     Calculates TPCF within each absorber
@@ -43,24 +44,24 @@ def absorber_tpcf(run,ion,tpcfProp):
     # Set up a dataframe with regabs information
     print('Reading Absorbers')
     absorbers = regabs(run,ion,tpcfProp)
-    absorbersName = '{0:s}_{1:s}_{2:s}_absorbers.csv'.format(
-                    run.galID,run.expn,ion.name)
+    absorbersName = '{0:s}/{1:s}_{2:s}_{3:s}_absorbers.csv'.format(
+                    tpcfDir,run.galID,run.expn,ion.name)
     absorbers.to_csv(absorbersName,index=False)
 
     # Set up a dataframe with pixel velocity information
     # Each column is a seperate absorber
     print('Creating pixel velocity')
     pixVel = velocities(run,ion,absorbers)
-    pixVelName = '{0:s}_{1:s}_{2:s}_pixVel.csv'.format(
-                    run.galID,run.expn,ion.name)
+    pixVelName = '{0:s}/{1:s}_{2:s}_{3:s}_pixVel.csv'.format(
+                    tpcfDir,run.galID,run.expn,ion.name)
     pixVel.to_csv(pixVelName,index=False)
     
     # Get the seperation between each possible pair of 
     # pixel velocties
     print('Calculating velocity seperations')
     velDiff = seperations(run,ion,pixVel)
-    velDiffName = '{0:s}_{1:s}_{2:s}_velDiff.csv'.format(
-                    run.galID,run.expn,ion.name)
+    velDiffName = '{0:s}/{1:s}_{2:s}_{3:s}_velDiff.csv'.format(
+                    tpcfDir,run.galID,run.expn,ion.name)
     velDiff.to_csv(velDiffName,index=False)
 
     # Bin the data to create TPCF
@@ -78,10 +79,30 @@ def absorber_tpcf(run,ion,tpcfProp):
                 pd.cut(x,bins,labels=labels,include_lowest=True))
     c = pd.Series(velBins.values.flatten()).value_counts().sort_index()
     c = c/c.sum()
+
     
     # Bootstrap for errors
     print('Bootstrapping')
     cMean,cStd = bootstrap(bins,labels,tpcfProp,velDiff)
+
+    print('Bins: ',bins)
+    print('Labels: ',labels)
+    tpcfFull = pd.DataFrame(index=c.index)
+    #tpcfFull['Velocity'] = labels
+    tpcfFull.index.name = 'Velocity'
+    tpcfFull['Full'] = c
+    tpcfFull['Mean'] = cMean
+    tpcfFull['Std'] = cStd
+    #tpcfFull = pd.concat([labels,c,cMean,cStd],axis=1,ignore_index=True)
+    #tpcfFull.columns = 'Velocity Full Mean Std'.split()
+
+    if ion.name=='CIV':
+        print('Full',c)
+        print('Mean',cMean)
+        print('Std',cStd)
+    outName = '{0:s}/{1:s}_{2:s}_{3:s}_tpcf.csv'.format(
+                tpcfDir,run.galID,run.expn,ion.name)
+    tpcfFull.to_csv(outName)
 
     return c,cMean,cStd
 
@@ -98,8 +119,7 @@ def bootstrap(bins,labels,tpcfProp,velDiff):
     
     # Loop over all bootstrap instances
     for i in range(tpcfProp.bootNum):
-
-        # Pick out a sample of absorbers from velDiff
+# Pick out a sample of absorbers from velDiff
         sample = velDiff.sample(frac=tpcfProp.fraction,axis=1)
 
         # Bin the samples
@@ -138,19 +158,19 @@ def regabs(run,ion,tpcfProp):
     absheader = 'los D phi region zabs v- v+ EW_r'.split()
 
     fname = '{0:s}/i{1:d}/{2:s}/{3:s}.{2:s}.a{4:s}.i{1:d}.ALL.regabs.h5'.format(
-            run.rootLoc,int(run.incline),ion.name,run.galID,run.expn)
+            run.runLoc,int(run.incline),ion.name,run.galID,run.expn)
     try:
         regdf = pd.read_hdf(fname,'data')
         reglos = regdf['los'].unique()
-
         regdf = regdf[absheader]
 
     except IOError:
+        print('No ALL.regabs file for {0:s}'.format(ion.name))
         regdf = pd.DataFrame(columns=absheader)
         reglos = []
     
     fname = '{0:s}/i{1:d}/{2:s}/{3:s}.{2:s}.a{4:s}.i{1:d}.ALL.sysabs.h5'.format(
-            run.rootLoc,int(run.incline),ion.name,run.galID,run.expn)
+            run.runLoc,int(run.incline),ion.name,run.galID,run.expn)
     try:
         alldf = pd.read_hdf(fname,'data')
     except IOError:
@@ -166,6 +186,8 @@ def regabs(run,ion,tpcfProp):
                  (alldf['D']>=tpcfProp.dLo) & 
                  (alldf['D']<=tpcfProp.dHi) &
                  (~alldf['los'].isin(reglos)))
+    print('For ion {0:s}, len(alldf) = {1:d}, len(selection) = {2:d}'.format(
+            ion.name,len(alldf),selection.sum()))
     df = pd.concat([regdf,alldf[absheader][selection]],ignore_index=True)
 
     return df
@@ -180,7 +202,7 @@ def velocities(run,ion,absorbers):
     '''
 
     
-    loc = '{0:s}/i{1:d}/{2:s}/'.format(run.rootLoc,int(run.incline),ion.name)
+    loc = '{0:s}/i{1:d}/{2:s}/'.format(run.runLoc,int(run.incline),ion.name)
     specFile = '{0:s}.{1:s}.los{2:04d}.{3:s}.spec'
     specHeader = 'lambda velocity flux dum1 dum2 dum3'.split()
 
@@ -258,8 +280,8 @@ if __name__ == '__main__':
     run = runProps()
     run.galID = 'D9o2'
     run.expn = '1.002'
-    run.rootLoc = '/Users/jacob/research/dwarfs/D9o2/a1.002/'
-    run.rootLoc = '/mnt/cluster/abs/cgm/dwarfs/D9o2/a1.002/'
+    run.runLoc = '/Users/jacob/research/dwarfs/D9o2/a1.002/'
+    run.runLoc = '/mnt/cluster/abs/cgm/dwarfs/D9o2/a1.002/'
     run.incline = 90
     
 

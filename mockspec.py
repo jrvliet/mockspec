@@ -22,6 +22,7 @@ import runFunctions as rf
 import funcs.sigcells.sigcells as sc
 import funcs.plotting.analysis_control as ac
 import funcs.compileFiles.mkHDF5 as hdf
+import funcs.tpcf.tpcf as cf
 
 
 
@@ -104,6 +105,7 @@ def ionLoop(run,ion):
     else:
         print '\tSkipping locatecells...'
 
+    
 
     # Move back up to the parent directory
     os.chdir('..')
@@ -120,13 +122,9 @@ requiredLoc = codeLoc+'/controls/'
 
 #  Read in the control file
 print '\n\nReading in control file...'
-run, ions = fi.read_control_file()
-#props, flags, ions, xh, instruments = fi.read_control_file()
-#galID, expn, nlos, maximpact, incline, ewcut, snr, ncores, rootLoc, sigcellsCut = props
-#runRates, runGenLOS, runCellfinder, runIdcells, runLos7, runSpecsynth, runSysanal, runCullabs, runLocateCells, runSummaries, runPlotting = flags
+run,ions,tpcfProp = fi.read_control_file()
 
 # Genearte the name of the gasfile
-#gasfile = galID+'_GZa'+expn+'.txt'
 gasfile = '{0:s}_GZa{1:s}.txt'.format(run.galID,run.expn)
 print '\nRun Parameters:'
 print '\tGasfile:      ', gasfile
@@ -260,12 +258,15 @@ if run.runCullabs==1 or run.runLocateCells==1:
 else:
     print 'What was the point...'
 
-
-
 # Generate summary files
 if run.runSummaries==1:
-    print '\n\nGenearting summary files'
+    print '\n\nGenerating summary files'
     hdf.genSummaries(galID, expn, incline, ions, nlos)    
+
+# Generate TPCFs
+if run.runTPCF==1:
+    print('\n\nGenerating TPCFs')
+    cf.absorber_tpcf(run,ions,tpcfProp)
 
 
 # Create basic plots

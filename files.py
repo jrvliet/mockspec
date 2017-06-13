@@ -49,6 +49,7 @@ class runProps(object):
         self.runCullabs = 1
         self.runLocateCells = 1
         self.runSummaries = 1
+        self.runTPCF = 1
         self.runPlotting = 1
         
         
@@ -65,7 +66,21 @@ class ionProps(object):
         self.xh = 0.
         self.instrument = 'COSNUV'
     
+class tpcfProps(object):
+    
+    '''
+    Class to decribe settings for TPCF
+    '''
 
+    def __init__ (self):
+
+        self.ewLo = 0.
+        self.ewHi = 10.
+        self.dLo = 0.
+        self.dHi = 200.
+        self.binSize = 10.
+        self.fraction = 0.1
+        self.bootNum = 1000
 
 
 def read_control_file():
@@ -76,6 +91,7 @@ def read_control_file():
     """
 
     run = runProps() 
+    tpcfP = tpcfProps()
 
     filename = 'mockspec.config'
     try:
@@ -99,6 +115,7 @@ def read_control_file():
     run.ncores = int(f.readline().split()[0])
     run.runLoc = f.readline().split()[0]
     run.sigcellsCut = float(f.readline().split()[0])
+
     # Now at flags for running the various subfunctions
     f.readline()
     run.runRates = int(f.readline().split()[0])
@@ -111,7 +128,19 @@ def read_control_file():
     run.runCullabs = int(f.readline().split()[0])
     run.runLocateCells = int(f.readline().split()[0])
     run.runSummaries = int(f.readline().split()[0])
+    run.runTPCF = int(f.readline().split()[0])
     run.runPlotting = int(f.readline().split()[0])
+
+    # Now at TPCF settings
+    f.readline()
+    tpcfP.ewLo = float(f.readline().split()[0])
+    tpcfP.hiLo = float(f.readline().split()[0])
+    tpcfP.dLo = float(f.readline().split()[0])
+    tpcfP.dHi = float(f.readline().split()[0])
+    tpcfP.binSize = float(f.readline().split()[0])
+    tpcfP.fraction = float(f.readline().split()[0])
+    tpcfP.bootNum = int(f.readline().split()[0])
+
     # Now at ion section
     # Loop over rest of file
     ions = []
@@ -133,7 +162,7 @@ def read_control_file():
     #flags = (runRates, runGenLOS, runCellfinder, runIdcells, runLos7, 
     #         runSpecsynth, runSysanal, runCullabs, runLocateCells, runSummaries, runPlotting)
     #return props, flags, ions, xh, instruments
-    return run,ions
+    return run,ions,tpcfP
 
 
 def setup_galprops(run, requiredLoc, summaryLoc):
