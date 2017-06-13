@@ -32,7 +32,7 @@ def sysabs_to_hdf5(run,ion,codeLoc):
     try:
         #data = np.loadtxt(allfile, skiprows=1)
         data = pd.read_csv(allfile,sep='\s+',names=header,skiprows=1)
-    except ValueError:
+    except (ValueError,IOError) as e:
         print 'Error in sysabs_to_hdf5 in mkHDF5.py'
         print 'while reading in {0:s}'.format(allfile)
         return 1
@@ -73,22 +73,27 @@ def regabs_to_hdf5(run,ion,codeLoc):
 
     # Read in the data
     try:
-        data = np.loadtxt(allfile, skiprows=1)
-        df = pd.read_csv(allfile,sep='\s+',skiprows=1,names=header)
-    except ValueError:
+        #data = np.loadtxt(allfile, skiprows=1)
+        data = pd.read_csv(allfile,sep='\s+',skiprows=1,names=header)
+    except (ValueError,IOError) as e:
         print 'Error in sysabs_to_hdf5 in mkHDF5.py'
         print 'while reading in {0:s}'.format(allfile)
         return 1
     
     # Read in lines.info to get the azimuthal angle
-    #linesfile = 'lines.info'
-    #phi = np.loadtxt(linesfile, skiprows=2, usecols=(2,), unpack=True)
+    linesfile = 'lines.info'
+    angle = np.loadtxt(linesfile, skiprows=2, usecols=(2,), unpack=True)
     
     # Insert into the sysabs data file
     #data = np.insert(data, 2, phi, axis=1)
     #header.insert(2, 'phi')
     
-
+    phi = []
+    for i in range(len(data)):
+        los = int(data['los'].iloc[i])
+        phi.append(angle[los-1])
+    data['phi'] = phi
+    
     # WRite data to HDF file
     #df = pd.DataFrame(data, columns=header)
     data.to_hdf(hdf5file, 'data', mode='w')

@@ -134,20 +134,39 @@ def regabs(run,ion,tpcfProp):
     and sysabs files
     Returns a dataframe
     '''
+    
+    absheader = 'los D phi region zabs v- v+ EW_r'.split()
 
     fname = '{0:s}/i{1:d}/{2:s}/{3:s}.{2:s}.a{4:s}.i{1:d}.ALL.regabs.h5'.format(
             run.rootLoc,int(run.incline),ion.name,run.galID,run.expn)
+    try:
+        regdf = pd.read_hdf(fname,'data')
+        reglos = regdf['los'].unique()
 
+        regdf = regdf[absheader]
+
+    except IOError:
+        regdf = pd.DataFrame(columns=absheader)
+        reglos = []
+    
     fname = '{0:s}/i{1:d}/{2:s}/{3:s}.{2:s}.a{4:s}.i{1:d}.ALL.sysabs.h5'.format(
             run.rootLoc,int(run.incline),ion.name,run.galID,run.expn)
-    alldf = pd.read_hdf(fname,'data')
+    try:
+        alldf = pd.read_hdf(fname,'data')
+    except IOError:
+        print('Cannot open {0:s} in regabs in tpcf.py'.format(fname))
+        sys.exit()
+    alldf['region'] = 1.
 
-    header = 'los D phi zabs v- v+ EW_r'.split()
+    
+    
     selection = ((alldf['EW_r']>=tpcfProp.ewLo) & 
                  (alldf['EW_r']<=tpcfProp.ewHi) &
+                 (alldf['EW_r']>0) &
                  (alldf['D']>=tpcfProp.dLo) & 
-                 (alldf['D']<=tpcfProp.dHi))
-    df = alldf[header][selection]
+                 (alldf['D']<=tpcfProp.dHi) &
+                 (~alldf['los'].isin(reglos)))
+    df = pd.concat([regdf,alldf[absheader][selection]],ignore_index=True)
 
     return df
 
@@ -247,11 +266,11 @@ if __name__ == '__main__':
     tpcfProp = tpcfProps()
     tpcfProp.ewLo = 0.
     tpcfProp.ewHi = 5.
-    tpcfProp.dLo = 10.0
+    tpcfProp.dLo = 5.0
     tpcfProp.dHi = 200.
-    tpcfProp.fraction = 0.20
+    tpcfProp.fraction = 0.15
     tpcfProp.binSize = 10.
-    tpcfProp.bootNum = 10
+    tpcfProp.bootNum = 1000
 
     ionP = ionProps()
     ions = 'HI MgII CIV OVI'.split()

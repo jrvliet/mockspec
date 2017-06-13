@@ -241,7 +241,7 @@ c       WRITE(42,1200) losID(k),impact(k),sysdata(k,ireg)
       RETURN
 
  1000 FORMAT(1x,a3,1x,a6,1x,a190)
- 1100 FORMAT(1x,a3,1x,a6,1x,a6,1x,a148)
+ 1100 FORMAT(1x,a3,1x,a6,5x,a6,1x,a158)
  1200 FORMAT(1x,a4,1x,f9.3,1x,a190)
      
       END

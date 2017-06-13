@@ -542,7 +542,7 @@ c     formats
      &       t97,'dVbar',t107,'Vsprd',t115,'dVsprd',
      &       t127,'Vasym',t136,'dVasym',
      &       t145,'dum',t149,'ytick')
- 1301 FORMAT(1x,i5,f10.7,2f10.2,5f9.3,6f10.2,f6.1,f6.2)
+ 1301 FORMAT(1x,i6,3x,f12.7,2f10.2,5f9.3,6f10.2,f6.1,f6.2)
  1400 FORMAT(1x,t5,'zabs',t19,'v-',t29,'v+',t37,'EW_r',
      &       t45,'dEW_r',t55,'DR',t64,'dDR',t73,'SL',
      &       t83,'Vbar',t92,'dVbar',t102,'Vsprd',t111,'dVsprd',
