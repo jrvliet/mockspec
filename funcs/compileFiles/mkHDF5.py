@@ -186,7 +186,6 @@ def box_conversion(filename, header):
 
 
 
-#def genSummaries(galID, expn, incline, ions, numlos):
 def genSummaries(run,ions):
 
     '''

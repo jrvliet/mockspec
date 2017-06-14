@@ -261,7 +261,7 @@ else:
 # Generate summary files
 if run.runSummaries==1:
     print '\n\nGenerating summary files'
-    hdf.genSummaries(galID, expn, incline, ions, nlos)    
+    hdf.genSummaries(run, ions)    
 
 # Generate TPCFs
 if run.runTPCF==1:
