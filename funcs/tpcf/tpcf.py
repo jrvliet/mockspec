@@ -31,7 +31,6 @@ def absorber_tpcf(run,ions,tpcfProp):
         command = 'mkdir {0:s}'.format(tpcfDir)
         sp.call(command,shell=True)
     
-    #print(', '.join('%s: %s' % item for item in vars(tpcfProp)))
     jl.Parallel(n_jobs=run.ncores,verbose=5)(
         jl.delayed(tpcf_ion_loop)(run,ion,tpcfProp,tpcfDir) for ion in ions)
 
@@ -42,7 +41,7 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
     '''
 
     # Set up a dataframe with regabs information
-    print('Reading Absorbers')
+    #print('Reading Absorbers')
     absorbers = regabs(run,ion,tpcfProp)
     absorbersName = '{0:s}/{1:s}_{2:s}_{3:s}_absorbers.csv'.format(
                     tpcfDir,run.galID,run.expn,ion.name)
@@ -50,7 +49,7 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
 
     # Set up a dataframe with pixel velocity information
     # Each column is a seperate absorber
-    print('Creating pixel velocity')
+    #print('Creating pixel velocity')
     pixVel = velocities(run,ion,absorbers)
     pixVelName = '{0:s}/{1:s}_{2:s}_{3:s}_pixVel.csv'.format(
                     tpcfDir,run.galID,run.expn,ion.name)
@@ -58,7 +57,7 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
     
     # Get the seperation between each possible pair of 
     # pixel velocties
-    print('Calculating velocity seperations')
+    #print('Calculating velocity seperations')
     velDiff = seperations(run,ion,pixVel)
     velDiffName = '{0:s}/{1:s}_{2:s}_{3:s}_velDiff.csv'.format(
                     tpcfDir,run.galID,run.expn,ion.name)
@@ -74,7 +73,7 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
     labels = [(bins[i]+bins[i+1])/2. for i in range(nbins)]
 
     # Bin the velDiff dataframe
-    print('Binning')
+    #print('Binning')
     velBins = velDiff.apply(lambda x: 
                 pd.cut(x,bins,labels=labels,include_lowest=True))
     c = pd.Series(velBins.values.flatten()).value_counts().sort_index()
@@ -82,11 +81,9 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
 
     
     # Bootstrap for errors
-    print('Bootstrapping')
+    #print('Bootstrapping')
     cMean,cStd = bootstrap(bins,labels,tpcfProp,velDiff)
 
-    print('Bins: ',bins)
-    print('Labels: ',labels)
     tpcfFull = pd.DataFrame(index=c.index)
     #tpcfFull['Velocity'] = labels
     tpcfFull.index.name = 'Velocity'
@@ -96,10 +93,6 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
     #tpcfFull = pd.concat([labels,c,cMean,cStd],axis=1,ignore_index=True)
     #tpcfFull.columns = 'Velocity Full Mean Std'.split()
 
-    if ion.name=='CIV':
-        print('Full',c)
-        print('Mean',cMean)
-        print('Std',cStd)
     outName = '{0:s}/{1:s}_{2:s}_{3:s}_tpcf.csv'.format(
                 tpcfDir,run.galID,run.expn,ion.name)
     tpcfFull.to_csv(outName)
@@ -256,7 +249,6 @@ def seperations(run,rion,pixVel):
 
     velDiff = pd.DataFrame(columns=pixVel.columns)
 
-    print(len(pixVel.columns))
     for col in pixVel.columns:
         
         # Create pairs of all possible combinations
@@ -304,10 +296,10 @@ if __name__ == '__main__':
 
         c,cMean,cStd = absorber_tpcf(run,ionP,tpcfProp)
 
-        ax.plot(c.index,c,marker='s',color='b',label='Full')
-        ax.plot(c.index,cMean,marker='o',color='g',label='Mean')
-        ax.plot(c.index,cMean-cStd,color='r',label='Err Down')
-        ax.plot(c.index,cMean+cStd,color='r',label='Err Up')
+        ax.step(c.index,c,marker='s',color='b',label='Full',where='mid')
+        ax.step(c.index,cMean,marker='o',color='g',label='Mean',where='mid')
+        ax.step(c.index,cMean-cStd,color='r',label='Err Down',where='mid')
+        ax.step(c.index,cMean+cStd,color='r',label='Err Up',where='mid')
         ax.legend(loc='upper right',frameon=True)
         
         ax.set_title(ion)

@@ -259,6 +259,9 @@ else:
     print 'What was the point...'
 
 # Generate summary files
+
+# Summary is currently broken, fix later
+run.runSummaries = 0
 if run.runSummaries==1:
     print '\n\nGenerating summary files'
     hdf.genSummaries(run, ions)    
