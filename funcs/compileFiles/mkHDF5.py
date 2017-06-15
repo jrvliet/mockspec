@@ -60,7 +60,7 @@ def sysabs_to_hdf5(run,ion,codeLoc):
     # Insert into the sysabs data file
     #data = np.insert(data, 2, phi, axis=1)
     data['phi'] = phi
-    data['azimuthal'] = df['phi'].apply(az)
+    data['azimuthal'] = data['phi'].apply(az)
     #header.insert(2, 'phi')
     
 
