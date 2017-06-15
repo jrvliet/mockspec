@@ -31,8 +31,10 @@ def absorber_tpcf(run,ions,tpcfProp):
         command = 'mkdir {0:s}'.format(tpcfDir)
         sp.call(command,shell=True)
     
-    jl.Parallel(n_jobs=run.ncores,verbose=5)(
-        jl.delayed(tpcf_ion_loop)(run,ion,tpcfProp,tpcfDir) for ion in ions)
+    for ion in ions:
+        tpcf_ion_loop(run,ion,tpcfProp,tpcfDir)
+    #jl.Parallel(n_jobs=run.ncores,verbose=5)(
+    #    jl.delayed(tpcf_ion_loop)(run,ion,tpcfProp,tpcfDir) for ion in ions)
 
 def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
 
@@ -89,12 +91,13 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
     print('Boot Init: ',boot)
     boot = np.empty((tpcfProp.bootNum,len(c)))
     boot[:] = np.nan
-    for i in range(tpcfProp.bootNum):
-        sample = velDiff.sample(frac=1.,replace=True)
-        b = cutBins(sample,bins,labels)
-        boot[i,:len(b)] = b.values
-        print(i,type(b))
+
+    jl.Parallel(n_jobs=4,verbose=5)(
+        jl.delayed(bstrap)(velDiff,bins,labels,boot,i)
+        for i in range(tpcfProp.bootNum))
+    
     print('Boot Final: ',boot)
+    np.savetxt('boot.dat',boot)
 
     tpcfFull = pd.DataFrame(index=c.index)
     print(tpcfFull.shape)
@@ -102,9 +105,10 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
     tpcfFull['Full'] = c
     #tpcfFull['Mean'] = boot.mean(axis=1)
     #tpcfFull['Std'] = boot.std(axis=1)
-    m = np.nanmean(boot,axis=1)
-    s = np.nanstd(boot,axis=1)
-    print(len(m))
+    m = np.nanmean(boot,axis=0)
+    s = np.nanstd(boot,axis=0)
+    print(len(m),len(c))
+    print(len(s),len(c))
     tpcfFull['Mean'] = np.pad(m,(0,len(c)-len(m)),'constant')
     tpcfFull['Std'] = np.pad(s,(0,len(c)-len(s)),'constant')
     #tpcfFull = pd.concat([labels,c,cMean,cStd],axis=1,ignore_index=True)
@@ -116,6 +120,14 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
     tpcfFull.to_csv(outName)
 
 #    return c,cMean,cStd
+
+@nb.jit
+def bstrap(velDiff,bins,labels,boot,i):
+    sample = velDiff.sample(frac=1.,replace=True,random_state=53)
+    b = cutBins(sample,bins,labels)
+    boot[i,:len(b)] = b.values
+
+
 
 @nb.jit
 def bootstrap(bins,labels,tpcfProp,velDiff):
@@ -203,6 +215,8 @@ def regabs(run,ion,tpcfProp):
                  (alldf['EW_r']>0) &
                  (alldf['D']>=tpcfProp.dLo) & 
                  (alldf['D']<=tpcfProp.dHi) &
+                 (alldf['azimuthal']>=tpcfProp.azLo) & 
+                 (alldf['azimuthal']<=tpcfProp.azHi) &
                  (~alldf['los'].isin(reglos)))
     print('For ion {0:s}, len(alldf) = {1:d}, len(selection) = {2:d}'.format(
             ion.name,len(alldf),selection.sum()))

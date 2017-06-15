@@ -78,8 +78,9 @@ class tpcfProps(object):
         self.ewHi = 10.
         self.dLo = 0.
         self.dHi = 200.
+        self.azLo = 0.
+        self.azHi = 90.
         self.binSize = 10.
-        self.fraction = 0.1
         self.bootNum = 1000
 
 
@@ -137,8 +138,9 @@ def read_control_file():
     tpcfP.hiLo = float(f.readline().split()[0])
     tpcfP.dLo = float(f.readline().split()[0])
     tpcfP.dHi = float(f.readline().split()[0])
+    tpcfP.azLo = float(f.readline().split()[0])
+    tpcfP.azHi = float(f.readline().split()[0])
     tpcfP.binSize = float(f.readline().split()[0])
-    tpcfP.fraction = float(f.readline().split()[0])
     tpcfP.bootNum = int(f.readline().split()[0])
 
     # Now at ion section

@@ -9,6 +9,22 @@ import pandas as pd
 import glob
 import losSummary as ls
 
+def az(phi):
+
+    '''
+    Converts the position angle to azimuthal angle,
+    the angle between the LOS and the closes major axis
+    '''
+    if phi<90:
+        return phi
+    elif phi<180:
+        return 180.-phi
+    elif phi<270:
+        return phi-180
+    else:
+        return 360-phi
+    
+
 def sysabs_to_hdf5(run,ion,codeLoc):
 
     '''
@@ -44,6 +60,7 @@ def sysabs_to_hdf5(run,ion,codeLoc):
     # Insert into the sysabs data file
     #data = np.insert(data, 2, phi, axis=1)
     data['phi'] = phi
+    data['azimuthal'] = df['phi'].apply(az)
     #header.insert(2, 'phi')
     
 
