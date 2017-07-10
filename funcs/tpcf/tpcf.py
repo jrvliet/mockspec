@@ -177,6 +177,15 @@ def cutBins(sample,bins,labels):
 #    return pd.cut(x,bins,labels=labels,include_lowest=True)
     
     
+def az(phi):
+    if phi<90:
+        return phi
+    elif phi<180:
+        return 180.-phi
+    elif phi<270:
+        return phi-180.
+    else:
+        return 360.-phi 
 
 def regabs(run,ion,tpcfProp):
     '''
@@ -208,7 +217,8 @@ def regabs(run,ion,tpcfProp):
         sys.exit()
     alldf['region'] = 1.
 
-    
+    if 'azimuthal' not in alldf.columns:
+        alldf['azimuthal'] = alldf['phi'].apply(az)
     
     selection = ((alldf['EW_r']>=tpcfProp.ewLo) & 
                  (alldf['EW_r']<=tpcfProp.ewHi) &
