@@ -76,55 +76,35 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
 
     # Bin the velDiff dataframe
     #print('Binning')
-    c = cutBins(velDiff,bins,labels)
-    #velBins = velDiff.apply(lambda x: 
-    #            pd.cut(x,bins,labels=labels,include_lowest=True))
-    #c = pd.Series(velBins.values.flatten()).value_counts().sort_index()
-    #c = c/c.sum()
-
+    c = cut_bins(velDiff,bins,labels)
     
     # Bootstrap for errors
-    #print('Bootstrapping')
-    #cMean,cStd = bootstrap(bins,labels,tpcfProp,velDiff)
-    
-    boot = pd.DataFrame(index=range(tpcfProp.bootNum))
-    print('Boot Init: ',boot)
+    #boot = pd.DataFrame(index=range(tpcfProp.bootNum))
     boot = np.empty((tpcfProp.bootNum,len(c)))
     boot[:] = np.nan
 
-    jl.Parallel(n_jobs=4,verbose=5)(
+    jl.Parallel(n_jobs=run.ncores,verbose=5)(
         jl.delayed(bstrap)(velDiff,bins,labels,boot,i)
         for i in range(tpcfProp.bootNum))
     
-    print('Boot Final: ',boot)
-    np.savetxt('boot.dat',boot)
-
     tpcfFull = pd.DataFrame(index=c.index)
-    print(tpcfFull.shape)
     tpcfFull.index.name = 'Velocity'
     tpcfFull['Full'] = c
-    #tpcfFull['Mean'] = boot.mean(axis=1)
-    #tpcfFull['Std'] = boot.std(axis=1)
     m = np.nanmean(boot,axis=0)
     s = np.nanstd(boot,axis=0)
-    print(len(m),len(c))
-    print(len(s),len(c))
     tpcfFull['Mean'] = np.pad(m,(0,len(c)-len(m)),'constant')
     tpcfFull['Std'] = np.pad(s,(0,len(c)-len(s)),'constant')
-    #tpcfFull = pd.concat([labels,c,cMean,cStd],axis=1,ignore_index=True)
-    #tpcfFull.columns = 'Velocity Full Mean Std'.split()
 
     tpcfFull[tpcfFull==0] = np.nan
     outName = '{0:s}/{1:s}_{2:s}_{3:s}_tpcf.csv'.format(
                 tpcfDir,run.galID,run.expn,ion.name)
     tpcfFull.to_csv(outName)
 
-#    return c,cMean,cStd
 
 @nb.jit
 def bstrap(velDiff,bins,labels,boot,i):
-    sample = velDiff.sample(frac=1.,replace=True,random_state=53)
-    b = cutBins(sample,bins,labels)
+    sample = velDiff.sample(frac=1.,replace=True)
+    b = cut_bins(sample,bins,labels)
     boot[i,:len(b)] = b.values
 
 
@@ -158,24 +138,13 @@ def bootstrap(bins,labels,tpcfProp,velDiff):
     return df.mean(axis=1),df.std(axis=1)
         
 
-def cutBins(sample,bins,labels):
+def cut_bins(sample,bins,labels):
     velBins = sample.apply(lambda x: 
                 pd.cut(x,bins,labels=labels,include_lowest=True))
     c = pd.Series(velBins.values.flatten()).value_counts().sort_index()
     c = c/c.sum()
     return c
 
-
-#def cutBins(x,bins,labels):
-
-#    # Add noise to bin edges
-#    noiseMu = 0.
-#    noiseSigma = 1.2
-#    noise = np.random.normal(noiseMu,noiseSigma,len(bins))
-#    bins = bins+noise
-    
-#    return pd.cut(x,bins,labels=labels,include_lowest=True)
-    
     
 def az(phi):
     if phi<90:
