@@ -38,7 +38,7 @@ def sysabs_to_hdf5(run,ion,codeLoc):
 
     # Create the name of the HDF5 file
     hdf5file = allfile+'.h5'
-    hdf5file = hdf5file.replace('ALL','i{0:d}.ALL'.format(run.incline))
+    hdf5file = hdf5file.replace('ALL','i{0:d}.ALL'.format(int(run.incline)))
 
     # Get the header
     header = ['los','D','zabs','v-','v+','EW_r','dEW_r','DR','dDR',
