@@ -58,11 +58,8 @@ c
 
 
       idum = -35
-      WRITE(6,*) idum
       CALL SYSTEM_CLOCK(idum)
-      WRITE(6,*) idum
       idum = -1*idum
-      WRITE(6,*) idum
 
 c     read in the list of ion names, input the ion information and book
 c     keeping, input the atomic constants, etc., grab the parameters
