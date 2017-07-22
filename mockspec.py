@@ -101,7 +101,9 @@ def ionLoop(run,ion):
         lc.locateSigCells(run,ion,codeLoc)
         #lc.locateSigCells(galID, expn, ion, sigcellsCut, codeLoc, incline)
 #        lc.sigCells(galID, expn, ion, sigcellsCut, codeLoc)
-        hdf.abscells_to_hdf5(codeLoc)
+        
+        # Conversion to HDF5 no longer needed as locatecells outputs an HDF5 file
+        # hdf.abscells_to_hdf5(codeLoc,run,ion)
     else:
         print '\tSkipping locatecells...'
 

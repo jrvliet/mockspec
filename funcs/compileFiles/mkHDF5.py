@@ -117,14 +117,16 @@ def regabs_to_hdf5(run,ion,codeLoc):
     data.to_hdf(hdf5file, 'data', mode='w')
 
 
-def abscells_to_hdf5(codeLoc):
+def abscells_to_hdf5(codeLoc,run,ion):
 
     '''
     Converts the abs_cells.dat file into the HDF5 format
     '''
     
     # Get the name of the file 
-    filename = (glob.glob('*.abs_cells.dat'))[0]
+    #filename = (glob.glob('*.abs_cells.dat'))[0]
+    filename = '{0:s}.{1:s}.{2:s}.i{3:d}.abs_cells.dat'.format(
+                run.galID,run.expn,ion.name,run.incline)
 
     # Create the name of the HDF5 file
     hdf5file = filename.replace('dat','h5')
