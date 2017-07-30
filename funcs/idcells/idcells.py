@@ -302,6 +302,7 @@ def idcells(run, ions, codeLoc):
             cf.close()
             of.close()
 
+        del ionbox
     # Clean up the directory
     clean_up()
 
