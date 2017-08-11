@@ -7,7 +7,7 @@ abs_cells files to HDF5 format for
 import numpy as np
 import pandas as pd
 import glob
-import losSummary as ls
+from . import losSummary as ls
 
 def az(phi):
 
@@ -50,8 +50,8 @@ def sysabs_to_hdf5(run,ion,codeLoc):
         #data = np.loadtxt(allfile, skiprows=1)
         data = pd.read_csv(allfile,sep='\s+',names=header,skiprows=1)
     except (ValueError,IOError) as e:
-        print 'Error in sysabs_to_hdf5 in mkHDF5.py'
-        print 'while reading in {0:s}'.format(allfile)
+        print('Error in sysabs_to_hdf5 in mkHDF5.py')
+        print('while reading in {0:s}'.format(allfile))
         return 1
     
     # Read in lines.info to get the azimuthal angle
@@ -94,8 +94,8 @@ def regabs_to_hdf5(run,ion,codeLoc):
         #data = np.loadtxt(allfile, skiprows=1)
         data = pd.read_csv(allfile,sep='\s+',skiprows=1,names=header)
     except (ValueError,IOError) as e:
-        print 'Error in sysabs_to_hdf5 in mkHDF5.py'
-        print 'while reading in {0:s}'.format(allfile)
+        print('Error in sysabs_to_hdf5 in mkHDF5.py')
+        print('while reading in {0:s}'.format(allfile))
         return 1
     
     # Read in lines.info to get the azimuthal angle
@@ -131,16 +131,12 @@ def abscells_to_hdf5(codeLoc,run,ion):
     # Create the name of the HDF5 file
     hdf5file = filename.replace('dat','h5')
 
-    print filename
     # Get the header
     with open(filename) as f:
         header = f.readline().strip().split()
-    print header
-    print len(header)
 
     # Read in the data
     data = np.loadtxt(filename, skiprows=1)
-    print data.shape    
 
     # WRite data to HDF file
     df = pd.DataFrame(data, columns=header)
@@ -188,8 +184,8 @@ def box_conversion(filename, header):
     try:
         data = np.loadtxt(filename, skiprows=2)
     except IOError:
-        print 'Unable to open {0:s} to convert to HDF5'.format(filename)
-        print 'Exitting'
+        print('Unable to open {0:s} to convert to HDF5'.format(filename))
+        print('Exitting')
         sys.exit()
     
     # Write data to HDF file
@@ -197,7 +193,7 @@ def box_conversion(filename, header):
         df = pd.DataFrame(data, columns=header)
         df.to_hdf(hdf5file, 'data', mode='w')
     except ValueError:
-        print 'Value Error with converting {0:s} in gasbox_to_hdf5'.format(filename)
+        print('Value Error with converting {0:s} in gasbox_to_hdf5'.format(filename))
         pass
     del df
     del data
@@ -231,7 +227,7 @@ def genSummaries(run,ions):
         outfile = '{0:s}_a{1:s}_i{2:d}_{3:s}_cellSummary.h5'.format(
                     run.galID,run.expn,int(run.incline),ion.name)
 
-        print 'Compiling summary for {0:s}'.format(ion.name)
+        print('Compiling summary for {0:s}'.format(ion.name))
         # Write the header
         header = ['LOS','Impact','Phi','Probbed','Probbed_in_halos',
                     'In_Lines','Lines_in_halos','Significant',   

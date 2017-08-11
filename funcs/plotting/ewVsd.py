@@ -44,7 +44,7 @@ def ew_profile(ions):
             ewRaw = d['EW_r']
             #impRaw, ewRaw = np.loadtxt(filename, skiprows=1, usecols=(1, 5), unpack=True)
         except IOError:
-            print 'Error in ew_profile function in ewVsd.py while reading {0:s}'.format(filename)
+            print('Error in ew_profile function in ewVsd.py while reading {0:s}'.format(filename))
             raise
 
         # Remove any EW that is zero, as these come from LOS with

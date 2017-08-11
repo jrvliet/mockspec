@@ -9,14 +9,14 @@ import numpy as np
 import sys
 from  math import sqrt, pow, log10
 import subprocess as sp
-import ew 
+from . import ew 
 import os.path as op
-import locate_funcs as lf
+from . import locate_funcs as lf
 import os
 import glob
-import significant as sg
+from . import significant as sg
 import pandas as pd
-import locate_files as fi
+from . import locate_files as fi
 
 
 def locateSigCells(run,ion,codeLoc,testing=0):

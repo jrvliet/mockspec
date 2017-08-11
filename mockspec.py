@@ -5,6 +5,7 @@
 #  of ART simulations of galaxy CGM
 
 # General libraries
+from __future__ import print_function
 #import numpy as np
 #import tables as tb
 import os
@@ -19,7 +20,7 @@ import ratesControl as rc
 import funcs.locatecells.locatecells as lc
 import funcs.idcells.idcells as ic
 import runFunctions as rf 
-import funcs.sigcells.sigcells as sc
+#import funcs.sigcells.sigcells as sc
 import funcs.plotting.analysis_control as ac
 import funcs.compileFiles.mkHDF5 as hdf
 import funcs.tpcf.tpcf as cf
@@ -29,11 +30,11 @@ import funcs.tpcf.tpcf as cf
 def ionLoop(run,ion):
 
     if sum([run.runLos7,run.runSpecsynth,run.runSysanal,run.runCullabs,run.runLocateCells])==0:
-        print '\t\tNothing to do'
+        print('\t\tNothing to do')
         return 1
 
     ionloc = '{0:s}/i{1:d}/{2:s}'.format(run.runLoc,int(run.incline),ion.name)
-    print '\n\n\tIon: ', ion.name
+    print('\n\n\tIon: ', ion.name)
     # Move into the ion directory
     os.chdir(ionloc)
 
@@ -45,10 +46,10 @@ def ionLoop(run,ion):
     #
     #####
     if run.runLos7==1:
-        print '\n\tDetermining cell path length and applying rough cut'
+        print('\n\tDetermining cell path length and applying rough cut')
         rf.los7(codeLoc)
     else:
-        print '\tSkipping los7...'
+        print('\tSkipping los7...')
 
 
     ##### 
@@ -58,10 +59,10 @@ def ionLoop(run,ion):
     #
     #####
     if run.runSpecsynth==1:
-        print '\n\tGenerating spectra'
+        print('\n\tGenerating spectra')
         rf.specsynth(codeLoc)
     else:
-        print '\tSkipping specsynth...'
+        print('\tSkipping specsynth...')
 
     ##### 
     #  
@@ -70,10 +71,10 @@ def ionLoop(run,ion):
     #
     #####
     if run.runSysanal==1:
-        print '\n\tAnalyzing spectra...'
+        print('\n\tAnalyzing spectra...')
         rf.sysanal(codeLoc)
     else:
-        print '\tSkipping sysanal...'
+        print('\tSkipping sysanal...')
 
 
     ##### 
@@ -83,12 +84,12 @@ def ionLoop(run,ion):
     #
     #####
     if run.runCullabs==1:
-        print '\n\tCreating sysabs'
+        print('\n\tCreating sysabs')
         rf.cullabs(codeLoc)
         hdf.sysabs_to_hdf5(run,ion,codeLoc)
         hdf.regabs_to_hdf5(run,ion,codeLoc)
     else:
-        print '\tSkipping sysabs...'
+        print('\tSkipping sysabs...')
 
     ##### 
     #  
@@ -97,7 +98,7 @@ def ionLoop(run,ion):
     #
     #####
     if run.runLocateCells==1:
-        print '\n\tIdentifying significant cells'
+        print('\n\tIdentifying significant cells')
         lc.locateSigCells(run,ion,codeLoc)
         #lc.locateSigCells(galID, expn, ion, sigcellsCut, codeLoc, incline)
 #        lc.sigCells(galID, expn, ion, sigcellsCut, codeLoc)
@@ -105,7 +106,7 @@ def ionLoop(run,ion):
         # Conversion to HDF5 no longer needed as locatecells outputs an HDF5 file
         # hdf.abscells_to_hdf5(codeLoc,run,ion)
     else:
-        print '\tSkipping locatecells...'
+        print('\tSkipping locatecells...')
 
     
 
@@ -123,45 +124,45 @@ summaryLoc = codeLoc+'/summaries/'
 requiredLoc = codeLoc+'/controls/'
 
 #  Read in the control file
-print '\n\nReading in control file...'
+print('\n\nReading in control file...')
 run,ions,tpcfProp = fi.read_control_file()
 
 # Genearte the name of the gasfile
 gasfile = '{0:s}_GZa{1:s}.txt'.format(run.galID,run.expn)
-print '\nRun Parameters:'
-print '\tGasfile:      ', gasfile
-print '\tIons:         ', [i.name for i in ions]
-print '\tNLOS:         ', run.nlos
-print '\tMax impact:   ', run.maximpact
-print '\tIncline:      ', run.incline
-print '\tEWCut:        ', run.ewcut
-print '\tSNR:          ', run.snr
-print '\tNCores:       ', run.ncores
-print '\tRun Loc:      ', run.runLoc
-print '\tSigcells Cut: {0:.0%}'.format( run.sigcellsCut/100. )
+print('\nRun Parameters:')
+print('\tGasfile:      ', gasfile)
+print('\tIons:         ', [i.name for i in ions])
+print('\tNLOS:         ', run.nlos)
+print('\tMax impact:   ', run.maximpact)
+print('\tIncline:      ', run.incline)
+print('\tEWCut:        ', run.ewcut)
+print('\tSNR:          ', run.snr)
+print('\tNCores:       ', run.ncores)
+print('\tRun Loc:      ', run.runLoc)
+print('\tSigcells Cut: {0:.0%}'.format( run.sigcellsCut/100. ))
 
-print '\nRun Flags:'
-print '\tRates:       {0:d}'.format(run.runRates)
-print '\tGenLOS:      {0:d}'.format(run.runGenLOS)
-print '\tCellfinder:  {0:d}'.format(run.runCellfinder)
-print '\tIDCells:     {0:d}'.format(run.runIdcells)
-print '\tLos7:        {0:d}'.format(run.runLos7)
-print '\tSpecsynth:   {0:d}'.format(run.runSpecsynth)
-print '\tSysanal:     {0:d}'.format(run.runSysanal)
-print '\tCullabs:     {0:d}'.format(run.runCullabs)
-print '\tLocateCells: {0:d}'.format(run.runLocateCells)
-print '\tPlotting:    {0:d}'.format(run.runPlotting)
+print('\nRun Flags:')
+print('\tRates:       {0:d}'.format(run.runRates))
+print('\tGenLOS:      {0:d}'.format(run.runGenLOS))
+print('\tCellfinder:  {0:d}'.format(run.runCellfinder))
+print('\tIDCells:     {0:d}'.format(run.runIdcells))
+print('\tLos7:        {0:d}'.format(run.runLos7))
+print('\tSpecsynth:   {0:d}'.format(run.runSpecsynth))
+print('\tSysanal:     {0:d}'.format(run.runSysanal))
+print('\tCullabs:     {0:d}'.format(run.runCullabs))
+print('\tLocateCells: {0:d}'.format(run.runLocateCells))
+print('\tPlotting:    {0:d}'.format(run.runPlotting))
 
 # Test the summary location
 sumFile = '{0:s}/rotmat_a{1:s}.txt'.format(os.getcwd(), run.expn)
 
 # Generate gal_props.dat file
-print '\n\nGenerating gal_props.dat...'
+print('\n\nGenerating gal_props.dat...')
 #fi.setup_galprops( galID, expn, requiredLoc, summaryLoc )
 fi.setup_galprops( run, requiredLoc, summaryLoc )
 
 # Generate galaxy.props file, needed for analysis codes
-print '\n\nGenerating galaxy.props...'
+print('\n\nGenerating galaxy.props...')
 #fi.setup_galaxy_props(sumFile, galID, expn, incline)
 fi.setup_galaxy_props(run, sumFile)
 
@@ -171,19 +172,19 @@ fi.setup_galaxy_props(run, sumFile)
 #
 #####
 if run.runRates==1:
-    print '\nRates:'
-    print '\t Setting up rates.inp...'
+    print('\nRates:')
+    print('\t Setting up rates.inp...')
     rc.setup_rates_control( gasfile, run.expn, ions, requiredLoc)
-    print '\t Setting up rates.outfiles...'
+    print('\t Setting up rates.outfiles...')
     rc.setup_rates_outputs(run, ions, codeLoc, requiredLoc) 
-    print '\t Setting up rates data location...'
+    print('\t Setting up rates data location...')
     rc.setup_rates_data(codeLoc)
-    print '\t Running rates...'
+    print('\t Running rates...')
     rc.run_rates(codeLoc)
-    print '\t Converting to hdf5...'
+    print('\t Converting to hdf5...')
     hdf.gasbox_to_hdf5(codeLoc, ions, run)
 else:
-    print 'Skipping rates'
+    print('Skipping rates')
 
 
 
@@ -205,10 +206,10 @@ os.chdir(incLoc)
 #
 #####
 if run.runGenLOS==1:
-    print '\nGenerating lines of sight...'
+    print('\nGenerating lines of sight...')
     rf.genLOS( codeLoc, mainLoc, run )
 else:
-    print 'Skipping genLOS...'
+    print('Skipping genLOS...')
 
 ##### 
 #  
@@ -216,10 +217,10 @@ else:
 #
 #####
 if run.runCellfinder==1:
-    print '\nRunning LOS through box...'
+    print('\nRunning LOS through box...')
     rf.runCellfinder(codeLoc, run.ncores)
 else: 
-    print 'Skipping cellfinder...'
+    print('Skipping cellfinder...')
 
 
 ##### 
@@ -228,10 +229,10 @@ else:
 #
 #####
 if run.runIdcells==1:
-    print '\nIdentifying probed cell properites...'
+    print('\nIdentifying probed cell properites...')
     ic.idcells(run, ions, codeLoc)
 else:
-    print 'Skipping IDcells...'
+    print('Skipping IDcells...')
 
 # Setup Mockspec 
 fi.setup_mockspec(ions, run, requiredLoc)
@@ -255,17 +256,17 @@ jl.Parallel(n_jobs=run.ncores,verbose=5)(
 #####
 if run.runCullabs==1 or run.runLocateCells==1:
     for ion in ions:
-        print '\n\t Renaming files...'
+        print('\n\t Renaming files...')
         fi.rename(run,ion)
 else:
-    print 'What was the point...'
+    print('What was the point...')
 
 # Generate summary files
 
 # Summary is currently broken, fix later
 run.runSummaries = 0
 if run.runSummaries==1:
-    print '\n\nGenerating summary files'
+    print('\n\nGenerating summary files')
     hdf.genSummaries(run, ions)    
 
 # Generate TPCFs
@@ -276,7 +277,7 @@ if run.runTPCF==1:
 
 # Create basic plots
 if run.runPlotting==1:
-    print '\n\nGenerating plots'
+    print('\n\nGenerating plots')
     ac.make_plots(ions)
 
 

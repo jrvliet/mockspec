@@ -3,7 +3,8 @@
 
 import os
 import sys
-from subprocess import check_call
+import subprocess as sp
+#from subprocess import check_call
 
 #def genLOS(codeLoc, galID, summaryLoc, expn, inc, nLOS, maximpact, ncores):
 def genLOS(codeLoc, summaryLoc, run):
@@ -20,10 +21,12 @@ def genLOS(codeLoc, summaryLoc, run):
     command = codeLoc + funcLoc + args
     
     try:
-        check_call(command, shell=True)
-    except:    
-        print '\n\nCould not run genLOS with :\n\t{0:s}'.format(command)
-        print 'Exiting...'
+        sp.run(command, shell=True)
+    except Exception as e:    
+        print(output)
+        print('\n\nCould not run genLOS with :\n\t{0:s}'.format(command))
+        print('Exiting...')
+        print(e.message,e.args)
         sys.exit()
 
 
@@ -37,10 +40,11 @@ def runCellfinder(codeLoc, numcores):
     cwd = os.getcwd()
     command = codeLoc+'/funcs/cellfinder/cellfinder {0:d} {1:s}'.format(numcores, cwd)
     try:
-        check_call(command, shell=True)
-    except:
-        print '\n\nCould not run cellfinder with:\n\t{0:s}'.format(command)
-        print 'Exiting...'
+        sp.check_call(command, shell=True)
+    except Exception as e:
+        print('\n\nCould not run cellfinder with:\n\t{0:s}'.format(command))
+        print('Exiting...')
+        print(e.message,e.args)
         sys.exit()
 
 
@@ -57,11 +61,12 @@ def los7(codeLoc):
     command = codeLoc + funcLoc
 
     try:
-        check_call(command, shell=True)
-    except:    
-        print '\n\nCould not run los7 with :\n\t{0:s}'.format(command)
-        print 'In ',os.getcwd()
-        print 'Exiting...'
+        sp.check_call(command, shell=True)
+    except Exception as e:
+        print('\n\nCould not run los7 with :\n\t{0:s}'.format(command))
+        print('In ',os.getcwd())
+        print('Exiting...')
+        print(e.message,e.args)
         sys.exit()
      
 
@@ -80,10 +85,11 @@ def specsynth(codeLoc):
 
     
     try:
-        check_call(command, shell=True)
-    except:    
-        print '\n\nCould not run specsynth with :\n\t{0:s}'.format(command)
-        print 'Exiting...'
+        sp.check_call(command, shell=True)
+    except Exception as e:
+        print('\n\nCould not run specsynth with :\n\t{0:s}'.format(command))
+        print('Exiting...')
+        print(e.message,e.args)
         sys.exit()
      
 
@@ -101,10 +107,11 @@ def sysanal(codeLoc):
 
     
     try:
-        check_call(command, shell=True)
-    except:    
-        print '\n\nCould not run sysanal with :\n\t{0:s}'.format(command)
-        print 'Exiting...'
+        sp.check_call(command, shell=True)
+    except Exception as e:
+        print('\n\nCould not run sysanal with :\n\t{0:s}'.format(command))
+        print('Exiting...')
+        print(e.message,e.args)
         sys.exit()
      
     
@@ -124,10 +131,11 @@ def cullabs(codeLoc):
 
     
     try:
-        check_call(command, shell=True)
-    except:    
-        print '\n\nCould not run cullabs with :\n\t{0:s}'.format(command)
-        print 'Exiting...'
+        sp.check_call(command, shell=True)
+    except Exception as e:
+        print('\n\nCould not run cullabs with :\n\t{0:s}'.format(command))
+        print('Exiting...')
+        print(e.message,e.args)
         sys.exit()
      
 

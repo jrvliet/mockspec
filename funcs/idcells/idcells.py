@@ -282,7 +282,7 @@ def idcells(run, ions, codeLoc):
                 cell_id = int(ionbox['ID'][ind])
 
                 if cell_id != cellnum:
-                    print 'Error'
+                    print('Error')
                     sys.exit()
 
                 # Write to file

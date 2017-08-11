@@ -69,10 +69,10 @@ def num_significant(galID, expn, ion, inc, losnum):
     and counting those lines that have that losnum
     '''
     
-    print ion, type(ion)
-    print galID, type(galID)
-    print expn, type(expn)
-    print inc, type(inc)
+    print(ion, type(ion))
+    print(galID, type(galID))
+    print(expn, type(expn))
+    print(inc, type(inc))
     filename = '{0:s}/{1:s}.{2:s}.{0:s}.i{3:d}.abs_cells.h5'.format(ion,galID,expn,int(inc))
 
     d = pd.read_hdf(filename, 'data')

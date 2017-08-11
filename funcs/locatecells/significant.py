@@ -2,9 +2,9 @@
 from __future__ import print_function
 import numpy as np
 import subprocess as sp
-import locate_funcs as lf
-import locate_files as fi
-from ew import findEW
+from . import locate_funcs as lf
+from . import locate_files as fi
+from . import ew as ewFuncs
 import sys
 
 
@@ -52,7 +52,7 @@ def search(start, end, ewcut, lines_z, lines_b, lines_N, lines_ID, redshift,
         # Find the new EW of the cut down list of cells
         wavelength, velocity, flux = np.loadtxt(specfile, usecols=(0,1,2),
                                                 unpack=True)
-        ew = findEW(wavelength, velocity, flux, negVelLimit, posVelLimit)
+        ew = ewFuncs.findEW(wavelength, velocity, flux, negVelLimit, posVelLimit)
         ewdiff = abs( (ewVelcut - ew) / ewVelcut)*100
         flog.write('{0:d}\t{1:d}\t{2:d}\t{3:d}\t{4:d}\t{5:.3f}\t{6:.3f}\n'.format(
                     len(lines_z), start, end, mid, len(cut_z), ew, ewdiff))
@@ -156,7 +156,7 @@ def sigcells(linesfile,ewcut,codeLoc,flog,falselog,wave,testing=0):
         velocity = specdata[:,1]
         flux = specdata[:,2]
         
-        ew = findEW(wavelength, velocity, flux, negVelLimit, posVelLimit)
+        ew = ewFuncs.findEW(wavelength, velocity, flux, negVelLimit, posVelLimit)
         ewdiff = abs( (ewSysabs - ew) / ewSysabs )
         ew_velcut_lines = ew
         ewVelcut = ew

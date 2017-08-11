@@ -9,6 +9,7 @@
 
 int main (int argc, char *argv[]){
 
+    printf("Starting genLOS\n");
     int i, nLOS, ncores;
     double incDeg, maximpact, a; 
     
@@ -66,8 +67,12 @@ int main (int argc, char *argv[]){
     char new_line[1000];    
     FILE *fp = fopen(sumfile, "r");
 
+    printf("summaryLoc: %s\n",summaryLoc);
+    printf("expng: %s\n",expn);
+    printf("sumfile: %s\n",sumfile);
+
     if (fp==NULL){
-        printf("\nERROR in genLOS\n");
+        printf("\nTest ERROR in genLOS\n");
         printf("Could not open %s\n", sumfile);
         printf("Exitting....\n\n");
         exit(1);

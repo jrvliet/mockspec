@@ -98,8 +98,8 @@ def read_control_file():
     try:
         f = open(filename)
     except IOError:
-        print 'Missing control file: {0:s}'.format(filename)
-        print 'Quitting...'
+        print('Missing control file: {0:s}'.format(filename))
+        print('Quitting...')
         sys.exit()
 
     # Read past header
@@ -360,7 +360,7 @@ def setup_ion_dir(ion, run, codeLoc):
         try:
             sp.check_call(command, shell=True)
         except:
-            print 'Could not complete {0:s}'.format(command)
+            print('Could not complete {0:s}'.format(command))
 
     # Create the los.list file
     command = ('ls *{0:s}.los*dat > qso.list && mv qso.list '
@@ -368,7 +368,7 @@ def setup_ion_dir(ion, run, codeLoc):
     try:
         sp.check_call(command, shell=True, stderr=sp.PIPE)
     except:
-        print 'Could not complete {0:s}'.format(command)
+        print('Could not complete {0:s}'.format(command))
     
     # Copy the cell files, ion boxes and the lines files into the ion directory
     ionbox = '{0:s}_GZa{1:s}.{2:s}.h5'.format(run.galID,run.expn,ion.name)
@@ -377,20 +377,20 @@ def setup_ion_dir(ion, run, codeLoc):
     try:
         sp.call(command, shell=True)
     except: 
-        print 'Could not complete {0:s}'.format(command)
+        print('Could not complete {0:s}'.format(command))
 
     #command = 'mv *'+ion+'.los*.dat ./'+ion+'/'
     command = 'mv *{0:s}.los*.dat ./{0:s}/'.format(ion.name)
     try:
         sp.check_call(command, shell=True)
     except:
-        print 'Could not complete {0:s}'.format(command)
+        print('Could not complete {0:s}'.format(command))
         
     command = 'cp lines* ./'+ion.name+'/'
     try:
         sp.check_call(command, shell=True)
     except:
-        print 'Could not complete {0:s}'.format(command)
+        print('Could not complete {0:s}'.format(command))
    
 
     # Copy the Mockspec files from the parent directory to here
@@ -399,20 +399,20 @@ def setup_ion_dir(ion, run, codeLoc):
     try:
         sp.check_call(command, shell=True)
     except:
-        print 'Could not complete {0:s}'.format(command)
+        print('Could not complete {0:s}'.format(command))
 
     command = 'cp ./Mockspec.transitions ./{1:s}/'.format(codeLoc,ion.name)
     try:
         sp.check_call(command, shell=True)
         print('Copying Mockspec.transitions: \n{0:s}'.format(command))
     except:
-        print 'Could not complete {0:s}'.format(command)
+        print('Could not complete {0:s}'.format(command))
 
     command = 'cp ./Mockspec.runpars ./{1:s}/'.format(codeLoc,ion.name)
     try:
         sp.check_call(command, shell=True)
     except:
-        print 'Could not complete {0:s}'.format(command)
+        print('Could not complete {0:s}'.format(command))
 
     # Old way: Copy from controls
     # This overwrites any local changes made, such as to the transitions file to
@@ -445,9 +445,9 @@ def setup_ion_dir(ion, run, codeLoc):
         pass
 
     if numDatFiles!=0:
-        print 'ERROR in setup_ion_dir in files.py'
-        print 'Problem moving .dat file for {0:s}'.format(ion.name)
-        print 'Exitting....'
+        print('ERROR in setup_ion_dir in files.py')
+        print('Problem moving .dat file for {0:s}'.format(ion.name))
+        print('Exitting....')
         sys.exit()
     return ionloc
 
@@ -479,8 +479,8 @@ def setup_inclination_dir(run, ions):
             try:
                 sp.check_call(command, shell=True)
             except sp.CalledProcessError:
-                print 'Error in files.py in setup_inclination_dir'
-                print 'Could not copy {0:s} into {1:s}'.format(boxName, incLoc)
+                print('Error in files.py in setup_inclination_dir')
+                print('Could not copy {0:s} into {1:s}'.format(boxName, incLoc))
                 continue
                 
     # Copy the rest of the control files into the directory
@@ -491,7 +491,7 @@ def setup_inclination_dir(run, ions):
         try:
             sp.check_call(command, shell=True)
         except sp.CalledProcessError:
-            print 'Cannot find {0:s} in setup_inclination_dir'.format(fn)
+            print('Cannot find {0:s} in setup_inclination_dir'.format(fn))
             sys.exit()
 
 
@@ -526,8 +526,8 @@ def setup_galaxy_props(run, sumFile):
     try:
         f = open(sumFile, 'r')
     except IOError:
-        print 'Cannot open {0:s} in setup_galaxy_props'.format(sumFile)
-        print 'Exitting...'
+        print('Cannot open {0:s} in setup_galaxy_props'.format(sumFile))
+        print('Exitting...')
         sys.exit()
     f.readline()
     l = f.readline().split()
@@ -538,7 +538,7 @@ def setup_galaxy_props(run, sumFile):
         mvir = float(l[2])
         rvir = float(l[3])
     else:
-        print 'Could not find {0:s} in {1:s}'.format(run.expn, sumFile)
+        print('Could not find {0:s} in {1:s}'.format(run.expn, sumFile))
         sys.exit()
     f.close()
 
@@ -583,8 +583,8 @@ def rename(run,ion):
         try:
             sp.check_call(command,shell=True,stderr=sp.PIPE)
         except:
-            print 'Error in rename running \n\t{0:s}'.format(command)
-            print '\tCWD: ',os.getcwd()
+            print('Error in rename running \n\t{0:s}'.format(command))
+            print('\tCWD: ',os.getcwd())
        
 
 

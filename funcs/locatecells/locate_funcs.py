@@ -3,8 +3,8 @@ from __future__ import print_function
 import numpy as np
 import sys
 import subprocess as sp
-from ew import findEW 
-import locate_files as lf
+from . import ew as ewFuncs
+from . import locate_files as lf
 
 def vel_limits(linesfile):
     '''
@@ -174,7 +174,7 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
     velocity = specdata[:,1]
     flux = specdata[:,2]
     
-    ew = findEW(wavelength, velocity, flux, negVelLimit, posVelLimit)
+    ew = ewFuncs.findEW(wavelength, velocity, flux, negVelLimit, posVelLimit)
     ewdiff = abs( (ewSysabs - ew) / ewSysabs )
     ew_velcut_lines = ew
 
@@ -259,7 +259,7 @@ def sigcells(linesfile, ewcut, codeLoc, testing=0):
                 velocity = specdata[:,1]
                 flux = specdata[:,2]
                 
-                ew = findEW(wavelength, velocity, flux, negVelLimit, posVelLimit)
+                ew = ewFuncs.findEW(wavelength, velocity, flux, negVelLimit, posVelLimit)
                 ewdiff = abs( (ew_velcut_lines - ew) / ew_velcut_lines)*100
                 f_log.write('{0:d} \t \t{1:0.3f} \t {2:0.3f}\n'.format(
                             len(velcut_z), ew, ewdiff))

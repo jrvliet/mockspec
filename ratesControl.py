@@ -2,7 +2,8 @@
 import subprocess as sp
 import os
 import sys
-from mockspec_funcs import getTransitionInfo
+import files as fi
+#from mockspec_funcs import getTransitionInfo
 
 
 def setup_rates_control(gasfile, expn, ion_list, requiredLoc):
@@ -69,7 +70,8 @@ def setup_rates_outputs(run, ion_list, codeLoc, requiredLoc):
     for ion in ion_list:
         #ionbox = galID+'_GZa'+expn+'.'+ion+'.txt'
         ionbox = '{0:s}_GZa{1:s}.{2:s}.txt'.format(run.galID,run.expn,ion.name)
-        element, Z, excitation = getTransitionInfo(ion.name, codeLoc)
+        element, Z, excitation = fi.get_transition_info(
+                                ion.name, codeLoc)
         line = '{0:<27s} {1:>2s} {2:>2s}\n'.format(ionbox, Z, excitation)
         outfiles.write(line)
     outfiles.close()
@@ -86,8 +88,8 @@ def run_rates(codeLoc):
     try:
         sp.check_call(command, shell=True) 
     except:
-        print '\n\nCould not run rates with \n\t{0:s}'.format(command)
-        print 'Exiting....'
+        print('\n\nCould not run rates with \n\t{0:s}'.format(command))
+        print('Exiting...')
         sys.exit()
 
 

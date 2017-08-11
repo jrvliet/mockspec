@@ -65,8 +65,8 @@ def transition_name(ion,testing=0):
     osc = np.array(osc)
     if len(waves)==0:
         # Transition is not turned on in control file
-        print 'Transitions for {0:s} not found in {1:s}'.format(ion,mockspecFile)
-        print 'Exitting...'
+        print('Transitions for {0:s} not found in {1:s}'.format(ion,mockspecFile))
+        print('Exitting...')
         sys.exit()
     else:
         if testing==1:

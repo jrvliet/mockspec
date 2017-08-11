@@ -21,8 +21,8 @@ def bindata(filename, parameter, binsize, lowerlimit, upperlimit):
         d = pd.read_hdf(filename, 'data')
         data = d[paramter]
     except:
-        print 'ERROR in bindata-logreq.py while accessing:'
-        print '\tFile = {0:s}\n\tParameter = {1:s}'.format(filename, parameter)
+        print('ERROR in bindata-logreq.py while accessing:')
+        print('\tFile = {0:s}\n\tParameter = {1:s}'.format(filename, parameter))
         return 1
 
     numdata = len(data) 

@@ -53,7 +53,7 @@ def phase(ions):
     i+=1
     binrange = [[-8, 1], [2, 8]]
     for ion in ions:
-        print galID, '\t', ion
+        print(galID, '\t', ion)
 
         # Open the data 
         abs_file = './{0:s}/{1:s}.{2:s}.{0:s}.i{3:d}.abs_cells.h5'.format(ion.name,galID,expn,inc)
@@ -64,7 +64,7 @@ def phase(ions):
             lognH = d['log_nH']
             logT = d['log_T']
         except IOError:
-            print 'Error in phase function in nT while reading {0:s}'.format(abs_file)
+            print('Error in phase function in nT while reading {0:s}'.format(abs_file))
             raise
 
         # Bin the data
