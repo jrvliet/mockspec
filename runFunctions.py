@@ -40,7 +40,8 @@ def runCellfinder(codeLoc, numcores):
     cwd = os.getcwd()
     command = codeLoc+'/funcs/cellfinder/cellfinder {0:d} {1:s}'.format(numcores, cwd)
     try:
-        sp.check_call(command, shell=True)
+        #sp.check_call(command, shell=True)
+        sp.run(command, shell=True)
     except Exception as e:
         print('\n\nCould not run cellfinder with:\n\t{0:s}'.format(command))
         print('Exiting...')
@@ -66,7 +67,7 @@ def los7(codeLoc):
         print('\n\nCould not run los7 with :\n\t{0:s}'.format(command))
         print('In ',os.getcwd())
         print('Exiting...')
-        print(e.message,e.args)
+        print(e,e.args)
         sys.exit()
      
 

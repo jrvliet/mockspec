@@ -20,6 +20,7 @@ import itertools as it
 import joblib as jl
 import os
 import numba as nb
+import tempfile
 
 import sys
 
@@ -80,9 +81,13 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
     
     # Bootstrap for errors
     #boot = pd.DataFrame(index=range(tpcfProp.bootNum))
-    boot = np.empty((tpcfProp.bootNum,len(c)))
-    boot[:] = np.nan
+    #boot = np.empty((tpcfProp.bootNum,len(c)))
+    #boot[:] = np.nan
 
+    path = tempfile.mkdtemp()
+    mempath = os.path.join(path,'bootstrap.mmap')
+    boot = np.memmap(mempath,dtype='float',
+                    shape=(tpcfProp.bootNum,len(c)),mode='w+')
     jl.Parallel(n_jobs=run.ncores,verbose=5)(
         jl.delayed(bstrap)(velDiff,bins,labels,boot,i)
         for i in range(tpcfProp.bootNum))
@@ -275,7 +280,8 @@ def seperations(run,rion,pixVel):
         # Get the difference between the pairs
         diff = np.abs(np.diff(comb))
         diff = pd.Series(diff.flatten(),name=col)
-        velDiff = pd.concat([velDiff,diff],axis=1,ignore_index=True)
+        #velDiff = pd.concat([velDiff,diff],axis=1,ignore_index=True)
+        velDiff[col] = diff
 
     return velDiff
 
