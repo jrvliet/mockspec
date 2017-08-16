@@ -7,6 +7,7 @@ abs_cells files to HDF5 format for
 import numpy as np
 import pandas as pd
 import glob
+import gc
 from . import losSummary as ls
 
 def az(phi):
@@ -182,7 +183,8 @@ def box_conversion(filename, header):
 
     # Read in the data
     try:
-        data = np.loadtxt(filename, skiprows=2)
+        #data = np.loadtxt(filename, skiprows=2)
+        data = pd.read_csv(filename,skiprows=2,names=header,sep='\s+')
     except IOError:
         print('Unable to open {0:s} to convert to HDF5'.format(filename))
         print('Exitting')
@@ -190,13 +192,15 @@ def box_conversion(filename, header):
     
     # Write data to HDF file
     try:
-        df = pd.DataFrame(data, columns=header)
+        #df = pd.DataFrame(data, columns=header)
         df.to_hdf(hdf5file, 'data', mode='w')
     except ValueError:
         print('Value Error with converting {0:s} in gasbox_to_hdf5'.format(filename))
         pass
     del df
     del data
+    gc.collect()
+    gc.collect()
 
 
 
