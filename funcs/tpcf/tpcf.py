@@ -26,6 +26,7 @@ import sys
 
 def absorber_tpcf(run,ions,tpcfProp):
     
+    print('\n\n',flush=True)
     # Check if TPCF directory exits
     tpcfDir = '{0:s}/i{1:d}/tpcf/'.format(run.runLoc,int(run.incline))
     if not os.path.isdir(tpcfDir):
@@ -44,7 +45,7 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
     '''
 
     # Set up a dataframe with regabs information
-    #print('Reading Absorbers')
+    print('Reading Absorbers')
     absorbers = regabs(run,ion,tpcfProp)
     absorbersName = '{0:s}/{1:s}_{2:s}_{3:s}_absorbers.csv'.format(
                     tpcfDir,run.galID,run.expn,ion.name)
@@ -52,7 +53,7 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
 
     # Set up a dataframe with pixel velocity information
     # Each column is a seperate absorber
-    #print('Creating pixel velocity')
+    print('Creating pixel velocity')
     pixVel = velocities(run,ion,absorbers)
     pixVelName = '{0:s}/{1:s}_{2:s}_{3:s}_pixVel.csv'.format(
                     tpcfDir,run.galID,run.expn,ion.name)
@@ -60,7 +61,7 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
     
     # Get the seperation between each possible pair of 
     # pixel velocties
-    #print('Calculating velocity seperations')
+    print('Calculating velocity seperations')
     velDiff = seperations(run,ion,pixVel)
     velDiffName = '{0:s}/{1:s}_{2:s}_{3:s}_velDiff.csv'.format(
                     tpcfDir,run.galID,run.expn,ion.name)
@@ -76,7 +77,7 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
     labels = [(bins[i]+bins[i+1])/2. for i in range(nbins)]
 
     # Bin the velDiff dataframe
-    #print('Binning')
+    print('Binning')
     c = cut_bins(velDiff,bins,labels)
     
     # Bootstrap for errors
@@ -178,7 +179,7 @@ def regabs(run,ion,tpcfProp):
         regdf = regdf[absheader]
 
     except IOError:
-        print('No ALL.regabs file for {0:s}'.format(ion.name))
+        print('No ALL.regabs file for {0:s}'.format(ion.name),flush=True)
         regdf = pd.DataFrame(columns=absheader)
         reglos = []
     
@@ -187,7 +188,7 @@ def regabs(run,ion,tpcfProp):
     try:
         alldf = pd.read_hdf(fname,'data')
     except IOError:
-        print('Cannot open {0:s} in regabs in tpcf.py'.format(fname))
+        print('Cannot open {0:s} in regabs in tpcf.py'.format(fname),flush=True)
         sys.exit()
     alldf['region'] = 1.
 
@@ -203,7 +204,7 @@ def regabs(run,ion,tpcfProp):
                  (alldf['azimuthal']<=tpcfProp.azHi) &
                  (~alldf['los'].isin(reglos)))
     print('For ion {0:s}, len(alldf) = {1:d}, len(selection) = {2:d}'.format(
-            ion.name,len(alldf),selection.sum()))
+            ion.name,len(alldf),selection.sum()),flush=True)
     df = pd.concat([regdf,alldf[absheader][selection]],ignore_index=True)
 
     return df
@@ -315,7 +316,7 @@ if __name__ == '__main__':
     fig,axes = plt.subplots(2,2,figsize=(10,10))
     
     for ion,ax in zip(ions,axes.flatten()):
-        print('\nIon = {0:s}'.format(ion))
+        print('\nIon = {0:s}'.format(ion),flush=True)
         ionP.name = ion
 
         c,cMean,cStd = absorber_tpcf(run,ionP,tpcfProp)

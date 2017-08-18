@@ -73,8 +73,8 @@ def locateSigCells(run,ion,codeLoc,testing=0):
     lf.quiet_mockspec()
 
     # Get a list of LOS that have a sysabs file associated with it
-    sysabs_losnum = glob.glob('*los*sysabs')
-    sysabs_losnum.sort()
+    #sysabs_losnum = glob.glob('*los*sysabs')
+    #sysabs_losnum.sort()
     
     if testing==1:
         print('Sysabs files aggregated')
@@ -85,12 +85,22 @@ def locateSigCells(run,ion,codeLoc,testing=0):
     falselog.write('los\tEWsysabs\tv-\tv+\tInitNumCells\n')
 
     # Loop over lines of sight
-    for i in range(0,len(sysabs_losnum)):
+    sysabsFilename = '{0:s}.{1:s}.los{2:s}.sysabs'
+    for i in range(0,run.nlos):
 
-        losnum = sysabs_losnum[i].split('.')[2].split('los')[1]
-        num = int(losnum)
+        #losnum = sysabs_losnum[i].split('.')[2].split('los')[1]
+        num = i+1
+        losnum = '{0:04d}'.format(num)
 
         linesfile = '{0:s}.{1:s}.los{2:s}.lines'.format(run.galID,ion.name,losnum)
+
+        # See if sysabs file exists for this losnum
+        sysabsfname = sysabsFilename.format(run.galID,
+                        ion.name,losnum)
+        try:
+            f = open(sysabsfname,'r')
+        except IOError:
+            continue
 
         # Get the column density of the LOS from the lines file
         logNinitial = lf.linesLogN(linesfile)
