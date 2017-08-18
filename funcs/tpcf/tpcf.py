@@ -23,6 +23,13 @@ import numba as nb
 import tempfile
 
 import sys
+import decimal
+
+def dfSize(df):
+
+    size = df.values.nbytes + df.index.nbytes + df.columns.nbytes
+    x = decimal.Decimal(size)
+    return x.normalize().to_eng_string()
 
 def absorber_tpcf(run,ions,tpcfProp):
     
@@ -45,27 +52,30 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
     '''
 
     # Set up a dataframe with regabs information
-    print('Reading Absorbers')
+    print('Reading Absorbers',flush=True)
     absorbers = regabs(run,ion,tpcfProp)
     absorbersName = '{0:s}/{1:s}_{2:s}_{3:s}_absorbers.csv'.format(
                     tpcfDir,run.galID,run.expn,ion.name)
     absorbers.to_csv(absorbersName,index=False)
+    print('Absorbers Size = {0:s}'.format(dfSize(absorbers)),flush=True)
 
     # Set up a dataframe with pixel velocity information
     # Each column is a seperate absorber
-    print('Creating pixel velocity')
+    print('Creating pixel velocity',flush=True)
     pixVel = velocities(run,ion,absorbers)
     pixVelName = '{0:s}/{1:s}_{2:s}_{3:s}_pixVel.csv'.format(
                     tpcfDir,run.galID,run.expn,ion.name)
     pixVel.to_csv(pixVelName,index=False)
+    print('Pixvel Size = {0:s}'.format(dfSize(pixVel)),flush=True)
     
     # Get the seperation between each possible pair of 
     # pixel velocties
-    print('Calculating velocity seperations')
+    print('Calculating velocity seperations',flush=True)
     velDiff = seperations(run,ion,pixVel)
     velDiffName = '{0:s}/{1:s}_{2:s}_{3:s}_velDiff.csv'.format(
                     tpcfDir,run.galID,run.expn,ion.name)
     velDiff.to_csv(velDiffName,index=False)
+    print('Veldiff Size = {0:s}'.format(dfSize(velDiff)),flush=True)
 
     # Bin the data to create TPCF
     # Set up bins
@@ -77,7 +87,7 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
     labels = [(bins[i]+bins[i+1])/2. for i in range(nbins)]
 
     # Bin the velDiff dataframe
-    print('Binning')
+    print('Binning',flush=True)
     c = cut_bins(velDiff,bins,labels)
     
     # Bootstrap for errors
