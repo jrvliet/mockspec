@@ -29,11 +29,13 @@ import funcs.tpcf.tpcf as cf
 
 def ionLoop(run,ion):
 
-    if sum([run.runLos7,run.runSpecsynth,run.runSysanal,run.runCullabs,run.runLocateCells])==0:
+    if sum([run.runLos7,run.runSpecsynth,run.runSysanal,
+            run.runCullabs,run.runLocateCells])==0:
         print('\t\tNothing to do',flush=True)
         return 1
 
-    ionloc = '{0:s}/i{1:d}/{2:s}'.format(run.runLoc,int(run.incline),ion.name)
+    ionloc = '{0:s}/i{1:d}/{2:s}'.format(run.runLoc,
+                int(run.incline),ion.name)
     print('\n\n\tIon: ', ion.name,flush=True)
     # Move into the ion directory
     os.chdir(ionloc)
@@ -46,7 +48,8 @@ def ionLoop(run,ion):
     #
     #####
     if run.runLos7==1:
-        print('\n\tDetermining cell path length and applying rough cut',flush=True)
+        print('\n\tDetermining cell path length and applying rough cut',
+                flush=True)
         rf.los7(codeLoc)
     else:
         print('\tSkipping los7...',flush=True)
@@ -103,7 +106,8 @@ def ionLoop(run,ion):
         #lc.locateSigCells(galID, expn, ion, sigcellsCut, codeLoc, incline)
 #        lc.sigCells(galID, expn, ion, sigcellsCut, codeLoc)
         
-        # Conversion to HDF5 no longer needed as locatecells outputs an HDF5 file
+        # Conversion to HDF5 no longer needed as locatecells 
+        # outputs an HDF5 file
         # hdf.abscells_to_hdf5(codeLoc,run,ion)
     else:
         print('\tSkipping locatecells...',flush=True)
@@ -139,7 +143,8 @@ print('\tEWCut:        ', run.ewcut,flush=True)
 print('\tSNR:          ', run.snr,flush=True)
 print('\tNCores:       ', run.ncores,flush=True)
 print('\tRun Loc:      ', run.runLoc,flush=True)
-print('\tSigcells Cut: {0:.0%}'.format( run.sigcellsCut/100. ,flush=True),flush=True)
+print('\tSigcells Cut: {0:.0%}'.format( 
+        run.sigcellsCut/100.),flush=True)
 
 print('\nRun Flags:',flush=True)
 print('\tRates:       {0:d}'.format(run.runRates,flush=True),flush=True)

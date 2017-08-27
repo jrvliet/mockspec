@@ -41,6 +41,7 @@ def absorber_tpcf(run,ions,tpcfProp):
         sp.call(command,shell=True)
     
     for ion in ions:
+        print('\nIon = {0:s}'.format(ion.name),flush=True)
         tpcf_ion_loop(run,ion,tpcfProp,tpcfDir)
     #jl.Parallel(n_jobs=run.ncores,verbose=5)(
     #    jl.delayed(tpcf_ion_loop)(run,ion,tpcfProp,tpcfDir) for ion in ions)
@@ -71,22 +72,13 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
     # Get the seperation between each possible pair of 
     # pixel velocties
     print('Calculating velocity seperations',flush=True)
-    velDiff = seperations(run,ion,pixVel)
-    velDiffName = '{0:s}/{1:s}_{2:s}_{3:s}_velDiff.csv'.format(
-                    tpcfDir,run.galID,run.expn,ion.name)
-    velDiff.to_csv(velDiffName,index=False)
-    print('Veldiff Size = {0:s}'.format(dfSize(velDiff)),flush=True)
+    velDiffMem,velDiffShape = seperations(run,ion,pixVel,tpcfDir)
 
     # Bin the data to create TPCF
     # Set up bins
-    maxDiff = velDiff.fillna(0).values.max()
-    binSize = tpcfProp.binSize
-    nbins = int(np.ceil(maxDiff/binSize))
-    endPoint = binSize*(nbins+1)
-    bins = np.arange(0,endPoint,binSize)
-    labels = [(bins[i]+bins[i+1])/2. for i in range(nbins)]
-
-    # Bin the velDiff dataframe
+    print(velDiffMem,velDiffShape,flush=True)
+    bins,labels = velocity_bins(velDiffMem,velDiffShape)
+       # Bin the velDiff dataframe
     print('Binning',flush=True)
     c = cut_bins(velDiff,bins,labels)
     
@@ -115,6 +107,22 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
     outName = '{0:s}/{1:s}_{2:s}_{3:s}_tpcf.csv'.format(
                 tpcfDir,run.galID,run.expn,ion.name)
     tpcfFull.to_csv(outName)
+
+def velocity_bins(velDiffName,velDiffShape):
+    print('velDiffName = {0:s}'.format(velDiffName),flush=True)
+    print('VelDiffShape = ',velDiffShape,flush=True)
+    velDiff = np.memmap(velDiffName,dtype='float',
+                        mode='r',shape=velDiffShape)
+    #maxDiff = velDiff.fillna(0).values.max()
+    maxDiff = velDiff.max()
+    binSize = tpcfProp.binSize
+    nbins = int(np.ceil(maxDiff/binSize))
+    endPoint = binSize*(nbins+1)
+    bins = np.arange(0,endPoint,binSize)
+    labels = [(bins[i]+bins[i+1])/2. for i in range(nbins)]
+    
+    return bins,labels
+
 
 
 @nb.jit
@@ -273,7 +281,7 @@ def velocities(run,ion,absorbers):
     return pixVel
     
 
-def seperations(run,rion,pixVel):
+def seperations(run,ion,pixVel,tpcfDir):
     '''
     Calculates the velocity seperation for all possible combinations
     of pixel velocities in each column of pixVel
@@ -294,7 +302,18 @@ def seperations(run,rion,pixVel):
         #velDiff = pd.concat([velDiff,diff],axis=1,ignore_index=True)
         velDiff[col] = diff
 
-    return velDiff
+    # Convert the velDiff array to memmap object
+    velDiffPath = tempfile.mkdtemp()
+    velMemPath = os.path.join(velDiffPath,'velDiff.mmap')
+    velDiffMem = np.memmap(velMemPath,dtype='float',
+                shape=velDiff.shape,mode='w+')
+    velDiffMem[:] = velDiff.values[:]
+
+    velDiffName = '{0:s}/{1:s}_{2:s}_{3:s}_velDiff.csv'.format(
+                    tpcfDir,run.galID,run.expn,ion.name)
+    velDiff.to_csv(velDiffName,index=False)
+    print('Veldiff Size = {0:s}'.format(dfSize(velDiff)),flush=True)
+    return velDiffMem,velDiff.shape
 
 
 
@@ -302,46 +321,52 @@ def seperations(run,rion,pixVel):
 if __name__ == '__main__':
 
     from testclass import *
+    from files import *
     import matplotlib.pyplot as plt
 
     run = runProps()
-    run.galID = 'D9o2'
-    run.expn = '1.002'
+    run.galID = 'vela2b-25'
+    run.expn = '0.490'
     run.runLoc = '/Users/jacob/research/dwarfs/D9o2/a1.002/'
     run.runLoc = '/mnt/cluster/abs/cgm/dwarfs/D9o2/a1.002/'
+    run.runLoc = '/home/sims/vela2b/vela25/a0.490/'
     run.incline = 90
-    
 
     tpcfProp = tpcfProps()
     tpcfProp.ewLo = 0.
-    tpcfProp.ewHi = 5.
+    tpcfProp.ewHi = 10.
     tpcfProp.dLo = 5.0
     tpcfProp.dHi = 200.
     tpcfProp.fraction = 0.15
     tpcfProp.binSize = 10.
-    tpcfProp.bootNum = 1000
+    tpcfProp.bootNum = 100
 
-    ionP = ionProps()
     ions = 'HI MgII CIV OVI'.split()
-    fig,axes = plt.subplots(2,2,figsize=(10,10))
-    
-    for ion,ax in zip(ions,axes.flatten()):
-        print('\nIon = {0:s}'.format(ion),flush=True)
+    ionPs  = []
+    for ion in ions:
+        ionP = ionProps()
         ionP.name = ion
-
-        c,cMean,cStd = absorber_tpcf(run,ionP,tpcfProp)
-
-        ax.step(c.index,c,marker='s',color='b',label='Full',where='mid')
-        ax.step(c.index,cMean,marker='o',color='g',label='Mean',where='mid')
-        ax.step(c.index,cMean-cStd,color='r',label='Err Down',where='mid')
-        ax.step(c.index,cMean+cStd,color='r',label='Err Up',where='mid')
-        ax.legend(loc='upper right',frameon=True)
-        
-        ax.set_title(ion)
+        ionPs.append(ionP)
     
-    fig.tight_layout()
-    fig.savefig('tpcf_bin.png',bbox_inches='tight',dpi=300)
-    plt.close(fig)
+    c,cMean,cStd = absorber_tpcf(run,ionPs,tpcfProp)
+
+#    fig,axes = plt.subplots(2,2,figsize=(10,10))
+#    for ion,ax in zip(ions,axes.flatten()):
+#        print('\nIon = {0:s}'.format(ion),flush=True)
+#        ionP.name = ion
+#
+#
+#        ax.step(c.index,c,marker='s',color='b',label='Full',where='mid')
+#        ax.step(c.index,cMean,marker='o',color='g',label='Mean',where='mid')
+#        ax.step(c.index,cMean-cStd,color='r',label='Err Down',where='mid')
+#        ax.step(c.index,cMean+cStd,color='r',label='Err Up',where='mid')
+#        ax.legend(loc='upper right',frameon=True)
+#        
+#        ax.set_title(ion)
+    
+#    fig.tight_layout()
+#    fig.savefig('tpcf_bin.png',bbox_inches='tight',dpi=300)
+#    plt.close(fig)
 
        
 
