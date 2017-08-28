@@ -80,7 +80,7 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
     bins,labels = velocity_bins(velDiffMem,velDiffShape)
        # Bin the velDiff dataframe
     print('Binning',flush=True)
-    c = cut_bins(velDiff,bins,labels)
+    c = cut_bins(velDiffMem,velDiffShape,bins,labels)
     
     # Bootstrap for errors
     #boot = pd.DataFrame(index=range(tpcfProp.bootNum))
@@ -109,12 +109,14 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
     tpcfFull.to_csv(outName)
 
 def velocity_bins(velDiffName,velDiffShape):
-    print('velDiffName = {0:s}'.format(velDiffName),flush=True)
+    print('velDiffName = ',velDiffName,flush=True)
     print('VelDiffShape = ',velDiffShape,flush=True)
     velDiff = np.memmap(velDiffName,dtype='float',
                         mode='r',shape=velDiffShape)
     #maxDiff = velDiff.fillna(0).values.max()
-    maxDiff = velDiff.max()
+    #maxDiff = velDiff.max()
+    maxDiff = np.nanmax(velDiff)
+    print('maxDiff = ',maxDiff)
     binSize = tpcfProp.binSize
     nbins = int(np.ceil(maxDiff/binSize))
     endPoint = binSize*(nbins+1)
@@ -128,8 +130,8 @@ def velocity_bins(velDiffName,velDiffShape):
 @nb.jit
 def bstrap(velDiff,bins,labels,boot,i):
     sample = velDiff.sample(frac=1.,replace=True)
-    b = cut_bins(sample,bins,labels)
-    boot[i,:len(b)] = b.values
+    b = cut_bins(velDiffMem,velDiffShape,bins,labels)
+    boot[i,:len(b)] = b
 
 
 
@@ -162,10 +164,15 @@ def bootstrap(bins,labels,tpcfProp,velDiff):
     return df.mean(axis=1),df.std(axis=1)
         
 
-def cut_bins(sample,bins,labels):
-    velBins = sample.apply(lambda x: 
-                pd.cut(x,bins,labels=labels,include_lowest=True))
-    c = pd.Series(velBins.values.flatten()).value_counts().sort_index()
+def cut_bins(velDiffMem,velDiffShape,bins,labels):
+    sample = np.memmap(velDiffMem,dtype='float',
+                        mode='r',shape=velDiffShape)
+    flat = sample.flatten()
+    flat = flat[~np.isnan(flat)]
+    c = np.sort(np.bincount(np.digitize(flat,bins)))
+    #velBins = sample.apply(lambda x: 
+    #            pd.cut(x,bins,labels=labels,include_lowest=True))
+    #c = pd.Series(velBins.values.flatten()).value_counts().sort_index()
     c = c/c.sum()
     return c
 
@@ -307,13 +314,14 @@ def seperations(run,ion,pixVel,tpcfDir):
     velMemPath = os.path.join(velDiffPath,'velDiff.mmap')
     velDiffMem = np.memmap(velMemPath,dtype='float',
                 shape=velDiff.shape,mode='w+')
+    print('velDiffMem Location: ',velMemPath,flush=True)
     velDiffMem[:] = velDiff.values[:]
 
     velDiffName = '{0:s}/{1:s}_{2:s}_{3:s}_velDiff.csv'.format(
                     tpcfDir,run.galID,run.expn,ion.name)
     velDiff.to_csv(velDiffName,index=False)
     print('Veldiff Size = {0:s}'.format(dfSize(velDiff)),flush=True)
-    return velDiffMem,velDiff.shape
+    return velMemPath,velDiff.shape
 
 
 
