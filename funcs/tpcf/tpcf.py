@@ -43,6 +43,7 @@ def absorber_tpcf(run,ions,tpcfProp):
     for ion in ions:
         print('\nIon = {0:s}'.format(ion.name),flush=True)
         tpcf_ion_loop(run,ion,tpcfProp,tpcfDir)
+    print('\n\nDone with absorber_tpcf function',flush=True)
     #jl.Parallel(n_jobs=run.ncores,verbose=5)(
     #    jl.delayed(tpcf_ion_loop)(run,ion,tpcfProp,tpcfDir) for ion in ions)
 
@@ -87,19 +88,26 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
     #boot = np.empty((tpcfProp.bootNum,len(c)))
     #boot[:] = np.nan
 
+    print('Bootstrapping',flush=True)
     path = tempfile.mkdtemp()
     mempath = os.path.join(path,'bootstrap.mmap')
     boot = np.memmap(mempath,dtype='float',
                     shape=(tpcfProp.bootNum,len(c)),mode='w+')
     jl.Parallel(n_jobs=run.ncores,verbose=5)(
-        jl.delayed(bstrap)(velDiff,bins,labels,boot,i)
+        jl.delayed(bstrap)(velDiffMem,velDiffShape,bins,labels,boot,i)
         for i in range(tpcfProp.bootNum))
     
-    tpcfFull = pd.DataFrame(index=c.index)
+    # Generate the dataframe containing the final results
+    #tpcfFull = pd.DataFrame(index=c.index)
+    tpcfFull = pd.DataFrame(index=labels)
     tpcfFull.index.name = 'Velocity'
+    print('\n\nShape of tpcfFull = ',tpcfFull.shape,flush=True)
+    print('Length of c = ',len(c),flush=True)
     tpcfFull['Full'] = c
     m = np.nanmean(boot,axis=0)
     s = np.nanstd(boot,axis=0)
+    print('Mean = ',m,flush=True)
+    print('Std = ',s,flush=True)
     tpcfFull['Mean'] = np.pad(m,(0,len(c)-len(m)),'constant')
     tpcfFull['Std'] = np.pad(s,(0,len(c)-len(s)),'constant')
 
@@ -107,6 +115,7 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
     outName = '{0:s}/{1:s}_{2:s}_{3:s}_tpcf.csv'.format(
                 tpcfDir,run.galID,run.expn,ion.name)
     tpcfFull.to_csv(outName)
+    print('Finished ion loop for {0:s}'.format(ion.name),flush=True)
 
 def velocity_bins(velDiffName,velDiffShape):
     print('velDiffName = ',velDiffName,flush=True)
@@ -122,15 +131,21 @@ def velocity_bins(velDiffName,velDiffShape):
     endPoint = binSize*(nbins+1)
     bins = np.arange(0,endPoint,binSize)
     labels = [(bins[i]+bins[i+1])/2. for i in range(nbins)]
+    lastLabel = labels[-1]+(labels[1]-labels[0])
+    labels.append(lastLabel)
+    print('\n\nBins : \n\tNumber = {0:d}\n\tLen(bins) = {1:d}\n\tLen(labels) = {2:d}'.format(
+            nbins,len(bins),len(labels)),flush=True)
     
     return bins,labels
 
 
 
 @nb.jit
-def bstrap(velDiff,bins,labels,boot,i):
-    sample = velDiff.sample(frac=1.,replace=True)
-    b = cut_bins(velDiffMem,velDiffShape,bins,labels)
+def bstrap(velDiffMem,velDiffShape,bins,labels,boot,i):
+    
+    #sample = velDiff.sample(frac=1.,replace=True)
+    resample = 1
+    b = cut_bins(velDiffMem,velDiffShape,bins,labels,resample)
     boot[i,:len(b)] = b
 
 
@@ -164,12 +179,17 @@ def bootstrap(bins,labels,tpcfProp,velDiff):
     return df.mean(axis=1),df.std(axis=1)
         
 
-def cut_bins(velDiffMem,velDiffShape,bins,labels):
+def cut_bins(velDiffMem,velDiffShape,bins,labels,resample=0):
     sample = np.memmap(velDiffMem,dtype='float',
                         mode='r',shape=velDiffShape)
+    if resample!=0:
+        sample = sample[:,np.random.choice(velDiffShape[1],
+                                           velDiffShape[1],
+                                           replace=True)]
+        
     flat = sample.flatten()
     flat = flat[~np.isnan(flat)]
-    c = np.sort(np.bincount(np.digitize(flat,bins)))
+    c = np.sort(np.bincount(np.digitize(flat,bins)))[::-1]
     #velBins = sample.apply(lambda x: 
     #            pd.cut(x,bins,labels=labels,include_lowest=True))
     #c = pd.Series(velBins.values.flatten()).value_counts().sort_index()
@@ -336,8 +356,8 @@ if __name__ == '__main__':
     run.galID = 'vela2b-25'
     run.expn = '0.490'
     run.runLoc = '/Users/jacob/research/dwarfs/D9o2/a1.002/'
-    run.runLoc = '/mnt/cluster/abs/cgm/dwarfs/D9o2/a1.002/'
-    run.runLoc = '/home/sims/vela2b/vela25/a0.490/'
+    run.runLoc = '/mnt/cluster/abs/cgm/vela2b/vela25/a0.490/'
+    #run.runLoc = '/home/sims/vela2b/vela25/a0.490/'
     run.incline = 90
 
     tpcfProp = tpcfProps()
@@ -346,8 +366,8 @@ if __name__ == '__main__':
     tpcfProp.dLo = 5.0
     tpcfProp.dHi = 200.
     tpcfProp.fraction = 0.15
-    tpcfProp.binSize = 10.
-    tpcfProp.bootNum = 100
+    tpcfProp.binSize = 20.
+    tpcfProp.bootNum = 1000
 
     ions = 'HI MgII CIV OVI'.split()
     ionPs  = []
@@ -356,7 +376,8 @@ if __name__ == '__main__':
         ionP.name = ion
         ionPs.append(ionP)
     
-    c,cMean,cStd = absorber_tpcf(run,ionPs,tpcfProp)
+    absorber_tpcf(run,ionPs,tpcfProp)
+    #c,cMean,cStd = absorber_tpcf(run,ionPs,tpcfProp)
 
 #    fig,axes = plt.subplots(2,2,figsize=(10,10))
 #    for ion,ax in zip(ions,axes.flatten()):
