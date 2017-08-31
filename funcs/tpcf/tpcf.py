@@ -25,6 +25,25 @@ import tempfile
 import sys
 import decimal
 
+
+class tpcfProps(object):
+    
+    '''
+    Class to decribe settings for TPCF
+    '''
+
+    def __init__ (self):
+
+        self.ewLo = 0.
+        self.ewHi = 10.
+        self.dLo = 0.
+        self.dHi = 200.
+        self.azLo = 0.
+        self.azHi = 90.
+        self.binSize = 10.
+        self.bootNum = 1000
+
+
 def dfSize(df):
 
     size = df.values.nbytes + df.index.nbytes + df.columns.nbytes
@@ -78,7 +97,7 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
     # Bin the data to create TPCF
     # Set up bins
     print(velDiffMem,velDiffShape,flush=True)
-    bins,labels = velocity_bins(velDiffMem,velDiffShape)
+    bins,labels = velocity_bins(velDiffMem,velDiffShape,tpcfProp)
        # Bin the velDiff dataframe
     print('Binning',flush=True)
     c = cut_bins(velDiffMem,velDiffShape,bins,labels)
@@ -117,7 +136,7 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
     tpcfFull.to_csv(outName)
     print('Finished ion loop for {0:s}'.format(ion.name),flush=True)
 
-def velocity_bins(velDiffName,velDiffShape):
+def velocity_bins(velDiffName,velDiffShape,tpcfProp):
     print('velDiffName = ',velDiffName,flush=True)
     print('VelDiffShape = ',velDiffShape,flush=True)
     velDiff = np.memmap(velDiffName,dtype='float',
