@@ -8,6 +8,7 @@
 from __future__ import print_function
 import numpy as np
 import matplotlib.pyplot as plt
+matplotlib.use('agg')
 import pandas as pd
 import subprocess as sp
 import os
