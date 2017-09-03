@@ -80,10 +80,10 @@ def regabs_to_hdf5(run,ion,codeLoc):
     # Get the name of the file 
     allfile = '{0:s}/i{1:d}/{2:s}/{3:s}.{2:s}.a{4:s}.ALL.regabs'.format(
                 run.runLoc,int(run.incline),ion.name,run.galID,run.expn)
-    #allfile = (glob.glob('*.ALL.regabs'))[0]
 
     # Create the name of the HDF5 file
     hdf5file = allfile + '.h5'
+    hdf5file = hdf5file.replace('ALL','i{0:d}.ALL'.format(int(run.incline)))
 
     # Get the header
     header = ['los','D','reg','zabs','v-','v+','EW_r','dEW_r','DR',
@@ -101,7 +101,7 @@ def regabs_to_hdf5(run,ion,codeLoc):
     
     # Read in lines.info to get the azimuthal angle
     linesfile = 'lines.info'
-    angle = np.loadtxt(linesfile, skiprows=2, usecols=(2,), unpack=True)
+    phi = np.loadtxt(linesfile, skiprows=2, usecols=(2,), unpack=True)
     
     # Insert into the sysabs data file
     #data = np.insert(data, 2, phi, axis=1)
@@ -112,6 +112,7 @@ def regabs_to_hdf5(run,ion,codeLoc):
         los = int(data['los'].iloc[i])
         phi.append(angle[los-1])
     data['phi'] = phi
+    data['azimuthal'] = data['phi'].apply(az)
     
     # WRite data to HDF file
     #df = pd.DataFrame(data, columns=header)

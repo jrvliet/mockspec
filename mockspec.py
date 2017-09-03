@@ -260,12 +260,14 @@ jl.Parallel(n_jobs=run.ncores,verbose=5)(
 #  Add inclination angle to filenames
 #
 #####
-if run.runCullabs==1 or run.runLocateCells==1:
-    for ion in ions:
-        print('\n\t Renaming files...',flush=True)
-        fi.rename(run,ion)
-else:
-    print('What was the point...',flush=True)
+# This is no longer needed as the cullabs functions output
+# files with the correct names
+#if run.runCullabs==1 or run.runLocateCells==1:
+#    for ion in ions:
+#        print('\n\t Renaming files...',flush=True)
+#        fi.rename(run,ion)
+#else:
+#    print('What was the point...',flush=True)
 
 # Generate summary files
 

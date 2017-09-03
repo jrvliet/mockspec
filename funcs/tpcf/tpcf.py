@@ -235,43 +235,56 @@ def regabs(run,ion,tpcfProp):
     
     absheader = 'los D phi region zabs v- v+ EW_r'.split()
 
+    # Try to read in regabs ALL file
     fname = '{0:s}/i{1:d}/{2:s}/{3:s}.{2:s}.a{4:s}.i{1:d}.ALL.regabs.h5'.format(
             run.runLoc,int(run.incline),ion.name,run.galID,run.expn)
     try:
-        regdf = pd.read_hdf(fname,'data')
-        reglos = regdf['los'].unique()
-        regdf = regdf[absheader]
-
+        regabs = pd.read_hdf(fname,'data')
+        reglos = regabs['los'].unique()
+        regabs = regdf[absheader]
+        if 'azimuthal' not in regabs.columns:
+            regabs['azimuthal'] = regabs['phi'].apply(az)
+        noregabs = 0
     except IOError:
         print('No ALL.regabs file for {0:s}'.format(ion.name),flush=True)
-        regdf = pd.DataFrame(columns=absheader)
-        reglos = []
+        regabs = pd.DataFrame(columns=absheader)
+        regabs = []
+        noregabs = 1
     
+    # Try to read in sysabs ALL file
     fname = '{0:s}/i{1:d}/{2:s}/{3:s}.{2:s}.a{4:s}.i{1:d}.ALL.sysabs.h5'.format(
             run.runLoc,int(run.incline),ion.name,run.galID,run.expn)
     try:
-        alldf = pd.read_hdf(fname,'data')
+        sysabs = pd.read_hdf(fname,'data')
+        sysabs['region'] = 1.
+        if 'azimuthal' not in sysabs.columns:
+            sysabs['azimuthal'] = sysabs['phi'].apply(az)
     except IOError:
         print('Cannot open {0:s} in regabs in tpcf.py'.format(fname),flush=True)
         sys.exit()
-    alldf['region'] = 1.
 
-    if 'azimuthal' not in alldf.columns:
-        alldf['azimuthal'] = alldf['phi'].apply(az)
     
-    selection = ((alldf['EW_r']>=tpcfProp.ewLo) & 
-                 (alldf['EW_r']<=tpcfProp.ewHi) &
-                 (alldf['EW_r']>0) &
-                 (alldf['D']>=tpcfProp.dLo) & 
-                 (alldf['D']<=tpcfProp.dHi) &
-                 (alldf['azimuthal']>=tpcfProp.azLo) & 
-                 (alldf['azimuthal']<=tpcfProp.azHi) &
-                 (~alldf['los'].isin(reglos)))
+    if noregabs==0:
+        nonRegSysabs = sysabs[~sysabs['los'].isin(regabs['los'])]
+        full = pd.concat([nonRegSysabs,regabs],ignore_index=True)
+        full = full.sort_values('los')
+        full.reset_index(drop=True,inplace=True)
+    else:
+        full = sysabs
+
+    selection = ((full['EW_r']>=tpcfProp.ewLo) & 
+                 (full['EW_r']<=tpcfProp.ewHi) &
+                 (full['EW_r']>0) &
+                 (full['D']>=tpcfProp.dLo) & 
+                 (full['D']<=tpcfProp.dHi) &
+                 (full['azimuthal']>=tpcfProp.azLo) & 
+                 (full['azimuthal']<=tpcfProp.azHi) &
+                 (~full['los'].isin(reglos)))
     print('For ion {0:s}, len(alldf) = {1:d}, len(selection) = {2:d}'.format(
             ion.name,len(alldf),selection.sum()),flush=True)
-    df = pd.concat([regdf,alldf[absheader][selection]],ignore_index=True)
+    #df = pd.concat([regdf,alldf[absheader][selection]],ignore_index=True)
 
-    return df
+    return full[absheader][selection]
 
 def velocities(run,ion,absorbers):
 
