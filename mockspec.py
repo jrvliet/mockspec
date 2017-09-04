@@ -13,6 +13,8 @@ import os
 import subprocess as sp
 import sys
 import joblib as jl
+import time 
+import datetime as dt
 
 # Code specific libraries
 import files as fi
@@ -120,6 +122,7 @@ def ionLoop(run,ion):
 
 
 
+startTime = time.time()
 
 # Get the location where the code lives
 pathname = os.path.dirname(sys.argv[0])
@@ -192,6 +195,8 @@ if run.runRates==1:
 else:
     print('Skipping rates',flush=True)
 
+print('\n\nTime elapse = {0:s}\n'.format(str(dt.timedelta(
+        seconds=time.time()-startTime))),flush=True)
 
 
 ##### 
@@ -217,6 +222,8 @@ if run.runGenLOS==1:
 else:
     print('Skipping genLOS...',flush=True)
 
+print('\n\nTime elapse = {0:s}\n'.format(str(dt.timedelta(
+        seconds=time.time()-startTime))),flush=True)
 ##### 
 #  
 #  Run lines of sight through box with cellfinder
@@ -228,6 +235,8 @@ if run.runCellfinder==1:
 else: 
     print('Skipping cellfinder...',flush=True)
 
+print('\n\nTime elapse = {0:s}\n'.format(str(dt.timedelta(
+        seconds=time.time()-startTime))),flush=True)
 
 ##### 
 #  
@@ -240,9 +249,14 @@ if run.runIdcells==1:
 else:
     print('Skipping IDcells...',flush=True)
 
+print('\n\nTime elapse = {0:s}\n'.format(str(dt.timedelta(
+        seconds=time.time()-startTime))),flush=True)
+
 # Setup Mockspec 
 fi.setup_mockspec(ions, run, requiredLoc)
 
+print('\n\nTime elapse = {0:s}\n'.format(str(dt.timedelta(
+        seconds=time.time()-startTime))),flush=True)
 
 
 # Setup the ion directory
@@ -250,6 +264,8 @@ fi.setup_mockspec(ions, run, requiredLoc)
 for ion in ions:
     ionloc = fi.setup_ion_dir(ion, run, codeLoc) 
 
+print('\n\nTime elapse = {0:s}\n'.format(str(dt.timedelta(
+        seconds=time.time()-startTime))),flush=True)
 # Start looping over ions
 jl.Parallel(n_jobs=run.ncores,verbose=5)(
         jl.delayed(ionLoop)(run,ion) for ion in ions)
@@ -282,6 +298,8 @@ if run.runTPCF==1:
     print('\n\nGenerating TPCFs',flush=True)
     cf.absorber_tpcf(run,ions,tpcfProp)
 
+print('\n\nTime elapse = {0:s}\n'.format(str(dt.timedelta(
+        seconds=time.time()-startTime))),flush=True)
 
 # Create basic plots
 if run.runPlotting==1:

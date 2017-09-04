@@ -13,7 +13,8 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-matplotlib.use('agg')
+import matplotlib as mpl
+mpl.use('agg')
 import math
 import sys
 import pandas as pd

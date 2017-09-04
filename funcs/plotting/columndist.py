@@ -10,7 +10,8 @@ import numpy as np
 import pandas as pd
 import scipy.optimize as so
 import matplotlib.pyplot as plt
-matplotlib.use('agg')
+import matplotlib as mpl
+mpl.use('agg')
 import subprocess as sp
 import os
 import sys

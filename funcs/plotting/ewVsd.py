@@ -3,7 +3,8 @@
 
 import sys
 import matplotlib.pyplot as plt
-matplotlib.use('agg')
+import matplotlib as mpl
+mpl.use('agg')
 import numpy as np
 import pandas as pd
 import warnings
