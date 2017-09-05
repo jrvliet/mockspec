@@ -87,7 +87,7 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
     pixVelName = '{0:s}/{1:s}_{2:s}_{3:s}_pixVel.csv'.format(
                     tpcfDir,run.galID,run.expn,ion.name)
     pixVel.to_csv(pixVelName,index=False)
-    print('Pixvel Size = {0:s}'.format(dfSize(pixVel)),flush=True)
+    #print('Pixvel Size = {0:s}'.format(dfSize(pixVel)),flush=True)
     
     # Get the seperation between each possible pair of 
     # pixel velocties
@@ -120,13 +120,13 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
     #tpcfFull = pd.DataFrame(index=c.index)
     tpcfFull = pd.DataFrame(index=labels)
     tpcfFull.index.name = 'Velocity'
-    print('\n\nShape of tpcfFull = ',tpcfFull.shape,flush=True)
-    print('Length of c = ',len(c),flush=True)
+    #print('\n\nShape of tpcfFull = ',tpcfFull.shape,flush=True)
+    #print('Length of c = ',len(c),flush=True)
     tpcfFull['Full'] = c
     m = np.nanmean(boot,axis=0)
     s = np.nanstd(boot,axis=0)
-    print('Mean = ',m,flush=True)
-    print('Std = ',s,flush=True)
+    #print('Mean = ',m,flush=True)
+    #print('Std = ',s,flush=True)
     tpcfFull['Mean'] = np.pad(m,(0,len(c)-len(m)),'constant')
     tpcfFull['Std'] = np.pad(s,(0,len(c)-len(s)),'constant')
 
@@ -137,14 +137,14 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
     print('Finished ion loop for {0:s}'.format(ion.name),flush=True)
 
 def velocity_bins(velDiffName,velDiffShape,tpcfProp):
-    print('velDiffName = ',velDiffName,flush=True)
-    print('VelDiffShape = ',velDiffShape,flush=True)
+    #print('velDiffName = ',velDiffName,flush=True)
+    #print('VelDiffShape = ',velDiffShape,flush=True)
     velDiff = np.memmap(velDiffName,dtype='float',
                         mode='r',shape=velDiffShape)
     #maxDiff = velDiff.fillna(0).values.max()
     #maxDiff = velDiff.max()
     maxDiff = np.nanmax(velDiff)
-    print('maxDiff = ',maxDiff)
+    #print('maxDiff = ',maxDiff)
     binSize = tpcfProp.binSize
     nbins = int(np.ceil(maxDiff/binSize))
     endPoint = binSize*(nbins+1)
@@ -152,8 +152,8 @@ def velocity_bins(velDiffName,velDiffShape,tpcfProp):
     labels = [(bins[i]+bins[i+1])/2. for i in range(nbins)]
     lastLabel = labels[-1]+(labels[1]-labels[0])
     labels.append(lastLabel)
-    print('\n\nBins : \n\tNumber = {0:d}\n\tLen(bins) = {1:d}\n\tLen(labels) = {2:d}'.format(
-            nbins,len(bins),len(labels)),flush=True)
+    #print('\n\nBins : \n\tNumber = {0:d}\n\tLen(bins) = {1:d}\n\tLen(labels) = {2:d}'.format(
+    #        nbins,len(bins),len(labels)),flush=True)
     
     return bins,labels
 
@@ -233,7 +233,7 @@ def regabs(run,ion,tpcfProp):
     Returns a dataframe
     '''
     
-    absheader = 'los D phi region zabs v- v+ EW_r'.split()
+    absheader = 'los D phi reg zabs v- v+ EW_r'.split()
 
     # Try to read in regabs ALL file
     fname = '{0:s}/i{1:d}/{2:s}/{3:s}.{2:s}.a{4:s}.i{1:d}.ALL.regabs.h5'.format(
@@ -241,7 +241,8 @@ def regabs(run,ion,tpcfProp):
     try:
         regabs = pd.read_hdf(fname,'data')
         reglos = regabs['los'].unique()
-        regabs = regdf[absheader]
+        #print(regabs.columns,flush=True)
+        regabs = regabs[absheader]
         if 'azimuthal' not in regabs.columns:
             regabs['azimuthal'] = regabs['phi'].apply(az)
         noregabs = 0
@@ -249,6 +250,7 @@ def regabs(run,ion,tpcfProp):
         print('No ALL.regabs file for {0:s}'.format(ion.name),flush=True)
         regabs = pd.DataFrame(columns=absheader)
         regabs = []
+        reglos = []
         noregabs = 1
     
     # Try to read in sysabs ALL file
@@ -281,7 +283,7 @@ def regabs(run,ion,tpcfProp):
                  (full['azimuthal']<=tpcfProp.azHi) &
                  (~full['los'].isin(reglos)))
     print('For ion {0:s}, len(alldf) = {1:d}, len(selection) = {2:d}'.format(
-            ion.name,len(alldf),selection.sum()),flush=True)
+            ion.name,len(full),selection.sum()),flush=True)
     #df = pd.concat([regdf,alldf[absheader][selection]],ignore_index=True)
 
     return full[absheader][selection]
