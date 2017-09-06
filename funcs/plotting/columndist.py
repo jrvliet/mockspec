@@ -9,9 +9,9 @@ from __future__ import print_function
 import numpy as np
 import pandas as pd
 import scipy.optimize as so
-import matplotlib.pyplot as plt
 import matplotlib as mpl
 mpl.use('agg')
+import matplotlib.pyplot as plt
 import subprocess as sp
 import os
 import sys

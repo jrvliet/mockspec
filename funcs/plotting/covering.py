@@ -25,9 +25,9 @@ import numpy as np
 import pandas as pd
 import scipy.special as sc
 import scipy.optimize as opt
-import matplotlib.pyplot as plt
 import matplotlib as mpl
 mpl.use('agg')
+import matplotlib.pyplot as plt
 import sys
 import math
 import matplotlib

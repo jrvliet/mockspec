@@ -12,9 +12,9 @@
 '''
 
 import numpy as np
-import matplotlib.pyplot as plt
 import matplotlib as mpl
 mpl.use('agg')
+import matplotlib.pyplot as plt
 import math
 import sys
 import pandas as pd
