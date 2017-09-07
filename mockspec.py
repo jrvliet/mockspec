@@ -321,5 +321,4 @@ if run.runPlotting==1:
     print('\n\nGenerating plots',flush=True)
     ac.make_plots(ions)
 fi.record_time(timef,timeStr,'Done',time.time(),startTime)
-timef.close()
 

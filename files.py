@@ -593,6 +593,7 @@ def timing_setup(startTime,run,ions,tpcfProp):
     Generates a file containing the timing of the run
     '''
 
+    import os
     import time
     import itertools as it
     import datetime as dt
@@ -660,9 +661,10 @@ def timing_setup(startTime,run,ions,tpcfProp):
     line = ['Starting',dateString,timeString,elapsed]
     f.write(timestring.format(line))
 
-    fullFileName = f.name
+    fullFileName = os.path.realpath(f.name)
     f.close()
     
+    print(fullFileName,flush=True)
     return fullFileName,timestring
 
 
