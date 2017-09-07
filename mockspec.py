@@ -162,6 +162,9 @@ print('\tLocateCells: {0:d}'.format(run.runLocateCells,flush=True),flush=True)
 print('\tPlotting:    {0:d}'.format(run.runPlotting,flush=True),flush=True)
 sys.stdout.flush()
 
+# Setup timing file
+timef,timeStr = fi.timing_setup(startTime,run,ions,tpcfProp)
+
 # Test the summary location
 sumFile = '{0:s}/rotmat_a{1:s}.txt'.format(os.getcwd(), run.expn)
 
@@ -195,6 +198,7 @@ if run.runRates==1:
 else:
     print('Skipping rates',flush=True)
 
+fi.record_time(timef,timeStr,'Rates',time.time(),startTime)
 print('\n\nTime elapse = {0:s}\n'.format(str(dt.timedelta(
         seconds=time.time()-startTime))),flush=True)
 
@@ -209,6 +213,7 @@ mainLoc = os.getcwd()
 incLoc = fi.setup_inclination_dir(run, ions)
 os.chdir(incLoc)
 
+fi.record_time(timef,timeStr,'Inclination Dir',time.time(),startTime)
 
 
 ##### 
@@ -221,9 +226,10 @@ if run.runGenLOS==1:
     rf.genLOS( codeLoc, mainLoc, run )
 else:
     print('Skipping genLOS...',flush=True)
-
+fi.record_time(timef,timeStr,'genLOS',time.time(),startTime)
 print('\n\nTime elapse = {0:s}\n'.format(str(dt.timedelta(
         seconds=time.time()-startTime))),flush=True)
+
 ##### 
 #  
 #  Run lines of sight through box with cellfinder
@@ -234,7 +240,7 @@ if run.runCellfinder==1:
     rf.runCellfinder(codeLoc, run.ncores)
 else: 
     print('Skipping cellfinder...',flush=True)
-
+fi.record_time(timef,timeStr,'cellfinder',time.time(),startTime)
 print('\n\nTime elapse = {0:s}\n'.format(str(dt.timedelta(
         seconds=time.time()-startTime))),flush=True)
 
@@ -248,13 +254,13 @@ if run.runIdcells==1:
     ic.idcells(run, ions, codeLoc)
 else:
     print('Skipping IDcells...',flush=True)
-
+fi.record_time(timef,timeStr,'idCells',time.time(),startTime)
 print('\n\nTime elapse = {0:s}\n'.format(str(dt.timedelta(
         seconds=time.time()-startTime))),flush=True)
 
 # Setup Mockspec 
 fi.setup_mockspec(ions, run, requiredLoc)
-
+fi.record_time(timef,timeStr,'setup mockspec',time.time(),startTime)
 print('\n\nTime elapse = {0:s}\n'.format(str(dt.timedelta(
         seconds=time.time()-startTime))),flush=True)
 
@@ -263,12 +269,15 @@ print('\n\nTime elapse = {0:s}\n'.format(str(dt.timedelta(
 #ionloc = fi.setup_ion_dir(ion, galID, expn, codeLoc) 
 for ion in ions:
     ionloc = fi.setup_ion_dir(ion, run, codeLoc) 
-
+fi.record_time(timef,timeStr,'ion dir',time.time(),startTime)
 print('\n\nTime elapse = {0:s}\n'.format(str(dt.timedelta(
         seconds=time.time()-startTime))),flush=True)
+
+
 # Start looping over ions
 jl.Parallel(n_jobs=run.ncores,verbose=5)(
         jl.delayed(ionLoop)(run,ion) for ion in ions)
+fi.record_time(timef,timeStr,'ion loop',time.time(),startTime)
 print('\n\nTime elapse = {0:s}\n'.format(str(dt.timedelta(
         seconds=time.time()-startTime))),flush=True)
     
@@ -294,13 +303,15 @@ run.runSummaries = 0
 if run.runSummaries==1:
     print('\n\nGenerating summary files',flush=True)
     hdf.genSummaries(run, ions)    
-
+fi.record_time(timef,timeStr,'summaries',time.time(),startTime)
 print('\n\nTime elapse = {0:s}\n'.format(str(dt.timedelta(
         seconds=time.time()-startTime))),flush=True)
+
 # Generate TPCFs
 if run.runTPCF==1:
     print('\n\nGenerating TPCFs',flush=True)
     cf.absorber_tpcf(run,ions,tpcfProp)
+fi.record_time(timef,timeStr,'tpcf',time.time(),startTime)
 print('\n\nTime elapse = {0:s}\n'.format(str(dt.timedelta(
         seconds=time.time()-startTime))),flush=True)
 
@@ -309,5 +320,6 @@ print('\n\nTime elapse = {0:s}\n'.format(str(dt.timedelta(
 if run.runPlotting==1:
     print('\n\nGenerating plots',flush=True)
     ac.make_plots(ions)
-
+fi.record_time(timef,timeStr,'Done',time.time(),startTime)
+timef.close()
 

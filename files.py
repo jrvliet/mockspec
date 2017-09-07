@@ -587,6 +587,107 @@ def rename(run,ion):
             print('\tCWD: ',os.getcwd())
        
 
+def timing_setup(startTime,run,ions,tpcfProp):
+
+    '''
+    Generates a file containing the timing of the run
+    '''
+
+    import time
+    import itertools as it
+    import datetime as dt
+    import textwrap as tw
+
+    fname = 'timing.out'
+    f = open(fname,'w')
+
+    # Print starting time
+    sTime = time.strftime('%H:%M:%S',time.localtime(startTime))
+    sDate = time.strftime('%d-%m-%Y',time.localtime(startTime))
+    line = '\nStart Time = {0:s}\tStart Date = {1:s}\n\n'.format(sTime,sDate)
+    f.write(line)
+
+    # Print run params
+    line = 'Run Settings:\n'
+    line += 'galID = {0:<10s}\ta = {1:<10s}\n'.format(run.galID,run.expn)
+    line += 'nLOS  = {0:<10d}\ti = {1:<10.1f}\n'.format(run.nlos,run.incline)
+    line += 'ewCut = {0:<10.1f}\tSNR = {1:<10.1f}\n'.format(run.ewcut,run.snr)
+    line += 'ncores = {0:<10d}\tsigCut = {1:<10.1f}\n\n'.format(run.ncores,run.sigcellsCut)
+    f.write(line)
+
+    # Print out flags
+    flags = [run.runRates,run.runGenLOS,run.runCellfinder,
+             run.runIdcells,run.runLos7,run.runSpecsynth,
+             run.runSysanal,run.runCullabs,run.runLocateCells,
+             run.runSummaries,run.runTPCF,run.runPlotting]
+    flags = [True if i==1 else False for i in flags]
+    functions = ['rates','genLOS','cellfinder','idCells','los7',
+                 'specsynth','sysanal','cullabs','locatecells',
+                 'summaries','tpcf','plotting']
+    runFuncs = list(it.compress(functions,flags))
+
+    line = 'Functions Run:\n'
+    line += tw.fill(', '.join(runFuncs))
+    f.write(line+'\n\n')
+
+
+    # Print out TPCF settings if TPCF was performed
+    if run.runTPCF==1:
+        line = 'TPCF Settings:\n'
+        line += 'EW limits = {0:.1f} - {1:.2f}\n'.format(tpcfProp.ewLo,tpcfProp.ewHi)
+        line += 'Impact limits = {0:.1f} - {1:.2f}\n'.format(tpcfProp.dLo,tpcfProp.dHi)
+        line += 'Az limits = {0:.1f} - {1:.2f}\n'.format(tpcfProp.azLo,tpcfProp.azHi)
+        line += 'Binsize = {0:.1f} \tnBoot = {1:d}\n\n'.format(tpcfProp.binSize,tpcfProp.bootNum)
+        f.write(line)
+
+    # Print ions:
+    line = 'Ions:\n'
+    ionLine = ['{0:s} ({1:s})'.format(i.name,i.instrument) for i in ions]
+    line += ', '.join(ionLine)
+    f.write(line)
+   
+    # Start timing information
+    timestring = '{0[0]:<14s}\t{0[1]:<10s}\t{0[2]:<8s}\t{0[3]:<12s}\n'
+    header = 'Event Date Time Elapsed'.split()
+    f.write('\n\n')
+    f.write(timestring.format(header))
+    
+    # Print out starting times
+    current = time.time()
+    dateString = time.strftime('%d-%m-%Y',time.localtime(current))
+    timeString = time.strftime('%H:%M:%S',time.localtime(current))
+    elapsed = str(dt.timedelta(seconds=current-startTime))
+    line = ['Starting',dateString,timeString,elapsed]
+    f.write(timestring.format(line))
+
+    fullFileName = f.name
+    f.close()
+    
+    return fullFileName,timestring
+
+
+
+def record_time(timef,timestring,event,current,startTime):
+    '''
+    Records the current time in to the timing file
+    '''
+
+    import time
+    import datetime as dt
+
+    with open(timef,'a') as f:
+        dateString = time.strftime('%d-%m-%Y',time.localtime(current))
+        timeString = time.strftime('%H:%M:%S',time.localtime(current))
+        elapsed = str(dt.timedelta(seconds=current-startTime))
+        line = [event,dateString,timeString,elapsed]
+        f.write(timestring.format(line))
+    
+    
+
+
+
+
+
 
 
 
