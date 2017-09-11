@@ -599,7 +599,7 @@ def timing_setup(startTime,run,ions,tpcfProp):
     import datetime as dt
     import textwrap as tw
 
-    fname = 'timing.out'
+    fname = 'timing.log'
     f = open(fname,'w')
 
     # Print starting time

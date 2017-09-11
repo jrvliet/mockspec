@@ -213,7 +213,7 @@ mainLoc = os.getcwd()
 incLoc = fi.setup_inclination_dir(run, ions)
 os.chdir(incLoc)
 
-fi.record_time(timef,timeStr,'Inclination Dir',time.time(),startTime)
+fi.record_time(timef,timeStr,'Inclination_Dir',time.time(),startTime)
 
 
 ##### 
@@ -260,7 +260,7 @@ print('\n\nTime elapse = {0:s}\n'.format(str(dt.timedelta(
 
 # Setup Mockspec 
 fi.setup_mockspec(ions, run, requiredLoc)
-fi.record_time(timef,timeStr,'setup mockspec',time.time(),startTime)
+fi.record_time(timef,timeStr,'setup_mockspec',time.time(),startTime)
 print('\n\nTime elapse = {0:s}\n'.format(str(dt.timedelta(
         seconds=time.time()-startTime))),flush=True)
 
@@ -269,7 +269,7 @@ print('\n\nTime elapse = {0:s}\n'.format(str(dt.timedelta(
 #ionloc = fi.setup_ion_dir(ion, galID, expn, codeLoc) 
 for ion in ions:
     ionloc = fi.setup_ion_dir(ion, run, codeLoc) 
-fi.record_time(timef,timeStr,'ion dir',time.time(),startTime)
+fi.record_time(timef,timeStr,'ion_dir',time.time(),startTime)
 print('\n\nTime elapse = {0:s}\n'.format(str(dt.timedelta(
         seconds=time.time()-startTime))),flush=True)
 
@@ -277,7 +277,7 @@ print('\n\nTime elapse = {0:s}\n'.format(str(dt.timedelta(
 # Start looping over ions
 jl.Parallel(n_jobs=run.ncores,verbose=5)(
         jl.delayed(ionLoop)(run,ion) for ion in ions)
-fi.record_time(timef,timeStr,'ion loop',time.time(),startTime)
+fi.record_time(timef,timeStr,'ion_loop',time.time(),startTime)
 print('\n\nTime elapse = {0:s}\n'.format(str(dt.timedelta(
         seconds=time.time()-startTime))),flush=True)
     
