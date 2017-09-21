@@ -75,8 +75,8 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
     # Set up a dataframe with regabs information
     print('Reading Absorbers',flush=True)
     absorbers = regabs(run,ion,tpcfProp)
-    absorbersName = '{0:s}/{1:s}_{2:s}_{3:s}_absorbers.csv'.format(
-                    tpcfDir,run.galID,run.expn,ion.name)
+    absorbersName = '{0:s}/{1:s}_{2:s}_i{3:d}_{4s}_absorbers.csv'.format(
+                    tpcfDir,run.galID,run.expn,int(run.incline),ion.name)
     absorbers.to_csv(absorbersName,index=False)
     print('Absorbers Size = {0:s}'.format(dfSize(absorbers)),flush=True)
 
@@ -84,8 +84,8 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
     # Each column is a seperate absorber
     print('Creating pixel velocity',flush=True)
     pixVel = velocities(run,ion,absorbers)
-    pixVelName = '{0:s}/{1:s}_{2:s}_{3:s}_pixVel.csv'.format(
-                    tpcfDir,run.galID,run.expn,ion.name)
+    pixVelName = '{0:s}/{1:s}_{2:s}_i{3:s}_{4:s}_pixVel.csv'.format(
+                    tpcfDir,run.galID,run.expn,int(run.incline),ion.name)
     pixVel.to_csv(pixVelName,index=False)
     #print('Pixvel Size = {0:s}'.format(dfSize(pixVel)),flush=True)
     
@@ -131,8 +131,8 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
     tpcfFull['Std'] = np.pad(s,(0,len(c)-len(s)),'constant')
 
     tpcfFull[tpcfFull==0] = np.nan
-    outName = '{0:s}/{1:s}_{2:s}_{3:s}_tpcf.csv'.format(
-                tpcfDir,run.galID,run.expn,ion.name)
+    outName = '{0:s}/{1:s}_{2:s}_i{3:d}_{4:s}_tpcf.csv'.format(
+                tpcfDir,run.galID,run.expn,int(run.incline),ion.name)
     tpcfFull.to_csv(outName)
     print('Finished ion loop for {0:s}'.format(ion.name),flush=True)
 
@@ -371,8 +371,8 @@ def seperations(run,ion,pixVel,tpcfDir):
     print('velDiffMem Location: ',velMemPath,flush=True)
     velDiffMem[:] = velDiff.values[:]
 
-    velDiffName = '{0:s}/{1:s}_{2:s}_{3:s}_velDiff.csv'.format(
-                    tpcfDir,run.galID,run.expn,ion.name)
+    velDiffName = '{0:s}/{1:s}_{2:s}_i{3:d}_{4:s}_velDiff.csv'.format(
+                    tpcfDir,run.galID,run.expn,int(run.incline),ion.name)
     velDiff.to_csv(velDiffName,index=False)
     print('Veldiff Size = {0:s}'.format(dfSize(velDiff)),flush=True)
     return velMemPath,velDiff.shape
