@@ -75,7 +75,7 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
     # Set up a dataframe with regabs information
     print('Reading Absorbers',flush=True)
     absorbers = regabs(run,ion,tpcfProp)
-    absorbersName = '{0:s}/{1:s}_{2:s}_i{3:d}_{4s}_absorbers.csv'.format(
+    absorbersName = '{0:s}/{1:s}_{2:s}_i{3:d}_{4:s}_absorbers.csv'.format(
                     tpcfDir,run.galID,run.expn,int(run.incline),ion.name)
     absorbers.to_csv(absorbersName,index=False)
     print('Absorbers Size = {0:s}'.format(dfSize(absorbers)),flush=True)
@@ -84,7 +84,7 @@ def tpcf_ion_loop(run,ion,tpcfProp,tpcfDir):
     # Each column is a seperate absorber
     print('Creating pixel velocity',flush=True)
     pixVel = velocities(run,ion,absorbers)
-    pixVelName = '{0:s}/{1:s}_{2:s}_i{3:s}_{4:s}_pixVel.csv'.format(
+    pixVelName = '{0:s}/{1:s}_{2:s}_i{3:d}_{4:s}_pixVel.csv'.format(
                     tpcfDir,run.galID,run.expn,int(run.incline),ion.name)
     pixVel.to_csv(pixVelName,index=False)
     #print('Pixvel Size = {0:s}'.format(dfSize(pixVel)),flush=True)
