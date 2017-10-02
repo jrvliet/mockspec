@@ -57,7 +57,7 @@ def sysabs_to_hdf5(run,ion,codeLoc):
     
     # Read in lines.info to get the azimuthal angle
     linesfile = 'lines.info'
-    phi = np.loadtxt(linesfile, skiprows=2, usecols=(2,), unpack=True)
+    phi = np.loadtxt(linesfile, skiprows=1, usecols=(2,), unpack=True)
     
     # Insert into the sysabs data file
     #data = np.insert(data, 2, phi, axis=1)
@@ -101,7 +101,7 @@ def regabs_to_hdf5(run,ion,codeLoc):
     
     # Read in lines.info to get the azimuthal angle
     linesfile = 'lines.info'
-    angle = np.loadtxt(linesfile, skiprows=2, usecols=(2,), unpack=True)
+    angle = np.loadtxt(linesfile, skiprows=1, usecols=(2,), unpack=True)
     
     # Insert into the sysabs data file
     #data = np.insert(data, 2, phi, axis=1)
