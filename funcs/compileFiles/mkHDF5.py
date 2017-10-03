@@ -26,6 +26,33 @@ def az(phi):
         return 360-phi
     
 
+def run_parameters(run,ions,tpcf={}):
+
+    '''
+    Combines all the runtimes parameters from all the objects.
+    Returns a single dictionary
+    '''
+
+    # To combine the ions, each ionProp object needs to be given a unique key
+    for i,ion in enumerate(ions):
+        for key in ion.__dict__.keys():
+            val = ion.__dict__[key]
+            newKey = key+'{0:d}'.format(i)
+            del ion.__dict__[key]
+            ion.__dict__[newKey] = val
+
+    # Combine the ions into a single dictionary
+    idict = {}
+    for ion in ions:
+        idict.update(ion.__dict__)
+
+    # Combine the three different objects together
+    params = {**run,**idict,**tpcf}
+
+    return params
+    
+    
+
 def sysabs_to_hdf5(run,ion,codeLoc):
 
     '''
@@ -68,7 +95,13 @@ def sysabs_to_hdf5(run,ion,codeLoc):
 
     # WRite data to HDF file
     #df = pd.DataFrame(data, columns=header)
-    data.to_hdf(hdf5file, 'data', mode='w')
+    metadata = {**run.__dict__,**ion.__dict__}
+    store = pd.HDFStore(hdf5file)
+    store.put('data',data)
+    store.get_storer('data').attrs.metadata = metadata
+    store.close()
+    
+    #data.to_hdf(hdf5file, 'data', mode='w')
 
 
 def regabs_to_hdf5(run,ion,codeLoc):
@@ -116,7 +149,13 @@ def regabs_to_hdf5(run,ion,codeLoc):
     
     # WRite data to HDF file
     #df = pd.DataFrame(data, columns=header)
-    data.to_hdf(hdf5file, 'data', mode='w')
+    #data.to_hdf(hdf5file, 'data', mode='w')
+    metadata = {**run.__dict__,**ion.__dict__}
+    store = pd.HDFStore(hdf5file)
+    store.put('data',data)
+    store.get_storer('data').attrs.metadata = metadata
+    store.close()
+    
 
 
 def abscells_to_hdf5(codeLoc,run,ion):
@@ -142,7 +181,13 @@ def abscells_to_hdf5(codeLoc,run,ion):
 
     # WRite data to HDF file
     df = pd.DataFrame(data, columns=header)
-    df.to_hdf(hdf5file, 'data', mode='w')
+    #df.to_hdf(hdf5file, 'data', mode='w')
+    metadata = {**run.__dict__,**ion.__dict__}
+    store = pd.HDFStore(hdf5file)
+    store.put('data',data)
+    store.get_storer('data').attrs.metadata = metadata
+    store.close()
+    
 
 
 def gasbox_to_hdf5(codeLoc, ions, run):
