@@ -437,7 +437,7 @@ def setup_ion_dir(ion, run, codeLoc):
 
     # Check that nothing exists in the parent directory
     #command = 'ls *.{0:s}.*los*dat | wc -l'.format(ion.name)
-    command = 'ls *{0:s}*los*dat &> dum.txt && grep -c dat$ dum.txt'.format(ion.name)
+    command = 'ls *{0:s}.los*dat &> dum.txt && grep -c dat$ dum.txt'.format(ion.name)
     try:
         numDatFiles = int(sp.check_output(command, shell=True).strip())
     except sp.CalledProcessError:

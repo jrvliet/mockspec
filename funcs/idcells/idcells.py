@@ -171,10 +171,12 @@ def read_los_props(losnum):
     
     f.readline()
 
+    los = losProps() 
+    found = 0
     for line in f:
         l = line.split()
         if int(l[0]) == losnum:
-           los = losProps() 
+           found = 1
            los.xen = float(l[3])
            los.yen = float(l[4])
            los.zen = float(l[5])
@@ -203,6 +205,11 @@ def read_los_props(losnum):
            los.vy_obs = 0.0
            los.vz_obs = 0.0
 
+    if found==0:
+        print('Cannot find LOS {0:d} in lines.props'.format(losnum),flush=True)
+        print('Function read_los_propsin idcells.py'.format(losnum))
+        print('Exitting'.format(losnum))
+        sys.exit()
     return los
            
 ###############################################################################

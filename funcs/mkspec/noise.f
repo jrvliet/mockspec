@@ -48,7 +48,8 @@ c     spectra have different realizations as a function of pixel number
 
  01   xdum = ran1(idum)
       If (xdum.lt.0.1) GOTO 01
-      idum = int(-50.0*xdum)
+      idum = int(-1*xdum*getpid())
+c      idum = int(-50.0*xdum)
 
 c     add the noise and make the sigma spectrum; uses the formula from
 c     my thesis in which the SNR is the critical quantity.  the SNR is

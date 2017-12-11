@@ -46,7 +46,8 @@ c
       include           'const.dek'
  
       logical            error
-      integer            maxqsos,ntran,idum
+      integer            maxqsos,ntran,idum,clock,seed
+      integer          seconds(8)
       parameter          (maxqsos=10000)
       integer            i,j,m
       double precision   wcen
@@ -58,8 +59,23 @@ c
 
 
       idum = -35
-      CALL SYSTEM_CLOCK(idum)
-      idum = -1*idum
+      CALL SYSTEM_CLOCK(clock)
+c      seed = mod(seed,getpid())
+      seed = mod(clock,getpid())
+      WRITE(6,*) 'seed = ',seed 
+c      CALL RANDOM_SEED(seed)
+c      idum = rand()
+c      WRITE(6,*) 'Random number ',idum
+c      idum = idum+clock
+c      WRITE(6,*) 'Add clock ',idum
+c      idum = idum/getpid()
+c      idum = mod(idum,getpid())
+c      WRITE(6,*) 'Divide by PID',idum
+c      idum = -1*idum
+      idum = -1*seed
+      WRITE(6,*) 'idum = ',idum
+      WRITE(6,*) 'PID = ',getpid()
+      
 
 c     read in the list of ion names, input the ion information and book
 c     keeping, input the atomic constants, etc., grab the parameters

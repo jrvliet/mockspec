@@ -258,7 +258,7 @@ def regabs(run,ion,tpcfProp):
             run.runLoc,int(run.incline),ion.name,run.galID,run.expn)
     try:
         sysabs = pd.read_hdf(fname,'data')
-        sysabs['region'] = 1.
+        sysabs['reg'] = 1.
         if 'azimuthal' not in sysabs.columns:
             sysabs['azimuthal'] = sysabs['phi'].apply(az)
     except IOError:
