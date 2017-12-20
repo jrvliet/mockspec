@@ -207,7 +207,7 @@ def read_los_props(losnum):
 
     if found==0:
         print('Cannot find LOS {0:d} in lines.props'.format(losnum),flush=True)
-        print('Function read_los_propsin idcells.py'.format(losnum))
+        print('Function read_los_props in idcells.py'.format(losnum))
         print('Exitting'.format(losnum))
         sys.exit()
     return los

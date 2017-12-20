@@ -111,10 +111,6 @@ int main(int argc, char *argv[]){
 
   fprintf(screenfp, "Number of lines of sight: %d\n",nlos);
 
-  // Write header to lines.props file
-  //fprintf(propsfp, "LOS \t b \t %-6s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \n", "phi", "xen", "yen", "zen", "losx", "losy", "losz", "a11", "a12", "a13", "a21", "a22", "a23", "a31", "a32", "a33", "Xcom", "Ycom", "Zcom", "VXcom", "VYcom", "VZcom", "x0", "y0", "z0", "vx_obs", "vy_obs", "vz_obs");
-
-
   double propsArr[nlos][30];
   double xen, yen, zen, xex, yex, zex;
   double R0, phi, incline;
@@ -223,14 +219,6 @@ int main(int argc, char *argv[]){
     propsArr[i][29] = vz_obs;
 
 
-
-    // Write header to output file
-    //write_OutfileHdr(outfp, &aexpn, &R0, &phi, &l, &b, &xen, &yen, &zen, &losx, &losy, &losz, &a11, &a12, &a13, &a21, &a22, &a23, &a31, &a32, &a33, &Xcom, &Ycom, &Zcom, &VXcom, &VYcom, &VZcom, &x0, &y0, &z0, &vx_obs, &vy_obs, &vz_obs);
-
-    // Write LOS properties to file
-    //write_LOSprops(propsfp, losnum, &aexpn, &R0, &phi, &l, &b, &xen, &yen, &zen, &losx, &losy, &losz, &a11, &a12, &a13, &a21, &a22, &a23, &a31, &a32, &a33, &Xcom, &Ycom, &Zcom, &VXcom, &VYcom, &VZcom, &x0, &y0, &z0, &vx_obs, &vy_obs, &vz_obs);
-
-    //outfp = outfp0;
     // Find all the cells that lie along the line of sight as 
     // defined by the points of entry and exit into and out of the box
     cellsearch(nlos, gasfile, &x0, &y0, &z0, &losx, &losy, &losz, &xen, &yen, &zen, &xex, &yex, &zex, &lowvel, &upvel, outfp, logfp, &a11, &a12, &a13, &a21, &a22, &a23, &a31, &a32, &a33);
@@ -242,7 +230,6 @@ int main(int argc, char *argv[]){
   fprintf(propsfp, "LOS \t b \t %-6s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \n", "phi", "xen", "yen", "zen", "losx", "losy", "losz", "a11", "a12", "a13", "a21", "a22", "a23", "a31", "a32", "a33", "Xcom", "Ycom", "Zcom", "VXcom", "VYcom", "VZcom", "x0", "y0", "z0", "vx_obs", "vy_obs", "vz_obs");
      
   for (i=0; i<nlos; i++){
-//    write_LOSprops(propsfp, propsArr[i][0],  propsArr[i][1],  propsArr[i][2],  propsArr[i][3],  propsArr[i][4],  propsArr[i][5],  propsArr[i][6],  propsArr[i][7],  propsArr[i][8],  propsArr[i][9],  propsArr[i][10],  propsArr[i][11],  propsArr[i][12],  propsArr[i][13],  propsArr[i][14],  propsArr[i][15],  propsArr[i][16],  propsArr[i][17],  propsArr[i][18],  propsArr[i][19],  propsArr[i][20],  propsArr[i][21],  propsArr[i][22],  propsArr[i][23],  propsArr[i][24],  propsArr[i][25],  propsArr[i][26],  propsArr[i][27],  propsArr[i][28],  propsArr[i][29]); 
     write_LOSprops2(propsfp, propsArr[i]); 
   }
   fclose(propsfp); 

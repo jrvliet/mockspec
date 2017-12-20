@@ -117,7 +117,7 @@ int main (int argc, char *argv[]){
     FILE *fpinfo = fopen("lines.info", "w");
     
     // Write header
-    fprintf(fpdat, "#        Enter points               Exit Points\n");
+    //fprintf(fpdat, "#        Enter points               Exit Points\n");
     fprintf(fpdat, "# xen      yen         zen      xex      yex       zex\n");
     //fprintf(fpinfo, "# More details on each LOS\n");
     fprintf(fpinfo, "# LOS num        b(kpc)       phi      Inclination\n");
