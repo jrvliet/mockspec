@@ -124,6 +124,11 @@ def ionLoop(run,ion):
 
 startTime = time.time()
 
+# Set the umask so all files created have read/write permissions
+# for user and group
+# umask = 022
+os.umask(0o002)
+
 # Get the location where the code lives
 pathname = os.path.dirname(sys.argv[0])
 codeLoc = os.path.abspath(pathname)
