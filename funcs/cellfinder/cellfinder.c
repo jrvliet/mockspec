@@ -31,7 +31,7 @@ int main(int argc, char *argv[]){
   int numcores;
   char cwd[200];
   sscanf(argv[1], "%d", &numcores);
-  //printf("Number of cores to use: %d\n", numcores);
+  printf("Number of cores to use: %d\n", numcores);
   strcpy(cwd, argv[2]);
 
   FILE *propfp0 = fopen("gal_props.dat", "r");
@@ -66,8 +66,10 @@ int main(int argc, char *argv[]){
   read_control_file(propfp, gasfile, galID, rootname, &aexpn, summaryLoc);
 
   // Read summary file
+  printf("Reading summary\n");
   read_summary(galID, &aexpn, cwd, &mvir, &rvir, &a11, &a12, &a13, &a21, &a22, &a23, &a31, &a32, &a33, &vpec_x, &vpec_y, &vpec_z);
 
+    printf("Read in mvir = %lf\n",mvir);
   Xcom = 0.0;
   Ycom = 0.0;
   Zcom = 0.0;
@@ -84,6 +86,7 @@ int main(int argc, char *argv[]){
   FILE *logfp = fopen("CellWalls.log", "w");
   fprintf(logfp, "The LOS vector runs along the cell walls of the following cells:\n");
   fprintf(logfp, "LOS # \t Cell ID #\n");
+    //printf("Wrote cellwalls log header\n");
 
   // Get information from gasfilename
   boxlength = 4.0*rvir;
@@ -94,11 +97,13 @@ int main(int argc, char *argv[]){
   fprintf(screenfp, "===============================================\n");
   fprintf(screenfp, "Gas file: %s\n",gasfile);
   fprintf(screenfp, "===============================================\n");
+    //printf("Wrote screen header\n");
 
   // Read in los of sight from posnlist.dat
   FILE *losfp = fopen("lines.dat", "r");
   FILE *infofp = fopen("lines.info", "r");
   FILE *propsfp = fopen("lines.props", "w");
+    //printf("Opened files\n");
 
   // Get number of lines of sight
   nlos = 0;
@@ -106,6 +111,7 @@ int main(int argc, char *argv[]){
     if(new_line[0] != '#')
       nlos++;
   }
+    //printf("Read in %d lines of sight\n",nlos);
   // Point fpin back to the beginning of the file
   fseek(losfp,0L,SEEK_SET);
 
@@ -138,10 +144,12 @@ int main(int argc, char *argv[]){
   } 
 
 
+    //printf("Read in start/end points of LOS\n");
 
 
   // Set the number of cores to use
   omp_set_num_threads(numcores);
+    //printf("Set num cores\n");
 
   
 
@@ -154,6 +162,7 @@ int main(int argc, char *argv[]){
   #pragma omp parallel for default(shared) private(xen, yen, zen, xex, yex, zex, losx, losy, losz, x0, y0, z0, losnum, R0, phi, incline, loslength, outfile, outfp, outfp0)
   for(i=0; i<currentInd; i++){
       
+    //printf("%d\n",i);
     xen = xenArr[i];
     yen = yenArr[i];
     zen = zenArr[i];
@@ -165,10 +174,12 @@ int main(int argc, char *argv[]){
     phi = phiArr[i];
     incline = incArr[i];
 
+    //printf("xen = %lf\n",xen);
     // Get the direction cosines (losx, losy, losz) and unit vector
     // describing los vector through box (tail at entrance point, headt at (x0, y0, z0)
     
     lmn4(xen, yen, zen, xex, yex, zex, Xcom, Ycom, Zcom, &losx, &losy, &losz, &x0, &y0, &z0);
+    //printf("losx: %lf\n",losx);
     fprintf(screenfp, "\nPOEntry: %3.6lf %3.6lf %3.6lf\n",xen,yen,zen);
     fprintf(screenfp, "POExit:   %3.6lf %3.6lf %3.6lf\n",xex,yex,zex);
     
@@ -177,10 +188,16 @@ int main(int argc, char *argv[]){
     zlen = zex-zen;
     loslength = sqrt(xlen*xlen + ylen*ylen + zlen*zlen);
     fprintf(screenfp, "LOS Length: %3.2lf\n",loslength);
+    //printf("loslength: %lf\n",loslength);
 
     // Generate a unique filename corresponding to current los in loslist
+    //printf("rootname: %s\n",rootname);
+    //printf("losnum: %d\n",losnum);
+    //printf("filename: %s\n",filegen(rootname,losnum));
     strcpy(outfile, filegen(rootname, losnum));
+    //printf("Opened outfile: %s\n",outfile);
     fprintf(screenfp, "Output file: %s\n",outfile);
+    //printf("Opened outfile: %s\n",outfile);
       
     // Open outfile
     outfp0 = fopen(outfile, "w");
@@ -218,10 +235,10 @@ int main(int argc, char *argv[]){
     propsArr[i][28] = vy_obs;
     propsArr[i][29] = vz_obs;
 
-
     // Find all the cells that lie along the line of sight as 
     // defined by the points of entry and exit into and out of the box
     cellsearch(nlos, gasfile, &x0, &y0, &z0, &losx, &losy, &losz, &xen, &yen, &zen, &xex, &yex, &zex, &lowvel, &upvel, outfp, logfp, &a11, &a12, &a13, &a21, &a22, &a23, &a31, &a32, &a33);
+    printf("Ran cellsearch\n");
     fclose(outfp0);
   }
 
