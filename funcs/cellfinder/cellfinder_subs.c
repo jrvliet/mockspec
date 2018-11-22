@@ -101,14 +101,25 @@ const char *filegen(char *rootname, int losnum){
 //void filegen(char *rootname, int losnum, char *outfile){
   // Generate a specific filename corresponding to each line of sight
   
-  char newstr[100], numstr[100];
+    printf("\nIn filegen");
+    printf("Rootname: %s\n",rootname);
+    printf("losnum: %d\n",losnum);
+  //char newstr[100], numstr[100];
+
+    char numstr[100];
+    char * newstr;
+    newstr = malloc(sizeof(char)*100);
   
   newstr[0] = '\0';
   sprintf(numstr, "%.4d", losnum);
+    //printf("Numstr: %s\n",numstr);
 
   strcat(newstr, "los");
+    //printf("Newstr: %s\n",newstr);
   strcat(newstr, numstr);
+    //printf("Newstr: %s\n",newstr);
   strcat(newstr, ".cellID.dat");
+    //printf("Newstr: %s\n",newstr);
 
   return newstr;
 
