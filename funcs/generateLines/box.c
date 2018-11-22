@@ -32,9 +32,9 @@ void find_ends(double px, double py, double pz, double dx, double dy, double dz,
     double *yex, double *zex, double *ten, double *tex){
 
     int i;
-    int tsize = 10000;
-    int tstart = -1000;
-    int tend = 1000;
+    int tsize = 100000;
+    int tstart = -10000;
+    int tend = 10000;
     double tstep;
     double size = boxsize;
     double t[tsize];
@@ -79,7 +79,10 @@ void find_ends(double px, double py, double pz, double dx, double dy, double dz,
             *tex = (t[i]+t[i+1])/2.0;
         }
     }
+
+
 }
+
 
 
 double inclination(double **a_gtb, double *db){

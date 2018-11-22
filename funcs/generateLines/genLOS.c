@@ -193,9 +193,8 @@ int main (int argc, char *argv[]){
         phi = ((double)rand()/(double)RAND_MAX)*(2.0*M_PI);
         phiDeg = phi * (180.0/M_PI);
         fprintf(fpinfo, "%d \t %lf \t %lf \t %lf\n",i+1,b,phiDeg,incDeg);
-//        printf("%d \t %lf \t %lf \t %lf\n",i,b,phiDeg,incDeg);
 
-        // Fill ps, the position vector in the sky from
+        // Fill ps, the position vector in the sky frame
         ps[0] = b*cos(phi);
         ps[1] = b*sin(phi);
         ps[2] = 0.0;
