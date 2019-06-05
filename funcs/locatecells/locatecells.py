@@ -195,6 +195,7 @@ def locateSigCells(run,ion,codeLoc,testing=0):
                 cell['SNIa'] = np.log10(box['SNIa'].iloc[index])
                 cell['alpha_Zmet'] = box['alpha_Zmet'].iloc[index]
                 cell['ion_density'] = np.log10(box['nIon'].iloc[index])
+                cell['fIon'] = np.log10(box['fIon'].iloc[index])
                 cell['fullLogNstart'] = logNinitial
                 cell['fullLogNend'] = logNfinal
            
