@@ -23,10 +23,9 @@ def genLOS(codeLoc, summaryLoc, run):
     try:
         sp.run(command, shell=True)
     except Exception as e:    
-        print(output)
         print('\n\nCould not run genLOS with :\n\t{0:s}'.format(command))
         print('Exiting...')
-        print(e.message,e.args)
+        print(e.message, e.args)
         sys.exit()
 
 

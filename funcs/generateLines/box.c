@@ -29,12 +29,20 @@ int in_box(double x, double y, double z, double boxsize){
 
 void find_ends(double px, double py, double pz, double dx, double dy, double dz,
     double boxsize, double *xen, double *yen, double *zen, double *xex, 
-    double *yex, double *zex, double *ten, double *tex){
+    double *yex, double *zex, double *ten, double *tex, int tmax){
 
     int i;
-    int tsize = 100000;
-    int tstart = -10000;
-    int tend = 10000;
+    int tsize, tstart, tend;
+    if (tmax==0){
+        tsize = 100000;
+        tstart = -10000;
+        tend = 10000;
+    }
+    else{
+        tstart = -1*tmax;
+        tend = tmax;
+        tsize = 10*tmax;
+    }
     double tstep;
     double size = boxsize;
     double t[tsize];

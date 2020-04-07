@@ -33,6 +33,7 @@ int main (int argc, char *argv[]){
     // Convert inclination to radians
     double inc = incDeg * (M_PI/180.0);  
 
+    int tmax = 1000;
     double b, phi, phiDeg;
     double aexpn, redshift;
     double mvir, rvir;
@@ -109,7 +110,7 @@ int main (int argc, char *argv[]){
     //srand(seed);
     srand(time(NULL));
 
-    double maximpact_kpc = 1.5*rvir;
+    double maximpact_kpc = maximpact*rvir;
     double boxsize = 4.0*rvir;
 
     // Open file operators
@@ -212,7 +213,16 @@ int main (int argc, char *argv[]){
         
         // Find the enter and exit point of the LOS 
         find_ends(pb[0], pb[1], pb[2], db[0], db[1], db[2], boxsize,
-                  &xen, &yen, &zen, &xex, &yex, &zex, &ten, &tex);
+                  &xen, &yen, &zen, &xex, &yex, &zex, &ten, &tex, tmax);
+
+        
+        if ((xex==0.) || (yex==0.) || (zex==0.) || 
+           (xen==0.) || (yen==0.) || (zen==0.)){
+            tmax *= 20;
+            find_ends(pb[0], pb[1], pb[2], db[0], db[1], db[2], boxsize,
+                      &xen, &yen, &zen, &xex, &yex, &zex, &ten, &tex, tmax);
+        }
+
 
         xens[i] = xen;
         yens[i] = yen;
