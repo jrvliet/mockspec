@@ -4,6 +4,14 @@
 #  Full pipeline for performing synthetic QSO observations
 #  of ART simulations of galaxy CGM
 
+"""
+This version is a sped up version of the mockspec pipeline.
+There are several different reorderings of the pipeline.
+Rates is no longer run on the entire box.
+It is instead run only on the cells selected by 
+cellfinder.
+
+"""
 # General libraries
 from __future__ import print_function
 #import numpy as np
